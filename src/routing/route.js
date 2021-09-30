@@ -4,12 +4,14 @@ import DashboardLayout from "../components/DashboardLayout";
 import { Navigate } from "react-router";
 import Account from "../pages/Account/Account";
 import NotFound from "../pages/NotFoundPage";
+import Users from "../pages/Users/Users";
 const routes = [
   {
     path: "app",
     element: <DashboardLayout />,
     children: [
       { path: "account", element: <Account /> },
+      { path: "users", element: <Users /> },
       { path: "*", element: <Navigate to="/404" /> },
     ],
   },
