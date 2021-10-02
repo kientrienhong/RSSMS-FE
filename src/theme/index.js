@@ -23,7 +23,7 @@ const theme = createTheme({
       main: "#04BFFE",
     },
     text: {
-      primary: "#04BFFE",
+      primary: "#130F26",
       disabled: "#A19FA8",
       error: "#CE0200",
     },
@@ -57,18 +57,18 @@ const theme = createTheme({
   ],
   typography: {
     h1: {
-      fontWeight: 500,
+      fontWeight: 700,
       fontSize: 32,
       letterSpacing: "-0.24px",
     },
     h2: {
-      fontWeight: 500,
-      fontSize: 24,
+      fontWeight: 700,
+      fontSize: 20,
       letterSpacing: "-0.24px",
     },
     h3: {
-      fontWeight: 500,
-      fontSize: 20,
+      fontWeight: 700,
+      fontSize: 16,
       letterSpacing: "-0.06px",
     },
     h4: {
@@ -85,6 +85,9 @@ const theme = createTheme({
       fontWeight: 500,
       fontSize: 14,
       letterSpacing: "-0.05px",
+    },
+    body: {
+      fontSize: 16,
     },
     overline: {
       fontWeight: 500,

@@ -5,6 +5,7 @@ import { Navigate } from "react-router";
 import Account from "../pages/Account/Account";
 import NotFound from "../pages/NotFoundPage";
 import Users from "../pages/Users/Users";
+import Storages from "../pages/Storage/Storages";
 const routes = [
   {
     path: "app",
@@ -12,6 +13,8 @@ const routes = [
     children: [
       { path: "account", element: <Account /> },
       { path: "users", element: <Users /> },
+      { path: "storages", element: <Storages /> },
+
       { path: "*", element: <Navigate to="/404" /> },
     ],
   },

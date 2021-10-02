@@ -1,0 +1,147 @@
+import React from "react";
+import { Card, Box, Typography, Button } from "@material-ui/core";
+
+const styleIcon = {
+  marginRight: "2%",
+  marginTop: "2%",
+};
+
+const styleBoxTypo = {
+  display: "flex",
+  flexDirection: "row",
+  marginTop: "2%",
+  alignItems: "flex-end",
+};
+export default function Storage({ storage }) {
+  return (
+    <Card
+      sx={{
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        height: "250px",
+        padding: "2%",
+      }}
+    >
+      <img
+        src="/img/storage.png"
+        alt="test"
+        width="50%"
+        height="96%"
+        style={{ margin: "1%" }}
+      />
+      <Box
+        sx={{
+          marginBottom: "3%",
+          display: "flex",
+          height: "100%",
+          flexDirection: "column",
+          justifyContent: "space-between",
+        }}
+      >
+        <Box
+          sx={{
+            marinTop: "2%",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            <Typography
+              color="black"
+              variant="h2"
+              style={{ marginTop: "1%", marginLeft: "1%" }}
+            >
+              {storage.name}
+            </Typography>
+            <Typography
+              color="green"
+              variant="h2"
+              style={{ marginTop: "1%", marginRight: "1%" }}
+            >
+              {storage.status}
+            </Typography>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "flex-end",
+            }}
+          >
+            <img src="/img/location.png" alt="location" style={styleIcon} />
+            {storage.address}
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "flex-end",
+            }}
+          >
+            <img src="/img/size.png" alt="size" style={styleIcon} />
+            {storage.size}
+          </Box>
+
+          <Box sx={styleBoxTypo}>
+            <Typography color="black" variant="h3" sx={{ marginRight: "2%" }}>
+              Type:
+            </Typography>
+            <Typography color="black" variant="body">
+              {storage.type}
+            </Typography>
+          </Box>
+          {storage.type === "Self-storage" ? (
+            <Box sx={styleBoxTypo}>
+              <Typography color="black" variant="h3" sx={{ marginRight: "2%" }}>
+                Remaining Time:
+              </Typography>
+              <Typography color="black" variant="body">
+                {storage.remainingTime}
+              </Typography>
+            </Box>
+          ) : (
+            <></>
+          )}
+          <Box sx={styleBoxTypo}>
+            <Typography color="black" variant="h3" sx={{ marginRight: "2%" }}>
+              Manager:
+            </Typography>
+            <Typography color="black" variant="body">
+              {storage.manager}
+            </Typography>
+          </Box>
+        </Box>
+        <Box sx={{ display: "flex", flexDirection: "row", marginTop: "2%" }}>
+          <Button
+            style={{
+              height: "45px",
+              paddingLeft: "16px",
+              paddingRight: "16px",
+              marginRight: "2%",
+            }}
+            color="primary"
+            variant="contained"
+          >
+            Edit
+          </Button>
+          <Button
+            style={{
+              height: "45px",
+              paddingLeft: "16px",
+              paddingRight: "16px",
+            }}
+            color="error"
+            variant="contained"
+          >
+            Delete
+          </Button>
+        </Box>
+      </Box>
+    </Card>
+  );
+}
