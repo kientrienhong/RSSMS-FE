@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import { styled } from "@material-ui/core/styles";
 import DashboardNavbar from "./DashboardNavbar";
 import DashboardSidebar from "./DashboardSidebar";
-
+import LoadingPage from "../pages/Loading/LoadingPage";
 const DashboardLayoutRoot = styled("div")(({ theme }) => ({
   backgroundColor: theme.palette.background.default,
   display: "flex",
@@ -39,6 +39,7 @@ const DashboardLayout = () => {
 
   return (
     <DashboardLayoutRoot>
+      <LoadingPage />
       <DashboardNavbar onMobileNavOpen={() => setMobileNavOpen(true)} />
       <DashboardSidebar
         onMobileClose={() => setMobileNavOpen(false)}

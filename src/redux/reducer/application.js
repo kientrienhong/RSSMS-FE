@@ -5,11 +5,8 @@ const initialState = {
 };
 
 const application = (state = initialState, action) => {
-  console.log("dasdkjlasjkld");
   switch (action.type) {
     case ActionType.SHOW_LOADER: {
-      console.log("test2");
-
       state.loading = true;
 
       return { ...state };

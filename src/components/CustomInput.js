@@ -1,22 +1,35 @@
 import React from "react";
-import { Controller, TextField } from "@material-ui/core";
-export default function CustomInput({ control, rules, styles, name }) {
+import { TextField } from "@material-ui/core";
+import { Controller } from "react-hook-form";
+export default function CustomInput({
+  control,
+  rules,
+  styles,
+  name,
+  label,
+  userInfo,
+  type,
+  inlineStyle,
+}) {
   return (
     <Controller
-      name="firstName"
+      name={name}
       control={control}
-      defaultValue=""
+      defaultValue={userInfo}
       render={({ field: { onChange, value }, fieldState: { error } }) => (
         <TextField
-          label="First Name"
-          variant="filled"
+          label={label}
+          variant="outlined"
           value={value}
+          style={inlineStyle}
           onChange={onChange}
+          type={type}
           error={!!error}
+          inputProps={{ style: styles }}
           helperText={error ? error.message : null}
         />
       )}
-      rules={{ required: "First name required" }}
+      rules={rules}
     />
   );
 }

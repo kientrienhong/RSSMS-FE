@@ -6,6 +6,5 @@ export const getListUser = async (name, page, size) => {
     `https://localhost:44304/api/v1/users?&Name=${name}&page=${page}&size=${size}`
   );
 
-  console.log(listUser);
   return listUser;
 };

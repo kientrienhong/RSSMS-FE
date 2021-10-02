@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -89,121 +89,6 @@ TablePaginationActions.propTypes = {
 
 const listHeaderName = ["Name", "Email", "Phone", "Storage", "Type", "Action"];
 
-function createData(id, name, email, avatar, phone, storage, type) {
-  return { id, name, email, avatar, phone, storage, type };
-}
-
-const rows = [
-  createData(
-    1,
-    "Hong Kien Trien",
-    "kientrienhong@gmal.com",
-    "test",
-    "0777457504",
-    "Storage 1",
-    "Customer"
-  ),
-  createData(
-    2,
-    "Hong Kien Trien",
-    "kientrienhong@gmal.com",
-    "test",
-    "0777457504",
-    "Storage 1",
-    "Office Staff"
-  ),
-  createData(
-    3,
-    "Hong Kien Trien",
-    "kientrienhong@gmal.com",
-    "test",
-    "0777457504",
-    "Storage 1",
-    "Delivery Staff"
-  ),
-  createData(
-    4,
-    "Hong Kien Trien",
-    "kientrienhong@gmal.com",
-    "test",
-    "0777457504",
-    "Storage 1",
-    "Customer"
-  ),
-  createData(
-    5,
-    "Hong Kien Trien",
-    "kientrienhong@gmal.com",
-    "test",
-    "0777457504",
-    "Storage 1",
-    "Customer"
-  ),
-  createData(
-    6,
-    "Hong Kien Trien",
-    "kientrienhong@gmal.com",
-    "test",
-    "0777457504",
-    "Storage 1",
-    "Customer"
-  ),
-  createData(
-    7,
-    "Hong Kien Trien",
-    "kientrienhong@gmal.com",
-    "test",
-    "0777457504",
-    "Storage 1",
-    "Customer"
-  ),
-  createData(
-    8,
-    "Hong Kien Trien",
-    "kientrienhong@gmal.com",
-    "test",
-    "0777457504",
-    "Storage 1",
-    "Customer"
-  ),
-  createData(
-    9,
-    "Hong Kien Trien",
-    "kientrienhong@gmal.com",
-    "test",
-    "0777457504",
-    "Storage 1",
-    "Customer"
-  ),
-  createData(
-    10,
-    "Hong Kien Trien",
-    "kientrienhong@gmal.com",
-    "test",
-    "0777457504",
-    "Storage 1",
-    "Customer"
-  ),
-  createData(
-    11,
-    "Hong Kien Trien",
-    "kientrienhong@gmal.com",
-    "test",
-    "0777457504",
-    "Storage 1",
-    "Customer"
-  ),
-  createData(
-    12,
-    "Hong Kien Trien",
-    "kientrienhong@gmal.com",
-    "test",
-    "0777457504",
-    "Storage 1",
-    "Customer"
-  ),
-];
-
 const mapListTableHeader = (listHeader) => (
   <TableHead>
     <TableRow sx={{ color: "black" }}>
@@ -214,15 +99,17 @@ const mapListTableHeader = (listHeader) => (
   </TableHead>
 );
 
-const handleClickRow = (row, setUser, handleOpen) => {
+const handleClickRow = (row, setUser, handleOpen, reset) => {
+  reset();
   const user = {
     id: row.id,
     name: row.name,
     email: row.email,
     avatar: row.avatar,
     phone: row.phone,
-    storage: row.storage,
-    type: row.type,
+    storageName: row.storageName,
+    roleName: row.roleName,
+    address: row.address,
   };
 
   setUser(user);
@@ -238,7 +125,7 @@ const useStyles = makeStyles({
     },
   },
 });
-export default function ListUsers({ setUser, handleOpen }) {
+export default function ListUsers({ reset, setUser, handleOpen, listUser }) {
   const classes = useStyles();
 
   const [page, setPage] = React.useState(0);
@@ -246,7 +133,7 @@ export default function ListUsers({ setUser, handleOpen }) {
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - listUser.length) : 0;
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -262,43 +149,50 @@ export default function ListUsers({ setUser, handleOpen }) {
       <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
         {mapListTableHeader(listHeaderName)}
         <TableBody>
-          {(rowsPerPage > 0
-            ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            : rows
-          ).map((row, index) => {
+          {listUser.map((row, index) => {
             return (
               <TableRow key={row.id}>
                 <TableCell
                   component="th"
                   scope="row"
                   style={{ color: "black" }}
-                  onClick={(e) => handleClickRow(row, setUser, handleOpen)}
+                  onClick={(e) =>
+                    handleClickRow(row, setUser, handleOpen, reset)
+                  }
                 >
                   {row.name}
                 </TableCell>
                 <TableCell
                   style={{ color: "black" }}
-                  onClick={(e) => handleClickRow(row, setUser, handleOpen)}
+                  onClick={(e) =>
+                    handleClickRow(row, setUser, handleOpen, reset)
+                  }
                 >
                   {row.email}
                 </TableCell>
                 <TableCell
                   style={{ color: "black" }}
-                  onClick={(e) => handleClickRow(row, setUser, handleOpen)}
+                  onClick={(e) =>
+                    handleClickRow(row, setUser, handleOpen, reset)
+                  }
                 >
                   {row.phone}
                 </TableCell>
                 <TableCell
                   style={{ color: "black" }}
-                  onClick={(e) => handleClickRow(row, setUser, handleOpen)}
+                  onClick={(e) =>
+                    handleClickRow(row, setUser, handleOpen, reset)
+                  }
                 >
-                  {row.storage}
+                  {row.storageName}
                 </TableCell>
                 <TableCell
                   style={{ color: "black" }}
-                  onClick={(e) => handleClickRow(row, setUser, handleOpen)}
+                  onClick={(e) =>
+                    handleClickRow(row, setUser, handleOpen, reset)
+                  }
                 >
-                  {row.type}
+                  {row.roleName}
                 </TableCell>
                 <TableCell style={{ color: "black" }}>
                   <Button className={classes.button}>Delete</Button>
@@ -318,7 +212,7 @@ export default function ListUsers({ setUser, handleOpen }) {
             <TablePagination
               rowsPerPageOptions={[10]}
               colSpan={3}
-              count={rows.length}
+              count={listUser.length}
               rowsPerPage={rowsPerPage}
               page={page}
               SelectProps={{
@@ -336,4 +230,52 @@ export default function ListUsers({ setUser, handleOpen }) {
       </Table>
     </TableContainer>
   );
+}
+
+{
+  /* <TableBody>
+{(rowsPerPage > 0
+  ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+  : rows
+).map((row, index) => {
+  return (
+    <TableRow key={row.id}>
+      <TableCell
+        component="th"
+        scope="row"
+        style={{ color: "black" }}
+        onClick={(e) => handleClickRow(row, setUser, handleOpen)}
+      >
+        {row.name}
+      </TableCell>
+      <TableCell
+        style={{ color: "black" }}
+        onClick={(e) => handleClickRow(row, setUser, handleOpen)}
+      >
+        {row.email}
+      </TableCell>
+      <TableCell
+        style={{ color: "black" }}
+        onClick={(e) => handleClickRow(row, setUser, handleOpen)}
+      >
+        {row.phone}
+      </TableCell>
+      <TableCell
+        style={{ color: "black" }}
+        onClick={(e) => handleClickRow(row, setUser, handleOpen)}
+      >
+        {row.storage}
+      </TableCell>
+      <TableCell
+        style={{ color: "black" }}
+        onClick={(e) => handleClickRow(row, setUser, handleOpen)}
+      >
+        {row.type}
+      </TableCell>
+      <TableCell style={{ color: "black" }}>
+        <Button className={classes.button}>Delete</Button>
+      </TableCell>
+    </TableRow>
+  );
+})} */
 }

@@ -21,6 +21,7 @@ import * as action from "../../redux/action/action";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import CustomInput from "../../components/CustomInput";
 let inputFile;
 
 const styleModal = {
@@ -29,7 +30,7 @@ const styleModal = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: "40%",
-  height: "75%",
+  height: "80%",
   bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
@@ -43,7 +44,7 @@ const styleBoxInput = {
   alignItems: "flex-start",
   height: "40px",
   width: "95%",
-  marginTop: "5% ",
+  marginTop: "8% ",
 };
 
 const styleBoxComboBox = {
@@ -64,17 +65,17 @@ const onChangeInputFile = (event, setUser, user) => {
   });
 };
 
-const onChangeInput = (e, value, setUser, user) => {
-  let tempUser = { ...user };
-  tempUser[value] = e.target.value;
-  setUser(tempUser);
-};
-
-const onHandleSubmit = (user) => {};
-
 const styleInput = { marginRight: "2.5%", marginLeft: "2.5%" };
 
-const buildModal = (user, open, handleClose, setUser) => {
+const buildModal = (
+  user,
+  open,
+  handleClose,
+  setUser,
+  onSubmit,
+  handleSubmit,
+  control
+) => {
   return (
     <Modal
       open={open}
@@ -90,7 +91,7 @@ const buildModal = (user, open, handleClose, setUser) => {
           flexDirection: "column",
         }}
       >
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <input
             type="file"
             id="file"
@@ -120,70 +121,66 @@ const buildModal = (user, open, handleClose, setUser) => {
           >
             Account information
           </Typography>
-          <Box sx={{ ...styleBoxInput }}>
-            <TextField
-              variant="outlined"
+          <Box sx={{ ...styleBoxInput, marginTop: "2%" }}>
+            <CustomInput
+              control={control}
+              rules={{ required: "Email required" }}
+              styles={{ width: "320px" }}
+              name="email"
               label="Email"
-              style={styleInput}
-              onChange={(e) => onChangeInput(e, "email", setUser, user)}
-              defaultValue={user.email}
-              inputProps={{
-                style: { width: "320px" },
-              }}
+              userInfo={user.email}
+              inlineStyle={styleInput}
             />
-            <TextField
-              variant="outlined"
+            <CustomInput
+              control={control}
+              rules={{ required: "Name required" }}
+              styles={{ width: "280px" }}
+              name="name"
               label="Name"
-              style={styleInput}
-              onChange={(e) => onChangeInput(e, "name", setUser, user)}
-              defaultValue={user.name}
-              inputProps={{
-                style: { width: "280px" },
-              }}
+              userInfo={user.name}
+              inlineStyle={styleInput}
             />
           </Box>
           <Box sx={{ ...styleBoxInput }}>
-            <TextField
-              variant="outlined"
+            <CustomInput
+              control={control}
+              rules={{ required: "Address required" }}
+              styles={{ width: "400px" }}
+              name="address"
               label="Address"
-              style={styleInput}
-              onChange={(e) => onChangeInput(e, "address", setUser, user)}
-              defaultValue={user.address}
-              inputProps={{
-                style: { width: "400px" },
-              }}
+              userInfo={user.address}
+              inlineStyle={styleInput}
             />
-            <TextField
-              variant="outlined"
+            <CustomInput
+              control={control}
+              rules={{ required: "Phone required" }}
+              styles={{ width: "160px" }}
+              name="phone"
               label="Phone"
-              style={styleInput}
-              onChange={(e) => onChangeInput(e, "phone", setUser, user)}
-              defaultValue={user.phone}
-              inputProps={{
-                style: { width: "160px" },
-              }}
+              userInfo={user.phone}
+              inlineStyle={styleInput}
             />
           </Box>
           <Box sx={{ ...styleBoxInput }}>
-            <TextField
-              variant="outlined"
+            <CustomInput
+              control={control}
+              rules={{ required: "Password required" }}
+              styles={{ width: "240px" }}
+              name="password"
               label="Password"
-              style={styleInput}
-              onChange={(e) => onChangeInput(e, "password", setUser, user)}
-              inputProps={{
-                style: { width: "240px" },
-              }}
+              userInfo={user.password}
+              type="password"
+              inlineStyle={styleInput}
             />
-            <TextField
-              variant="outlined"
-              label="Confirm password"
-              onChange={(e) =>
-                onChangeInput(e, "confirmPassword", setUser, user)
-              }
-              style={styleInput}
-              inputProps={{
-                style: { width: "240px" },
-              }}
+            <CustomInput
+              control={control}
+              rules={{ required: "Confirm password required" }}
+              styles={{ width: "240px" }}
+              name="confirmPassword"
+              label="Confirm Password"
+              userInfo={user.password}
+              type="password"
+              inlineStyle={styleInput}
             />
           </Box>
 
@@ -210,11 +207,11 @@ const buildModal = (user, open, handleClose, setUser) => {
               </Typography>
               <FormControl sx={{ m: 1, minWidth: 120, color: "black" }}>
                 <Select
-                  value={user.type}
+                  value={user.roleName}
                   // onChange={handleChange}
                   displayEmpty
                 >
-                  <MenuItem value="">
+                  <MenuItem value={null}>
                     <em>None</em>
                   </MenuItem>
                   <MenuItem value={"Customer"}>Customer</MenuItem>
@@ -240,7 +237,7 @@ const buildModal = (user, open, handleClose, setUser) => {
                 <Select
                   value={""}
                   // onChange={handleChange}
-                  value={user.storage}
+                  value={user.storageName}
                   displayEmpty
                 >
                   <MenuItem value="">
@@ -269,9 +266,10 @@ const buildModal = (user, open, handleClose, setUser) => {
                 paddingLeft: "16px",
                 paddingRight: "16px",
               }}
-              onClick={() => onHandleSubmit(user)}
+              // onClick={() => onHandleSubmit(user)}
               color="primary"
               variant="contained"
+              type="submit"
             >
               Submit
             </Button>
@@ -303,7 +301,7 @@ function Users(props) {
   useEffect(() => {
     const getData = async (name, page, size) => {
       let list = await getListUser(name, page, size);
-      console.log(list);
+      setListUser(list.data.data);
     };
 
     const firstCall = async () => {
@@ -320,9 +318,14 @@ function Users(props) {
   }, []);
 
   const [open, setOpen] = React.useState(false);
+  const [listUser, setListUser] = React.useState([]);
+
   const [user, setUser] = React.useState({});
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    setUser({});
+  };
   return (
     <Box
       sx={{
@@ -331,7 +334,15 @@ function Users(props) {
         py: 3,
       }}
     >
-      {buildModal(user, open, handleClose, setUser)}
+      {buildModal(
+        user,
+        open,
+        handleClose,
+        setUser,
+        onSubmit,
+        handleSubmit,
+        control
+      )}
       <Box
         sx={{
           marginLeft: "2%",
@@ -375,7 +386,12 @@ function Users(props) {
         color="#FFF"
         sx={{ marginLeft: "2%", marginRight: "2%" }}
       >
-        <ListUsers handleOpen={handleOpen} setUser={setUser} />
+        <ListUsers
+          handleOpen={handleOpen}
+          setUser={setUser}
+          listUser={listUser}
+          reset={reset}
+        />
       </Card>
     </Box>
   );
