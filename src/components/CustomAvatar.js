@@ -1,8 +1,11 @@
 import React from "react";
 import { Box, Avatar } from "@material-ui/core";
-export default function CustomAvatar({ url, isEdit }) {
+export default function CustomAvatar({ url, isEdit, onHandleClick }) {
   return (
-    <Box sx={{ position: "relative", width: 84, height: 84 }}>
+    <Box
+      sx={{ position: "relative", width: 84, height: 84 }}
+      onClick={() => onHandleClick()}
+    >
       <Avatar
         src={url}
         sx={{

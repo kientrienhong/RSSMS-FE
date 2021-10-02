@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import {
   Box,
   InputAdornment,
@@ -6,12 +6,98 @@ import {
   TextField,
   Button,
   Modal,
+  FormControl,
+  Typography,
+  MenuItem,
+  Select,
   Grid,
 } from "@material-ui/core";
 import SearchIcon from "@mui/icons-material/Search";
 import ListStorage from "./components/ListStorage";
+let inputFile;
+const styleModal = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "40%",
+  height: "75%",
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  p: 4,
+  borderRadius: "10px",
+};
+
+const buildModal = (storage, open, handleClose) => {
+  return (
+    <Modal
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <input
+        type="file"
+        id="file"
+        ref={inputFile}
+        style={{ display: "none" }}
+      />
+
+      <Box
+        sx={{
+          ...styleModal,
+          display: "flex",
+          justifyContent: "flex-start",
+          flexDirection: "row",
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-start",
+            flexDirection: "column",
+          }}
+        ></Box>
+        <Box
+          sx={{
+            width: "35%",
+            margin: "2% auto",
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <Button
+            style={{
+              height: "45px",
+              paddingLeft: "16px",
+              paddingRight: "16px",
+            }}
+            color="primary"
+            variant="contained"
+          >
+            Submit
+          </Button>
+          <Button
+            style={{
+              height: "45px",
+              paddingLeft: "16px",
+              paddingRight: "16px",
+            }}
+            color="error"
+            variant="outlined"
+          >
+            Cancel
+          </Button>
+        </Box>
+      </Box>
+    </Modal>
+  );
+};
 
 export default function Storages() {
+  inputFile = useRef(null);
+
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -23,12 +109,7 @@ export default function Storages() {
         py: 3,
       }}
     >
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      ></Modal>
+      {buildModal({}, open, handleClose)}
       <Box
         sx={{
           marginLeft: "2%",
