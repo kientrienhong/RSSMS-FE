@@ -17,6 +17,9 @@ import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 import { Button, TableHead } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
+import ConfirmModal from "../../../components/ConfirmModal";
+
+import { deleteUser } from "../../../apis/Apis";
 
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -113,7 +116,7 @@ const handleClickRow = (row, setUser, handleOpen, reset) => {
   };
 
   setUser(user);
-  handleOpen();
+  handleOpen(true);
 };
 const useStyles = makeStyles({
   button: {
@@ -125,12 +128,37 @@ const useStyles = makeStyles({
     },
   },
 });
-export default function ListUsers({ reset, setUser, handleOpen, listUser }) {
+
+const handleDeleteUser = async (id) => {
+  let response;
+  try {
+    response = await deleteUser(id);
+  } catch (error) {
+    console.log(error);
+  }
+
+  return response;
+};
+
+export default function ListUsers({
+  reset,
+  setUser,
+  handleOpen,
+  listUser,
+  setListUser,
+}) {
   const classes = useStyles();
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
-
+  const [open, setOpen] = React.useState(false);
+  const [currentId, setCurrentId] = React.useState(-1);
+  const handleConfirmOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - listUser.length) : 0;
@@ -147,6 +175,14 @@ export default function ListUsers({ reset, setUser, handleOpen, listUser }) {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+        <ConfirmModal
+          open={open}
+          handleClose={handleClose}
+          onHandleYes={handleDeleteUser}
+          listData={listUser}
+          setListData={setListUser}
+          id={currentId}
+        />
         {mapListTableHeader(listHeaderName)}
         <TableBody>
           {listUser.map((row, index) => {
@@ -195,7 +231,15 @@ export default function ListUsers({ reset, setUser, handleOpen, listUser }) {
                   {row.roleName}
                 </TableCell>
                 <TableCell style={{ color: "black" }}>
-                  <Button className={classes.button}>Delete</Button>
+                  <Button
+                    className={classes.button}
+                    onClick={() => {
+                      setCurrentId(row.id);
+                      handleConfirmOpen();
+                    }}
+                  >
+                    Delete
+                  </Button>
                 </TableCell>
               </TableRow>
             );

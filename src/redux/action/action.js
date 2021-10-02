@@ -11,3 +11,15 @@ export const hideLoader = () => {
     type: ActionType.HIDE_LOADER,
   };
 };
+
+export const showSnackbar = (msg) => {
+  return {
+    type: ActionType.SHOW_SNACKBAR,
+    payload: msg,
+  };
+};
+export const hideSnackbar = () => {
+  return {
+    type: ActionType.HIDE_SNACKBAR,
+  };
+};

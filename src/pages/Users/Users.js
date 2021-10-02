@@ -15,13 +15,14 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import ListUsers from "./components/ListUsers";
 import CustomAvatar from "../../components/CustomAvatar";
-import { getListUser } from "../../apis/Apis";
+import { getListUser, createUser } from "../../apis/Apis";
 import { connect } from "react-redux";
 import * as action from "../../redux/action/action";
-import { Controller, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+import { useForm } from "react-hook-form";
 import CustomInput from "../../components/CustomInput";
+import { CustomSelect } from "../../components/CustomSelect";
+import { storageFirebase } from "../../firebase/firebase";
+
 let inputFile;
 
 const styleModal = {
@@ -30,7 +31,7 @@ const styleModal = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: "40%",
-  height: "80%",
+  height: "auto",
   bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
@@ -51,13 +52,22 @@ const styleBoxComboBox = {
   display: "flex",
   flexDirection: "column",
   width: "50%",
+  marginTop: "2%",
 };
+
+const listRoleOption = [
+  { value: "Customer", label: "Customer" },
+  { value: "Manager", label: "Manager" },
+  { value: "Office Staff", label: "Office Staff" },
+  { value: "Delivery Staff", label: "Delivery Staff" },
+];
 
 const handleOnclickAvatar = () => {
   inputFile.current.click();
 };
 
 const onChangeInputFile = (event, setUser, user) => {
+  console.log(event.target.files[0]);
   setUser({
     ...user,
     avatar: URL.createObjectURL(event.target.files[0]),
@@ -74,7 +84,10 @@ const buildModal = (
   setUser,
   onSubmit,
   handleSubmit,
-  control
+  control,
+  isEdit,
+  password,
+  handleChangeRole
 ) => {
   return (
     <Modal
@@ -91,10 +104,12 @@ const buildModal = (
           flexDirection: "column",
         }}
       >
+        <input type="hidden" name="id" value={user.id} />
         <form onSubmit={handleSubmit(onSubmit)}>
           <input
             type="file"
             id="file"
+            name="fileImage"
             ref={inputFile}
             onChange={(e) => onChangeInputFile(e, setUser, user)}
             style={{ display: "none" }}
@@ -124,7 +139,13 @@ const buildModal = (
           <Box sx={{ ...styleBoxInput, marginTop: "2%" }}>
             <CustomInput
               control={control}
-              rules={{ required: "Email required" }}
+              rules={{
+                required: "Email required",
+                // pattern: {
+                //   value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                //   message: "Invalid email",
+                // },
+              }}
               styles={{ width: "320px" }}
               name="email"
               label="Email"
@@ -153,7 +174,13 @@ const buildModal = (
             />
             <CustomInput
               control={control}
-              rules={{ required: "Phone required" }}
+              rules={{
+                required: "Phone required",
+                pattern: {
+                  value: /[0-9]{10}/,
+                  message: "Invalid phone number",
+                },
+              }}
               styles={{ width: "160px" }}
               name="phone"
               label="Phone"
@@ -161,28 +188,34 @@ const buildModal = (
               inlineStyle={styleInput}
             />
           </Box>
-          <Box sx={{ ...styleBoxInput }}>
-            <CustomInput
-              control={control}
-              rules={{ required: "Password required" }}
-              styles={{ width: "240px" }}
-              name="password"
-              label="Password"
-              userInfo={user.password}
-              type="password"
-              inlineStyle={styleInput}
-            />
-            <CustomInput
-              control={control}
-              rules={{ required: "Confirm password required" }}
-              styles={{ width: "240px" }}
-              name="confirmPassword"
-              label="Confirm Password"
-              userInfo={user.password}
-              type="password"
-              inlineStyle={styleInput}
-            />
-          </Box>
+          {isEdit === true ? null : (
+            <Box sx={{ ...styleBoxInput }}>
+              <CustomInput
+                control={control}
+                rules={{ required: "Password required" }}
+                styles={{ width: "240px" }}
+                name="password"
+                label="Password"
+                userInfo={user.password}
+                type="password"
+                inlineStyle={styleInput}
+              />
+              <CustomInput
+                control={control}
+                rules={{
+                  required: "Confirm password required",
+                  validate: (value) =>
+                    value === password.current || "The passwords do not match",
+                }}
+                styles={{ width: "240px" }}
+                name="confirmPassword"
+                label="Confirm Password"
+                userInfo={user.password}
+                type="password"
+                inlineStyle={styleInput}
+              />
+            </Box>
+          )}
 
           <Box
             sx={{
@@ -205,21 +238,28 @@ const buildModal = (
               >
                 Type
               </Typography>
-              <FormControl sx={{ m: 1, minWidth: 120, color: "black" }}>
+              <FormControl
+                sx={{ m: 1, minWidth: 120, color: "black" }}
+                name="roleName"
+              >
                 <Select
                   value={user.roleName}
-                  // onChange={handleChange}
+                  onChange={handleChangeRole}
                   displayEmpty
                 >
-                  <MenuItem value={null}>
-                    <em>None</em>
-                  </MenuItem>
                   <MenuItem value={"Customer"}>Customer</MenuItem>
                   <MenuItem value={"Manager"}>Manager</MenuItem>
                   <MenuItem value={"Office Staff"}>Office Staff</MenuItem>
                   <MenuItem value={"Delivery Staff"}>Delivery Staff</MenuItem>
                 </Select>
               </FormControl>
+              {/* <CustomSelect
+                name={"roleName"}
+                value={user.roleName || " "}
+                control={control}
+                options={listRoleOption}
+                rules={{ required: "Type required" }}
+              /> */}
             </Box>
             <Box sx={styleBoxComboBox}>
               <Typography
@@ -235,7 +275,6 @@ const buildModal = (
               </Typography>
               <FormControl sx={{ m: 1, minWidth: 120, color: "black" }}>
                 <Select
-                  value={""}
                   // onChange={handleChange}
                   value={user.storageName}
                   displayEmpty
@@ -243,10 +282,10 @@ const buildModal = (
                   <MenuItem value="">
                     <em>None</em>
                   </MenuItem>
-                  <MenuItem value={"Customer"}>Customer</MenuItem>
-                  <MenuItem value={"Manager"}>Manager</MenuItem>
-                  <MenuItem value={"Office Staff"}>Office staff</MenuItem>
-                  <MenuItem value={"Delivery Staff"}>Delivery staff</MenuItem>
+                  <MenuItem value={3}>Customer</MenuItem>
+                  <MenuItem value={2}>Manager</MenuItem>
+                  <MenuItem value={5}>Office staff</MenuItem>
+                  <MenuItem value={4}>Delivery staff</MenuItem>
                 </Select>
               </FormControl>
             </Box>
@@ -292,12 +331,93 @@ const buildModal = (
   );
 };
 
-function Users(props) {
-  const onSubmit = (data) => console.log(data);
-  const { handleSubmit, reset, control } = useForm();
-  const { showLoading, hideLoading } = props;
-  inputFile = useRef(null);
+const onHancleCreateUser = async (
+  data,
+  role,
+  showLoading,
+  hideLoading,
+  showSnackbar,
+  handleClose
+) => {
+  // let id;
+  // let urlFirebase;
+  // const ref = storageFirebase.ref(`/${id}/avatar`);
+  // const uploadTask = ref.put(user.avatarFile);
+  // uploadTask.on("state_changed", console.log, console.error, async () => {
+  //   urlFirebase = await ref.getDownloadURL();
+  //   console.log(urlFirebase);
+  // });
+  let roleName;
+  if (role === "Delivery Staff") {
+    roleName = 4;
+  } else if (role === "Customer") {
+    roleName = 3;
+  } else if (role === "Office Staff") {
+    roleName = 5;
+  } else if (role === "Manager") {
+    roleName = 2;
+  }
+  let user = {
+    name: data.name,
+    password: data.password,
+    email: data.email,
+    address: data.address,
+    phone: data.phone,
+    roleId: roleName,
+    storageId: null,
+    avatarLink: null,
+  };
+  try {
+    showLoading();
 
+    const response = await createUser(user);
+    console.log(response);
+    // if (response)
+    if (response.status === 200) {
+      showSnackbar({
+        typeSnackbar: "success",
+        msgSnackbar: "Create user successful!",
+      });
+      handleClose();
+    }
+  } catch (error) {
+    console.log(error);
+  } finally {
+    hideLoading();
+  }
+};
+
+function Users(props) {
+  const [role, setRole] = React.useState("");
+
+  const handleChangeRole = (event) => {
+    setRole(event.target.value);
+  };
+  const { handleSubmit, reset, control, watch } = useForm();
+  const password = useRef({});
+  password.current = watch("password", "");
+
+  const { showLoading, hideLoading, showSnackbar } = props;
+  inputFile = useRef(null);
+  const onSubmit = (data) => {
+    // const ref = storage.ref(`/images/${file.name}`);
+    // const uploadTask = ref.put(file);
+    // uploadTask.on("state_changed", console.log, console.error, () => {
+    //   ref.getDownloadURL().then((url) => {
+    //     setFile(null);
+    //     setURL(url);
+    //   });
+    // });
+    onHancleCreateUser(
+      data,
+      role,
+      showLoading,
+      hideLoading,
+      showSnackbar,
+      handleClose,
+      user
+    );
+  };
   useEffect(() => {
     const getData = async (name, page, size) => {
       let list = await getListUser(name, page, size);
@@ -319,12 +439,16 @@ function Users(props) {
 
   const [open, setOpen] = React.useState(false);
   const [listUser, setListUser] = React.useState([]);
-
+  const [isEdit, setEdit] = React.useState(false);
   const [user, setUser] = React.useState({});
-  const handleOpen = () => setOpen(true);
+  const handleOpen = (isEdit) => {
+    setOpen(true);
+    setEdit(isEdit);
+  };
   const handleClose = () => {
     setOpen(false);
     setUser({});
+    reset();
   };
   return (
     <Box
@@ -341,7 +465,10 @@ function Users(props) {
         setUser,
         onSubmit,
         handleSubmit,
-        control
+        control,
+        isEdit,
+        password,
+        handleChangeRole
       )}
       <Box
         sx={{
@@ -375,7 +502,7 @@ function Users(props) {
           variant="contained"
           onClick={(e) => {
             setUser({});
-            handleOpen();
+            handleOpen(false);
           }}
         >
           Create user
@@ -391,6 +518,7 @@ function Users(props) {
           setUser={setUser}
           listUser={listUser}
           reset={reset}
+          setListUser={setListUser}
         />
       </Card>
     </Box>
@@ -400,6 +528,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     showLoading: () => dispatch(action.showLoader()),
     hideLoading: () => dispatch(action.hideLoader()),
+    showSnackbar: (msg) => dispatch(action.showSnackbar(msg)),
   };
 };
 export default connect(null, mapDispatchToProps)(Users);
