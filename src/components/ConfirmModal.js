@@ -72,7 +72,6 @@ function ConfirmModal({
               try {
                 showLoading();
                 const response = await onHandleYes(id);
-                console.log(response);
                 if (response.status === 200) {
                   handleClose();
                   setListData(listData.filter((e) => e.id !== id));

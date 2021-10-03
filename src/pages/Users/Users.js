@@ -15,13 +15,14 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import ListUsers from "./components/ListUsers";
 import CustomAvatar from "../../components/CustomAvatar";
-import { getListUser, createUser } from "../../apis/Apis";
+import { getListUser, createUser, updateUser } from "../../apis/Apis";
 import { connect } from "react-redux";
 import * as action from "../../redux/action/action";
 import { useForm } from "react-hook-form";
 import CustomInput from "../../components/CustomInput";
 import { CustomSelect } from "../../components/CustomSelect";
 import { storageFirebase } from "../../firebase/firebase";
+import FirebaseUtils from "../../firebase/firebaseUtils";
 
 let inputFile;
 
@@ -67,10 +68,14 @@ const handleOnclickAvatar = () => {
 };
 
 const onChangeInputFile = (event, setUser, user) => {
-  console.log(event.target.files[0]);
   setUser({
     ...user,
-    avatar: URL.createObjectURL(event.target.files[0]),
+    images: [
+      {
+        id: user?.images[0]?.id,
+        url: URL.createObjectURL(event.target.files[0]),
+      },
+    ],
     avatarFile: event.target.files[0],
   });
 };
@@ -123,7 +128,7 @@ const buildModal = (
             }}
           >
             <CustomAvatar
-              url={user.avatar}
+              url={user?.images[0]?.url}
               isEdit="true"
               onHandleClick={handleOnclickAvatar}
             />
@@ -149,6 +154,7 @@ const buildModal = (
               styles={{ width: "320px" }}
               name="email"
               label="Email"
+              disabled={isEdit}
               userInfo={user.email}
               inlineStyle={styleInput}
             />
@@ -331,22 +337,99 @@ const buildModal = (
   );
 };
 
+const onHancleUpdateUser = async (
+  data,
+  role,
+  showLoading,
+  hideLoading,
+  showSnackbar,
+  handleClose,
+  setListUser,
+  listUser,
+  user
+) => {
+  let roleName;
+  if (role === "Delivery Staff") {
+    roleName = 4;
+  } else if (role === "Customer") {
+    roleName = 3;
+  } else if (role === "Office Staff") {
+    roleName = 5;
+  } else if (role === "Manager") {
+    roleName = 2;
+  }
+  let userTemp = {
+    name: data.name,
+    email: data.email,
+    address: data.address,
+    phone: data.phone,
+    roleId: roleName,
+    storageId: null,
+    images: [
+      {
+        id: user?.images[0]?.id,
+        url: user?.images[0]?.url,
+      },
+    ],
+  };
+  try {
+    showLoading();
+
+    // if (response)
+    let id = user.id;
+
+    let responseUpdate;
+    if (user.avatarFile !== undefined) {
+      let urlFirebase;
+      let name = `/${id}/avatar.png`;
+      const ref = storageFirebase.ref(name);
+      const uploadTask = ref.put(user.avatarFile);
+      uploadTask.on("state_changed", console.log, console.error, async () => {
+        urlFirebase = await ref.getDownloadURL();
+        responseUpdate = await updateUser(userTemp, id, urlFirebase);
+        if (responseUpdate.status === 200) {
+          showSnackbar({
+            typeSnackbar: "success",
+            msgSnackbar: "Update user successful!",
+          });
+          handleClose();
+          let newListUser = [...listUser];
+          let index = newListUser.findIndex((e) => e.id === id);
+          newListUser[index] = responseUpdate.data;
+          setListUser(newListUser);
+        }
+      });
+    } else {
+      responseUpdate = await updateUser(userTemp, id, "");
+      if (responseUpdate.status === 200) {
+        showSnackbar({
+          typeSnackbar: "success",
+          msgSnackbar: "Update user successful!",
+        });
+        handleClose();
+        let newListUser = [...listUser];
+        let index = newListUser.findIndex((e) => e.id === id);
+        newListUser[index] = responseUpdate.data;
+        setListUser(newListUser);
+      }
+    }
+  } catch (error) {
+    console.log(error);
+  } finally {
+    hideLoading();
+  }
+};
+
 const onHancleCreateUser = async (
   data,
   role,
   showLoading,
   hideLoading,
   showSnackbar,
-  handleClose
+  handleClose,
+  setListUser,
+  listUser
 ) => {
-  // let id;
-  // let urlFirebase;
-  // const ref = storageFirebase.ref(`/${id}/avatar`);
-  // const uploadTask = ref.put(user.avatarFile);
-  // uploadTask.on("state_changed", console.log, console.error, async () => {
-  //   urlFirebase = await ref.getDownloadURL();
-  //   console.log(urlFirebase);
-  // });
   let roleName;
   if (role === "Delivery Staff") {
     roleName = 4;
@@ -371,14 +454,33 @@ const onHancleCreateUser = async (
     showLoading();
 
     const response = await createUser(user);
-    console.log(response);
     // if (response)
     if (response.status === 200) {
-      showSnackbar({
-        typeSnackbar: "success",
-        msgSnackbar: "Create user successful!",
-      });
-      handleClose();
+      let id = response.data.id;
+      // let urlFirebase;
+      // let name = `/${id}/avatar.png`;
+      // const ref = storageFirebase.ref(name);
+      // const uploadTask = ref.put(user.avatarFile);
+      // uploadTask.on("state_changed", console.log, console.error, async () => {
+      //   // urlFirebase = await ref.getDownloadURL();
+      // });
+      let urlFirebase = await FirebaseUtils.uploadImage(
+        user.avatarFile,
+        id,
+        `/${id}/avatar.png`
+      );
+      const responseUpdate = await updateUser(response.data, id, urlFirebase);
+
+      if (responseUpdate.status === 200) {
+        showSnackbar({
+          typeSnackbar: "success",
+          msgSnackbar: "Create user successful!",
+        });
+        handleClose();
+        let newListUser = [...listUser];
+        newListUser.unshift(response.data);
+        setListUser(newListUser);
+      }
     }
   } catch (error) {
     console.log(error);
@@ -400,23 +502,30 @@ function Users(props) {
   const { showLoading, hideLoading, showSnackbar } = props;
   inputFile = useRef(null);
   const onSubmit = (data) => {
-    // const ref = storage.ref(`/images/${file.name}`);
-    // const uploadTask = ref.put(file);
-    // uploadTask.on("state_changed", console.log, console.error, () => {
-    //   ref.getDownloadURL().then((url) => {
-    //     setFile(null);
-    //     setURL(url);
-    //   });
-    // });
-    onHancleCreateUser(
-      data,
-      role,
-      showLoading,
-      hideLoading,
-      showSnackbar,
-      handleClose,
-      user
-    );
+    if (isEdit === false) {
+      onHancleCreateUser(
+        data,
+        role,
+        showLoading,
+        hideLoading,
+        showSnackbar,
+        handleClose,
+        setListUser,
+        listUser
+      );
+    } else {
+      onHancleUpdateUser(
+        data,
+        role,
+        showLoading,
+        hideLoading,
+        showSnackbar,
+        handleClose,
+        setListUser,
+        listUser,
+        user
+      );
+    }
   };
   useEffect(() => {
     const getData = async (name, page, size) => {
@@ -440,14 +549,14 @@ function Users(props) {
   const [open, setOpen] = React.useState(false);
   const [listUser, setListUser] = React.useState([]);
   const [isEdit, setEdit] = React.useState(false);
-  const [user, setUser] = React.useState({});
+  const [user, setUser] = React.useState({ images: [{ id: null, url: null }] });
   const handleOpen = (isEdit) => {
     setOpen(true);
     setEdit(isEdit);
   };
   const handleClose = () => {
     setOpen(false);
-    setUser({});
+    setUser({ avatarFile: undefined, images: [{ id: null, url: null }] });
     reset();
   };
   return (
@@ -501,7 +610,7 @@ function Users(props) {
           color="primary"
           variant="contained"
           onClick={(e) => {
-            setUser({});
+            setUser({ images: [{ id: null, url: null }] });
             handleOpen(false);
           }}
         >

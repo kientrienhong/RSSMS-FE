@@ -113,6 +113,7 @@ const handleClickRow = (row, setUser, handleOpen, reset) => {
     storageName: row.storageName,
     roleName: row.roleName,
     address: row.address,
+    images: [row.images[0]],
   };
 
   setUser(user);

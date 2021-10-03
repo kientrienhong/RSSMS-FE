@@ -28,6 +28,12 @@ const styleModal = {
   borderRadius: "10px",
 };
 
+const buildInputFileImage = () => {
+  <Box sx={{ width: "90%" }}>
+    <img src="" />
+  </Box>;
+};
+
 const buildModal = (storage, open, handleClose) => {
   return (
     <Modal
@@ -36,13 +42,6 @@ const buildModal = (storage, open, handleClose) => {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <input
-        type="file"
-        id="file"
-        ref={inputFile}
-        style={{ display: "none" }}
-      />
-
       <Box
         sx={{
           ...styleModal,
@@ -51,6 +50,13 @@ const buildModal = (storage, open, handleClose) => {
           flexDirection: "row",
         }}
       >
+        <input
+          type="file"
+          id="file"
+          ref={inputFile}
+          style={{ display: "none" }}
+        />
+
         <Box
           sx={{
             display: "flex",
@@ -58,6 +64,7 @@ const buildModal = (storage, open, handleClose) => {
             flexDirection: "column",
           }}
         ></Box>
+        <Box></Box>
         <Box
           sx={{
             width: "35%",
@@ -99,8 +106,10 @@ export default function Storages() {
   inputFile = useRef(null);
 
   const [open, setOpen] = React.useState(false);
+  const [storage, setStorage] = React.useState({});
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
   return (
     <Box
       sx={{
@@ -109,7 +118,7 @@ export default function Storages() {
         py: 3,
       }}
     >
-      {buildModal({}, open, handleClose)}
+      {buildModal(storage, open, handleClose)}
       <Box
         sx={{
           marginLeft: "2%",

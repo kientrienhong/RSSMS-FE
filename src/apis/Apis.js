@@ -35,3 +35,36 @@ export const deleteUser = async (id) => {
 
   return response;
 };
+
+export const updateUser = async (user, id, imageUrl) => {
+  let image;
+  if (imageUrl === "") {
+    console.log(user.images);
+    if (user.images === undefined) {
+      image = null;
+    } else {
+      image = user.images[0].url;
+    }
+  } else {
+    image = imageUrl;
+  }
+  console.log("=============", image);
+  const response = await axios.put(
+    `https://localhost:44304/api/v1/users/${id}`,
+    {
+      id: id,
+      name: user.name,
+      address: user.address,
+      phone: user.phone,
+      storageId: null,
+      images: [
+        {
+          id: user.images[0].id,
+          url: image,
+        },
+      ],
+    }
+  );
+
+  return response;
+};
