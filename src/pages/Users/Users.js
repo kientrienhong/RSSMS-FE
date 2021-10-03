@@ -22,7 +22,6 @@ import { useForm } from "react-hook-form";
 import CustomInput from "../../components/CustomInput";
 import { CustomSelect } from "../../components/CustomSelect";
 import { storageFirebase } from "../../firebase/firebase";
-import FirebaseUtils from "../../firebase/firebaseUtils";
 
 let inputFile;
 
@@ -55,13 +54,6 @@ const styleBoxComboBox = {
   width: "50%",
   marginTop: "2%",
 };
-
-const listRoleOption = [
-  { value: "Customer", label: "Customer" },
-  { value: "Manager", label: "Manager" },
-  { value: "Office Staff", label: "Office Staff" },
-  { value: "Delivery Staff", label: "Delivery Staff" },
-];
 
 const handleOnclickAvatar = () => {
   inputFile.current.click();
@@ -232,41 +224,44 @@ const buildModal = (
               justifyContent: "space-between",
             }}
           >
-            <Box sx={styleBoxComboBox}>
-              <Typography
-                color="black"
-                variant="h2"
-                style={{
-                  marginTop: "2%",
-                  textAlign: "left",
-                  marginLeft: "2.5%",
-                }}
-              >
-                Type
-              </Typography>
-              <FormControl
-                sx={{ m: 1, minWidth: 120, color: "black" }}
-                name="roleName"
-              >
-                <Select
-                  value={user.roleName}
-                  onChange={handleChangeRole}
-                  displayEmpty
+            {isEdit === false ? (
+              <Box sx={styleBoxComboBox}>
+                <Typography
+                  color="black"
+                  variant="h2"
+                  style={{
+                    marginTop: "2%",
+                    textAlign: "left",
+                    marginLeft: "2.5%",
+                  }}
                 >
-                  <MenuItem value={"Customer"}>Customer</MenuItem>
-                  <MenuItem value={"Manager"}>Manager</MenuItem>
-                  <MenuItem value={"Office Staff"}>Office Staff</MenuItem>
-                  <MenuItem value={"Delivery Staff"}>Delivery Staff</MenuItem>
-                </Select>
-              </FormControl>
-              {/* <CustomSelect
+                  Type
+                </Typography>
+                <FormControl
+                  sx={{ m: 1, minWidth: 120, color: "black" }}
+                  name="roleName"
+                >
+                  <Select
+                    value={user.roleName}
+                    onChange={handleChangeRole}
+                    displayEmpty
+                  >
+                    <MenuItem value={"Customer"}>Customer</MenuItem>
+                    <MenuItem value={"Manager"}>Manager</MenuItem>
+                    <MenuItem value={"Office Staff"}>Office Staff</MenuItem>
+                    <MenuItem value={"Delivery Staff"}>Delivery Staff</MenuItem>
+                  </Select>
+                </FormControl>
+                {/* <CustomSelect
                 name={"roleName"}
                 value={user.roleName || " "}
                 control={control}
                 options={listRoleOption}
                 rules={{ required: "Type required" }}
               /> */}
-            </Box>
+              </Box>
+            ) : null}
+
             <Box sx={styleBoxComboBox}>
               <Typography
                 color="black"
@@ -337,7 +332,7 @@ const buildModal = (
   );
 };
 
-const onHancleUpdateUser = async (
+const onHandleUpdateUser = async (
   data,
   role,
   showLoading,
@@ -381,7 +376,7 @@ const onHancleUpdateUser = async (
     let responseUpdate;
     if (user.avatarFile !== undefined) {
       let urlFirebase;
-      let name = `/${id}/avatar.png`;
+      let name = `user/${id}/avatar.png`;
       const ref = storageFirebase.ref(name);
       const uploadTask = ref.put(user.avatarFile);
       uploadTask.on("state_changed", console.log, console.error, async () => {
@@ -395,7 +390,11 @@ const onHancleUpdateUser = async (
           handleClose();
           let newListUser = [...listUser];
           let index = newListUser.findIndex((e) => e.id === id);
-          newListUser[index] = responseUpdate.data;
+          newListUser[index] = {
+            ...responseUpdate.data,
+            roleName: user.roleName,
+          };
+          console.log(newListUser[index]);
           setListUser(newListUser);
         }
       });
@@ -409,7 +408,10 @@ const onHancleUpdateUser = async (
         handleClose();
         let newListUser = [...listUser];
         let index = newListUser.findIndex((e) => e.id === id);
-        newListUser[index] = responseUpdate.data;
+        newListUser[index] = {
+          ...responseUpdate.data,
+          roleName: user.roleName,
+        };
         setListUser(newListUser);
       }
     }
@@ -420,7 +422,7 @@ const onHancleUpdateUser = async (
   }
 };
 
-const onHancleCreateUser = async (
+const onHandleCreateUser = async (
   data,
   role,
   showLoading,
@@ -428,7 +430,8 @@ const onHancleCreateUser = async (
   showSnackbar,
   handleClose,
   setListUser,
-  listUser
+  listUser,
+  user
 ) => {
   let roleName;
   if (role === "Delivery Staff") {
@@ -440,7 +443,7 @@ const onHancleCreateUser = async (
   } else if (role === "Manager") {
     roleName = 2;
   }
-  let user = {
+  let userTemp = {
     name: data.name,
     password: data.password,
     email: data.email,
@@ -453,34 +456,35 @@ const onHancleCreateUser = async (
   try {
     showLoading();
 
-    const response = await createUser(user);
-    // if (response)
+    const response = await createUser(userTemp);
     if (response.status === 200) {
       let id = response.data.id;
-      // let urlFirebase;
-      // let name = `/${id}/avatar.png`;
-      // const ref = storageFirebase.ref(name);
-      // const uploadTask = ref.put(user.avatarFile);
-      // uploadTask.on("state_changed", console.log, console.error, async () => {
-      //   // urlFirebase = await ref.getDownloadURL();
-      // });
-      let urlFirebase = await FirebaseUtils.uploadImage(
-        user.avatarFile,
-        id,
-        `/${id}/avatar.png`
-      );
-      const responseUpdate = await updateUser(response.data, id, urlFirebase);
-
-      if (responseUpdate.status === 200) {
-        showSnackbar({
-          typeSnackbar: "success",
-          msgSnackbar: "Create user successful!",
-        });
-        handleClose();
-        let newListUser = [...listUser];
-        newListUser.unshift(response.data);
-        setListUser(newListUser);
-      }
+      let urlFirebase;
+      let name = `user/${id}/avatar.png`;
+      const ref = storageFirebase.ref(name);
+      const uploadTask = ref.put(user.avatarFile);
+      uploadTask.on("state_changed", console.log, console.error, async () => {
+        urlFirebase = await ref.getDownloadURL();
+        let responseUpdate = await updateUser(response.data, id, urlFirebase);
+        if (responseUpdate.status === 200) {
+          showSnackbar({
+            typeSnackbar: "success",
+            msgSnackbar: "Create user successful!",
+          });
+          handleClose();
+          let newListUser = [...listUser];
+          let newImages = [
+            {
+              id: response.data.images[0].id,
+              url: urlFirebase,
+            },
+          ];
+          let newUser = { ...response.data, images: newImages };
+          console.log(newUser);
+          newListUser.unshift(newUser);
+          setListUser(newListUser);
+        }
+      });
     }
   } catch (error) {
     console.log(error);
@@ -503,7 +507,7 @@ function Users(props) {
   inputFile = useRef(null);
   const onSubmit = (data) => {
     if (isEdit === false) {
-      onHancleCreateUser(
+      onHandleCreateUser(
         data,
         role,
         showLoading,
@@ -511,10 +515,11 @@ function Users(props) {
         showSnackbar,
         handleClose,
         setListUser,
-        listUser
+        listUser,
+        user
       );
     } else {
-      onHancleUpdateUser(
+      onHandleUpdateUser(
         data,
         role,
         showLoading,

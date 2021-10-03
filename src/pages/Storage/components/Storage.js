@@ -13,6 +13,8 @@ const styleBoxTypo = {
   alignItems: "flex-end",
 };
 export default function Storage({ storage }) {
+  const statusList = [{}, { color: "green", name: "Available" }];
+  const typeList = ["Self-storage", "Door-to-door"];
   return (
     <Card
       sx={{
@@ -20,11 +22,11 @@ export default function Storage({ storage }) {
         flexDirection: "row",
         alignItems: "center",
         height: "250px",
-        padding: "2%",
+        padding: "8px",
       }}
     >
       <img
-        src="/img/storage.png"
+        src={storage.images[0].url}
         alt="test"
         width="50%"
         height="96%"
@@ -33,8 +35,10 @@ export default function Storage({ storage }) {
       <Box
         sx={{
           marginBottom: "3%",
+          margin: "1%",
           display: "flex",
           height: "100%",
+          width: "50%",
           flexDirection: "column",
           justifyContent: "space-between",
         }}
@@ -59,11 +63,11 @@ export default function Storage({ storage }) {
               {storage.name}
             </Typography>
             <Typography
-              color="green"
+              color={statusList[storage.status].color}
               variant="h2"
               style={{ marginTop: "1%", marginRight: "1%" }}
             >
-              {storage.status}
+              {statusList[storage.status].name}
             </Typography>
           </Box>
           <Box
@@ -92,7 +96,7 @@ export default function Storage({ storage }) {
               Type:
             </Typography>
             <Typography color="black" variant="body">
-              {storage.type}
+              {typeList[storage.type]}
             </Typography>
           </Box>
           {storage.type === "Self-storage" ? (

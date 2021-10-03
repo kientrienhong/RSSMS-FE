@@ -1,106 +1,6 @@
 import React from "react";
 import { Grid, Item } from "@material-ui/core";
 import Storage from "./Storage";
-function createData(
-  id,
-  name,
-  address,
-  img,
-  size,
-  status,
-  type,
-  remainingTime,
-  usage,
-  manager
-) {
-  return {
-    id,
-    name,
-    address,
-    img,
-    size,
-    status,
-    type,
-    remainingTime,
-    usage,
-    manager,
-  };
-}
-
-const listStorage = [
-  createData(
-    1,
-    "Storage 1",
-    "12 Kim Bien",
-    "test",
-    "2m x 10m x 2m",
-    "Available",
-    "Self-storage",
-    "2 years 2 weeks 2 days",
-    "",
-    "Hong Kien Trien"
-  ),
-  createData(
-    1,
-    "Storage 1",
-    "12 Kim Bien",
-    "test",
-    "2m x 10m x 2m",
-    "Available",
-    "Self-storage",
-    "2 years 2 weeks 2 days",
-    "",
-    "Hong Kien Trien"
-  ),
-  createData(
-    1,
-    "Storage 1",
-    "12 Kim Bien",
-    "test",
-    "2m x 10m x 2m",
-    "Available",
-    "Self-storage",
-    "2 years 2 weeks 2 days",
-    "",
-    "Hong Kien Trien"
-  ),
-  createData(
-    1,
-    "Storage 1",
-    "12 Kim Bien",
-    "test",
-    "2m x 10m x 2m",
-    "Available",
-    "Self-storage",
-    "2 years 2 weeks 2 days",
-    "",
-    "Hong Kien Trien"
-  ),
-  createData(
-    1,
-    "Storage 1",
-    "12 Kim Bien",
-    "test",
-    "2m x 10m x 2m",
-    "Available",
-    "Self-storage",
-    "2 years 2 weeks 2 days",
-    "",
-    "Hong Kien Trien"
-  ),
-  createData(
-    1,
-    "Storage 1",
-    "12 Kim Bien",
-    "test",
-    "2m x 10m x 2m",
-    "Available",
-    "Self-storage",
-    "2 years 2 weeks 2 days",
-    "",
-    "Hong Kien Trien"
-  ),
-];
 
 const mapListToGrid = (listStorage) =>
   listStorage.map((e) => (
@@ -109,7 +9,7 @@ const mapListToGrid = (listStorage) =>
     </Grid>
   ));
 
-export default function ListStorage() {
+export default function ListStorage({ listStorages }) {
   // Avoid a layout jump when reaching the last page with empty rows.
   return (
     <Grid
@@ -120,7 +20,7 @@ export default function ListStorage() {
         width: "98%",
       }}
     >
-      {mapListToGrid(listStorage)}
+      {mapListToGrid(listStorages)}
     </Grid>
   );
 }

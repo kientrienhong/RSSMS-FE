@@ -9,6 +9,18 @@ export const getListUser = async (name, page, size) => {
   return listUser;
 };
 
+export const login = async (email, password) => {
+  const response = await axios.post(
+    "https://localhost:44304/api/v1/users/login",
+    {
+      email: email,
+      password: password,
+    }
+  );
+
+  return response;
+};
+
 export const createUser = async (user) => {
   const response = await axios.post(`https://localhost:44304/api/v1/users`, {
     name: user.name,
@@ -20,7 +32,7 @@ export const createUser = async (user) => {
     storageId: null,
     images: [
       {
-        url: user.avatarLink,
+        url: null,
       },
     ],
   });
@@ -48,7 +60,6 @@ export const updateUser = async (user, id, imageUrl) => {
   } else {
     image = imageUrl;
   }
-  console.log("=============", image);
   const response = await axios.put(
     `https://localhost:44304/api/v1/users/${id}`,
     {
@@ -63,6 +74,68 @@ export const updateUser = async (user, id, imageUrl) => {
           url: image,
         },
       ],
+    }
+  );
+
+  return response;
+};
+
+export const getListStorage = async (name, page, size) => {
+  const listStorage = await axios.get(
+    `https://localhost:44304/api/v1/storages?page=${page}&size=${size}`
+  );
+
+  return listStorage;
+};
+
+export const createStorage = async (storage) => {
+  const response = await axios.post(`https://localhost:44304/api/v1/storages`, {
+    name: storage.name,
+    size: storage.size,
+    address: storage.address,
+    status: 1,
+    type: storage.type,
+    images: [
+      {
+        url: null,
+      },
+    ],
+    listStaff: [],
+  });
+
+  return response;
+};
+
+export const updateStorage = async (storage, id, imageUrl) => {
+  let image;
+  if (imageUrl === "") {
+    console.log(storage.images);
+    if (storage.images === undefined) {
+      image = null;
+    } else {
+      image = storage.images[0].url;
+    }
+  } else {
+    image = imageUrl;
+  }
+  const response = await axios.put(
+    `https://localhost:44304/api/v1/storages/${id}`,
+    {
+      id: id,
+      name: storage.name,
+      managerId: null,
+
+      address: storage.address,
+      size: storage.size,
+      storageId: null,
+      images: [
+        {
+          id: storage.images[0].id,
+          url: image,
+        },
+      ],
+      usage: 0,
+      type: storage.type,
     }
   );
 

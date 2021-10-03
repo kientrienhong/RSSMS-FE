@@ -1,17 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Button, TextField, Typography } from "@material-ui/core";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import LoadingPage from "../Loading/LoadingPage";
 import * as action from "../../redux/action/action";
-
+import { login } from "../../apis/Apis";
 function LogIn(props) {
+  const [isValid, setValid] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [input, setInput] = useState({ email: "", password: "" });
   const navigate = useNavigate();
 
   const submitLogin = async () => {
     props.showLoading();
-    props.hideLoading();
-    navigate("/app/account", { replace: true });
+    try {
+      const response = await login(input.email, input.password);
+      console.log(response);
+      if (response.code === 404) {
+        setValid(false);
+        setErrorMsg("Invalid username or password");
+      } else {
+        navigate("/app/account", { replace: true });
+      }
+    } catch (e) {
+      console.log(e);
+      setValid(false);
+      setErrorMsg("Invalid username or password");
+    } finally {
+      props.hideLoading();
+    }
+  };
+
+  const handleOnChange = (e, value) => {
+    let inputTemp = { ...input };
+    inputTemp[`${value}`] = e.target.value;
+    setInput(inputTemp);
   };
 
   const style = {
@@ -66,14 +89,26 @@ function LogIn(props) {
               <Typography variant="h3" style={{ marginBottom: "4%" }}>
                 Email
               </Typography>
-              <TextField variant="outlined" />
+              <TextField
+                variant="outlined"
+                onChange={(e) => handleOnChange(e, "email")}
+              />
             </Box>
             <Box sx={style.boxTextField}>
-              <Typography variant="h3" style={{ marginBottom: "4%" }}>
+              <Typography variant="h3" style={{ marginBottom: "1%" }}>
                 Password
               </Typography>
-              <TextField variant="outlined" />
+
+              <TextField
+                type="password"
+                variant="outlined"
+                onChange={(e) => handleOnChange(e, "password")}
+              />
             </Box>
+            {isValid === false ? (
+              <p style={{ color: "red" }}>{errorMsg}</p>
+            ) : null}
+
             <Box sx={style.boxTextField}>
               <Button
                 style={{ height: "45px" }}
