@@ -18,7 +18,12 @@ import Tab from "@mui/material/Tab";
 import TabPanel from "../../components/TabPanel";
 import { useForm } from "react-hook-form";
 import CustomInput from "../../components/CustomInput";
-import { getListStorage, createStorage, updateStorage } from "../../apis/Apis";
+import {
+  getListStorage,
+  createStorage,
+  updateStorage,
+  deleteStorage,
+} from "../../apis/Apis";
 import { connect } from "react-redux";
 import * as action from "../../redux/action/action";
 import { storageFirebase } from "../../firebase/firebase";
@@ -87,6 +92,17 @@ const buildInputFileImage = (storage) => {
       )}
     </Box>
   );
+};
+
+const onHandleDeleteStorage = async (id) => {
+  let response;
+  try {
+    response = await deleteStorage(id);
+  } catch (error) {
+    console.log(error);
+  }
+
+  return response;
 };
 
 const buildInputForm = (
@@ -551,7 +567,11 @@ function Storages(props) {
           Create storage
         </Button>
       </Box>
-      <ListStorage listStorages={listStorages} />
+      <ListStorage
+        listStorages={listStorages}
+        onHandleDeleteStorage={onHandleDeleteStorage}
+        setListStorages={setListStorages}
+      />
     </Box>
   );
 }

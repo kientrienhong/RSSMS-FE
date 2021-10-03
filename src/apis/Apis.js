@@ -124,7 +124,7 @@ export const updateStorage = async (storage, id, imageUrl) => {
       id: id,
       name: storage.name,
       managerId: null,
-
+      status: 1,
       address: storage.address,
       size: storage.size,
       storageId: null,
@@ -137,6 +137,13 @@ export const updateStorage = async (storage, id, imageUrl) => {
       usage: 0,
       type: storage.type,
     }
+  );
+
+  return response;
+};
+export const deleteStorage = async (id) => {
+  const response = await axios.delete(
+    `https://localhost:44304/api/v1/storages/${id}`
   );
 
   return response;

@@ -12,7 +12,7 @@ const styleBoxTypo = {
   marginTop: "2%",
   alignItems: "flex-end",
 };
-export default function Storage({ storage }) {
+export default function Storage({ storage, setCurrentId, handleConfirmOpen }) {
   const statusList = [{}, { color: "green", name: "Available" }];
   const typeList = ["Self-storage", "Door-to-door"];
   return (
@@ -141,6 +141,10 @@ export default function Storage({ storage }) {
             }}
             color="error"
             variant="contained"
+            onClick={() => {
+              setCurrentId(storage.id);
+              handleConfirmOpen();
+            }}
           >
             Delete
           </Button>
