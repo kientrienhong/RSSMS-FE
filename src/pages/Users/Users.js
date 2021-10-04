@@ -354,6 +354,14 @@ function Users(props) {
     setTotalUser(list.data.metadata.total);
   };
 
+  const onHandleSearch = (e) => {
+    setSearchName(e.target.value);
+    setTimeout(async () => {
+      await getData(e.target.value, 1, 8);
+      setSearchName(e.target.value);
+    }, 700);
+  };
+
   const onHandleUpdateUser = async (data) => {
     let roleName;
     if (role === "Delivery Staff") {
@@ -397,8 +405,10 @@ function Users(props) {
           if (responseUpdate.status === 200) {
             showSnackbar("success", "Update user successful!");
             await getData(searchName, page, 8);
-
             handleClose();
+            hideLoading();
+          } else {
+            hideLoading();
           }
         });
       } else {
@@ -406,13 +416,14 @@ function Users(props) {
         if (responseUpdate.status === 200) {
           showSnackbar("success", "Update user successful!");
           await getData(searchName, page, 8);
-
           handleClose();
+          hideLoading();
+        } else {
+          hideLoading();
         }
       }
     } catch (error) {
       console.log(error);
-    } finally {
       hideLoading();
     }
   };
@@ -457,12 +468,12 @@ function Users(props) {
             await getData(searchName, page, 8);
 
             handleClose();
-          }
+            hideLoading();
+          } else hideLoading();
         });
       }
     } catch (error) {
       console.log(error);
-    } finally {
       hideLoading();
     }
   };
@@ -479,9 +490,9 @@ function Users(props) {
       try {
         showLoading();
         await getData(searchName, page, 8);
+        hideLoading();
       } catch (error) {
         console.log(error);
-      } finally {
         hideLoading();
       }
     };
@@ -493,9 +504,9 @@ function Users(props) {
       try {
         showLoading();
         await getData(searchName, page, 8);
+        hideLoading();
       } catch (error) {
         console.log(error);
-      } finally {
         hideLoading();
       }
     };
@@ -549,6 +560,7 @@ function Users(props) {
           sx={{
             width: "80%",
           }}
+          onChange={(e) => onHandleSearch(e)}
           InputProps={{
             style: { height: "45px", backgroundColor: "white" },
             startAdornment: (

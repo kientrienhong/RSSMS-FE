@@ -130,17 +130,6 @@ const useStyles = makeStyles({
   },
 });
 
-const handleDeleteUser = async (id) => {
-  let response;
-  try {
-    response = await deleteUser(id);
-  } catch (error) {
-    console.log(error);
-  }
-
-  return response;
-};
-
 export default function ListUsers({
   reset,
   setUser,
@@ -161,6 +150,21 @@ export default function ListUsers({
   };
   const handleClose = () => {
     setOpen(false);
+  };
+  const handleDeleteUser = async (id) => {
+    let response;
+    try {
+      response = await deleteUser(id);
+      if (listUser.length === 1) {
+        if (page !== 1) {
+          setPage(page - 1);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    return response;
   };
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
