@@ -147,10 +147,12 @@ export default function ListUsers({
   handleOpen,
   listUser,
   setListUser,
+  page,
+  setPage,
+  totalUser,
 }) {
   const classes = useStyles();
 
-  const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   const [open, setOpen] = React.useState(false);
   const [currentId, setCurrentId] = React.useState(-1);
@@ -162,10 +164,10 @@ export default function ListUsers({
   };
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - listUser.length) : 0;
+    page - 1 > 0 ? Math.max(0, (1 + page) * rowsPerPage - listUser.length) : 0;
 
   const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+    setPage(newPage + 1);
   };
 
   const handleChangeRowsPerPage = (event) => {
@@ -183,6 +185,7 @@ export default function ListUsers({
           listData={listUser}
           setListData={setListUser}
           id={currentId}
+          msg={"Delete user success!"}
         />
         {mapListTableHeader(listHeaderName)}
         <TableBody>
@@ -246,20 +249,20 @@ export default function ListUsers({
             );
           })}
 
-          {emptyRows > 0 && (
-            <TableRow style={{ height: 53 * emptyRows }}>
+          {/* {emptyRows > 0 && (
+            <TableRow style={{ height: 30 * emptyRows }}>
               <TableCell colSpan={6} />
             </TableRow>
-          )}
+          )} */}
         </TableBody>
         <TableFooter>
           <TableRow>
             <TablePagination
               rowsPerPageOptions={[10]}
               colSpan={3}
-              count={listUser.length}
+              count={totalUser}
               rowsPerPage={rowsPerPage}
-              page={page}
+              page={page - 1}
               SelectProps={{
                 inputProps: {
                   "aria-label": "rows per page",

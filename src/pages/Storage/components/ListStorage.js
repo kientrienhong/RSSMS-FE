@@ -45,6 +45,7 @@ export default function ListStorage({
         listData={listStorages}
         setListData={setListStorages}
         id={currentId}
+        msg={"Delete storage success!"}
       />
       {mapListToGrid(listStorages, setCurrentId, handleConfirmOpen)}
     </Grid>

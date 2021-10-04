@@ -25,6 +25,7 @@ function ConfirmModal({
   showSnackbar,
   listData,
   setListData,
+  msg,
 }) {
   return (
     <Modal
@@ -75,10 +76,7 @@ function ConfirmModal({
                 if (response.status === 200) {
                   handleClose();
                   setListData(listData.filter((e) => e.id !== id));
-                  showSnackbar({
-                    typeSnackbar: "success",
-                    msgSnackbar: "Delete user successful!",
-                  });
+                  showSnackbar("success", msg);
                 }
               } catch (error) {
                 console.log(error);
@@ -113,7 +111,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     showLoading: () => dispatch(action.showLoader()),
     hideLoading: () => dispatch(action.hideLoader()),
-    showSnackbar: (msg) => dispatch(action.showSnackbar(msg)),
+    showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
   };
 };
 export default connect(null, mapDispatchToProps)(ConfirmModal);

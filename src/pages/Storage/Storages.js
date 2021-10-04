@@ -364,7 +364,6 @@ const onHandleCreateStorage = async (
   listStorages,
   storage
 ) => {
-  console.log(typeName);
   let type;
   if (typeName === "Self-Storage") {
     type = 0;
@@ -388,7 +387,6 @@ const onHandleCreateStorage = async (
     listStaff: [],
   };
   try {
-    console.log(storageTemp);
     showLoading();
 
     const response = await createStorage(storageTemp);
@@ -407,10 +405,7 @@ const onHandleCreateStorage = async (
           urlFirebase
         );
         if (responseUpdate.status === 200) {
-          showSnackbar({
-            typeSnackbar: "success",
-            msgSnackbar: "Create storage successful!",
-          });
+          showSnackbar("success", "Create storage successful!");
           handleClose();
           let newListStorages = [...listStorages];
           let newImages = [
@@ -420,7 +415,6 @@ const onHandleCreateStorage = async (
             },
           ];
           let newStorages = { ...response.data, images: newImages };
-          console.log(newStorages);
           newListStorages.unshift(newStorages);
           setListStorages(newListStorages);
         }
@@ -438,7 +432,7 @@ function Storages(props) {
   const { showLoading, hideLoading, showSnackbar } = props;
 
   const [open, setOpen] = React.useState(false);
-  const { handleSubmit, reset, control, watch } = useForm();
+  const { handleSubmit, reset, control } = useForm();
   const [listStorages, setListStorages] = React.useState([]);
   const [storage, setStorage] = React.useState({
     images: [{ id: null, url: null }],
@@ -580,7 +574,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     showLoading: () => dispatch(action.showLoader()),
     hideLoading: () => dispatch(action.hideLoader()),
-    showSnackbar: (msg) => dispatch(action.showSnackbar(msg)),
+    showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
   };
 };
 

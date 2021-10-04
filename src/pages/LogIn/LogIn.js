@@ -15,7 +15,6 @@ function LogIn(props) {
     props.showLoading();
     try {
       const response = await login(input.email, input.password);
-      console.log(response);
       if (response.code === 404) {
         setValid(false);
         setErrorMsg("Invalid username or password");

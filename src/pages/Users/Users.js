@@ -22,7 +22,6 @@ import { useForm } from "react-hook-form";
 import CustomInput from "../../components/CustomInput";
 import { CustomSelect } from "../../components/CustomSelect";
 import { storageFirebase } from "../../firebase/firebase";
-
 let inputFile;
 
 const styleModal = {
@@ -36,6 +35,7 @@ const styleModal = {
   boxShadow: 24,
   p: 4,
   borderRadius: "10px",
+  padding: "1%",
 };
 
 const styleBoxInput = {
@@ -143,31 +143,22 @@ const buildModal = (
                 //   message: "Invalid email",
                 // },
               }}
-              styles={{ width: "320px" }}
+              styles={{ width: "540px" }}
               name="email"
               label="Email"
               disabled={isEdit}
               userInfo={user.email}
               inlineStyle={styleInput}
             />
-            <CustomInput
-              control={control}
-              rules={{ required: "Name required" }}
-              styles={{ width: "280px" }}
-              name="name"
-              label="Name"
-              userInfo={user.name}
-              inlineStyle={styleInput}
-            />
           </Box>
           <Box sx={{ ...styleBoxInput }}>
             <CustomInput
               control={control}
-              rules={{ required: "Address required" }}
-              styles={{ width: "400px" }}
-              name="address"
-              label="Address"
-              userInfo={user.address}
+              rules={{ required: "Name required" }}
+              styles={{ width: "240px" }}
+              name="name"
+              label="Name"
+              userInfo={user.name}
               inlineStyle={styleInput}
             />
             <CustomInput
@@ -179,10 +170,21 @@ const buildModal = (
                   message: "Invalid phone number",
                 },
               }}
-              styles={{ width: "160px" }}
+              styles={{ width: "240px" }}
               name="phone"
               label="Phone"
               userInfo={user.phone}
+              inlineStyle={styleInput}
+            />
+          </Box>
+          <Box sx={{ ...styleBoxInput }}>
+            <CustomInput
+              control={control}
+              rules={{ required: "Address required" }}
+              styles={{ width: "540px" }}
+              name="address"
+              label="Address"
+              userInfo={user.address}
               inlineStyle={styleInput}
             />
           </Box>
@@ -332,170 +334,11 @@ const buildModal = (
   );
 };
 
-const onHandleUpdateUser = async (
-  data,
-  role,
-  showLoading,
-  hideLoading,
-  showSnackbar,
-  handleClose,
-  setListUser,
-  listUser,
-  user
-) => {
-  let roleName;
-  if (role === "Delivery Staff") {
-    roleName = 4;
-  } else if (role === "Customer") {
-    roleName = 3;
-  } else if (role === "Office Staff") {
-    roleName = 5;
-  } else if (role === "Manager") {
-    roleName = 2;
-  }
-  let userTemp = {
-    name: data.name,
-    email: data.email,
-    address: data.address,
-    phone: data.phone,
-    roleId: roleName,
-    storageId: null,
-    images: [
-      {
-        id: user?.images[0]?.id,
-        url: user?.images[0]?.url,
-      },
-    ],
-  };
-  try {
-    showLoading();
-
-    // if (response)
-    let id = user.id;
-
-    let responseUpdate;
-    if (user.avatarFile !== undefined) {
-      let urlFirebase;
-      let name = `user/${id}/avatar.png`;
-      const ref = storageFirebase.ref(name);
-      const uploadTask = ref.put(user.avatarFile);
-      uploadTask.on("state_changed", console.log, console.error, async () => {
-        urlFirebase = await ref.getDownloadURL();
-        responseUpdate = await updateUser(userTemp, id, urlFirebase);
-        if (responseUpdate.status === 200) {
-          showSnackbar({
-            typeSnackbar: "success",
-            msgSnackbar: "Update user successful!",
-          });
-          handleClose();
-          let newListUser = [...listUser];
-          let index = newListUser.findIndex((e) => e.id === id);
-          newListUser[index] = {
-            ...responseUpdate.data,
-            roleName: user.roleName,
-          };
-          console.log(newListUser[index]);
-          setListUser(newListUser);
-        }
-      });
-    } else {
-      responseUpdate = await updateUser(userTemp, id, "");
-      if (responseUpdate.status === 200) {
-        showSnackbar({
-          typeSnackbar: "success",
-          msgSnackbar: "Update user successful!",
-        });
-        handleClose();
-        let newListUser = [...listUser];
-        let index = newListUser.findIndex((e) => e.id === id);
-        newListUser[index] = {
-          ...responseUpdate.data,
-          roleName: user.roleName,
-        };
-        setListUser(newListUser);
-      }
-    }
-  } catch (error) {
-    console.log(error);
-  } finally {
-    hideLoading();
-  }
-};
-
-const onHandleCreateUser = async (
-  data,
-  role,
-  showLoading,
-  hideLoading,
-  showSnackbar,
-  handleClose,
-  setListUser,
-  listUser,
-  user
-) => {
-  let roleName;
-  if (role === "Delivery Staff") {
-    roleName = 4;
-  } else if (role === "Customer") {
-    roleName = 3;
-  } else if (role === "Office Staff") {
-    roleName = 5;
-  } else if (role === "Manager") {
-    roleName = 2;
-  }
-  let userTemp = {
-    name: data.name,
-    password: data.password,
-    email: data.email,
-    address: data.address,
-    phone: data.phone,
-    roleId: roleName,
-    storageId: null,
-    avatarLink: null,
-  };
-  try {
-    showLoading();
-
-    const response = await createUser(userTemp);
-    if (response.status === 200) {
-      let id = response.data.id;
-      let urlFirebase;
-      let name = `user/${id}/avatar.png`;
-      const ref = storageFirebase.ref(name);
-      const uploadTask = ref.put(user.avatarFile);
-      uploadTask.on("state_changed", console.log, console.error, async () => {
-        urlFirebase = await ref.getDownloadURL();
-        let responseUpdate = await updateUser(response.data, id, urlFirebase);
-        if (responseUpdate.status === 200) {
-          showSnackbar({
-            typeSnackbar: "success",
-            msgSnackbar: "Create user successful!",
-          });
-          handleClose();
-          let newListUser = [...listUser];
-          let newImages = [
-            {
-              id: response.data.images[0].id,
-              url: urlFirebase,
-            },
-          ];
-          let newUser = { ...response.data, images: newImages };
-          console.log(newUser);
-          newListUser.unshift(newUser);
-          setListUser(newListUser);
-        }
-      });
-    }
-  } catch (error) {
-    console.log(error);
-  } finally {
-    hideLoading();
-  }
-};
-
 function Users(props) {
   const [role, setRole] = React.useState("");
-
+  const [page, setPage] = React.useState(1);
+  const [searchName, setSearchName] = React.useState("");
+  const [totalUser, setTotalUser] = React.useState(0);
   const handleChangeRole = (event) => {
     setRole(event.target.value);
   };
@@ -505,43 +348,137 @@ function Users(props) {
 
   const { showLoading, hideLoading, showSnackbar } = props;
   inputFile = useRef(null);
+  const getData = async (name, page, size) => {
+    let list = await getListUser(name, page, size);
+    setListUser(list.data.data);
+    setTotalUser(list.data.metadata.total);
+  };
+
+  const onHandleUpdateUser = async (data) => {
+    let roleName;
+    if (role === "Delivery Staff") {
+      roleName = 4;
+    } else if (role === "Customer") {
+      roleName = 3;
+    } else if (role === "Office Staff") {
+      roleName = 5;
+    } else if (role === "Manager") {
+      roleName = 2;
+    }
+    let userTemp = {
+      name: data.name,
+      email: data.email,
+      address: data.address,
+      phone: data.phone,
+      roleId: roleName,
+      storageId: null,
+      images: [
+        {
+          id: user?.images[0]?.id,
+          url: user?.images[0]?.url,
+        },
+      ],
+    };
+    try {
+      showLoading();
+
+      // if (response)
+      let id = user.id;
+
+      let responseUpdate;
+      if (user.avatarFile !== undefined) {
+        let urlFirebase;
+        let name = `user/${id}/avatar.png`;
+        const ref = storageFirebase.ref(name);
+        const uploadTask = ref.put(user.avatarFile);
+        uploadTask.on("state_changed", console.log, console.error, async () => {
+          urlFirebase = await ref.getDownloadURL();
+          responseUpdate = await updateUser(userTemp, id, urlFirebase);
+          if (responseUpdate.status === 200) {
+            showSnackbar("success", "Update user successful!");
+            await getData(searchName, page, 8);
+
+            handleClose();
+          }
+        });
+      } else {
+        responseUpdate = await updateUser(userTemp, id, "");
+        if (responseUpdate.status === 200) {
+          showSnackbar("success", "Update user successful!");
+          await getData(searchName, page, 8);
+
+          handleClose();
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      hideLoading();
+    }
+  };
+
+  const onHandleCreateUser = async (data) => {
+    let roleName;
+    if (role === "Delivery Staff") {
+      roleName = 4;
+    } else if (role === "Customer") {
+      roleName = 3;
+    } else if (role === "Office Staff") {
+      roleName = 5;
+    } else if (role === "Manager") {
+      roleName = 2;
+    }
+    let userTemp = {
+      name: data.name,
+      password: data.password,
+      email: data.email,
+      address: data.address,
+      phone: data.phone,
+      roleId: roleName,
+      storageId: null,
+      avatarLink: null,
+    };
+    try {
+      showLoading();
+
+      const response = await createUser(userTemp);
+      if (response.status === 200) {
+        let id = response.data.id;
+        let urlFirebase;
+        let name = `user/${id}/avatar.png`;
+        const ref = storageFirebase.ref(name);
+        let uploadTask;
+        uploadTask = ref.put(user.avatarFile);
+        uploadTask.on("state_changed", console.log, console.error, async () => {
+          urlFirebase = await ref.getDownloadURL();
+          let responseUpdate = await updateUser(response.data, id, urlFirebase);
+          if (responseUpdate.status === 200) {
+            showSnackbar("success", "Create user successful!");
+            await getData(searchName, page, 8);
+
+            handleClose();
+          }
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      hideLoading();
+    }
+  };
+
   const onSubmit = (data) => {
     if (isEdit === false) {
-      onHandleCreateUser(
-        data,
-        role,
-        showLoading,
-        hideLoading,
-        showSnackbar,
-        handleClose,
-        setListUser,
-        listUser,
-        user
-      );
+      onHandleCreateUser(data);
     } else {
-      onHandleUpdateUser(
-        data,
-        role,
-        showLoading,
-        hideLoading,
-        showSnackbar,
-        handleClose,
-        setListUser,
-        listUser,
-        user
-      );
+      onHandleUpdateUser(data);
     }
   };
   useEffect(() => {
-    const getData = async (name, page, size) => {
-      let list = await getListUser(name, page, size);
-      setListUser(list.data.data);
-    };
-
     const firstCall = async () => {
       try {
         showLoading();
-        await getData("", 1, 8);
+        await getData(searchName, page, 8);
       } catch (error) {
         console.log(error);
       } finally {
@@ -550,6 +487,20 @@ function Users(props) {
     };
     firstCall();
   }, []);
+
+  useEffect(() => {
+    const process = async () => {
+      try {
+        showLoading();
+        await getData(searchName, page, 8);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        hideLoading();
+      }
+    };
+    process();
+  }, [page]);
 
   const [open, setOpen] = React.useState(false);
   const [listUser, setListUser] = React.useState([]);
@@ -633,6 +584,9 @@ function Users(props) {
           listUser={listUser}
           reset={reset}
           setListUser={setListUser}
+          page={page}
+          setPage={setPage}
+          totalUser={totalUser}
         />
       </Card>
     </Box>
@@ -642,7 +596,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     showLoading: () => dispatch(action.showLoader()),
     hideLoading: () => dispatch(action.hideLoader()),
-    showSnackbar: (msg) => dispatch(action.showSnackbar(msg)),
+    showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
   };
 };
 export default connect(null, mapDispatchToProps)(Users);

@@ -16,7 +16,7 @@ import { ReactComponent as WarehouseSVG } from "../svg/warehouse.svg";
 const user = {
   avatar: "/static/images/avatars/avatar_6.png",
   jobTitle: "Admin",
-  name: "Giang Thanh Dinh",
+  name: "admin",
 };
 
 const items = [

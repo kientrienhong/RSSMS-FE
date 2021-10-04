@@ -51,7 +51,6 @@ export const deleteUser = async (id) => {
 export const updateUser = async (user, id, imageUrl) => {
   let image;
   if (imageUrl === "") {
-    console.log(user.images);
     if (user.images === undefined) {
       image = null;
     } else {
@@ -109,7 +108,6 @@ export const createStorage = async (storage) => {
 export const updateStorage = async (storage, id, imageUrl) => {
   let image;
   if (imageUrl === "") {
-    console.log(storage.images);
     if (storage.images === undefined) {
       image = null;
     } else {

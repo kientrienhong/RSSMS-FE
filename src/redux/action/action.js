@@ -12,10 +12,10 @@ export const hideLoader = () => {
   };
 };
 
-export const showSnackbar = (msg) => {
+export const showSnackbar = (type, msg) => {
   return {
     type: ActionType.SHOW_SNACKBAR,
-    payload: msg,
+    payload: { type, msg },
   };
 };
 export const hideSnackbar = () => {
