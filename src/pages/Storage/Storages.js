@@ -27,7 +27,9 @@ import {
 import { connect } from "react-redux";
 import * as action from "../../redux/action/action";
 import { storageFirebase } from "../../firebase/firebase";
-
+import Typography from "@mui/material/Typography";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 let inputFile;
 const styleModal = {
   position: "absolute",
@@ -94,17 +96,6 @@ const buildInputFileImage = (storage) => {
   );
 };
 
-const onHandleDeleteStorage = async (id) => {
-  let response;
-  try {
-    response = await deleteStorage(id);
-  } catch (error) {
-    console.log(error);
-  }
-
-  return response;
-};
-
 const buildInputForm = (
   handleSubmit,
   onSubmit,
@@ -116,6 +107,8 @@ const buildInputForm = (
   handleChangeType,
   onChangeInputFile
 ) => {
+  const typeList = ["Self-Storage", "Door-to-door"];
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <input
@@ -218,7 +211,11 @@ const buildInputForm = (
           sx={{ m: 1, minWidth: 120, color: "black" }}
           name="roleName"
         >
-          <Select value={storage.type} onChange={handleChangeType} displayEmpty>
+          <Select
+            value={typeList[storage.type]}
+            onChange={handleChangeType}
+            displayEmpty
+          >
             <MenuItem value={"Self-Storage"}>Self-Storage</MenuItem>
             <MenuItem value={"Door-to-door"}>Door-to-door</MenuItem>
           </Select>
@@ -353,108 +350,197 @@ const buildModal = (
   );
 };
 
-const onHandleCreateStorage = async (
-  data,
-  typeName,
-  showLoading,
-  hideLoading,
-  showSnackbar,
-  handleClose,
-  setListStorages,
-  listStorages,
-  storage
-) => {
-  let type;
-  if (typeName === "Self-Storage") {
-    type = 0;
-  } else if (typeName === "Door-to-door") {
-    type = 1;
-  }
-
-  let size = `${data.width}m x ${data.length}m x ${data.height}m`;
-
-  let storageTemp = {
-    name: data.name,
-    size: size,
-    address: data.address,
-    status: 1,
-    type: type,
-    images: [
-      {
-        url: null,
-      },
-    ],
-    listStaff: [],
-  };
-  try {
-    showLoading();
-
-    const response = await createStorage(storageTemp);
-    if (response.status === 200) {
-      let id = response.data.id;
-      let urlFirebase;
-      let name = `storages/${id}/avatar.png`;
-
-      const ref = storageFirebase.ref(name);
-      const uploadTask = ref.put(storage.avatarFile);
-      uploadTask.on("state_changed", console.log, console.error, async () => {
-        urlFirebase = await ref.getDownloadURL();
-        let responseUpdate = await updateStorage(
-          response.data,
-          id,
-          urlFirebase
-        );
-        if (responseUpdate.status === 200) {
-          showSnackbar("success", "Create storage successful!");
-          handleClose();
-          let newListStorages = [...listStorages];
-          let newImages = [
-            {
-              id: response.data.images[0].id,
-              url: urlFirebase,
-            },
-          ];
-          let newStorages = { ...response.data, images: newImages };
-          newListStorages.unshift(newStorages);
-          setListStorages(newListStorages);
-        }
-      });
-    }
-  } catch (error) {
-    console.log(error);
-  } finally {
-    hideLoading();
-  }
-};
-
 function Storages(props) {
   inputFile = useRef(null);
   const { showLoading, hideLoading, showSnackbar } = props;
-
   const [open, setOpen] = React.useState(false);
+  const [searchName, setSearchName] = React.useState("");
   const { handleSubmit, reset, control } = useForm();
   const [listStorages, setListStorages] = React.useState([]);
   const [storage, setStorage] = React.useState({
     images: [{ id: null, url: null }],
   });
+  const [page, setPage] = React.useState(1);
+  const handleChange = async (event, value) => {
+    setPage(value);
+  };
+
+  const onHandleDeleteStorage = async (id) => {
+    let response;
+    try {
+      response = await deleteStorage(id);
+      if (listStorages.length === 1) {
+        if (page !== 1) {
+          setPage(page - 1);
+        }
+      }
+      await getData(searchName, page, 4);
+    } catch (error) {
+      console.log(error);
+    }
+
+    return response;
+  };
+
+  useEffect(() => {
+    const process = async () => {
+      try {
+        showLoading();
+        await getData("", page, 4);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        hideLoading();
+      }
+    };
+    process();
+  }, [page]);
+
+  useEffect(() => {
+    const searchName = async () => {
+      await getData(searchName, 1, 4);
+    };
+
+    const timeOut = setTimeout(() => searchName(), 700);
+
+    return () => {
+      clearTimeout(timeOut);
+    };
+  }, [searchName]);
+
+  const onHandleSearch = (e) => {
+    setSearchName(e.target.value);
+  };
+
+  const [totalPage, setTotalPage] = React.useState(0);
   const handleOpen = (isEdit) => {
     setOpen(true);
     setEdit(isEdit);
   };
+  const onHandleCreateStorage = async (data, typeName) => {
+    let type;
+    if (typeName === "Self-Storage") {
+      type = 0;
+    } else if (typeName === "Door-to-door") {
+      type = 1;
+    }
+
+    let size = `${data.width}m x ${data.length}m x ${data.height}m`;
+
+    let storageTemp = {
+      name: data.name,
+      size: size,
+      address: data.address,
+      status: 1,
+      type: type,
+      images: [
+        {
+          url: null,
+        },
+      ],
+      listStaff: [],
+    };
+    try {
+      showLoading();
+
+      const response = await createStorage(storageTemp);
+      if (response.status === 200) {
+        let id = response.data.id;
+        let urlFirebase;
+        let name = `storages/${id}/avatar.png`;
+
+        const ref = storageFirebase.ref(name);
+        const uploadTask = ref.put(storage.avatarFile);
+        uploadTask.on("state_changed", console.log, console.error, async () => {
+          urlFirebase = await ref.getDownloadURL();
+          let responseUpdate = await updateStorage(
+            response.data,
+            id,
+            urlFirebase
+          );
+          if (responseUpdate.status === 200) {
+            showSnackbar("success", "Create storage successful!");
+            await getData(searchName, page, 4);
+            handleClose();
+          }
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      hideLoading();
+    }
+  };
+
+  const onHandleUpdateUser = async (data, typeName) => {
+    let type;
+    if (typeName === "Self-Storage") {
+      type = 0;
+    } else if (typeName === "Door-to-door") {
+      type = 1;
+    }
+    let size = `${data.width}m x ${data.length}m x ${data.height}m`;
+
+    let storageTemp = {
+      name: data.name,
+      size: size,
+      address: data.address,
+      status: 1,
+      type: type,
+      images: [
+        {
+          id: storage?.images[0]?.id,
+          url: storage?.images[0]?.url,
+        },
+      ],
+      listStaff: [],
+    };
+    try {
+      showLoading();
+
+      // if (response)
+      let id = storage.id;
+
+      let responseUpdate;
+      if (storage.avatarFile !== undefined) {
+        let urlFirebase;
+        let name = `storages/${id}/avatar.png`;
+        const ref = storageFirebase.ref(name);
+        const uploadTask = ref.put(storage.avatarFile);
+        uploadTask.on("state_changed", console.log, console.error, async () => {
+          urlFirebase = await ref.getDownloadURL();
+          responseUpdate = await updateStorage(storageTemp, id, urlFirebase);
+          if (responseUpdate.status === 200) {
+            showSnackbar("success", "Update storage successful!");
+            await getData(searchName, page, 4);
+            handleClose();
+            hideLoading();
+          } else {
+            hideLoading();
+          }
+        });
+      } else {
+        responseUpdate = await updateStorage(storageTemp, id, "");
+        if (responseUpdate.status === 200) {
+          showSnackbar("success", "Update storage successful!");
+          await getData(searchName, page, 4);
+          handleClose();
+          hideLoading();
+        } else {
+          hideLoading();
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      hideLoading();
+    }
+  };
+
   const onSubmit = (data) => {
     if (isEdit === false) {
-      onHandleCreateStorage(
-        data,
-        type,
-        showLoading,
-        hideLoading,
-        showSnackbar,
-        handleClose,
-        setListStorages,
-        listStorages,
-        storage
-      );
+      onHandleCreateStorage(data, type);
     } else {
+      onHandleUpdateUser(data, type);
     }
   };
   const handleClose = () => {
@@ -466,7 +552,20 @@ function Storages(props) {
   const [isEdit, setEdit] = React.useState(false);
   const [type, setType] = React.useState("");
 
-  const handleChangeTab = (event, newtabIndex) => {
+  const getData = async (name, page, size) => {
+    try {
+      showLoading();
+      let list = await getListStorage(name, page, size);
+      setListStorages(list.data.data);
+      setTotalPage(list.data.metadata.totalPage);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      hideLoading();
+    }
+  };
+
+  const handleChangeTab = async (event, newtabIndex) => {
     setTabIndex(newtabIndex);
   };
 
@@ -484,18 +583,26 @@ function Storages(props) {
   };
 
   const handleChangeType = (event) => {
+    let tempType = -1;
+    if (event.target.value === "Self-Storage") {
+      tempType = 0;
+    } else {
+      tempType = 1;
+    }
     setType(event.target.value);
+    setStorage({ ...storage, type: tempType });
   };
   useEffect(() => {
     const getData = async (name, page, size) => {
       let list = await getListStorage(name, page, size);
       setListStorages(list.data.data);
+      setTotalPage(list.data.metadata.totalPage);
     };
 
     const firstCall = async () => {
       try {
         showLoading();
-        await getData("", 1, 8);
+        await getData("", page, 4);
       } catch (error) {
         console.log(error);
       } finally {
@@ -540,6 +647,7 @@ function Storages(props) {
           sx={{
             width: "80%",
           }}
+          onChange={(e) => onHandleSearch(e)}
           InputProps={{
             style: { height: "45px", backgroundColor: "white" },
             startAdornment: (
@@ -565,7 +673,26 @@ function Storages(props) {
         listStorages={listStorages}
         onHandleDeleteStorage={onHandleDeleteStorage}
         setListStorages={setListStorages}
+        handleOpen={handleOpen}
+        setStorage={setStorage}
       />
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Stack
+          spacing={2}
+          sx={{
+            marignTop: "20px",
+          }}
+        >
+          <Pagination count={totalPage} page={page} onChange={handleChange} />
+        </Stack>
+      </Box>
     </Box>
   );
 }

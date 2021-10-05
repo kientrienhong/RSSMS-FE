@@ -18,7 +18,6 @@ import LastPageIcon from "@mui/icons-material/LastPage";
 import { Button, TableHead } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import ConfirmModal from "../../../components/ConfirmModal";
-
 import { deleteUser } from "../../../apis/Apis";
 
 function TablePaginationActions(props) {
@@ -135,10 +134,11 @@ export default function ListUsers({
   setUser,
   handleOpen,
   listUser,
-  setListUser,
   page,
   setPage,
   totalUser,
+  searchName,
+  getData,
 }) {
   const classes = useStyles();
 
@@ -160,6 +160,7 @@ export default function ListUsers({
           setPage(page - 1);
         }
       }
+      await getData(searchName, page, 8);
     } catch (error) {
       console.log(error);
     }
@@ -186,8 +187,6 @@ export default function ListUsers({
           open={open}
           handleClose={handleClose}
           onHandleYes={handleDeleteUser}
-          listData={listUser}
-          setListData={setListUser}
           id={currentId}
           msg={"Delete user success!"}
         />
@@ -282,52 +281,4 @@ export default function ListUsers({
       </Table>
     </TableContainer>
   );
-}
-
-{
-  /* <TableBody>
-{(rowsPerPage > 0
-  ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-  : rows
-).map((row, index) => {
-  return (
-    <TableRow key={row.id}>
-      <TableCell
-        component="th"
-        scope="row"
-        style={{ color: "black" }}
-        onClick={(e) => handleClickRow(row, setUser, handleOpen)}
-      >
-        {row.name}
-      </TableCell>
-      <TableCell
-        style={{ color: "black" }}
-        onClick={(e) => handleClickRow(row, setUser, handleOpen)}
-      >
-        {row.email}
-      </TableCell>
-      <TableCell
-        style={{ color: "black" }}
-        onClick={(e) => handleClickRow(row, setUser, handleOpen)}
-      >
-        {row.phone}
-      </TableCell>
-      <TableCell
-        style={{ color: "black" }}
-        onClick={(e) => handleClickRow(row, setUser, handleOpen)}
-      >
-        {row.storage}
-      </TableCell>
-      <TableCell
-        style={{ color: "black" }}
-        onClick={(e) => handleClickRow(row, setUser, handleOpen)}
-      >
-        {row.type}
-      </TableCell>
-      <TableCell style={{ color: "black" }}>
-        <Button className={classes.button}>Delete</Button>
-      </TableCell>
-    </TableRow>
-  );
-})} */
 }

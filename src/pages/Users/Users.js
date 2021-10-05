@@ -594,7 +594,9 @@ function Users(props) {
           handleOpen={handleOpen}
           setUser={setUser}
           listUser={listUser}
+          getData={getData}
           reset={reset}
+          searchName={searchName}
           setListUser={setListUser}
           page={page}
           setPage={setPage}

@@ -23,8 +23,6 @@ function ConfirmModal({
   showLoading,
   hideLoading,
   showSnackbar,
-  listData,
-  setListData,
   msg,
 }) {
   return (
@@ -75,7 +73,6 @@ function ConfirmModal({
                 const response = await onHandleYes(id);
                 if (response.status === 200) {
                   handleClose();
-                  setListData(listData.filter((e) => e.id !== id));
                   showSnackbar("success", msg);
                 }
               } catch (error) {

@@ -12,16 +12,23 @@ const styleBoxTypo = {
   marginTop: "2%",
   alignItems: "flex-end",
 };
-export default function Storage({ storage, setCurrentId, handleConfirmOpen }) {
+export default function Storage({
+  storage,
+  setCurrentId,
+  handleConfirmOpen,
+  setStorage,
+  handleOpen,
+}) {
   const statusList = [{}, { color: "green", name: "Available" }];
-  const typeList = ["Self-storage", "Door-to-door"];
+  const typeList = ["Self-Storage", "Door-to-door"];
+
   return (
     <Card
       sx={{
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
-        height: "250px",
+        height: "280px",
         padding: "8px",
       }}
     >
@@ -130,6 +137,35 @@ export default function Storage({ storage, setCurrentId, handleConfirmOpen }) {
             }}
             color="primary"
             variant="contained"
+            onClick={() => {
+              let sizes;
+              if (storage.size) {
+                sizes = storage.size.split("x");
+                console.log(sizes);
+                storage.width = sizes[0]
+                  ?.trim()
+                  .substring(0, sizes[0]?.trim().length - 1);
+                storage.length = sizes[1]
+                  ?.trim()
+                  .substring(0, sizes[1]?.trim().length - 1);
+                storage.height = sizes[2]
+                  ?.trim()
+                  .substring(0, sizes[2]?.trim().length - 1);
+              }
+              setStorage({
+                ...storage,
+                width: storage.width,
+                length: storage.length,
+                height: storage.height,
+              });
+              console.log({
+                ...storage,
+                width: storage.width,
+                length: storage.length,
+                height: storage.height,
+              });
+              handleOpen(true);
+            }}
           >
             Edit
           </Button>
