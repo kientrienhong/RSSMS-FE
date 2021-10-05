@@ -35,7 +35,7 @@ export default function Storage({
       <img
         src={storage.images[0].url}
         alt="test"
-        width="50%"
+        width="48%"
         height="96%"
         style={{ margin: "1%" }}
       />
@@ -158,12 +158,7 @@ export default function Storage({
                 length: storage.length,
                 height: storage.height,
               });
-              console.log({
-                ...storage,
-                width: storage.width,
-                length: storage.length,
-                height: storage.height,
-              });
+
               handleOpen(true);
             }}
           >
@@ -174,6 +169,7 @@ export default function Storage({
               height: "45px",
               paddingLeft: "16px",
               paddingRight: "16px",
+              marginRight: "2%",
             }}
             color="error"
             variant="contained"
@@ -183,6 +179,16 @@ export default function Storage({
             }}
           >
             Delete
+          </Button>
+          <Button
+            style={{
+              height: "45px",
+              width: "auto",
+            }}
+            color="success"
+            variant="contained"
+          >
+            See more
           </Button>
         </Box>
       </Box>

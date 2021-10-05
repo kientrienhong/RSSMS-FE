@@ -30,6 +30,7 @@ import { storageFirebase } from "../../firebase/firebase";
 import Typography from "@mui/material/Typography";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
+import ListStaff from "./components/ListStaff";
 let inputFile;
 const styleModal = {
   position: "absolute",
@@ -286,7 +287,11 @@ const buildModal = (
   open,
   handleChangeTab,
   tabIndex,
-  onChangeInputFile
+  onChangeInputFile,
+  addAssignStaff,
+  removeAssignStaff,
+  listStaffAssigned,
+  listStaffUnAssigned
 ) => {
   return (
     <Modal
@@ -342,7 +347,22 @@ const buildModal = (
             </Box>
           </TabPanel>
           <TabPanel value={tabIndex} index={1}>
-            Item Two
+            <Box sx={{ display: "flex", flexDirection: "row" }}>
+              <ListStaff
+                listStaff={listStaffAssigned}
+                isAssigned={true}
+                name="Staffs belong to this storage"
+                addAssignStaff={addAssignStaff}
+                removeAssignStaff={removeAssignStaff}
+              />
+              <ListStaff
+                listStaff={listStaffUnAssigned}
+                isAssigned={false}
+                name="Staffs are not assigned yet"
+                addAssignStaff={addAssignStaff}
+                removeAssignStaff={removeAssignStaff}
+              />
+            </Box>
           </TabPanel>
         </Box>
       </Box>
@@ -357,6 +377,15 @@ function Storages(props) {
   const [searchName, setSearchName] = React.useState("");
   const { handleSubmit, reset, control } = useForm();
   const [listStorages, setListStorages] = React.useState([]);
+  const [listStaffAssigned, setListStaffAssigned] = React.useState([
+    { name: "Test", role: "Manager", id: 1 },
+    { name: "Test 1", role: "Office staff", id: 2 },
+  ]);
+  const [listStaffUnAssigned, setListStaffUnAssigned] = React.useState([
+    { name: "Test 3", role: "Delivery Staff", id: 3 },
+    { name: "Test 4", role: "Office staff", id: 4 },
+  ]);
+
   const [storage, setStorage] = React.useState({
     images: [{ id: null, url: null }],
   });
@@ -536,6 +565,28 @@ function Storages(props) {
     }
   };
 
+  const addAssignStaff = (staff) => {
+    let listStaffAssignedTemp = [...listStaffAssigned];
+    let listStaffUnAssignedTemp = [...listStaffUnAssigned];
+    listStaffAssignedTemp.push(staff);
+    listStaffUnAssignedTemp = listStaffUnAssignedTemp.filter(
+      (e) => e.id !== staff.id
+    );
+    setListStaffAssigned(listStaffAssignedTemp);
+    setListStaffUnAssigned(listStaffUnAssignedTemp);
+  };
+
+  const removeAssignStaff = (staff) => {
+    let listStaffAssignedTemp = [...listStaffAssigned];
+    let listStaffUnAssignedTemp = [...listStaffUnAssigned];
+    listStaffUnAssignedTemp.push(staff);
+    listStaffAssignedTemp = listStaffAssignedTemp.filter(
+      (e) => e.id !== staff.id
+    );
+    setListStaffAssigned(listStaffAssignedTemp);
+    setListStaffUnAssigned(listStaffUnAssignedTemp);
+  };
+
   const onSubmit = (data) => {
     if (isEdit === false) {
       onHandleCreateStorage(data, type);
@@ -632,7 +683,11 @@ function Storages(props) {
         open,
         handleChangeTab,
         tabIndex,
-        onChangeInputFile
+        onChangeInputFile,
+        addAssignStaff,
+        removeAssignStaff,
+        listStaffAssigned,
+        listStaffUnAssigned
       )}
       <Box
         sx={{
@@ -682,14 +737,10 @@ function Storages(props) {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          marignTop: "32px",
         }}
       >
-        <Stack
-          spacing={2}
-          sx={{
-            marignTop: "20px",
-          }}
-        >
+        <Stack spacing={2} sx={{}}>
           <Pagination count={totalPage} page={page} onChange={handleChange} />
         </Stack>
       </Box>
