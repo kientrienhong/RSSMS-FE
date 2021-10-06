@@ -1,28 +1,28 @@
 import React, { useState } from "react";
 import { Box, Card, Typography, Button, Modal } from "@material-ui/core";
-import { useForm } from "react-hook-form";
 import CustomInput from "../../components/CustomInput";
 
-export default function ModalArea({ open, handleClose, currentArea }) {
-  const { handleSubmit, control } = useForm();
-
-  const styleInput = { marginRight: "2.5%", marginLeft: "2.5%" };
+export default function ModalArea({
+  open,
+  handleClose,
+  currentArea,
+  handleSubmit,
+  control,
+  onSubmit,
+}) {
+  const styleInput = { marginRight: "2.5%" };
 
   const styleModal = {
     position: "absolute",
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: "50%",
-    height: "30%",
+    width: "auto",
+    height: "auto",
     bgcolor: "background.paper",
     boxShadow: 24,
     p: 4,
     borderRadius: "10px",
-  };
-
-  const onSubmit = (data) => {
-    console.log(data);
   };
 
   return (
@@ -57,9 +57,18 @@ export default function ModalArea({ open, handleClose, currentArea }) {
               inlineStyle={styleInput}
             />
           </Box>
-          <Button color="primary" type="submit">
-            Submit
-          </Button>
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "16px",
+            }}
+          >
+            <Button color="primary" type="submit" variant="contained">
+              Submit
+            </Button>
+          </Box>
         </form>
       </Box>
     </Modal>

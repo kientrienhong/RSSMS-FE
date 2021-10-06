@@ -481,14 +481,14 @@ function Storages(props) {
       if (open === true) {
         try {
           showLoading();
-          let listUserNotAssigned = await getListUser("", 1, 100000, 0);
+          let listUserNotAssigned = await getListUser("", 1, -1, 0);
           setListStaffUnAssigned(listUserNotAssigned.data.data);
         } catch (error) {
           console.log(error);
           setListStaffUnAssigned([]);
         }
         try {
-          let listUserAssigned = await getListUser("", 1, 1000000, storage.id);
+          let listUserAssigned = await getListUser("", 1, -1, storage.id);
           setListStaffAssigned(listUserAssigned.data.data);
         } catch (error) {
           console.log(error);

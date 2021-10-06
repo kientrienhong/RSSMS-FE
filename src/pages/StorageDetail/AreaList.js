@@ -2,8 +2,26 @@ import React, { useState } from "react";
 import { Box, Card, Typography, Button } from "@material-ui/core";
 import RowArea from "./RowArea";
 import ModalArea from "./ModalArea";
-export default function AreaList({ listArea, setListArea }) {
-  const mapListToview = (setCurrentArea, handleOpen) =>
+import { useForm } from "react-hook-form";
+import { connect } from "react-redux";
+import * as action from "../../redux/action/action";
+import ConfirmModal from "../../components/ConfirmModal";
+
+function AreaList({
+  listArea,
+  setListArea,
+  showLoading,
+  hideLoading,
+  showSnackbar,
+}) {
+  const { handleSubmit, control, reset } = useForm();
+
+  const mapListToview = (
+    setCurrentArea,
+    handleOpen,
+    deleteArea,
+    handleOpenConfirm
+  ) =>
     listArea.map((e) => {
       return (
         <RowArea
@@ -11,18 +29,84 @@ export default function AreaList({ listArea, setListArea }) {
           key={e.key}
           setCurrentArea={setCurrentArea}
           handleOpen={handleOpen}
+          deleteArea={deleteArea}
+          handleOpenConfirm={handleOpenConfirm}
         />
       );
     });
 
   const addArea = async (name) => {
-    let listAreaTemp = [...listArea];
+    try {
+      showLoading();
+      let listAreaTemp = [
+        ...listArea,
+        { id: listArea.length + 1, name: name, usage: 0 },
+      ];
+      setListArea(listAreaTemp);
+      showSnackbar("success", "Create area success!");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      hideLoading();
+      handleClose();
+    }
+  };
+
+  const deleteArea = async (id) => {
+    try {
+      showLoading();
+      let listAreaTemp = [...listArea];
+      listAreaTemp = listAreaTemp.filter((e) => e.id !== id);
+      console.log(listAreaTemp);
+      setListArea(listAreaTemp);
+      showSnackbar("success", "Delete area success!");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      hideLoading();
+      handleClose();
+    }
+  };
+
+  const editArea = async (name) => {
+    try {
+      showLoading();
+      let index = listArea.findIndex((e) => e.id === currentArea.id);
+      let listAreaTemp = [...listArea];
+      listAreaTemp[index] = { ...listAreaTemp[index], name: name };
+      setListArea(listAreaTemp);
+      showSnackbar("success", "Update area success!");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      hideLoading();
+      handleClose();
+    }
   };
 
   const [open, setOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [currentArea, setCurrentArea] = useState({});
+  const [openConfirm, setOpenConfirm] = useState(false);
+
+  const handleCloseConfirm = () => {
+    setOpenConfirm(false);
+  };
+
+  const handleOpenConfirm = () => {
+    setOpenConfirm(true);
+  };
+
+  const onSubmit = (data) => {
+    if (isEdit === false) {
+      addArea(data.name);
+    } else {
+      editArea(data.name);
+    }
+  };
+
   const handleOpen = (isEdit) => {
+    reset();
     setOpen(true);
     setIsEdit(isEdit);
   };
@@ -30,6 +114,21 @@ export default function AreaList({ listArea, setListArea }) {
   const handleClose = () => {
     setOpen(false);
     setCurrentArea({});
+  };
+
+  const onHandleDeleteArea = (id) => {
+    try {
+      showLoading();
+      let listAreaTemp = [...listArea];
+      listAreaTemp = listAreaTemp.filter((e) => e.id !== id);
+      setListArea(listAreaTemp);
+      showSnackbar("success", "Delete area success!");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      hideLoading();
+      handleClose();
+    }
   };
 
   return (
@@ -48,6 +147,16 @@ export default function AreaList({ listArea, setListArea }) {
         open={open}
         handleClose={handleClose}
         currentArea={currentArea}
+        handleSubmit={handleSubmit}
+        control={control}
+        onSubmit={onSubmit}
+      />
+      <ConfirmModal
+        open={openConfirm}
+        handleClose={handleCloseConfirm}
+        onHandleYes={onHandleDeleteArea}
+        id={currentArea.id}
+        msg={"Delete area success!"}
       />
       <Box
         sx={{
@@ -75,7 +184,17 @@ export default function AreaList({ listArea, setListArea }) {
           Create area
         </Button>
       </Box>
-      {mapListToview(setCurrentArea, handleOpen)}
+      {mapListToview(setCurrentArea, handleOpen, deleteArea, handleOpenConfirm)}
     </Card>
   );
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    showLoading: () => dispatch(action.showLoader()),
+    hideLoading: () => dispatch(action.hideLoader()),
+    showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(AreaList);

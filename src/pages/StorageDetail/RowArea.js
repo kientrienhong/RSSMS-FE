@@ -1,17 +1,16 @@
 import React from "react";
-import {
-  Box,
-  Typography,
-  InputAdornment,
-  IconButton,
-  TextField,
-} from "@material-ui/core";
+import { Box, Typography } from "@material-ui/core";
 import { styled } from "@mui/material/styles";
 import LinearProgress, {
   linearProgressClasses,
 } from "@mui/material/LinearProgress";
 
-export default function RowArea({ area, setCurrentArea, handleOpen }) {
+export default function RowArea({
+  area,
+  setCurrentArea,
+  handleOpen,
+  handleOpenConfirm,
+}) {
   const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
     height: 10,
     borderRadius: 5,
@@ -63,15 +62,18 @@ export default function RowArea({ area, setCurrentArea, handleOpen }) {
           src="/img/edit.png"
           alt="edit"
           style={{ marginRight: "8%", cursor: "pointer" }}
-          onClick={(e) => {
+          onClick={() => {
             handleOpen(true);
-            setCurrentArea(e);
+            setCurrentArea(area);
           }}
         />
         <img
           src="/img/delete.png"
           alt="edit"
           style={{ marginRight: "8%", cursor: "pointer" }}
+          onClick={() => {
+            handleOpenConfirm();
+          }}
         />
         <img src="/img/info.png" alt="edit" style={{ cursor: "pointer" }} />
       </Box>
