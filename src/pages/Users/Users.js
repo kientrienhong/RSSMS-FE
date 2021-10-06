@@ -15,7 +15,12 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import ListUsers from "./components/ListUsers";
 import CustomAvatar from "../../components/CustomAvatar";
-import { getListUser, createUser, updateUser } from "../../apis/Apis";
+import {
+  getListUser,
+  createUser,
+  updateUser,
+  getListStorage,
+} from "../../apis/Apis";
 import { connect } from "react-redux";
 import * as action from "../../redux/action/action";
 import { useForm } from "react-hook-form";
@@ -74,6 +79,13 @@ const onChangeInputFile = (event, setUser, user) => {
 
 const styleInput = { marginRight: "2.5%", marginLeft: "2.5%" };
 
+const buildListStorageToView = (listStorage) =>
+  listStorage.map((e) => (
+    <MenuItem value={e.id} key={e.id}>
+      {e.name}
+    </MenuItem>
+  ));
+
 const buildModal = (
   user,
   open,
@@ -84,7 +96,9 @@ const buildModal = (
   control,
   isEdit,
   password,
-  handleChangeRole
+  handleChangeRole,
+  listStorage,
+  handleChangeStorageCB
 ) => {
   return (
     <Modal
@@ -276,19 +290,16 @@ const buildModal = (
               >
                 Assign to Storage
               </Typography>
-              <FormControl sx={{ m: 1, minWidth: 120, color: "black" }}>
+              <FormControl
+                name="storageId"
+                sx={{ m: 1, minWidth: 120, color: "black" }}
+              >
                 <Select
-                  // onChange={handleChange}
-                  value={user.storageName}
+                  onChange={handleChangeStorageCB}
+                  value={user.storageId}
                   displayEmpty
                 >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={3}>Customer</MenuItem>
-                  <MenuItem value={2}>Manager</MenuItem>
-                  <MenuItem value={5}>Office staff</MenuItem>
-                  <MenuItem value={4}>Delivery staff</MenuItem>
+                  {buildListStorageToView(listStorage)}
                 </Select>
               </FormControl>
             </Box>
@@ -339,8 +350,15 @@ function Users(props) {
   const [page, setPage] = React.useState(1);
   const [searchName, setSearchName] = React.useState("");
   const [totalUser, setTotalUser] = React.useState(0);
+  const [open, setOpen] = React.useState(false);
+  const [listStorage, setListStorage] = React.useState([]);
+  const [storageCB, setStorageCB] = React.useState({});
   const handleChangeRole = (event) => {
     setRole(event.target.value);
+  };
+
+  const handleChangeStorageCB = (event) => {
+    setStorageCB(event.target.value);
   };
   const { handleSubmit, reset, control, watch } = useForm();
   const password = useRef({});
@@ -379,7 +397,7 @@ function Users(props) {
       address: data.address,
       phone: data.phone,
       roleId: roleName,
-      storageId: null,
+      storageId: storageCB,
       images: [
         {
           id: user?.images[0]?.id,
@@ -446,7 +464,7 @@ function Users(props) {
       address: data.address,
       phone: data.phone,
       roleId: roleName,
-      storageId: null,
+      storageId: storageCB,
       avatarLink: null,
     };
     try {
@@ -490,6 +508,7 @@ function Users(props) {
       try {
         showLoading();
         await getData(searchName, page, 8);
+        console.log(listUser);
         hideLoading();
       } catch (error) {
         console.log(error);
@@ -498,6 +517,23 @@ function Users(props) {
     };
     firstCall();
   }, []);
+
+  useEffect(() => {
+    const process = async () => {
+      if (open === true) {
+        try {
+          showLoading();
+          let listStorage = await getListStorage("", 1, -1);
+          setListStorage(listStorage.data.data);
+          hideLoading();
+        } catch (error) {
+          console.log(error);
+          hideLoading();
+        }
+      }
+    };
+    process();
+  }, [open]);
 
   useEffect(() => {
     const process = async () => {
@@ -513,7 +549,6 @@ function Users(props) {
     process();
   }, [page]);
 
-  const [open, setOpen] = React.useState(false);
   const [listUser, setListUser] = React.useState([]);
   const [isEdit, setEdit] = React.useState(false);
   const [user, setUser] = React.useState({ images: [{ id: null, url: null }] });
@@ -544,7 +579,9 @@ function Users(props) {
         control,
         isEdit,
         password,
-        handleChangeRole
+        handleChangeRole,
+        listStorage,
+        handleChangeStorageCB
       )}
       <Box
         sx={{

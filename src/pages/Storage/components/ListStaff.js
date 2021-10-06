@@ -33,7 +33,6 @@ export default function ListStaff({
         sx={{
           width: "350px",
           display: "flex",
-          marginRight: "20px",
           flexDirection: "column",
           justifiedContent: "flex-start",
         }}
@@ -52,6 +51,7 @@ export default function ListStaff({
             height: "400px",
             border: "solid 1px #000",
             padding: "8px",
+            overflowY: "auto",
           }}
         >
           <TextField

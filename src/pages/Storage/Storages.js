@@ -23,6 +23,8 @@ import {
   createStorage,
   updateStorage,
   deleteStorage,
+  getListUser,
+  assignListStaffToStorage,
 } from "../../apis/Apis";
 import { connect } from "react-redux";
 import * as action from "../../redux/action/action";
@@ -38,7 +40,7 @@ const styleModal = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: "50%",
-  height: "75%",
+  height: "auto",
   bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
@@ -291,7 +293,8 @@ const buildModal = (
   addAssignStaff,
   removeAssignStaff,
   listStaffAssigned,
-  listStaffUnAssigned
+  listStaffUnAssigned,
+  onHandleAssignUser
 ) => {
   return (
     <Modal
@@ -347,7 +350,14 @@ const buildModal = (
             </Box>
           </TabPanel>
           <TabPanel value={tabIndex} index={1}>
-            <Box sx={{ display: "flex", flexDirection: "row" }}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                width: "100%",
+              }}
+            >
               <ListStaff
                 listStaff={listStaffAssigned}
                 isAssigned={true}
@@ -363,6 +373,34 @@ const buildModal = (
                 removeAssignStaff={removeAssignStaff}
               />
             </Box>
+            <Box
+              sx={{
+                width: "100%",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                marginTop: "16px",
+              }}
+            >
+              <Button
+                style={{
+                  height: "45px",
+                  paddingLeft: "16px",
+                  paddingRight: "16px",
+                }}
+                color="primary"
+                variant="contained"
+                onClick={() =>
+                  onHandleAssignUser(
+                    listStaffAssigned,
+                    listStaffUnAssigned,
+                    storage.id
+                  )
+                }
+              >
+                Submit
+              </Button>
+            </Box>
           </TabPanel>
         </Box>
       </Box>
@@ -377,14 +415,8 @@ function Storages(props) {
   const [searchName, setSearchName] = React.useState("");
   const { handleSubmit, reset, control } = useForm();
   const [listStorages, setListStorages] = React.useState([]);
-  const [listStaffAssigned, setListStaffAssigned] = React.useState([
-    { name: "Test", role: "Manager", id: 1 },
-    { name: "Test 1", role: "Office staff", id: 2 },
-  ]);
-  const [listStaffUnAssigned, setListStaffUnAssigned] = React.useState([
-    { name: "Test 3", role: "Delivery Staff", id: 3 },
-    { name: "Test 4", role: "Office staff", id: 4 },
-  ]);
+  const [listStaffAssigned, setListStaffAssigned] = React.useState([]);
+  const [listStaffUnAssigned, setListStaffUnAssigned] = React.useState([]);
 
   const [storage, setStorage] = React.useState({
     images: [{ id: null, url: null }],
@@ -427,7 +459,14 @@ function Storages(props) {
 
   useEffect(() => {
     const searchName = async () => {
-      await getData(searchName, 1, 4);
+      try {
+        showLoading();
+        await getData(searchName, page, 4);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        hideLoading();
+      }
     };
 
     const timeOut = setTimeout(() => searchName(), 700);
@@ -436,6 +475,31 @@ function Storages(props) {
       clearTimeout(timeOut);
     };
   }, [searchName]);
+
+  useEffect(() => {
+    const process = async () => {
+      if (open === true) {
+        try {
+          showLoading();
+          let listUserNotAssigned = await getListUser("", 1, 100000, 0);
+          setListStaffUnAssigned(listUserNotAssigned.data.data);
+        } catch (error) {
+          console.log(error);
+          setListStaffUnAssigned([]);
+        }
+        try {
+          let listUserAssigned = await getListUser("", 1, 1000000, storage.id);
+          setListStaffAssigned(listUserAssigned.data.data);
+        } catch (error) {
+          console.log(error);
+          setListStaffAssigned([]);
+        } finally {
+          hideLoading();
+        }
+      }
+    };
+    process();
+  }, [open]);
 
   const onHandleSearch = (e) => {
     setSearchName(e.target.value);
@@ -446,6 +510,24 @@ function Storages(props) {
     setOpen(true);
     setEdit(isEdit);
   };
+
+  const onHandleAssignUser = async (
+    listAssigned,
+    listUnassigned,
+    storageId
+  ) => {
+    try {
+      showLoading();
+      await assignListStaffToStorage(listAssigned, listUnassigned, storageId);
+      hideLoading();
+      showSnackbar("success", "Assign Success!");
+      handleClose();
+    } catch (error) {
+      console.log(error);
+      hideLoading();
+    }
+  };
+
   const onHandleCreateStorage = async (data, typeName) => {
     let type;
     if (typeName === "Self-Storage") {
@@ -538,6 +620,7 @@ function Storages(props) {
         const uploadTask = ref.put(storage.avatarFile);
         uploadTask.on("state_changed", console.log, console.error, async () => {
           urlFirebase = await ref.getDownloadURL();
+
           responseUpdate = await updateStorage(storageTemp, id, urlFirebase);
           if (responseUpdate.status === 200) {
             showSnackbar("success", "Update storage successful!");
@@ -687,7 +770,8 @@ function Storages(props) {
         addAssignStaff,
         removeAssignStaff,
         listStaffAssigned,
-        listStaffUnAssigned
+        listStaffUnAssigned,
+        onHandleAssignUser
       )}
       <Box
         sx={{

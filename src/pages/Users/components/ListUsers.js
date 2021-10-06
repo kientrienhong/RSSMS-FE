@@ -109,11 +109,14 @@ const handleClickRow = (row, setUser, handleOpen, reset) => {
     email: row.email,
     avatar: row.avatar,
     phone: row.phone,
+    storageId: row.storageId,
     storageName: row.storageName,
     roleName: row.roleName,
     address: row.address,
     images: [row.images[0]],
   };
+
+  console.log(user);
 
   setUser(user);
   handleOpen(true);

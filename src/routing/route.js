@@ -6,6 +6,7 @@ import Account from "../pages/Account/Account";
 import NotFound from "../pages/NotFoundPage";
 import Users from "../pages/Users/Users";
 import Storages from "../pages/Storage/Storages";
+import StorageDetail from "../pages/StorageDetail/StorageDetail";
 const routes = [
   {
     path: "app",
@@ -14,6 +15,7 @@ const routes = [
       { path: "account", element: <Account /> },
       { path: "users", element: <Users /> },
       { path: "storages", element: <Storages /> },
+      { path: "storages/:storageId", element: <StorageDetail /> },
 
       { path: "*", element: <Navigate to="/404" /> },
     ],

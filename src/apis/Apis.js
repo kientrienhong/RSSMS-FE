@@ -1,10 +1,17 @@
 import callApi from "./callApi";
 import axios from "axios";
 
-export const getListUser = async (name, page, size) => {
-  const listUser = await axios.get(
-    `https://localhost:44304/api/v1/users?&Name=${name}&page=${page}&size=${size}`
-  );
+export const getListUser = async (name, page, size, storageId) => {
+  let listUser;
+  if (storageId !== undefined) {
+    listUser = await axios.get(
+      `https://localhost:44304/api/v1/users?storageId=${storageId}&Name=${name}&page=${page}&size=${size}`
+    );
+  } else {
+    listUser = await axios.get(
+      `https://localhost:44304/api/v1/users?Name=${name}&page=${page}&size=${size}`
+    );
+  }
 
   return listUser;
 };
@@ -59,6 +66,7 @@ export const updateUser = async (user, id, imageUrl) => {
   } else {
     image = imageUrl;
   }
+
   const response = await axios.put(
     `https://localhost:44304/api/v1/users/${id}`,
     {
@@ -66,7 +74,7 @@ export const updateUser = async (user, id, imageUrl) => {
       name: user.name,
       address: user.address,
       phone: user.phone,
-      storageId: null,
+      storageId: user.storageId,
       images: [
         {
           id: user.images[0].id,
@@ -85,6 +93,14 @@ export const getListStorage = async (name, page, size) => {
   );
 
   return listStorage;
+};
+
+export const getStorageDetail = async (id) => {
+  const storage = await axios.get(
+    `https://localhost:44304/api/v1/storages/${id}`
+  );
+
+  return storage;
 };
 
 export const createStorage = async (storage) => {
@@ -116,6 +132,7 @@ export const updateStorage = async (storage, id, imageUrl) => {
   } else {
     image = imageUrl;
   }
+
   const response = await axios.put(
     `https://localhost:44304/api/v1/storages/${id}`,
     {
@@ -142,6 +159,39 @@ export const updateStorage = async (storage, id, imageUrl) => {
 export const deleteStorage = async (id) => {
   const response = await axios.delete(
     `https://localhost:44304/api/v1/storages/${id}`
+  );
+
+  return response;
+};
+
+export const assignListStaffToStorage = async (
+  listAssigned,
+  listUnassigned,
+  storageId
+) => {
+  // console.log({
+  //   storageId: storageId,
+  //   userAssigned: listAssigned,
+  //   userUnAssigned: listUnassigned,
+  // });
+  listAssigned = listAssigned.map((e) => {
+    return e.id;
+  });
+  listUnassigned = listUnassigned.map((e) => {
+    return e.id;
+  });
+  console.log({
+    storageId: storageId,
+    userAssigned: listAssigned,
+    userUnAssigned: listUnassigned,
+  });
+  const response = await axios.put(
+    "https://localhost:44304/api/v1/staff-manage-storages/assign-staff",
+    {
+      storageId: storageId,
+      userAssigned: listAssigned,
+      userUnAssigned: listUnassigned,
+    }
   );
 
   return response;

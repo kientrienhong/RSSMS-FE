@@ -1,5 +1,6 @@
 import React from "react";
 import { Card, Box, Typography, Button } from "@material-ui/core";
+import { useNavigate } from "react-router-dom";
 
 const styleIcon = {
   marginRight: "2%",
@@ -21,6 +22,7 @@ export default function Storage({
 }) {
   const statusList = [{}, { color: "green", name: "Available" }];
   const typeList = ["Self-Storage", "Door-to-door"];
+  const navigate = useNavigate();
 
   return (
     <Card
@@ -186,6 +188,9 @@ export default function Storage({
               width: "auto",
             }}
             color="success"
+            onClick={() =>
+              navigate("/app/storages/" + storage.id, { replace: false })
+            }
             variant="contained"
           >
             See more
