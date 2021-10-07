@@ -31,7 +31,7 @@ export default function RowStaff({
           width: "40%",
         }}
       >
-        <p>{staff.role}</p>
+        <p>{staff.roleName}</p>
       </Box>
       <Box
         sx={{

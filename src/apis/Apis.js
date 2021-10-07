@@ -89,7 +89,7 @@ export const updateUser = async (user, id, imageUrl) => {
 
 export const getListStorage = async (name, page, size) => {
   const listStorage = await axios.get(
-    `https://localhost:44304/api/v1/storages?page=${page}&size=${size}`
+    `https://localhost:44304/api/v1/storages?Name=${name}&page=${page}&size=${size}`
   );
 
   return listStorage;
@@ -167,30 +167,66 @@ export const deleteStorage = async (id) => {
 export const assignListStaffToStorage = async (
   listAssigned,
   listUnassigned,
-  storageId
+  storage
 ) => {
-  // console.log({
-  //   storageId: storageId,
-  //   userAssigned: listAssigned,
-  //   userUnAssigned: listUnassigned,
-  // });
   listAssigned = listAssigned.map((e) => {
-    return e.id;
+    return { userId: e.id, roleName: e.roleName };
   });
   listUnassigned = listUnassigned.map((e) => {
-    return e.id;
+    return { userId: e.id, roleName: e.roleName };
   });
-  console.log({
-    storageId: storageId,
-    userAssigned: listAssigned,
-    userUnAssigned: listUnassigned,
-  });
+
   const response = await axios.put(
     "https://localhost:44304/api/v1/staff-manage-storages/assign-staff",
     {
-      storageId: storageId,
+      storageId: storage.id,
+      storageName: storage.name,
       userAssigned: listAssigned,
       userUnAssigned: listUnassigned,
+    }
+  );
+
+  return response;
+};
+
+export const getArea = async (storageId) => {
+  const response = await axios.get(
+    `https://localhost:44304/api/v1/areas?storageid=${storageId}&page=1&size=-1`
+  );
+
+  return response;
+};
+
+export const createArea = async (storageId, name) => {
+  console.log({
+    name: name,
+    storageId: storageId,
+    status: 1,
+  });
+  const response = await axios.post("https://localhost:44304/api/v1/areas", {
+    name: name,
+    storageId: parseInt(storageId),
+    status: 1,
+  });
+
+  return response;
+};
+
+export const deleteArea = async (id) => {
+  const response = await axios.delete(
+    `https://localhost:44304/api/v1/areas/${id}`
+  );
+
+  return response;
+};
+
+export const updateArea = async (id, name) => {
+  console.log(id, name);
+  const response = await axios.put(
+    `https://localhost:44304/api/v1/areas/${id}`,
+    {
+      id: id,
+      name: name,
     }
   );
 

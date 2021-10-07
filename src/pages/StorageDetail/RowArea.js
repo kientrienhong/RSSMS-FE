@@ -50,7 +50,7 @@ export default function RowArea({
       >
         <BorderLinearProgress
           variant="determinate"
-          value={50}
+          value={area.usage}
           sx={{ width: "60%", marginRight: "7%" }}
         />
         <Typography color="black" variant="h3">
@@ -72,6 +72,7 @@ export default function RowArea({
           alt="edit"
           style={{ marginRight: "8%", cursor: "pointer" }}
           onClick={() => {
+            setCurrentArea(area);
             handleOpenConfirm();
           }}
         />

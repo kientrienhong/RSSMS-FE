@@ -394,7 +394,7 @@ const buildModal = (
                   onHandleAssignUser(
                     listStaffAssigned,
                     listStaffUnAssigned,
-                    storage.id
+                    storage
                   )
                 }
               >
@@ -458,7 +458,7 @@ function Storages(props) {
   }, [page]);
 
   useEffect(() => {
-    const searchName = async () => {
+    const searchNameCall = async () => {
       try {
         showLoading();
         await getData(searchName, page, 4);
@@ -469,7 +469,7 @@ function Storages(props) {
       }
     };
 
-    const timeOut = setTimeout(() => searchName(), 700);
+    const timeOut = setTimeout(() => searchNameCall(), 700);
 
     return () => {
       clearTimeout(timeOut);
@@ -511,14 +511,10 @@ function Storages(props) {
     setEdit(isEdit);
   };
 
-  const onHandleAssignUser = async (
-    listAssigned,
-    listUnassigned,
-    storageId
-  ) => {
+  const onHandleAssignUser = async (listAssigned, listUnassigned, storage) => {
     try {
       showLoading();
-      await assignListStaffToStorage(listAssigned, listUnassigned, storageId);
+      await assignListStaffToStorage(listAssigned, listUnassigned, storage);
       hideLoading();
       showSnackbar("success", "Assign Success!");
       handleClose();
@@ -728,9 +724,11 @@ function Storages(props) {
   };
   useEffect(() => {
     const getData = async (name, page, size) => {
-      let list = await getListStorage(name, page, size);
-      setListStorages(list.data.data);
-      setTotalPage(list.data.metadata.totalPage);
+      try {
+        let list = await getListStorage(name, page, size);
+        setListStorages(list.data.data);
+        setTotalPage(list.data.metadata.totalPage);
+      } catch (e) {}
     };
 
     const firstCall = async () => {
@@ -739,6 +737,7 @@ function Storages(props) {
         await getData("", page, 4);
       } catch (error) {
         console.log(error);
+        setListStorages([]);
       } finally {
         hideLoading();
       }

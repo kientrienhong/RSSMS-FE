@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import * as action from "../../redux/action/action";
-import { getStorageDetail } from "../../apis/Apis";
+import { getStorageDetail, getArea } from "../../apis/Apis";
 import { useParams } from "react-router-dom";
 import { Box } from "@material-ui/core";
 import StorageDetailView from "./StorageDetailView";
 import AreaList from "./AreaList";
 function StorageDetail({ showLoading, hideLoading, showSnackbar }) {
   const [storage, setStorage] = useState({});
-  const [listArea, setListArea] = useState([
-    { id: 1, name: "Area - 1", usage: 70 },
-    { id: 2, name: "Area - 2", usage: 50 },
-    { id: 3, name: "Area - 3", usage: 0 },
-  ]);
+  const [listArea, setListArea] = useState([]);
   const { storageId } = useParams();
   useEffect((e) => {
     const getData = async () => {
@@ -22,10 +18,10 @@ function StorageDetail({ showLoading, hideLoading, showSnackbar }) {
 
     const firstCall = async () => {
       try {
-        console.log(storageId);
         showLoading();
         await getData();
-        console.log(storage);
+        let listAreaTemp = await getArea(parseInt(storageId));
+        setListArea(listAreaTemp.data.data);
       } catch (error) {
         console.log(error);
       } finally {
@@ -38,7 +34,11 @@ function StorageDetail({ showLoading, hideLoading, showSnackbar }) {
   return (
     <Box sx={{ display: "flex", flexDirection: "row" }}>
       <StorageDetailView storage={storage} />
-      <AreaList listArea={listArea} setListArea={setListArea} />
+      <AreaList
+        listArea={listArea}
+        setListArea={setListArea}
+        storageId={storageId}
+      />
     </Box>
   );
 }

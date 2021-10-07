@@ -277,32 +277,6 @@ const buildModal = (
               /> */}
               </Box>
             ) : null}
-
-            <Box sx={styleBoxComboBox}>
-              <Typography
-                color="black"
-                variant="h2"
-                style={{
-                  marginTop: "2%",
-                  textAlign: "left",
-                  marginLeft: "2.5%",
-                }}
-              >
-                Assign to Storage
-              </Typography>
-              <FormControl
-                name="storageId"
-                sx={{ m: 1, minWidth: 120, color: "black" }}
-              >
-                <Select
-                  onChange={handleChangeStorageCB}
-                  value={user.storageId}
-                  displayEmpty
-                >
-                  {buildListStorageToView(listStorage)}
-                </Select>
-              </FormControl>
-            </Box>
           </Box>
           <Box
             sx={{

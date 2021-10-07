@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { connect } from "react-redux";
 import * as action from "../../redux/action/action";
 import ConfirmModal from "../../components/ConfirmModal";
+import { createArea, deleteArea, updateArea, getArea } from "../../apis/Apis";
 
 function AreaList({
   listArea,
@@ -13,6 +14,7 @@ function AreaList({
   showLoading,
   hideLoading,
   showSnackbar,
+  storageId,
 }) {
   const { handleSubmit, control, reset } = useForm();
 
@@ -26,7 +28,7 @@ function AreaList({
       return (
         <RowArea
           area={e}
-          key={e.key}
+          key={e.id}
           setCurrentArea={setCurrentArea}
           handleOpen={handleOpen}
           deleteArea={deleteArea}
@@ -38,28 +40,11 @@ function AreaList({
   const addArea = async (name) => {
     try {
       showLoading();
-      let listAreaTemp = [
-        ...listArea,
-        { id: listArea.length + 1, name: name, usage: 0 },
-      ];
-      setListArea(listAreaTemp);
-      showSnackbar("success", "Create area success!");
-    } catch (error) {
-      console.log(error);
-    } finally {
-      hideLoading();
-      handleClose();
-    }
-  };
+      await createArea(parseInt(storageId), name);
+      let listAreaTemp = await getArea(parseInt(storageId));
 
-  const deleteArea = async (id) => {
-    try {
-      showLoading();
-      let listAreaTemp = [...listArea];
-      listAreaTemp = listAreaTemp.filter((e) => e.id !== id);
-      console.log(listAreaTemp);
-      setListArea(listAreaTemp);
-      showSnackbar("success", "Delete area success!");
+      setListArea(listAreaTemp.data.data);
+      showSnackbar("success", "Create area success!");
     } catch (error) {
       console.log(error);
     } finally {
@@ -71,10 +56,13 @@ function AreaList({
   const editArea = async (name) => {
     try {
       showLoading();
-      let index = listArea.findIndex((e) => e.id === currentArea.id);
-      let listAreaTemp = [...listArea];
-      listAreaTemp[index] = { ...listAreaTemp[index], name: name };
-      setListArea(listAreaTemp);
+      await updateArea(parseInt(currentArea.id), name);
+      let listAreaTemp = await getArea(parseInt(storageId));
+
+      // let index = listArea.findIndex((e) => e.id === currentArea.id);
+      // let listAreaTemp = [...listArea];
+      // listAreaTemp[index] = { ...listAreaTemp[index], name: name };
+      setListArea(listAreaTemp.data.data);
       showSnackbar("success", "Update area success!");
     } catch (error) {
       console.log(error);
@@ -116,15 +104,18 @@ function AreaList({
     setCurrentArea({});
   };
 
-  const onHandleDeleteArea = (id) => {
+  const onHandleDeleteArea = async (id) => {
     try {
       showLoading();
-      let listAreaTemp = [...listArea];
-      listAreaTemp = listAreaTemp.filter((e) => e.id !== id);
-      setListArea(listAreaTemp);
+      await deleteArea(id);
+      let listAreaTemp = await getArea(storageId);
+      setListArea(listAreaTemp.data.data);
       showSnackbar("success", "Delete area success!");
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
+      if (error.message === "Request failed with status code 404") {
+        setListArea([]);
+      }
     } finally {
       hideLoading();
       handleClose();
