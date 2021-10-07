@@ -29,7 +29,6 @@ import {
 import { connect } from "react-redux";
 import * as action from "../../redux/action/action";
 import { storageFirebase } from "../../firebase/firebase";
-import Typography from "@mui/material/Typography";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import ListStaff from "./components/ListStaff";
@@ -292,9 +291,13 @@ const buildModal = (
   onChangeInputFile,
   addAssignStaff,
   removeAssignStaff,
+  listShowStaffAssigned,
+  listShowStaffUnAssigned,
+  onHandleAssignUser,
+  handleChangeSearchUnAssigned,
+  handleChangeSearchAssigned,
   listStaffAssigned,
-  listStaffUnAssigned,
-  onHandleAssignUser
+  listStaffUnAssigned
 ) => {
   return (
     <Modal
@@ -360,18 +363,20 @@ const buildModal = (
               }}
             >
               <ListStaff
-                listStaff={listStaffAssigned}
+                listStaff={listShowStaffAssigned}
                 isAssigned={true}
                 name="Staffs belong to this storage"
                 addAssignStaff={addAssignStaff}
                 removeAssignStaff={removeAssignStaff}
+                onHandleSearch={handleChangeSearchAssigned}
               />
               <ListStaff
-                listStaff={listStaffUnAssigned}
+                listStaff={listShowStaffUnAssigned}
                 isAssigned={false}
                 name="Staffs are not assigned yet"
                 addAssignStaff={addAssignStaff}
                 removeAssignStaff={removeAssignStaff}
+                onHandleSearch={handleChangeSearchUnAssigned}
               />
             </Box>
             <Box
@@ -415,6 +420,12 @@ function Storages(props) {
   const { showLoading, hideLoading, showSnackbar } = props;
   const [open, setOpen] = React.useState(false);
   const [searchName, setSearchName] = React.useState("");
+
+  const [listShowStaffAssigned, setListShowStaffAssigned] = React.useState([]);
+  const [listShowStaffUnAssigned, setListShowStaffUnAssigned] = React.useState(
+    []
+  );
+
   const { handleSubmit, reset, control } = useForm();
   const [listStorages, setListStorages] = React.useState([]);
   const [listStaffAssigned, setListStaffAssigned] = React.useState([]);
@@ -426,6 +437,23 @@ function Storages(props) {
   const [page, setPage] = React.useState(1);
   const handleChange = async (event, value) => {
     setPage(value);
+  };
+
+  const handleChangeSearchUnAssigned = (event) => {
+    let listStaffUnAssignedTemp = [...listStaffUnAssigned];
+    listStaffUnAssignedTemp = listStaffUnAssignedTemp.filter((e) =>
+      e.name.includes(event.target.value)
+    );
+    setListShowStaffUnAssigned(listStaffUnAssignedTemp);
+  };
+
+  const handleChangeSearchAssigned = (event) => {
+    let listShowStaffAssignedTemp = [...listStaffAssigned];
+    listShowStaffAssignedTemp = listShowStaffAssignedTemp.filter((e) =>
+      e.name.includes(event.target.value)
+    );
+
+    setListShowStaffAssigned(listShowStaffAssignedTemp);
   };
 
   const onHandleDeleteStorage = async (id) => {
@@ -485,16 +513,20 @@ function Storages(props) {
           showLoading();
           let listUserNotAssigned = await getListUser("", 1, -1, 0);
           setListStaffUnAssigned(listUserNotAssigned.data.data);
+          setListShowStaffUnAssigned(listUserNotAssigned.data.data);
         } catch (error) {
           console.log(error);
           setListStaffUnAssigned([]);
+          setListShowStaffUnAssigned([]);
         }
         try {
           let listUserAssigned = await getListUser("", 1, -1, storage.id);
           setListStaffAssigned(listUserAssigned.data.data);
+          setListShowStaffAssigned(listUserAssigned.data.data);
         } catch (error) {
           console.log(error);
           setListStaffAssigned([]);
+          setListShowStaffAssigned([]);
         } finally {
           hideLoading();
         }
@@ -649,25 +681,45 @@ function Storages(props) {
   };
 
   const addAssignStaff = (staff) => {
+    let listShowStaffAssignedTemp = [...listShowStaffAssigned];
+    let listShowStaffUnAssignedTemp = [...listShowStaffUnAssigned];
+
     let listStaffAssignedTemp = [...listStaffAssigned];
     let listStaffUnAssignedTemp = [...listStaffUnAssigned];
+
     listStaffAssignedTemp.push(staff);
     listStaffUnAssignedTemp = listStaffUnAssignedTemp.filter(
       (e) => e.id !== staff.id
     );
-    setListStaffAssigned(listStaffAssignedTemp);
-    setListStaffUnAssigned(listStaffUnAssignedTemp);
-  };
-
-  const removeAssignStaff = (staff) => {
-    let listStaffAssignedTemp = [...listStaffAssigned];
-    let listStaffUnAssignedTemp = [...listStaffUnAssigned];
-    listStaffUnAssignedTemp.push(staff);
-    listStaffAssignedTemp = listStaffAssignedTemp.filter(
+    listShowStaffAssignedTemp.push(staff);
+    listShowStaffUnAssignedTemp = listShowStaffUnAssignedTemp.filter(
       (e) => e.id !== staff.id
     );
     setListStaffAssigned(listStaffAssignedTemp);
     setListStaffUnAssigned(listStaffUnAssignedTemp);
+    setListShowStaffAssigned(listShowStaffAssignedTemp);
+    setListShowStaffUnAssigned(listShowStaffUnAssignedTemp);
+  };
+
+  const removeAssignStaff = (staff) => {
+    let listShowStaffAssignedTemp = [...listShowStaffAssigned];
+    let listShowStaffUnAssignedTemp = [...listShowStaffUnAssigned];
+
+    let listStaffAssignedTemp = [...listStaffAssigned];
+    let listStaffUnAssignedTemp = [...listStaffUnAssigned];
+
+    listStaffUnAssignedTemp.push(staff);
+    listStaffAssignedTemp = listStaffAssignedTemp.filter(
+      (e) => e.id !== staff.id
+    );
+    listShowStaffUnAssignedTemp.push(staff);
+    listShowStaffAssignedTemp = listShowStaffAssignedTemp.filter(
+      (e) => e.id !== staff.id
+    );
+    setListStaffAssigned(listStaffAssignedTemp);
+    setListStaffUnAssigned(listStaffUnAssignedTemp);
+    setListShowStaffAssigned(listShowStaffAssignedTemp);
+    setListShowStaffUnAssigned(listShowStaffUnAssignedTemp);
   };
 
   const onSubmit = (data) => {
@@ -773,9 +825,13 @@ function Storages(props) {
         onChangeInputFile,
         addAssignStaff,
         removeAssignStaff,
+        listShowStaffAssigned,
+        listShowStaffUnAssigned,
+        onHandleAssignUser,
+        handleChangeSearchUnAssigned,
+        handleChangeSearchAssigned,
         listStaffAssigned,
-        listStaffUnAssigned,
-        onHandleAssignUser
+        listStaffUnAssigned
       )}
       <Box
         sx={{

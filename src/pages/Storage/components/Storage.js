@@ -143,7 +143,6 @@ export default function Storage({
               let sizes;
               if (storage.size) {
                 sizes = storage.size.split("x");
-                console.log(sizes);
                 storage.width = sizes[0]
                   ?.trim()
                   .substring(0, sizes[0]?.trim().length - 1);

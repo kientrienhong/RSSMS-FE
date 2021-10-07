@@ -14,6 +14,7 @@ export default function ListStaff({
   isAssigned,
   addAssignStaff,
   removeAssignStaff,
+  onHandleSearch,
 }) {
   const mapListToView = (listStaff, isAssigned) => {
     return listStaff.map((e) => (
@@ -58,6 +59,7 @@ export default function ListStaff({
             sx={{
               width: "100%",
             }}
+            onChange={(e) => onHandleSearch(e)}
             InputProps={{
               style: { height: "45px", backgroundColor: "white" },
               startAdornment: (
