@@ -125,7 +125,7 @@ export default function Storage({
               Manager:
             </Typography>
             <Typography color="black" variant="body">
-              {storage.manager}
+              {storage.managerName}
             </Typography>
           </Box>
         </Box>

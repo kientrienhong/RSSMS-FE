@@ -32,7 +32,7 @@ function StorageDetail({ showLoading, hideLoading, showSnackbar }) {
   }, []);
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "row" }}>
+    <Box sx={{ display: "flex", flexDirection: "row", height: "91vh" }}>
       <StorageDetailView storage={storage} />
       <AreaList
         listArea={listArea}

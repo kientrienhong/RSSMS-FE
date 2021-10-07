@@ -36,13 +36,13 @@ export default function StorageDetailView({ storage }) {
 
   return (
     <Card
-      style={{ height: "90%" }}
+      style={{ height: "68vh" }}
       sx={{
         margin: "2%",
         display: "flex",
         flexDirection: "column",
         width: "30%",
-        height: "90%",
+        height: "68vh",
         padding: "2%",
         alignItems: "center",
       }}

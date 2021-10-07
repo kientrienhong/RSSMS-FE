@@ -230,7 +230,7 @@ export default function ListUsers({
                     handleClickRow(row, setUser, handleOpen, reset)
                   }
                 >
-                  {row.storageName}
+                  {row?.staffManageStorages[0]?.storageName}
                 </TableCell>
                 <TableCell
                   style={{ color: "black" }}

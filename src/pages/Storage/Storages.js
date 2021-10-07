@@ -356,6 +356,7 @@ const buildModal = (
                 flexDirection: "row",
                 justifyContent: "space-between",
                 width: "100%",
+                marginTop: "3%",
               }}
             >
               <ListStaff
@@ -387,6 +388,7 @@ const buildModal = (
                   height: "45px",
                   paddingLeft: "16px",
                   paddingRight: "16px",
+                  marginTop: "4%",
                 }}
                 color="primary"
                 variant="contained"
@@ -515,6 +517,8 @@ function Storages(props) {
     try {
       showLoading();
       await assignListStaffToStorage(listAssigned, listUnassigned, storage);
+      await getData(searchName, page, 4);
+
       hideLoading();
       showSnackbar("success", "Assign Success!");
       handleClose();
@@ -675,6 +679,7 @@ function Storages(props) {
   };
   const handleClose = () => {
     setOpen(false);
+    setTabIndex(0);
     setStorage({ avatarFile: undefined, images: [{ id: null, url: null }] });
     reset();
   };
