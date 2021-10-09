@@ -1,6 +1,8 @@
 import React from "react";
 import { Box, Typography } from "@material-ui/core";
 import { styled } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
+
 import LinearProgress, {
   linearProgressClasses,
 } from "@mui/material/LinearProgress";
@@ -10,7 +12,10 @@ export default function RowArea({
   setCurrentArea,
   handleOpen,
   handleOpenConfirm,
+  storageId,
 }) {
+  const navigate = useNavigate();
+
   const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
     height: 10,
     borderRadius: 5,
@@ -76,7 +81,16 @@ export default function RowArea({
             handleOpenConfirm();
           }}
         />
-        <img src="/img/info.png" alt="edit" style={{ cursor: "pointer" }} />
+        <img
+          src="/img/info.png"
+          alt="edit"
+          style={{ cursor: "pointer" }}
+          onClick={() => {
+            navigate("/app/storages/" + storageId + "/areas/" + area.id, {
+              replace: false,
+            });
+          }}
+        />
       </Box>
     </Box>
   );

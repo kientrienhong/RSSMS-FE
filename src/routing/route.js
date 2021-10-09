@@ -7,6 +7,7 @@ import NotFound from "../pages/NotFoundPage";
 import Users from "../pages/Users/Users";
 import Storages from "../pages/Storage/Storages";
 import StorageDetail from "../pages/StorageDetail/StorageDetail";
+import AreaDetail from "../pages/AreaDetail/AreaDetail";
 const routes = [
   {
     path: "app",
@@ -16,7 +17,7 @@ const routes = [
       { path: "users", element: <Users /> },
       { path: "storages", element: <Storages /> },
       { path: "storages/:storageId", element: <StorageDetail /> },
-
+      { path: "storages/:storageId/areas/:areaId", element: <AreaDetail /> },
       { path: "*", element: <Navigate to="/404" /> },
     ],
   },

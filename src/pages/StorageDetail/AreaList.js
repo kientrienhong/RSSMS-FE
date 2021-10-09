@@ -33,6 +33,7 @@ function AreaList({
           handleOpen={handleOpen}
           deleteArea={deleteArea}
           handleOpenConfirm={handleOpenConfirm}
+          storageId={storageId}
         />
       );
     });
@@ -175,7 +176,13 @@ function AreaList({
           Create area
         </Button>
       </Box>
-      {mapListToview(setCurrentArea, handleOpen, deleteArea, handleOpenConfirm)}
+      {mapListToview(
+        setCurrentArea,
+        handleOpen,
+        deleteArea,
+        handleOpenConfirm,
+        storageId
+      )}
     </Card>
   );
 }
