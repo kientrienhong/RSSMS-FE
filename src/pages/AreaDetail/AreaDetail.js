@@ -14,6 +14,7 @@ import { connect } from "react-redux";
 import * as action from "../../redux/action/action";
 import AreaDetailView from "./components/AreaDetailView";
 import AreaUsage from "./components/AreaUsage";
+import DetailBox from "./components/DetailBox";
 
 function AreaDetail(props) {
   const listShelf = [
@@ -156,6 +157,7 @@ function AreaDetail(props) {
           }}
         >
           <AreaUsage />
+          <DetailBox />
         </Box>
       </Box>
     </Box>

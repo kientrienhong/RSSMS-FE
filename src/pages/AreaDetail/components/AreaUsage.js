@@ -38,7 +38,7 @@ export default function AreaUsage() {
     <Card
       sx={{
         width: "100%",
-        height: "auto",
+        height: "35%",
         marginLeft: "1%",
         display: "flex",
         flexDirection: "column",

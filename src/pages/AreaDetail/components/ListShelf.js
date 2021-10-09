@@ -6,7 +6,7 @@ const mapListToGrid = (listShelf) =>
   listShelf.map((e, i) => (
     <Grid
       container
-      sx={{ height: "30%", padding: 0, margin: 0, width: "33%" }}
+      sx={{ height: "50%", padding: 0, margin: 0, width: "33%" }}
       key={i}
     >
       <Box

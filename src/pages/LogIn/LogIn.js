@@ -131,6 +131,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     showLoading: () => dispatch(action.showLoader()),
     hideLoading: () => dispatch(action.hideLoader()),
+    logIn: (user) => dispatch(action.logIn(user)),
   };
 };
 

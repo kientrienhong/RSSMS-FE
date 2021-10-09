@@ -18,8 +18,16 @@ export const showSnackbar = (type, msg) => {
     payload: { type, msg },
   };
 };
+
 export const hideSnackbar = () => {
   return {
     type: ActionType.HIDE_SNACKBAR,
+  };
+};
+
+export const logIn = (user) => {
+  return {
+    type: ActionType.LOG_IN,
+    payload: user,
   };
 };
