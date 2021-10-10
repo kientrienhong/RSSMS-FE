@@ -4,12 +4,13 @@ import CustomAvatar from "../../components/CustomAvatar";
 import { connect } from "react-redux";
 import * as action from "../../redux/action/action";
 import UpdateInformation from "./UpdateInformation";
+import ChangePassword from "./ChangePassword";
 function Account({ user, showLoading, hideLoading, showSnackbar }) {
   return (
     <Box
       sx={{
         backgroundColor: "background.default",
-        height: "85vh",
+        height: "auto",
         py: 3,
         padding: "1%",
       }}
@@ -35,6 +36,14 @@ function Account({ user, showLoading, hideLoading, showSnackbar }) {
           Account information
         </Typography>
         <UpdateInformation />
+        <Typography
+          color="black"
+          variant="h2"
+          style={{ marginTop: "2%", textAlign: "left", marginLeft: "2.5%" }}
+        >
+          Change password
+        </Typography>
+        <ChangePassword />
       </Card>
     </Box>
   );

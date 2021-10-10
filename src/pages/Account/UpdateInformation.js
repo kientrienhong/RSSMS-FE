@@ -23,6 +23,21 @@ function UpdateInformation({ user, setUpUser }) {
 
   const onSubmit = (data) => {
     console.log(data);
+    let userTemp;
+    if (imageFile.url) {
+      userTemp = {
+        address: data.address,
+        name: data.name,
+        phone: data.phone,
+      };
+    } else {
+      setUpUser({
+        ...user,
+        address: data.address,
+        name: data.name,
+        phone: data.phone,
+      });
+    }
   };
 
   let inputFile = useRef(null);
