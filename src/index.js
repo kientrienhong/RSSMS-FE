@@ -8,6 +8,8 @@ import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import thunk from "redux-thunk";
 import rootReducer from "./redux/reducer/rootReducer";
+import { PersistGate } from "redux-persist/integration/react";
+import { persistor } from "./configs/configureStore";
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = createStore(
@@ -17,9 +19,11 @@ const store = createStore(
 
 ReactDOM.render(
   <Provider store={store}>
+    {/* <PersistGate loading={null} presistor={persistor}> */}
     <BrowserRouter>
       <App />
     </BrowserRouter>
+    {/* </PersistGate> */}
   </Provider>,
   document.getElementById("root")
 );

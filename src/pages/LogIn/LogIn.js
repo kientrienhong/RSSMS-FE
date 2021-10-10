@@ -19,6 +19,7 @@ function LogIn(props) {
         setValid(false);
         setErrorMsg("Invalid username or password");
       } else {
+        props.setUpUser(response.data);
         navigate("/app/account", { replace: true });
       }
     } catch (e) {
@@ -131,7 +132,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     showLoading: () => dispatch(action.showLoader()),
     hideLoading: () => dispatch(action.hideLoader()),
-    logIn: (user) => dispatch(action.logIn(user)),
+    setUpUser: (user) => dispatch(action.setUpUser(user)),
   };
 };
 

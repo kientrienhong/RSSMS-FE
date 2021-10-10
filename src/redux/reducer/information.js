@@ -6,8 +6,8 @@ const initialState = {
 
 const application = (state = initialState, action) => {
   switch (action.type) {
-    case ActionType.LOG_IN: {
-      state.user = state.payload;
+    case ActionType.SET_UP_USER: {
+      state.user = action.payload;
       return { ...state };
     }
 

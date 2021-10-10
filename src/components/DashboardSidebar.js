@@ -12,12 +12,7 @@ import {
 import { User as UserIcon, Users as UsersIcon } from "react-feather";
 import NavItem from "./NavItem";
 import { ReactComponent as WarehouseSVG } from "../svg/warehouse.svg";
-
-const user = {
-  avatar: "/static/images/avatars/avatar_6.png",
-  jobTitle: "Admin",
-  name: "admin",
-};
+import { connect } from "react-redux";
 
 const items = [
   {
@@ -37,9 +32,9 @@ const items = [
   },
 ];
 
-const DashboardSidebar = ({ onMobileClose, openMobile }) => {
+const DashboardSidebar = ({ onMobileClose, openMobile, user }) => {
   const location = useLocation();
-
+  console.log(user);
   useEffect(() => {
     if (openMobile && onMobileClose) {
       onMobileClose();
@@ -65,7 +60,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
       >
         <Avatar
           component={RouterLink}
-          src={user.avatar}
+          src={user?.images.length === 0 ? undefined : user?.images[0].url}
           sx={{
             cursor: "pointer",
             width: 64,
@@ -77,7 +72,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
           {user.name}
         </Typography>
         <Typography color="textSecondary" variant="body2">
-          {user.jobTitle}
+          {user.roleName}
         </Typography>
       </Box>
       <Box sx={{ p: 2 }}>
@@ -144,4 +139,8 @@ DashboardSidebar.defaultProps = {
   openMobile: false,
 };
 
-export default DashboardSidebar;
+const mapStateToProps = (state) => ({
+  user: state.information.user,
+});
+
+export default connect(mapStateToProps, null)(DashboardSidebar);

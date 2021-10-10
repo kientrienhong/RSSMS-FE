@@ -79,13 +79,6 @@ const onChangeInputFile = (event, setUser, user) => {
 
 const styleInput = { marginRight: "2.5%", marginLeft: "2.5%" };
 
-const buildListStorageToView = (listStorage) =>
-  listStorage.map((e) => (
-    <MenuItem value={e.id} key={e.id}>
-      {e.name}
-    </MenuItem>
-  ));
-
 const buildModal = (
   user,
   open,

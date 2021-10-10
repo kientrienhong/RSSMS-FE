@@ -25,9 +25,9 @@ export const hideSnackbar = () => {
   };
 };
 
-export const logIn = (user) => {
+export const setUpUser = (user) => {
   return {
-    type: ActionType.LOG_IN,
+    type: ActionType.SET_UP_USER,
     payload: user,
   };
 };
