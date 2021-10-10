@@ -4,8 +4,8 @@ import * as action from "../../redux/action/action";
 import { useForm } from "react-hook-form";
 import CustomInput from "../../components/CustomInput";
 import { Box, Button } from "@material-ui/core";
-
-function ChangePassword() {
+import { changePassword } from "../../apis/Apis";
+function ChangePassword({ showLoading, hideLoading, showSnackbar, userId }) {
   const { handleSubmit, reset, control, watch } = useForm();
   const password = useRef({});
   password.current = watch("password", "");
@@ -20,8 +20,16 @@ function ChangePassword() {
   };
 
   const styleInput = { marginRight: "2.5%", marginLeft: "2.5%" };
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    try {
+      showLoading();
+      await changePassword(userId, data.password, data.confirmPassword);
+      showSnackbar("success", "Change password successful!");
+    } catch (e) {
+      console.log(e);
+    } finally {
+      hideLoading();
+    }
   };
   return (
     <Box

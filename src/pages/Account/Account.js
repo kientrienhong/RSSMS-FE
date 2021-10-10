@@ -43,10 +43,14 @@ function Account({ user, showLoading, hideLoading, showSnackbar }) {
         >
           Change password
         </Typography>
-        <ChangePassword />
+        <ChangePassword userId={user.userId} />
       </Card>
     </Box>
   );
 }
 
-export default connect()(Account);
+const mapStateToProps = (state) => ({
+  user: state.information.user,
+});
+
+export default connect(mapStateToProps, null)(Account);

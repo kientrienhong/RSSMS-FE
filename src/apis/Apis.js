@@ -28,6 +28,19 @@ export const login = async (email, password) => {
   return response;
 };
 
+export const changePassword = async (id, password, confirmPassword) => {
+  const response = await axios.post(
+    "https://localhost:44304/api/v1/users/changepassword",
+    {
+      id: id,
+      password: password,
+      confirmPassword: confirmPassword,
+    }
+  );
+
+  return response;
+};
+
 export const createUser = async (user) => {
   const response = await axios.post(`https://localhost:44304/api/v1/users`, {
     name: user.name,
