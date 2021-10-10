@@ -5,7 +5,15 @@ import { connect } from "react-redux";
 import * as action from "../../redux/action/action";
 import { useForm } from "react-hook-form";
 import CustomInput from "../../components/CustomInput";
-function UpdateInformation({ user, setUpUser }) {
+import { storageFirebase } from "../../firebase/firebase";
+import { updateUser } from "../../apis/Apis";
+function UpdateInformation({
+  user,
+  setUpUser,
+  showLoading,
+  hideLoading,
+  showSnackbar,
+}) {
   const [imageFile, setImageFile] = useState({});
   const { handleSubmit, reset, control } = useForm();
   let imageUrl;
@@ -21,22 +29,75 @@ function UpdateInformation({ user, setUpUser }) {
 
   const styleInput = { marginRight: "2.5%", marginLeft: "2.5%" };
 
-  const onSubmit = (data) => {
-    console.log(data);
-    let userTemp;
-    if (imageFile.url) {
-      userTemp = {
-        address: data.address,
-        name: data.name,
-        phone: data.phone,
-      };
+  const onSubmit = async (data) => {
+    let roleId;
+
+    if (user.roleName === "Delivery Staff") {
+      roleId = 4;
+    } else if (user.roleName === "Customer") {
+      roleId = 3;
+    } else if (user.roleName === "Office Staff") {
+      roleId = 5;
+    } else if (user.roleName === "Manager") {
+      roleId = 2;
     } else {
-      setUpUser({
-        ...user,
-        address: data.address,
-        name: data.name,
-        phone: data.phone,
+      roleId = 1;
+    }
+
+    let userTemp = {
+      name: data.name,
+      email: data.email,
+      address: data.address,
+      phone: data.phone,
+      roleId: roleId,
+      images: [
+        {
+          id: user?.images[0]?.id,
+          url: user?.images[0]?.url,
+        },
+      ],
+    };
+    let responseUpdate;
+    let id = user.userId;
+    showLoading();
+    if (imageFile.url) {
+      let urlFirebase;
+      let name = `user/${id}/avatar.png`;
+      const ref = storageFirebase.ref(name);
+      const uploadTask = ref.put(imageFile.file);
+      uploadTask.on("state_changed", console.log, console.error, async () => {
+        urlFirebase = await ref.getDownloadURL();
+        responseUpdate = await updateUser(userTemp, id, urlFirebase);
+        if (responseUpdate.status === 200) {
+          showSnackbar("success", "Update user successful!");
+          setUpUser({
+            ...user,
+            address: data.address,
+            name: data.name,
+            phone: data.phone,
+            images: responseUpdate.data.images,
+          });
+          console.log(responseUpdate);
+          hideLoading();
+        } else {
+          hideLoading();
+        }
       });
+    } else {
+      responseUpdate = await updateUser(userTemp, id, "");
+      if (responseUpdate.status === 200) {
+        showSnackbar("success", "Update user successful!");
+        setUpUser({
+          ...user,
+          address: data.address,
+          name: data.name,
+          phone: data.phone,
+          images: responseUpdate.data.images,
+        });
+        hideLoading();
+      } else {
+        hideLoading();
+      }
     }
   };
 

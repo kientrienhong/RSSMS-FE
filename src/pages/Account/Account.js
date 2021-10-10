@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import * as action from "../../redux/action/action";
 import UpdateInformation from "./UpdateInformation";
 import ChangePassword from "./ChangePassword";
-function Account({ user, showLoading, hideLoading, showSnackbar }) {
+function Account({ user }) {
   return (
     <Box
       sx={{
