@@ -475,7 +475,6 @@ function Users(props) {
       try {
         showLoading();
         await getData(searchName, page, 8);
-        console.log(listUser);
         hideLoading();
       } catch (error) {
         console.log(error);

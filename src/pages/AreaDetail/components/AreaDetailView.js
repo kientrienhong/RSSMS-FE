@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Card,
   Typography,
@@ -8,17 +8,22 @@ import {
   Pagination,
 } from "@material-ui/core";
 import ListShelf from "./ListShelf";
-
-export default function AreaDetailView({ storage, listShelf }) {
+import ShelfModal from "./SheflModal";
+export default function AreaDetailView({
+  storage,
+  listShelf,
+  setCurrentShelf,
+  handleOpen,
+}) {
   return (
     <Card
-      style={{ height: "68vh" }}
+      style={{ height: "73vh" }}
       sx={{
         margin: "2%",
         display: "flex",
         flexDirection: "column",
         width: "65%",
-        height: "68vh",
+        height: "75vh",
         padding: "2%",
         alignItems: "flex-start",
       }}
@@ -26,14 +31,19 @@ export default function AreaDetailView({ storage, listShelf }) {
       <Typography color="black" variant="h2" sx={{ textAlign: "left" }}>
         {storage.name}
       </Typography>
-      <ListShelf listShelf={listShelf} />
+
+      <ListShelf
+        listShelf={listShelf}
+        setCurrentShelf={setCurrentShelf}
+        handleOpen={handleOpen}
+      />
       <Box
         sx={{
           width: "100%",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          marignTop: "32px",
+          marignTop: "64px",
         }}
       >
         <Stack spacing={2} sx={{}}>

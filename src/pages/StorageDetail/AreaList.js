@@ -59,10 +59,6 @@ function AreaList({
       showLoading();
       await updateArea(parseInt(currentArea.id), name);
       let listAreaTemp = await getArea(parseInt(storageId));
-
-      // let index = listArea.findIndex((e) => e.id === currentArea.id);
-      // let listAreaTemp = [...listArea];
-      // listAreaTemp[index] = { ...listAreaTemp[index], name: name };
       setListArea(listAreaTemp.data.data);
       showSnackbar("success", "Update area success!");
     } catch (error) {

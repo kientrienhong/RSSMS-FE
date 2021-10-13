@@ -116,8 +116,6 @@ const handleClickRow = (row, setUser, handleOpen, reset) => {
     images: [row.images[0]],
   };
 
-  console.log(user);
-
   setUser(user);
   handleOpen(true);
 };

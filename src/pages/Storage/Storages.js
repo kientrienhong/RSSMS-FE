@@ -127,10 +127,6 @@ const buildInputForm = (
           control={control}
           rules={{
             required: "Name required",
-            // pattern: {
-            //   value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-            //   message: "Invalid email",
-            // },
           }}
           styles={{ width: "400px" }}
           name="name"

@@ -34,7 +34,6 @@ const items = [
 
 const DashboardSidebar = ({ onMobileClose, openMobile, user }) => {
   const location = useLocation();
-  console.log(user);
   useEffect(() => {
     if (openMobile && onMobileClose) {
       onMobileClose();

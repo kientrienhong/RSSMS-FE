@@ -77,7 +77,6 @@ function UpdateInformation({
             phone: data.phone,
             images: responseUpdate.data.images,
           });
-          console.log(responseUpdate);
           hideLoading();
         } else {
           hideLoading();

@@ -8,83 +8,47 @@ import {
   Card,
 } from "@material-ui/core";
 import { useParams } from "react-router-dom";
-import { getStorageDetail } from "../../apis/Apis";
+
+import { getStorageDetail, getListShelves } from "../../apis/Apis";
 import SearchIcon from "@mui/icons-material/Search";
 import { connect } from "react-redux";
 import * as action from "../../redux/action/action";
 import AreaDetailView from "./components/AreaDetailView";
 import AreaUsage from "./components/AreaUsage";
 import DetailBox from "./components/DetailBox";
+import SheflModal from "./components/SheflModal";
 
 function AreaDetail(props) {
-  const listShelf = [
-    {
-      id: 1,
-      name: "Shelf - 1",
-      type: "handy",
-      amountHeight: 3,
-      amountWidth: 3,
-      boxSize: "S",
-      boxes: [{}, {}, {}, {}, {}, {}, {}, {}, {}],
-    },
-    {
-      id: 2,
-      name: "Shelf - 2",
-      type: "handy",
-      amountHeight: 3,
-      amountWidth: 4,
-      boxSize: "M",
-      boxes: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
-    },
-    {
-      id: 3,
-      name: "Shelf - 3",
-      type: "unwieldy",
-      amountHeight: 1,
-      amountWidth: 1,
-      boxSize: "M",
-      boxes: [{}],
-    },
-    {
-      id: 4,
-      name: "Shelf - 4",
-      type: "handy",
-      amountHeight: 4,
-      amountWidth: 4,
-      boxSize: "L",
-      boxes: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
-    },
-    {
-      id: 5,
-      name: "Shelf - 5",
-      type: "handy",
-      amountHeight: 4,
-      amountWidth: 3,
-      boxSize: "XL",
-      boxes: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
-    },
-    {
-      id: 6,
-      name: "Shelf - 6",
-      type: "unwieldy",
-      amountHeight: 1,
-      amountWidth: 1,
-      boxSize: "XL",
-      boxes: [{}],
-    },
-  ];
-
   const { storageId, areaId } = useParams();
   const [storage, setStorage] = useState({});
-
   const { showLoading, hideLoading, showSnackbar } = props;
+  const [open, setOpen] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+  const [currentShelf, setCurrentShelf] = useState({});
+  const [listShelf, setListShelf] = useState([]);
+  const handleOpen = (isEdit) => {
+    setIsEdit(isEdit);
+    setOpen(true);
+  };
 
+  const handleClose = () => {
+    setOpen(false);
+    setCurrentShelf({});
+  };
   useEffect(() => {
     const getData = async () => {
       try {
         let storageTemp = await getStorageDetail(parseInt(storageId));
         setStorage(storageTemp.data);
-      } catch (e) {}
+        let response = await getListShelves("", 1, 6, parseInt(areaId));
+        let listShelves = response.data.data;
+        listShelves = listShelves.map((e) => {
+          return { ...e, boxSize: e.boxes[0].sizeType };
+        });
+        setListShelf(listShelves);
+      } catch (e) {
+        console.log(e);
+      }
     };
 
     const firstCall = async () => {
@@ -108,6 +72,12 @@ function AreaDetail(props) {
         py: 3,
       }}
     >
+      <SheflModal
+        currentShelf={currentShelf}
+        open={open}
+        setCurrentShelf={setCurrentShelf}
+        handleClose={handleClose}
+      />
       <Box
         sx={{
           marginLeft: "2%",
@@ -137,6 +107,7 @@ function AreaDetail(props) {
           style={{ height: "45px", paddingLeft: "16px", paddingRight: "16px" }}
           color="primary"
           variant="contained"
+          onClick={() => handleOpen(false)}
         >
           Create shelf
         </Button>
@@ -147,7 +118,12 @@ function AreaDetail(props) {
           flexDirection: "row",
         }}
       >
-        <AreaDetailView storage={storage} listShelf={listShelf} />
+        <AreaDetailView
+          storage={storage}
+          listShelf={listShelf}
+          setCurrentShelf={setCurrentShelf}
+          handleOpen={handleOpen}
+        />
         <Box
           sx={{
             margin: "2%",
