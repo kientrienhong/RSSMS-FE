@@ -254,3 +254,17 @@ export const getListShelves = async (name, page, size, areaId) => {
 
   return listShelves;
 };
+
+export const createShelf = async (shelf, areaId) => {
+  let listShelves = await axios.post(`https://localhost:44304/api/v1/shelves`, {
+    areaId: areaId,
+    type: shelf.type,
+    name: shelf.name,
+    note: shelf.name,
+    boxesInWidth: shelf.boxesInWidth,
+    boxesInHeight: shelf.boxesInHeight,
+    boxSize: shelf.boxSize,
+  });
+
+  return listShelves;
+};

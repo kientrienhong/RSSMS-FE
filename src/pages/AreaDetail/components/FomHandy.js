@@ -27,13 +27,22 @@ export default function FomHandy({ isEdit, currentShelf, setCurrentShelf }) {
   const handleChangeSize = (event) => {
     setCurrentShelf({ ...currentShelf, boxSize: event.target.value });
   };
+
+  const onHandleCreateShelf = (data) => {
+    console.log("==========================");
+    console.log(currentShelf);
+    console.log(data);
+  };
+
   const onSubmit = (data) => {
+    console.log("==========================");
+    console.log(currentShelf);
     console.log(data);
   };
 
   const [inputAmountBox, setInputAmountBox] = useState({
-    amountHeight: { value: 4 },
-    amountWidth: { value: 4 },
+    boxesInHeight: { value: 0 },
+    boxesInWidth: { value: 0 },
   });
 
   const onChangeAmountBox = (e, value) => {
@@ -43,7 +52,11 @@ export default function FomHandy({ isEdit, currentShelf, setCurrentShelf }) {
       const shelfTemp = { ...currentShelf };
       shelfTemp[value] = e.target.value;
       let boxesTemp = [];
-      for (let i = 0; i < shelfTemp.amountWidth * shelfTemp.amountHeight; i++) {
+      for (
+        let i = 0;
+        i < shelfTemp.boxesInWidth * shelfTemp.boxesInHeight;
+        i++
+      ) {
         boxesTemp.push({});
       }
       shelfTemp.boxes = boxesTemp;
@@ -137,30 +150,30 @@ export default function FomHandy({ isEdit, currentShelf, setCurrentShelf }) {
               label={"Width"}
               disabled={false}
               variant="outlined"
-              value={currentShelf.amountWidth}
-              error={!!inputAmountBox.amountWidth.error}
+              value={currentShelf.boxesInWidth}
+              error={!!inputAmountBox.boxesInWidth.error}
               helperText={
-                inputAmountBox.amountWidth.error
-                  ? inputAmountBox.amountWidth.error.message
+                inputAmountBox.boxesInWidth.error
+                  ? inputAmountBox.boxesInWidth.error.message
                   : null
               }
               style={styleInput}
-              onChange={(e) => onChangeAmountBox(e, "amountWidth")}
+              onChange={(e) => onChangeAmountBox(e, "boxesInWidth")}
               inputProps={{ style: { width: "50px" } }}
             />
             <TextField
               label={"Height"}
               disabled={false}
               variant="outlined"
-              value={currentShelf.amountHeight}
-              error={!!inputAmountBox.amountHeight.error}
+              value={currentShelf.boxesInHeight}
+              error={!!inputAmountBox.boxesInHeight.error}
               helperText={
-                inputAmountBox.amountHeight.error
-                  ? inputAmountBox.amountHeight.error.message
+                inputAmountBox.boxesInHeight.error
+                  ? inputAmountBox.boxesInHeight.error.message
                   : null
               }
               style={styleInput}
-              onChange={(e) => onChangeAmountBox(e, "amountHeight")}
+              onChange={(e) => onChangeAmountBox(e, "boxesInHeight")}
               inputProps={{ style: { width: "50px" } }}
             />
           </Box>

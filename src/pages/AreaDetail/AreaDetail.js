@@ -26,6 +26,8 @@ function AreaDetail(props) {
   const [isEdit, setIsEdit] = useState(false);
   const [currentShelf, setCurrentShelf] = useState({});
   const [listShelf, setListShelf] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(0);
   const handleOpen = (isEdit) => {
     setIsEdit(isEdit);
     setOpen(true);
@@ -35,19 +37,39 @@ function AreaDetail(props) {
     setOpen(false);
     setCurrentShelf({});
   };
+  const getData = async (name, page, size) => {
+    try {
+      showLoading();
+      let response = await getListShelves("", page, 6, parseInt(areaId));
+      let listShelves = response.data.data;
+      listShelves = listShelves.map((e) => {
+        return { ...e, boxSize: e.boxes[0].sizeType };
+      });
+      setTotalPage(response.data.meta.totalPage);
+      setListShelf(listShelves);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      hideLoading();
+    }
+  };
+
   useEffect(() => {
     const getData = async () => {
       try {
+        showLoading();
         let storageTemp = await getStorageDetail(parseInt(storageId));
         setStorage(storageTemp.data);
-        let response = await getListShelves("", 1, 6, parseInt(areaId));
+        let response = await getListShelves("", page, 6, parseInt(areaId));
         let listShelves = response.data.data;
         listShelves = listShelves.map((e) => {
           return { ...e, boxSize: e.boxes[0].sizeType };
         });
+        setTotalPage(response.data.meta.totalPage);
         setListShelf(listShelves);
       } catch (e) {
         console.log(e);
+        hideLoading();
       }
     };
 
@@ -77,6 +99,7 @@ function AreaDetail(props) {
         open={open}
         setCurrentShelf={setCurrentShelf}
         handleClose={handleClose}
+        page={page}
       />
       <Box
         sx={{

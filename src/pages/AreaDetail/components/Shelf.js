@@ -9,24 +9,24 @@ const buildBox = (shelf) => {
     let nameBox;
 
     if (shelf?.type === 0) {
-      if (e?.sizeType === 0) {
+      if (shelf?.boxSize === 0) {
         nameBox = "S";
-      } else if (e.sizeType === 1) {
+      } else if (shelf?.boxSize === 1) {
         nameBox = "M";
-      } else if (e.sizeType === 2) {
+      } else if (shelf?.boxSize === 2) {
         nameBox = "L";
-      } else if (e.sizeType === 3) {
+      } else if (shelf?.boxSize === 3) {
         nameBox = "XL";
       }
       nameBox += `- ${i + 1}`;
     } else {
-      if (e?.sizeType === 0) {
+      if (shelf?.boxSize === 0) {
         nameBox = "0.5m2";
-      } else if (e.sizeType === 1) {
+      } else if (shelf?.boxSize === 1) {
         nameBox = "1m2";
-      } else if (e.sizeType === 2) {
+      } else if (shelf?.boxSize === 2) {
         nameBox = "2m2";
-      } else if (e.sizeType === 3) {
+      } else if (shelf?.boxSize === 3) {
         nameBox = "3m2";
       }
     }

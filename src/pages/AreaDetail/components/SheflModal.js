@@ -56,6 +56,12 @@ export default function SheflModal({
     }
   };
 
+  if (currentShelf.type === undefined) {
+    setCurrentShelf({
+      type: 0,
+    });
+  }
+
   return (
     <Modal
       open={open}
