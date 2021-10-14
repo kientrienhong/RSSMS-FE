@@ -10,6 +10,7 @@ import {
 } from "@material-ui/core";
 import Shelf from "./Shelf";
 import FormHandy from "./FormHandy";
+import FormUnwieldy from "./FormUnwieldy";
 
 const styleModal = {
   position: "absolute",
@@ -34,19 +35,26 @@ export default function SheflModal({
   page,
   getData,
   searchName,
+  isHandy,
+  setIsHandy,
 }) {
   const handleChangeRadioButton = (event) => {
     if (event.target.value === "0") {
+      setIsHandy(true);
       setCurrentShelf({
         ...currentShelf,
         type: 0,
+        boxesInHeight: 0,
+        boxesInWidth: 0,
+        boxes: [],
       });
     } else {
+      setIsHandy(false);
       setCurrentShelf({
         ...currentShelf,
         type: 1,
-        amountHeight: 1,
-        amountWidth: 1,
+        boxesInHeight: 1,
+        boxesInWidth: 1,
         boxes: [{}],
       });
     }
@@ -101,16 +109,29 @@ export default function SheflModal({
               />
             </RadioGroup>
           </FormControl>
-          <FormHandy
-            isEdit={isEdit}
-            currentShelf={currentShelf}
-            setCurrentShelf={setCurrentShelf}
-            getData={getData}
-            page={page}
-            areaId={areaId}
-            searchName={searchName}
-            handleClose={handleClose}
-          />
+          {isHandy === true ? (
+            <FormHandy
+              isEdit={isEdit}
+              currentShelf={currentShelf}
+              setCurrentShelf={setCurrentShelf}
+              getData={getData}
+              page={page}
+              areaId={areaId}
+              searchName={searchName}
+              handleClose={handleClose}
+            />
+          ) : (
+            <FormUnwieldy
+              isEdit={isEdit}
+              currentShelf={currentShelf}
+              setCurrentShelf={setCurrentShelf}
+              getData={getData}
+              page={page}
+              areaId={areaId}
+              searchName={searchName}
+              handleClose={handleClose}
+            />
+          )}
         </Box>
       </Box>
     </Modal>

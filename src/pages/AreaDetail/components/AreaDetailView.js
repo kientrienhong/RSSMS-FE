@@ -6,6 +6,7 @@ export default function AreaDetailView({
   listShelf,
   setCurrentShelf,
   handleOpen,
+  setIsHandy,
 }) {
   return (
     <Card
@@ -28,6 +29,7 @@ export default function AreaDetailView({
         listShelf={listShelf}
         setCurrentShelf={setCurrentShelf}
         handleOpen={handleOpen}
+        setIsHandy={setIsHandy}
       />
       <Box
         sx={{

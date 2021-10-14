@@ -21,7 +21,7 @@ const styleBoxInput = {
   alignItems: "flex-start",
   height: "40px",
   width: "95%",
-  marginTop: "8% ",
+  marginTop: "6% ",
 };
 
 function FormHandy({
@@ -55,17 +55,6 @@ function FormHandy({
         boxesInHeight: parseInt(currentShelf.boxesInHeight),
         boxSize: currentShelf.boxSize,
       };
-      // createShelf(shelf, parseInt(areaId))
-      //   .then(async (e) => {
-      //     if (response.status === 200) {
-      // await getData(searchName, page, 4);
-      // showSnackbar("success", "Create shelf success");
-      // handleClose();
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     console.log(error);
-      //   });
       await createShelf(shelf, parseInt(areaId));
       await getData(searchName, page, 4);
       showSnackbar("success", "Create shelf success");

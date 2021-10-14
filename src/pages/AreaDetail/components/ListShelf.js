@@ -2,8 +2,18 @@ import React from "react";
 import { Grid, Box } from "@material-ui/core";
 import Shelf from "./Shelf";
 
-export default function ListShelf({ listShelf, setCurrentShelf, handleOpen }) {
+export default function ListShelf({
+  listShelf,
+  setCurrentShelf,
+  setIsHandy,
+  handleOpen,
+}) {
   const handleOnClickEdit = (shelf) => {
+    if (shelf.type === 0) {
+      setIsHandy(true);
+    } else {
+      setIsHandy(false);
+    }
     setCurrentShelf(shelf);
     handleOpen(true);
   };

@@ -1,6 +1,6 @@
 import React from "react";
 import { Controller } from "react-hook-form";
-import { TextareaAutosize } from "@material-ui/core";
+import { TextField } from "@material-ui/core";
 
 export default function CustomAreaInput({
   control,
@@ -20,10 +20,12 @@ export default function CustomAreaInput({
       defaultValue={userInfo}
       render={({ field: { onChange, value }, fieldState: { error } }) => {
         return (
-          <TextareaAutosize
+          <TextField
             label={label}
             disabled={disabled}
-            minRows={2}
+            multiline
+            rows={2}
+            rowsMax={4}
             variant="outlined"
             value={value}
             style={inlineStyle}

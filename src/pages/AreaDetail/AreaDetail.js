@@ -29,6 +29,8 @@ function AreaDetail(props) {
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
   const [searchName, setSearchName] = useState("");
+  const [isHandy, setIsHandy] = useState(true);
+
   const handleOpen = (isEdit) => {
     setIsEdit(isEdit);
     setOpen(true);
@@ -111,6 +113,8 @@ function AreaDetail(props) {
         areaId={areaId}
         isEdit={isEdit}
         searchName={searchName}
+        setIsHandy={setIsHandy}
+        isHandy={isHandy}
       />
       <Box
         sx={{
@@ -157,6 +161,7 @@ function AreaDetail(props) {
           listShelf={listShelf}
           setCurrentShelf={setCurrentShelf}
           handleOpen={handleOpen}
+          setIsHandy={setIsHandy}
         />
         <Box
           sx={{
