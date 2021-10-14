@@ -248,7 +248,7 @@ export const updateArea = async (id, name) => {
 export const getListShelves = async (name, page, size, areaId) => {
   let listShelves;
   listShelves = await axios.get(
-    `https://localhost:44304/api/v1/shelves?AreaId=${areaId}&page=${page}&size=${size}`
+    `https://localhost:44304/api/v1/shelves?AreaId=${areaId}&Name=${name}&page=${page}&size=${size}`
   );
 
   return listShelves;

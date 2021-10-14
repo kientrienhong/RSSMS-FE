@@ -473,7 +473,7 @@ function Storages(props) {
     const process = async () => {
       try {
         showLoading();
-        await getData("", page, 4);
+        await getData(searchName, page, 4);
       } catch (error) {
         console.log(error);
       } finally {

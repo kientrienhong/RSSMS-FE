@@ -19,8 +19,14 @@ function AreaDetailView({
   getData,
   searchName,
   page,
+  totalPage,
+  setPage,
 }) {
   const [openConfirm, setOpenConfirm] = useState(false);
+
+  const handleChange = async (event, value) => {
+    setPage(value);
+  };
 
   const handleOpenConfirm = () => {
     setOpenConfirm(true);
@@ -79,7 +85,7 @@ function AreaDetailView({
         }}
       >
         <Stack spacing={2} sx={{}}>
-          <Pagination count={4} page={1} />
+          <Pagination count={totalPage} page={page} onChange={handleChange} />
         </Stack>
       </Box>
     </Card>

@@ -21,7 +21,7 @@ import SheflModal from "./components/SheflModal";
 function AreaDetail(props) {
   const { storageId, areaId } = useParams();
   const [storage, setStorage] = useState({});
-  const { showLoading, hideLoading, showSnackbar } = props;
+  const { showLoading, hideLoading } = props;
   const [open, setOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [currentShelf, setCurrentShelf] = useState({});
@@ -36,6 +36,10 @@ function AreaDetail(props) {
     setOpen(true);
   };
 
+  const onHandleSearch = (e) => {
+    setSearchName(e.target.value);
+  };
+
   const handleClose = () => {
     setOpen(false);
     setCurrentShelf({});
@@ -43,7 +47,7 @@ function AreaDetail(props) {
   const getData = async (name, page, size) => {
     try {
       showLoading();
-      let response = await getListShelves("", page, 6, parseInt(areaId));
+      let response = await getListShelves(name, page, 6, parseInt(areaId));
       let listShelves = response.data.data;
       listShelves = listShelves.map((e) => {
         return { ...e, boxSize: e.boxes[0].sizeType };
@@ -94,6 +98,39 @@ function AreaDetail(props) {
     firstCall();
   }, []);
 
+  useEffect(() => {
+    const process = async () => {
+      try {
+        showLoading();
+        await getData(searchName, page, 6);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        hideLoading();
+      }
+    };
+    process();
+  }, [page]);
+
+  useEffect(() => {
+    const searchNameCall = async () => {
+      try {
+        showLoading();
+        await getData(searchName, page, 6);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        hideLoading();
+      }
+    };
+
+    const timeOut = setTimeout(() => searchNameCall(), 700);
+
+    return () => {
+      clearTimeout(timeOut);
+    };
+  }, [searchName]);
+
   return (
     <Box
       sx={{
@@ -128,6 +165,7 @@ function AreaDetail(props) {
           sx={{
             width: "80%",
           }}
+          onChange={(e) => onHandleSearch(e)}
           InputProps={{
             style: { height: "45px", backgroundColor: "white" },
             startAdornment: (
@@ -165,6 +203,8 @@ function AreaDetail(props) {
           getData={getData}
           searchName={searchName}
           page={page}
+          totalPage={totalPage}
+          setPage={setPage}
         />
         <Box
           sx={{
