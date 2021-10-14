@@ -1,14 +1,6 @@
-import React, { useState } from "react";
-import {
-  Card,
-  Typography,
-  Grid,
-  Box,
-  Stack,
-  Pagination,
-} from "@material-ui/core";
+import React from "react";
+import { Card, Typography, Box, Stack, Pagination } from "@material-ui/core";
 import ListShelf from "./ListShelf";
-import ShelfModal from "./SheflModal";
 export default function AreaDetailView({
   storage,
   listShelf,

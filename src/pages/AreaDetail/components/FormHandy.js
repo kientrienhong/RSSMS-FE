@@ -10,7 +10,9 @@ import {
   Select,
 } from "@material-ui/core";
 import CustomInput from "../../../components/CustomInput";
-
+import { connect } from "react-redux";
+import * as action from "../../../redux/action/action";
+import { createShelf } from "../../../apis/Apis";
 const styleInput = { marginRight: "5%" };
 const styleBoxInput = {
   display: "flex",
@@ -22,22 +24,65 @@ const styleBoxInput = {
   marginTop: "8% ",
 };
 
-export default function FomHandy({ isEdit, currentShelf, setCurrentShelf }) {
+function FormHandy({
+  isEdit,
+  currentShelf,
+  setCurrentShelf,
+  getData,
+  page,
+  showLoading,
+  hideLoading,
+  showSnackbar,
+  areaId,
+  searchName,
+  handleClose,
+}) {
   const { handleSubmit, control, reset } = useForm();
   const handleChangeSize = (event) => {
     setCurrentShelf({ ...currentShelf, boxSize: event.target.value });
   };
 
-  const onHandleCreateShelf = (data) => {
-    console.log("==========================");
-    console.log(currentShelf);
-    console.log(data);
+  const [error, setError] = useState({});
+
+  const onHandleCreateShelf = async (data, areaId) => {
+    try {
+      showLoading();
+      const shelf = {
+        type: currentShelf.type,
+        name: data.name,
+        note: "test",
+        boxesInWidth: parseInt(currentShelf.boxesInWidth),
+        boxesInHeight: parseInt(currentShelf.boxesInHeight),
+        boxSize: currentShelf.boxSize,
+      };
+      // createShelf(shelf, parseInt(areaId))
+      //   .then(async (e) => {
+      //     if (response.status === 200) {
+      // await getData(searchName, page, 4);
+      // showSnackbar("success", "Create shelf success");
+      // handleClose();
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     console.log(error);
+      //   });
+      await createShelf(shelf, parseInt(areaId));
+      await getData(searchName, page, 4);
+      showSnackbar("success", "Create shelf success");
+      handleClose();
+    } catch (e) {
+      console.log(e.response);
+      setError({ msg: e.response.data.error.message });
+    } finally {
+      hideLoading();
+    }
   };
 
-  const onSubmit = (data) => {
-    console.log("==========================");
-    console.log(currentShelf);
-    console.log(data);
+  const onSubmit = async (data) => {
+    console.log(isEdit);
+    if (isEdit === false) {
+      await onHandleCreateShelf(data, areaId);
+    }
   };
 
   const [inputAmountBox, setInputAmountBox] = useState({
@@ -179,7 +224,9 @@ export default function FomHandy({ isEdit, currentShelf, setCurrentShelf }) {
           </Box>
         </Box>
       </Box>
-
+      {error.msg ? (
+        <p style={{ textAlign: "center", color: "red" }}>{error.msg}</p>
+      ) : null}
       <Box
         sx={{
           width: "100%",
@@ -195,3 +242,13 @@ export default function FomHandy({ isEdit, currentShelf, setCurrentShelf }) {
     </form>
   );
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    showLoading: () => dispatch(action.showLoader()),
+    hideLoading: () => dispatch(action.hideLoader()),
+    showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(FormHandy);

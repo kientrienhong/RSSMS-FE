@@ -19,7 +19,6 @@ export default function CustomInput({
       control={control}
       defaultValue={userInfo}
       render={({ field: { onChange, value }, fieldState: { error } }) => {
-        console.log(error);
         return (
           <TextField
             label={label}

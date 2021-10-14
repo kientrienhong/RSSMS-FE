@@ -28,6 +28,7 @@ function AreaDetail(props) {
   const [listShelf, setListShelf] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
+  const [searchName, setSearchName] = useState("");
   const handleOpen = (isEdit) => {
     setIsEdit(isEdit);
     setOpen(true);
@@ -45,7 +46,8 @@ function AreaDetail(props) {
       listShelves = listShelves.map((e) => {
         return { ...e, boxSize: e.boxes[0].sizeType };
       });
-      setTotalPage(response.data.meta.totalPage);
+      console.log(listShelves);
+      setTotalPage(response.data.metadata.totalPage);
       setListShelf(listShelves);
     } catch (e) {
       console.log(e);
@@ -60,12 +62,17 @@ function AreaDetail(props) {
         showLoading();
         let storageTemp = await getStorageDetail(parseInt(storageId));
         setStorage(storageTemp.data);
-        let response = await getListShelves("", page, 6, parseInt(areaId));
+        let response = await getListShelves(
+          searchName,
+          page,
+          6,
+          parseInt(areaId)
+        );
         let listShelves = response.data.data;
         listShelves = listShelves.map((e) => {
           return { ...e, boxSize: e.boxes[0].sizeType };
         });
-        setTotalPage(response.data.meta.totalPage);
+        setTotalPage(response.data.metadata.totalPage);
         setListShelf(listShelves);
       } catch (e) {
         console.log(e);
@@ -100,6 +107,10 @@ function AreaDetail(props) {
         setCurrentShelf={setCurrentShelf}
         handleClose={handleClose}
         page={page}
+        getData={getData}
+        areaId={areaId}
+        isEdit={isEdit}
+        searchName={searchName}
       />
       <Box
         sx={{

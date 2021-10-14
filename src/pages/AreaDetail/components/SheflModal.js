@@ -1,23 +1,15 @@
 import React, { useState } from "react";
 import {
-  Typography,
   Box,
-  Button,
   Modal,
   FormLabel,
   RadioGroup,
   FormControl,
   Radio,
-  MenuItem,
   FormControlLabel,
-  TextField,
-  Select,
 } from "@material-ui/core";
-import CustomInput from "../../../components/CustomInput";
-import { useForm } from "react-hook-form";
 import Shelf from "./Shelf";
-import FormHandy from "./FomHandy";
-const styleInput = { marginRight: "5%" };
+import FormHandy from "./FormHandy";
 
 const styleModal = {
   position: "absolute",
@@ -37,7 +29,11 @@ export default function SheflModal({
   open,
   handleClose,
   isEdit,
+  areaId,
   setCurrentShelf,
+  page,
+  getData,
+  searchName,
 }) {
   const handleChangeRadioButton = (event) => {
     if (event.target.value === "0") {
@@ -109,6 +105,11 @@ export default function SheflModal({
             isEdit={isEdit}
             currentShelf={currentShelf}
             setCurrentShelf={setCurrentShelf}
+            getData={getData}
+            page={page}
+            areaId={areaId}
+            searchName={searchName}
+            handleClose={handleClose}
           />
         </Box>
       </Box>

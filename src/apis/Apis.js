@@ -260,7 +260,7 @@ export const createShelf = async (shelf, areaId) => {
     areaId: areaId,
     type: shelf.type,
     name: shelf.name,
-    note: shelf.name,
+    note: shelf.note,
     boxesInWidth: shelf.boxesInWidth,
     boxesInHeight: shelf.boxesInHeight,
     boxSize: shelf.boxSize,
