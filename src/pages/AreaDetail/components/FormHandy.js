@@ -12,7 +12,7 @@ import {
 import CustomInput from "../../../components/CustomInput";
 import { connect } from "react-redux";
 import * as action from "../../../redux/action/action";
-import { createShelf } from "../../../apis/Apis";
+import { createShelf, updateShelf } from "../../../apis/Apis";
 const styleInput = { marginRight: "5%" };
 const styleBoxInput = {
   display: "flex",
@@ -67,10 +67,35 @@ function FormHandy({
     }
   };
 
+  const onHandleEditShelf = async (data) => {
+    try {
+      showLoading();
+      const shelf = {
+        type: currentShelf.type,
+        name: data.name,
+        note: data.note ? data.note : "",
+        boxesInWidth: parseInt(currentShelf.boxesInWidth),
+        boxesInHeight: parseInt(currentShelf.boxesInHeight),
+        boxSize: currentShelf.boxSize,
+      };
+      await updateShelf(currentShelf.id, shelf);
+      await getData(searchName, page, 4);
+      showSnackbar("success", "Update shelf success");
+      handleClose();
+    } catch (e) {
+      console.log(e.response);
+      setError({ msg: e.response.data.error.message });
+    } finally {
+      hideLoading();
+    }
+  };
+
   const onSubmit = async (data) => {
     console.log(isEdit);
     if (isEdit === false) {
       await onHandleCreateShelf(data, areaId);
+    } else {
+      await onHandleEditShelf(data);
     }
   };
 

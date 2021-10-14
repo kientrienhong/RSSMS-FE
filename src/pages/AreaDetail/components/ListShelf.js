@@ -7,6 +7,7 @@ export default function ListShelf({
   setCurrentShelf,
   setIsHandy,
   handleOpen,
+  handleOpenConfirm,
 }) {
   const handleOnClickEdit = (shelf) => {
     if (shelf.type === 0) {
@@ -20,6 +21,7 @@ export default function ListShelf({
 
   const handleOnClickDelete = (shelf) => {
     setCurrentShelf(shelf);
+    handleOpenConfirm();
   };
 
   const handleOnClickSeeMore = (shelf) => {
@@ -27,7 +29,7 @@ export default function ListShelf({
     handleOpen(true);
   };
 
-  const mapListToGrid = (listShelf, setCurrentShelf) =>
+  const mapListToGrid = (listShelf) =>
     listShelf.map((e, i) => (
       <Grid
         container

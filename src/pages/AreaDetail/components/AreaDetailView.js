@@ -1,13 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, Typography, Box, Stack, Pagination } from "@material-ui/core";
 import ListShelf from "./ListShelf";
-export default function AreaDetailView({
+import ConfirmModal from "../../../components/ConfirmModal";
+import { connect } from "react-redux";
+import * as action from "../../../redux/action/action";
+import { deleteShelf } from "../../../apis/Apis";
+
+function AreaDetailView({
   storage,
   listShelf,
   setCurrentShelf,
   handleOpen,
   setIsHandy,
+  currentShelf,
+  showLoading,
+  hideLoading,
+  showSnackbar,
+  getData,
+  searchName,
+  page,
 }) {
+  const [openConfirm, setOpenConfirm] = useState(false);
+
+  const handleOpenConfirm = () => {
+    setOpenConfirm(true);
+  };
+
+  const handleCloseConfirm = () => {
+    setOpenConfirm(false);
+  };
+
+  const handleDeleteShelf = async (id) => {
+    await deleteShelf(id);
+    await getData(searchName, page, 6);
+  };
+
   return (
     <Card
       style={{ height: "73vh" }}
@@ -21,6 +48,16 @@ export default function AreaDetailView({
         alignItems: "flex-start",
       }}
     >
+      <ConfirmModal
+        open={openConfirm}
+        handleClose={handleCloseConfirm}
+        onHandleYes={handleDeleteShelf}
+        id={currentShelf.id}
+        showLoading={showLoading}
+        hideLoading={hideLoading}
+        showSnackbar={showSnackbar}
+        msg="Delete shelf success"
+      />
       <Typography color="black" variant="h2" sx={{ textAlign: "left" }}>
         {storage.name}
       </Typography>
@@ -30,6 +67,7 @@ export default function AreaDetailView({
         setCurrentShelf={setCurrentShelf}
         handleOpen={handleOpen}
         setIsHandy={setIsHandy}
+        handleOpenConfirm={handleOpenConfirm}
       />
       <Box
         sx={{
@@ -47,3 +85,12 @@ export default function AreaDetailView({
     </Card>
   );
 }
+const mapDispatchToProps = (dispatch) => {
+  return {
+    showLoading: () => dispatch(action.showLoader()),
+    hideLoading: () => dispatch(action.hideLoader()),
+    showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(AreaDetailView);

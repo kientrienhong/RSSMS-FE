@@ -1,4 +1,3 @@
-import callApi from "./callApi";
 import axios from "axios";
 
 export const getListUser = async (name, page, size, storageId) => {
@@ -267,4 +266,29 @@ export const createShelf = async (shelf, areaId) => {
   });
 
   return listShelves;
+};
+
+export const updateShelf = async (id, shelf) => {
+  let listShelves = await axios.put(
+    `https://localhost:44304/api/v1/shelves/${id}`,
+    {
+      id: id,
+      type: shelf.type,
+      name: shelf.name,
+      note: shelf.note,
+      boxesInWidth: shelf.boxesInWidth,
+      boxesInHeight: shelf.boxesInHeight,
+    }
+    // boxSize: shelf.boxSize,
+  );
+
+  return listShelves;
+};
+
+export const deleteShelf = async (id) => {
+  const response = await axios.delete(
+    `https://localhost:44304/api/v1/shelves/${id}`
+  );
+
+  return response;
 };

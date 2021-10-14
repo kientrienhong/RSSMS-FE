@@ -6,7 +6,6 @@ import {
   Button,
   FormControl,
   MenuItem,
-  TextField,
   Select,
 } from "@material-ui/core";
 import CustomInput from "../../../components/CustomInput";
@@ -14,17 +13,8 @@ import CustomAreaInput from "../../../components/CustomAreaInput";
 
 import { connect } from "react-redux";
 import * as action from "../../../redux/action/action";
-import { createShelf } from "../../../apis/Apis";
+import { createShelf, updateShelf } from "../../../apis/Apis";
 const styleInput = { marginRight: "5%" };
-const styleBoxInput = {
-  display: "flex",
-  justifyContent: "center",
-  flexDirection: "row",
-  alignItems: "flex-start",
-  height: "40px",
-  width: "95%",
-  marginTop: "6% ",
-};
 
 function FormUnwieldy({
   isEdit,
@@ -39,12 +29,35 @@ function FormUnwieldy({
   searchName,
   handleClose,
 }) {
-  const { handleSubmit, control, reset } = useForm();
+  const { handleSubmit, control } = useForm();
   const handleChangeSize = (event) => {
     setCurrentShelf({ ...currentShelf, boxSize: event.target.value });
   };
 
   const [error, setError] = useState({});
+
+  const onHandleEditShelf = async (data) => {
+    try {
+      showLoading();
+      const shelf = {
+        type: currentShelf.type,
+        name: data.name,
+        note: data.note ? data.note : "",
+        boxesInWidth: parseInt(currentShelf.boxesInWidth),
+        boxesInHeight: parseInt(currentShelf.boxesInHeight),
+        boxSize: currentShelf.boxSize,
+      };
+      await updateShelf(currentShelf.id, shelf);
+      await getData(searchName, page, 4);
+      showSnackbar("success", "Update shelf success");
+      handleClose();
+    } catch (e) {
+      console.log(e.response);
+      setError({ msg: e.response.data.error.message });
+    } finally {
+      hideLoading();
+    }
+  };
 
   const onHandleCreateShelf = async (data, areaId) => {
     try {
@@ -70,9 +83,10 @@ function FormUnwieldy({
   };
 
   const onSubmit = async (data) => {
-    console.log(isEdit);
     if (isEdit === false) {
       await onHandleCreateShelf(data, areaId);
+    } else {
+      await onHandleEditShelf(data);
     }
   };
 

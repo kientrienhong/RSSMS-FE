@@ -48,7 +48,6 @@ function AreaDetail(props) {
       listShelves = listShelves.map((e) => {
         return { ...e, boxSize: e.boxes[0].sizeType };
       });
-      console.log(listShelves);
       setTotalPage(response.data.metadata.totalPage);
       setListShelf(listShelves);
     } catch (e) {
@@ -162,6 +161,10 @@ function AreaDetail(props) {
           setCurrentShelf={setCurrentShelf}
           handleOpen={handleOpen}
           setIsHandy={setIsHandy}
+          currentShelf={currentShelf}
+          getData={getData}
+          searchName={searchName}
+          page={page}
         />
         <Box
           sx={{
