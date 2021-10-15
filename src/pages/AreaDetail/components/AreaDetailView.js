@@ -21,8 +21,47 @@ function AreaDetailView({
   page,
   totalPage,
   setPage,
+  area,
 }) {
   const [openConfirm, setOpenConfirm] = useState(false);
+  const [currentBox, setCurrentBox] = useState({});
+
+  const listNote = [
+    { color: "#99E5FE", name: "Available" },
+    { color: "#04BFFE", name: "Not available" },
+    { color: "#FF615F", name: "Expired" },
+    { color: "#FF7C33", name: "Expired soon" },
+    { color: "#26FF7B", name: "Selected" },
+  ];
+
+  const mapListNote = () =>
+    listNote.map((e) => (
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+        }}
+      >
+        <Box
+          sx={{
+            width: "32px",
+            height: "32px",
+            borderRadius: "4px",
+            marginRight: "4px",
+            backgroundColor: e.color,
+          }}
+        ></Box>
+        <p
+          style={{
+            marginRight: "16px",
+            fontWeight: "bold",
+          }}
+        >
+          {e.name}
+        </p>
+      </Box>
+    ));
 
   const handleChange = async (event, value) => {
     setPage(value);
@@ -49,7 +88,7 @@ function AreaDetailView({
         display: "flex",
         flexDirection: "column",
         width: "65%",
-        height: "75vh",
+        height: "78vh",
         padding: "2%",
         alignItems: "flex-start",
       }}
@@ -65,15 +104,17 @@ function AreaDetailView({
         msg="Delete shelf success"
       />
       <Typography color="black" variant="h2" sx={{ textAlign: "left" }}>
-        {storage.name}
+        {storage.name} {area.name}
       </Typography>
-      <Box sx={{ display: "flex", flexDirection: "row" }}></Box>
+      <Box sx={{ display: "flex", flexDirection: "row" }}>{mapListNote()}</Box>
       <ListShelf
         listShelf={listShelf}
         setCurrentShelf={setCurrentShelf}
         handleOpen={handleOpen}
         setIsHandy={setIsHandy}
         handleOpenConfirm={handleOpenConfirm}
+        currentBox={currentBox}
+        setCurrentBox={setCurrentBox}
       />
       <Box
         sx={{

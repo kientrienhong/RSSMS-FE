@@ -8,6 +8,8 @@ export default function ListShelf({
   setIsHandy,
   handleOpen,
   handleOpenConfirm,
+  currentBox,
+  setCurrentBox,
 }) {
   const handleOnClickEdit = (shelf) => {
     if (shelf.type === 0) {
@@ -93,7 +95,12 @@ export default function ListShelf({
               flexDirection: "row",
             }}
           >
-            <Shelf shelf={e} index={i} />
+            <Shelf
+              shelf={e}
+              index={i}
+              currentBox={currentBox}
+              setCurrentBox={setCurrentBox}
+            />
           </Box>
         </Box>
       </Grid>

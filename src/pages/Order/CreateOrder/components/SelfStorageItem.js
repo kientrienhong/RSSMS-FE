@@ -49,7 +49,6 @@ export default function SelfStorageItem({
   setChoosenProduct,
 }) {
   const handleOnClickMinus = () => {
-    console.log(list);
     if (quantity > 0) {
       let quantityTemp = --quantity;
       let listTemp = [...list];

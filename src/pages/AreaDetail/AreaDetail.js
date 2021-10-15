@@ -214,6 +214,7 @@ function AreaDetail(props) {
           searchName={searchName}
           page={page}
           totalPage={totalPage}
+          area={currentArea}
         />
         <Box
           sx={{
@@ -223,7 +224,7 @@ function AreaDetail(props) {
             width: "25%",
           }}
         >
-          <AreaUsage />
+          <AreaUsage area={currentArea} />
           <DetailBox />
         </Box>
       </Box>

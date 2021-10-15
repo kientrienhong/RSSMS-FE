@@ -33,7 +33,7 @@ CircularProgressWithLabel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-export default function AreaUsage() {
+export default function AreaUsage({ area }) {
   return (
     <Card
       sx={{
@@ -49,7 +49,7 @@ export default function AreaUsage() {
       }}
     >
       <CircularProgressWithLabel
-        value={24}
+        value={area.usage}
         width="80px"
         height="80px"
         sx={{ marginBottom: "8px", marginTop: "16px" }}
@@ -79,7 +79,7 @@ export default function AreaUsage() {
         >
           <p>Not available</p>
           <Typography color="black" variant="h2" sx={{ textAlign: "left" }}>
-            75
+            0
           </Typography>
         </Box>
         <Box
@@ -91,7 +91,7 @@ export default function AreaUsage() {
         >
           <p>Available</p>
           <Typography color="black" variant="h2" sx={{ textAlign: "left" }}>
-            100
+            {area.totalBox}
           </Typography>
         </Box>
       </Box>
