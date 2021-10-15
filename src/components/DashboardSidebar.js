@@ -11,9 +11,8 @@ import {
 } from "@material-ui/core";
 import { User as UserIcon, Users as UsersIcon } from "react-feather";
 import NavItem from "./NavItem";
-import { ReactComponent as WarehouseSVG } from "../svg/warehouse.svg";
 import { connect } from "react-redux";
-
+import { FaWarehouse, FaFileInvoiceDollar } from "react-icons/fa";
 const items = [
   {
     href: "/app/account",
@@ -28,7 +27,14 @@ const items = [
   {
     href: "/app/storages",
     title: "Storages",
-    img: <WarehouseSVG />,
+    icon: undefined,
+    reactIcon: <FaWarehouse />,
+  },
+  {
+    href: "/app/orders",
+    title: "Orders",
+    icon: undefined,
+    reactIcon: <FaFileInvoiceDollar />,
   },
 ];
 
@@ -83,6 +89,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile, user }) => {
               title={item.title}
               icon={item.icon}
               customImg={item.img}
+              reactIcon={item.reactIcon}
             />
           ))}
         </List>

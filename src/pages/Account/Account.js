@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Box, Container, Grid, Card, Typography } from "@material-ui/core";
-import CustomAvatar from "../../components/CustomAvatar";
 import { connect } from "react-redux";
-import * as action from "../../redux/action/action";
 import UpdateInformation from "./UpdateInformation";
 import ChangePassword from "./ChangePassword";
 function Account({ user }) {

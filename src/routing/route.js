@@ -8,6 +8,8 @@ import Users from "../pages/Users/Users";
 import Storages from "../pages/Storage/Storages";
 import StorageDetail from "../pages/StorageDetail/StorageDetail";
 import AreaDetail from "../pages/AreaDetail/AreaDetail";
+import Order from "../pages/Order/Order";
+import MakingOrder from "../pages/Order/CreateOrder/MakingOrder";
 const routes = [
   {
     path: "app",
@@ -16,6 +18,7 @@ const routes = [
       { path: "account", element: <Account /> },
       { path: "users", element: <Users /> },
       { path: "storages", element: <Storages /> },
+      { path: "orders", element: <Order /> },
       { path: "storages/:storageId", element: <StorageDetail /> },
       { path: "storages/:storageId/areas/:areaId", element: <AreaDetail /> },
       { path: "*", element: <Navigate to="/404" /> },
@@ -23,8 +26,12 @@ const routes = [
   },
   {
     path: "/",
-    element: <MainLayout />,
-    children: [{ element: <LogIn /> }, { path: "404", element: <NotFound /> }],
+    // element: <MainLayout />,
+    children: [
+      { element: <LogIn /> },
+      { path: "404", element: <NotFound /> },
+      { path: "orders/makingOrder", element: <MakingOrder /> },
+    ],
   },
 ];
 

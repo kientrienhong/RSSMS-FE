@@ -9,7 +9,11 @@ import {
 } from "@material-ui/core";
 import { useParams } from "react-router-dom";
 
-import { getStorageDetail, getListShelves } from "../../apis/Apis";
+import {
+  getStorageDetail,
+  getListShelves,
+  getDetailArea,
+} from "../../apis/Apis";
 import SearchIcon from "@mui/icons-material/Search";
 import { connect } from "react-redux";
 import * as action from "../../redux/action/action";
@@ -30,6 +34,7 @@ function AreaDetail(props) {
   const [totalPage, setTotalPage] = useState(0);
   const [searchName, setSearchName] = useState("");
   const [isHandy, setIsHandy] = useState(true);
+  const [currentArea, setCurrentArea] = useState({});
 
   const handleOpen = (isEdit) => {
     setIsEdit(isEdit);
@@ -44,6 +49,7 @@ function AreaDetail(props) {
     setOpen(false);
     setCurrentShelf({});
   };
+
   const getData = async (name, page, size) => {
     try {
       showLoading();
@@ -77,6 +83,9 @@ function AreaDetail(props) {
         listShelves = listShelves.map((e) => {
           return { ...e, boxSize: e.boxes[0].sizeType };
         });
+
+        let area = await getDetailArea(parseInt(areaId));
+        setCurrentArea(area.data);
         setTotalPage(response.data.metadata.totalPage);
         setListShelf(listShelves);
       } catch (e) {
@@ -199,12 +208,12 @@ function AreaDetail(props) {
           setCurrentShelf={setCurrentShelf}
           handleOpen={handleOpen}
           setIsHandy={setIsHandy}
+          setPage={setPage}
           currentShelf={currentShelf}
           getData={getData}
           searchName={searchName}
           page={page}
           totalPage={totalPage}
-          setPage={setPage}
         />
         <Box
           sx={{

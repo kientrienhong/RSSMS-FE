@@ -67,7 +67,7 @@ function AreaDetailView({
       <Typography color="black" variant="h2" sx={{ textAlign: "left" }}>
         {storage.name}
       </Typography>
-
+      <Box sx={{ display: "flex", flexDirection: "row" }}></Box>
       <ListShelf
         listShelf={listShelf}
         setCurrentShelf={setCurrentShelf}

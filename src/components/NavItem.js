@@ -5,15 +5,8 @@ import {
 } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Button, ListItem } from "@material-ui/core";
-const NavItem = ({
-  href,
-  icon: Icon,
-  title,
-  customImg: CustomImg,
-  ...rest
-}) => {
+const NavItem = ({ href, icon: Icon, title, reactIcon, ...rest }) => {
   const location = useLocation();
-
   const active = href
     ? !!matchPath(
         {
@@ -53,6 +46,7 @@ const NavItem = ({
         to={href}
       >
         {Icon && <Icon size="20" />}
+        {reactIcon}
         <span>{title}</span>
       </Button>
     </ListItem>

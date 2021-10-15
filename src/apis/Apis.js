@@ -210,11 +210,6 @@ export const getArea = async (storageId) => {
 };
 
 export const createArea = async (storageId, name) => {
-  console.log({
-    name: name,
-    storageId: storageId,
-    status: 1,
-  });
   const response = await axios.post("https://localhost:44304/api/v1/areas", {
     name: name,
     storageId: parseInt(storageId),
@@ -233,13 +228,20 @@ export const deleteArea = async (id) => {
 };
 
 export const updateArea = async (id, name) => {
-  console.log(id, name);
   const response = await axios.put(
     `https://localhost:44304/api/v1/areas/${id}`,
     {
       id: id,
       name: name,
     }
+  );
+
+  return response;
+};
+
+export const getDetailArea = async (id) => {
+  const response = await axios.get(
+    `https://localhost:44304/api/v1/areas/${id}`
   );
 
   return response;
@@ -278,8 +280,8 @@ export const updateShelf = async (id, shelf) => {
       note: shelf.note,
       boxesInWidth: shelf.boxesInWidth,
       boxesInHeight: shelf.boxesInHeight,
+      boxSize: shelf.boxSize,
     }
-    // boxSize: shelf.boxSize,
   );
 
   return listShelves;
