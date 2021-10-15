@@ -19,6 +19,74 @@ export default function MakingOrder() {
     doorToDoor: "#A19FA8",
   });
 
+  const [listStorages, setListStorages] = useState([
+    {
+      name: "Storage 2m2",
+      price: "600,000",
+      image: "/img/storage2m2.png",
+      quantity: 0,
+    },
+    {
+      name: "Storage 4m2",
+      price: "1,000,000",
+      image: "/img/storage4m2.png",
+      quantity: 0,
+    },
+    {
+      name: "Storage 8m2",
+      price: "1,600,000",
+      image: "/img/storage8m2.png",
+      quantity: 0,
+    },
+    {
+      name: "Storage 16m2",
+      price: "2,800,000",
+      image: "/img/storage16m2.png",
+      quantity: 0,
+    },
+  ]);
+
+  const [listAccessory, setListAccessory] = useState([
+    {
+      name: "Tape",
+      price: "25,000",
+      image: "/img/tape.png",
+      quantity: 0,
+    },
+    {
+      name: "Locker",
+      price: "165,000",
+      image: "/img/locker.png",
+      quantity: 0,
+    },
+    {
+      name: "Carton box",
+      price: "30,000",
+      image: "/img/carton.png",
+      quantity: 0,
+    },
+    {
+      name: "PE Foam",
+      price: "25,000",
+      image: "/img/peFoam.png",
+      quantity: 0,
+    },
+    {
+      name: "Bubble Wrap",
+      price: "25,000",
+      image: "/img/bubbleWrap.png",
+      quantity: 0,
+    },
+    {
+      name: "PE strech film",
+      price: "150,000",
+      image: "/img/PEstretchfilm.png",
+      quantity: 0,
+    },
+  ]);
+
+  const [choosenProduct, setChoosenProduct] = useState([]);
+
   const onClickMainTab = (name) => {
     if (name === "Self-Storage") {
       setIndexMain(0);
@@ -98,7 +166,14 @@ export default function MakingOrder() {
           width: "60%",
         }}
       >
-        <SelfStorageMainTab />
+        <SelfStorageMainTab
+          listStorages={listStorages}
+          listAccessory={listAccessory}
+          setListStorages={setListStorages}
+          setListAccessory={setListAccessory}
+          setChoosenProduct={setChoosenProduct}
+          choosenProduct={choosenProduct}
+        />
       </Box>
       <Box
         sx={{

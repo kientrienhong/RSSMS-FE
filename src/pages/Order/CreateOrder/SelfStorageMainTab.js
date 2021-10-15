@@ -1,83 +1,15 @@
 import React from "react";
-import {
-  Box,
-  Button,
-  InputAdornment,
-  IconButton,
-  TextField,
-  Typography,
-  Grid,
-  Card,
-} from "@material-ui/core";
+import { Box, Typography, Grid } from "@material-ui/core";
 import SelfStorageItem from "./components/SelfStorageItem";
-export default function SelfStorageMainTab() {
-  const listStorages = [
-    {
-      name: "Storage 2m2",
-      price: "600,000",
-      image: "/img/storage2m2.png",
-      quantity: 0,
-    },
-    {
-      name: "Storage 4m2",
-      price: "1,000,000",
-      image: "/img/storage4m2.png",
-      quantity: 0,
-    },
-    {
-      name: "Storage 8m2",
-      price: "1,600,000",
-      image: "/img/storage8m2.png",
-      quantity: 0,
-    },
-    {
-      name: "Storage 16m2",
-      price: "2,800,000",
-      image: "/img/storage16m2.png",
-      quantity: 0,
-    },
-  ];
-
-  const listAccessory = [
-    {
-      name: "Tape",
-      price: "25,000",
-      image: "/img/tape.png",
-      quantity: 0,
-    },
-    {
-      name: "Locker",
-      price: "165,000",
-      image: "/img/locker.png",
-      quantity: 0,
-    },
-    {
-      name: "Carton box",
-      price: "30,000",
-      image: "/img/carton.png",
-      quantity: 0,
-    },
-    {
-      name: "PE Foam",
-      price: "25,000",
-      image: "/img/peFoam.png",
-      quantity: 0,
-    },
-    {
-      name: "Bubble Wrap",
-      price: "25,000",
-      image: "/img/bubbleWrap.png",
-      quantity: 0,
-    },
-    {
-      name: "PE strech film",
-      price: "150,000",
-      image: "/img/PEstretchfilm.png",
-      quantity: 0,
-    },
-  ];
-
-  const mapListStoragesToGrid = (listData) => {
+export default function SelfStorageMainTab({
+  listStorages,
+  listAccessory,
+  setChoosenProduct,
+  setListStorages,
+  setListAccessory,
+  choosenProduct,
+}) {
+  const mapListStoragesToGrid = (listData, setListData) => {
     return listData.map((e, index) => (
       <Grid item xs={4} key={index}>
         <SelfStorageItem
@@ -85,6 +17,10 @@ export default function SelfStorageMainTab() {
           price={e.price}
           quantity={e.quantity}
           name={e.name}
+          setList={setListData}
+          list={listData}
+          setChoosenProduct={setChoosenProduct}
+          choosenProduct={choosenProduct}
         />
       </Grid>
     ));
@@ -116,7 +52,7 @@ export default function SelfStorageMainTab() {
           height: "630px",
         }}
       >
-        {mapListStoragesToGrid(listStorages)}
+        {mapListStoragesToGrid(listStorages, setListStorages)}
       </Grid>
       <Typography
         sx={{
@@ -132,10 +68,9 @@ export default function SelfStorageMainTab() {
         spacing={2}
         sx={{
           width: "98%",
-          height: "630px",
         }}
       >
-        {mapListStoragesToGrid(listAccessory)}
+        {mapListStoragesToGrid(listAccessory, setListAccessory)}
       </Grid>
     </Box>
   );

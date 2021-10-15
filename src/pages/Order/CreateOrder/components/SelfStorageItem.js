@@ -38,7 +38,57 @@ const styleInput = {
   width: "50%",
 };
 
-export default function SelfStorageItem({ image, name, quantity, price }) {
+export default function SelfStorageItem({
+  image,
+  name,
+  quantity,
+  price,
+  setList,
+  list,
+  choosenProduct,
+  setChoosenProduct,
+}) {
+  const handleOnClickMinus = () => {
+    console.log(list);
+    if (quantity > 0) {
+      let quantityTemp = --quantity;
+      let listTemp = [...list];
+      let index = listTemp.findIndex((e) => e.name === name);
+      listTemp[index] = { ...listTemp[index], quantity: quantityTemp };
+      setList(listTemp);
+
+      let choosenProductTemp = [...choosenProduct];
+      let indexProduct = choosenProductTemp.findIndex((e) => e.name === name);
+      if (choosenProductTemp[indexProduct].quantity === 1) {
+        choosenProductTemp.splice(indexProduct, 1);
+      } else {
+        --choosenProductTemp[indexProduct].quantity;
+      }
+      setChoosenProduct(choosenProductTemp);
+    }
+  };
+
+  const handleOnClickPlus = () => {
+    let quantityTemp = ++quantity;
+    let listTemp = [...list];
+    let index = listTemp.findIndex((e) => e.name === name);
+    listTemp[index] = { ...listTemp[index], quantity: quantityTemp };
+    setList(listTemp);
+
+    let choosenProductTemp = [...choosenProduct];
+    let indexProduct = choosenProductTemp.findIndex((e) => e.name === name);
+    if (indexProduct === -1) {
+      choosenProductTemp.push({
+        name: name,
+        quantity: 1,
+        price: price,
+      });
+    } else {
+      ++choosenProductTemp[indexProduct].quantity;
+    }
+    setChoosenProduct(choosenProductTemp);
+  };
+
   return (
     <Card
       sx={{
@@ -74,9 +124,13 @@ export default function SelfStorageItem({ image, name, quantity, price }) {
           marginTop: "3%",
         }}
       >
-        <button style={styleButtonMinus}>-</button>
+        <button style={styleButtonMinus} onClick={handleOnClickMinus}>
+          -
+        </button>
         <input style={styleInput} value={quantity}></input>
-        <button style={styleButtonPlus}>+</button>
+        <button style={styleButtonPlus} onClick={handleOnClickPlus}>
+          +
+        </button>
       </Box>
     </Card>
   );
