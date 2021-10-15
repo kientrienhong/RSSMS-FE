@@ -47,6 +47,7 @@ export default function SelfStorageItem({
   list,
   choosenProduct,
   setChoosenProduct,
+  type,
 }) {
   const handleOnClickMinus = () => {
     if (quantity > 0) {
@@ -56,14 +57,18 @@ export default function SelfStorageItem({
       listTemp[index] = { ...listTemp[index], quantity: quantityTemp };
       setList(listTemp);
 
-      let choosenProductTemp = [...choosenProduct];
-      let indexProduct = choosenProductTemp.findIndex((e) => e.name === name);
-      if (choosenProductTemp[indexProduct].quantity === 1) {
-        choosenProductTemp.splice(indexProduct, 1);
+      let choosenProductTemp = { ...choosenProduct };
+
+      let indexProduct = choosenProductTemp[type].findIndex(
+        (e) => e.name === name
+      );
+      if (choosenProductTemp[type][indexProduct].quantity === 1) {
+        choosenProductTemp[type].splice(indexProduct, 1);
       } else {
-        --choosenProductTemp[indexProduct].quantity;
+        --choosenProductTemp[type][indexProduct].quantity;
       }
       setChoosenProduct(choosenProductTemp);
+      console.log(choosenProductTemp);
     }
   };
 
@@ -74,18 +79,22 @@ export default function SelfStorageItem({
     listTemp[index] = { ...listTemp[index], quantity: quantityTemp };
     setList(listTemp);
 
-    let choosenProductTemp = [...choosenProduct];
-    let indexProduct = choosenProductTemp.findIndex((e) => e.name === name);
+    let choosenProductTemp = { ...choosenProduct };
+    let indexProduct = choosenProductTemp[type].findIndex(
+      (e) => e.name === name
+    );
     if (indexProduct === -1) {
-      choosenProductTemp.push({
+      choosenProductTemp[type].push({
         name: name,
         quantity: 1,
         price: price,
+        type: type,
       });
     } else {
-      ++choosenProductTemp[indexProduct].quantity;
+      ++choosenProductTemp[type][indexProduct].quantity;
     }
     setChoosenProduct(choosenProductTemp);
+    console.log(choosenProductTemp);
   };
 
   return (

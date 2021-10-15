@@ -14,6 +14,7 @@ export default function SelfStorageMainTab({
       <Grid item xs={4} key={index}>
         <SelfStorageItem
           image={e.image}
+          type={e.type}
           price={e.price}
           quantity={e.quantity}
           name={e.name}

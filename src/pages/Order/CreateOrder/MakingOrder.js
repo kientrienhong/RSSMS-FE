@@ -1,17 +1,9 @@
 import React, { useState } from "react";
-import {
-  Box,
-  Button,
-  InputAdornment,
-  IconButton,
-  TextField,
-  Typography,
-  Card,
-} from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import { BsBoxSeam } from "react-icons/bs";
 import { FaWarehouse } from "react-icons/fa";
 import SelfStorageMainTab from "./SelfStorageMainTab";
-
+import SelfStorageOrderInfo from "./components/SelfStorageOrderInfo";
 export default function MakingOrder() {
   const [indexMain, setIndexMain] = useState(0);
   const [currentColor, setCurrentColor] = useState({
@@ -22,70 +14,83 @@ export default function MakingOrder() {
   const [listStorages, setListStorages] = useState([
     {
       name: "Storage 2m2",
-      price: "600,000",
+      price: 600000,
       image: "/img/storage2m2.png",
       quantity: 0,
+      type: "product",
     },
     {
       name: "Storage 4m2",
-      price: "1,000,000",
+      price: 1000000,
       image: "/img/storage4m2.png",
       quantity: 0,
+      type: "product",
     },
     {
       name: "Storage 8m2",
-      price: "1,600,000",
+      price: 1600000,
       image: "/img/storage8m2.png",
       quantity: 0,
+      type: "product",
     },
     {
       name: "Storage 16m2",
-      price: "2,800,000",
+      price: 2800000,
       image: "/img/storage16m2.png",
       quantity: 0,
+      type: "product",
     },
   ]);
 
   const [listAccessory, setListAccessory] = useState([
     {
       name: "Tape",
-      price: "25,000",
+      price: 25000,
       image: "/img/tape.png",
       quantity: 0,
+      type: "accessory",
     },
     {
       name: "Locker",
-      price: "165,000",
+      price: 165000,
       image: "/img/locker.png",
       quantity: 0,
+      type: "accessory",
     },
     {
       name: "Carton box",
-      price: "30,000",
+      price: 30000,
       image: "/img/carton.png",
       quantity: 0,
+      type: "accessory",
     },
     {
       name: "PE Foam",
-      price: "25,000",
+      price: 25000,
       image: "/img/peFoam.png",
       quantity: 0,
+      type: "accessory",
     },
     {
       name: "Bubble Wrap",
-      price: "25,000",
+      price: 25000,
       image: "/img/bubbleWrap.png",
       quantity: 0,
+      type: "accessory",
     },
     {
       name: "PE strech film",
-      price: "150,000",
+      price: 150000,
       image: "/img/PEstretchfilm.png",
       quantity: 0,
+      type: "accessory",
     },
   ]);
 
-  const [choosenProduct, setChoosenProduct] = useState([]);
+  const [choosenProduct, setChoosenProduct] = useState({
+    product: [],
+    accessory: [],
+  });
 
   const onClickMainTab = (name) => {
     if (name === "Self-Storage") {
@@ -182,7 +187,9 @@ export default function MakingOrder() {
           flexDirection: "column",
           width: "30%",
         }}
-      ></Box>
+      >
+        <SelfStorageOrderInfo choosenProduct={choosenProduct} />
+      </Box>
     </Box>
   );
 }
