@@ -199,6 +199,7 @@ function AreaDetail(props) {
           onClick={() => {
             setIsHandy(true);
             handleOpen(false);
+            setCurrentShelf({});
           }}
         >
           Create shelf

@@ -83,7 +83,12 @@ export default function SheflModal({
         }}
       >
         <Box sx={{ width: "60%", height: "auto" }}>
-          <Shelf shelf={currentShelf} index={2} isModifyShelf={isModifyShelf} />
+          <Shelf
+            shelf={currentShelf}
+            index={2}
+            isModifyShelf={isModifyShelf}
+            setCurrentShelf={setCurrentShelf}
+          />
         </Box>
         <Box
           sx={{

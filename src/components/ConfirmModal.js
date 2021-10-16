@@ -71,10 +71,8 @@ function ConfirmModal({
               try {
                 showLoading();
                 const response = await onHandleYes(id);
-                // if (response.status === 200) {
                 handleClose();
                 showSnackbar("success", msg);
-                // }
               } catch (error) {
                 console.log(error);
               } finally {
