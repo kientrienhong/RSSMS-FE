@@ -1,14 +1,5 @@
 import React, { useState } from "react";
-import {
-  Box,
-  TextField,
-  Grid,
-  Typography,
-  Card,
-  Checkbox,
-  FormControlLabel,
-  Divider,
-} from "@material-ui/core";
+import { Box, TextField, Typography, Card, Divider } from "@material-ui/core";
 import TagSelection from "./TagSelection";
 
 const styleButtonPlus = {
@@ -69,6 +60,35 @@ export default function SelfStorageOrderInfo({ choosenProduct }) {
   const handleChangeStartDate = (e) => {
     setDateStart(e.target.value);
     setDateEnd(new Date(e.target.value).toLocaleDateString("en-US"));
+  };
+
+  const buildTotalPrice = () => {
+    let sum = 0;
+    choosenProduct.product.forEach((e) => {
+      sum += e.price * e.quantity * duration;
+    });
+    choosenProduct.accessory.forEach((e) => {
+      sum += e.price * e.quantity;
+    });
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          marginTop: "4%",
+          marginBottom: "4%",
+        }}
+      >
+        <Typography variant="h2" color="black" style={{ marginBottom: "3%" }}>
+          Total
+        </Typography>
+        <Typography variant="h2" color="primary" style={{ marginBottom: "3%" }}>
+          {sum}
+        </Typography>
+      </Box>
+    );
   };
 
   const mapListDetail = (listProduct) => {
@@ -237,6 +257,7 @@ export default function SelfStorageOrderInfo({ choosenProduct }) {
         </Box>
         <Divider />
         {mapListDetail(choosenProduct.accessory)}
+        {buildTotalPrice()}
       </Card>
     </Box>
   );

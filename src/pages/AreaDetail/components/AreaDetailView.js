@@ -22,6 +22,7 @@ function AreaDetailView({
   totalPage,
   setPage,
   area,
+  isModifyShelf,
 }) {
   const [openConfirm, setOpenConfirm] = useState(false);
   const [currentBox, setCurrentBox] = useState({});
@@ -82,7 +83,7 @@ function AreaDetailView({
 
   return (
     <Card
-      style={{ height: "73vh" }}
+      style={{ height: "78vh" }}
       sx={{
         margin: "2%",
         display: "flex",
@@ -115,6 +116,7 @@ function AreaDetailView({
         handleOpenConfirm={handleOpenConfirm}
         currentBox={currentBox}
         setCurrentBox={setCurrentBox}
+        isModifyShelf={isModifyShelf}
       />
       <Box
         sx={{

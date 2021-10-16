@@ -35,10 +35,12 @@ function AreaDetail(props) {
   const [searchName, setSearchName] = useState("");
   const [isHandy, setIsHandy] = useState(true);
   const [currentArea, setCurrentArea] = useState({});
+  const [isModifyShelf, setIsModifyShelf] = useState(false);
 
   const handleOpen = (isEdit) => {
     setIsEdit(isEdit);
     setOpen(true);
+    setIsModifyShelf(true);
   };
 
   const onHandleSearch = (e) => {
@@ -48,6 +50,7 @@ function AreaDetail(props) {
   const handleClose = () => {
     setOpen(false);
     setCurrentShelf({});
+    setIsModifyShelf(false);
   };
 
   const getData = async (name, page, size) => {
@@ -125,7 +128,8 @@ function AreaDetail(props) {
     const searchNameCall = async () => {
       try {
         showLoading();
-        await getData(searchName, page, 6);
+        await getData(searchName, 1, 6);
+        setPage(1);
       } catch (error) {
         console.log(error);
       } finally {
@@ -160,6 +164,7 @@ function AreaDetail(props) {
         searchName={searchName}
         setIsHandy={setIsHandy}
         isHandy={isHandy}
+        isModifyShelf={isModifyShelf}
       />
       <Box
         sx={{
@@ -191,7 +196,10 @@ function AreaDetail(props) {
           style={{ height: "45px", paddingLeft: "16px", paddingRight: "16px" }}
           color="primary"
           variant="contained"
-          onClick={() => handleOpen(false)}
+          onClick={() => {
+            setIsHandy(true);
+            handleOpen(false);
+          }}
         >
           Create shelf
         </Button>
@@ -215,6 +223,7 @@ function AreaDetail(props) {
           page={page}
           totalPage={totalPage}
           area={currentArea}
+          isModifyShelf={isModifyShelf}
         />
         <Box
           sx={{

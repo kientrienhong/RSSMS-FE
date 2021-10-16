@@ -37,6 +37,7 @@ export default function SheflModal({
   searchName,
   isHandy,
   setIsHandy,
+  isModifyShelf,
 }) {
   const handleChangeRadioButton = (event) => {
     if (event.target.value === "0") {
@@ -82,7 +83,7 @@ export default function SheflModal({
         }}
       >
         <Box sx={{ width: "60%", height: "auto" }}>
-          <Shelf shelf={currentShelf} index={2} />
+          <Shelf shelf={currentShelf} index={2} isModifyShelf={isModifyShelf} />
         </Box>
         <Box
           sx={{

@@ -94,7 +94,6 @@ export default function SelfStorageItem({
       ++choosenProductTemp[type][indexProduct].quantity;
     }
     setChoosenProduct(choosenProductTemp);
-    console.log(choosenProductTemp);
   };
 
   return (

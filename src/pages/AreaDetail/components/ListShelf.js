@@ -10,6 +10,7 @@ export default function ListShelf({
   handleOpenConfirm,
   currentBox,
   setCurrentBox,
+  isModifyShelf,
 }) {
   const handleOnClickEdit = (shelf) => {
     if (shelf.type === 0) {
@@ -97,9 +98,11 @@ export default function ListShelf({
           >
             <Shelf
               shelf={e}
+              lengthList={listShelf.length}
               index={i}
               currentBox={currentBox}
               setCurrentBox={setCurrentBox}
+              isModifyShelf={isModifyShelf}
             />
           </Box>
         </Box>

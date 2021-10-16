@@ -1,15 +1,62 @@
 import React from "react";
-import { Box, Grid } from "@material-ui/core";
+import { Box, Grid, Typography } from "@material-ui/core";
 
-export default function Shelf({ shelf, index, currentBox, setCurrentBox }) {
+export default function Shelf({
+  shelf,
+  index,
+  currentBox,
+  setCurrentBox,
+  lengthList,
+  isModifyShelf,
+}) {
   const buildBox = () => {
     let size = 12 / shelf.boxesInWidth;
     let height = (100 / shelf.boxesInHeight) * 1.5;
+    let totalBox = shelf.boxesInWidth * shelf.boxesInHeight;
+    if (totalBox >= 20) {
+      let nameBox;
+      if (shelf?.type === 0) {
+        if (shelf?.boxSize === 0) {
+          nameBox = "S";
+        } else if (shelf?.boxSize === 1) {
+          nameBox = "M";
+        } else if (shelf?.boxSize === 2) {
+          nameBox = "L";
+        } else if (shelf?.boxSize === 3) {
+          nameBox = "XL";
+        }
+      } else {
+        if (shelf?.boxSize === 0) {
+          nameBox = "0.5m2";
+        } else if (shelf?.boxSize === 1) {
+          nameBox = "1m2";
+        } else if (shelf?.boxSize === 2) {
+          nameBox = "2m2";
+        } else if (shelf?.boxSize === 3) {
+          nameBox = "3m2";
+        }
+      }
+
+      return (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            width: "100%",
+            justifyContent: "center",
+          }}
+        >
+          <Typography color="black" variant="h2" sx={{ textAlign: "center" }}>
+            {nameBox} x {totalBox} Boxes
+          </Typography>
+        </Box>
+      );
+    }
 
     return shelf?.boxes?.map((e, i) => {
       let color = "#99E5FE";
       let nameBox;
-      if (currentBox.id === e.id) {
+      if (currentBox?.id === e.id && currentBox !== undefined) {
         color = "#26FF7B";
       }
 
@@ -49,7 +96,11 @@ export default function Shelf({ shelf, index, currentBox, setCurrentBox }) {
               margin: 0,
               borderRadius: 0.5,
             }}
-            onClick={() => setCurrentBox(e)}
+            onClick={() => {
+              if (isModifyShelf === false) {
+                setCurrentBox(e);
+              }
+            }}
           >
             <p
               style={{
@@ -92,7 +143,7 @@ export default function Shelf({ shelf, index, currentBox, setCurrentBox }) {
       >
         {buildBox()}
       </Grid>
-      {index === 2 || index === 5 ? (
+      {index === lengthList - 1 || index === 2 || index === 5 ? (
         <div
           style={{
             width: "4px",
