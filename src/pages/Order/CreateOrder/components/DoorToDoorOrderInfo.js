@@ -8,11 +8,15 @@ import {
   Checkbox,
   FormControlLabel,
   Divider,
+  Button,
 } from "@material-ui/core";
 import TagSelection from "./TagSelection";
 import { formatCurrency } from "../../../../utils/FormatCurrency";
+import { useNavigate } from "react-router";
 
 export default function DoorToDoorOrderInfo({ choosenProduct }) {
+  const navigate = useNavigate();
+
   const [timeDelivery, setTimeDelivery] = useState({});
 
   const [isCustomerDelivery, setIsCustomerDelivery] = React.useState(false);
@@ -418,6 +422,16 @@ export default function DoorToDoorOrderInfo({ choosenProduct }) {
         {buildTotalEachPartPrice("services")}
         {buildTotalPrice()}
       </Card>
+      <Button
+        style={{ height: "45px", paddingLeft: "16px", paddingRight: "16px" }}
+        color="primary"
+        variant="contained"
+        onClick={(e) => {
+          navigate("/orders/inputInfor");
+        }}
+      >
+        Next
+      </Button>
     </Box>
   );
 }

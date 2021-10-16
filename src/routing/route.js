@@ -10,6 +10,8 @@ import StorageDetail from "../pages/StorageDetail/StorageDetail";
 import AreaDetail from "../pages/AreaDetail/AreaDetail";
 import Order from "../pages/Order/Order";
 import MakingOrder from "../pages/Order/CreateOrder/MakingOrder";
+import InputInfor from "../pages/Order/CreateOrder/InputInfor";
+
 const routes = [
   {
     path: "app",
@@ -31,6 +33,7 @@ const routes = [
       { element: <LogIn /> },
       { path: "404", element: <NotFound /> },
       { path: "orders/makingOrder", element: <MakingOrder /> },
+      { path: "orders/inputInfor", element: <InputInfor /> },
     ],
   },
 ];
