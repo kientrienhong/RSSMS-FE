@@ -1,15 +1,18 @@
 import React from "react";
 import { Box, Typography, Grid } from "@material-ui/core";
-import Item from "./components/Item";
-export default function SelfStorageMainTab({
-  listStorages,
+import Item from "./Item";
+
+export default function AreaTab({
+  listAreas,
+  listServices,
   listAccessory,
   setChoosenProduct,
-  setListStorages,
+  setListServices,
+  setListAreas,
   setListAccessory,
   choosenProduct,
 }) {
-  const mapListStoragesToGrid = (listData, setListData) => {
+  const mapListItemsToGrid = (listData, setListData) => {
     return listData.map((e, index) => (
       <Grid item xs={4} key={index}>
         <Item
@@ -34,6 +37,7 @@ export default function SelfStorageMainTab({
         flexDirection: "column",
         alignItems: "flex-start",
         justifyContent: "flex-start",
+        marginTop: "-6.5%",
       }}
     >
       <Typography
@@ -43,17 +47,17 @@ export default function SelfStorageMainTab({
         color="textPrimary"
         variant="h2"
       >
-        Storage
+        Area
       </Typography>
       <Grid
         container
         spacing={2}
         sx={{
           width: "98%",
-          height: "630px",
+          marginBottom: "3%",
         }}
       >
-        {mapListStoragesToGrid(listStorages, setListStorages)}
+        {mapListItemsToGrid(listAreas, setListAreas)}
       </Grid>
       <Typography
         sx={{
@@ -69,9 +73,29 @@ export default function SelfStorageMainTab({
         spacing={2}
         sx={{
           width: "98%",
+          marginBottom: "3%",
         }}
       >
-        {mapListStoragesToGrid(listAccessory, setListAccessory)}
+        {mapListItemsToGrid(listAccessory, setListAccessory)}
+      </Grid>
+      <Typography
+        sx={{
+          marginBottom: "2%",
+        }}
+        color="textPrimary"
+        variant="h2"
+      >
+        Services
+      </Typography>
+      <Grid
+        container
+        spacing={2}
+        sx={{
+          width: "98%",
+          marginBottom: "3%",
+        }}
+      >
+        {mapListItemsToGrid(listServices, setListServices)}
       </Grid>
     </Box>
   );

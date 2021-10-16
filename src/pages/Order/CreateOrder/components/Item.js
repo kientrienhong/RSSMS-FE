@@ -8,6 +8,7 @@ import {
   Typography,
   Card,
 } from "@material-ui/core";
+import { formatCurrency } from "../../../../utils/FormatCurrency";
 
 const styleButtonPlus = {
   width: "26px",
@@ -38,7 +39,7 @@ const styleInput = {
   width: "50%",
 };
 
-export default function SelfStorageItem({
+export default function Item({
   image,
   name,
   quantity,
@@ -96,6 +97,11 @@ export default function SelfStorageItem({
     setChoosenProduct(choosenProductTemp);
   };
 
+  let priceString =
+    type !== "product"
+      ? `${formatCurrency(price, "đ")} / item`
+      : `${formatCurrency(price, "đ")} / month`;
+
   return (
     <Card
       sx={{
@@ -120,7 +126,7 @@ export default function SelfStorageItem({
         {name}
       </Typography>
       <Typography color="primary" variant="h2" style={{ marginBottom: "5%" }}>
-        {price} đ / month
+        {priceString}
       </Typography>
       <Box
         sx={{

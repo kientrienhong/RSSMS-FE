@@ -4,6 +4,8 @@ import { BsBoxSeam } from "react-icons/bs";
 import { FaWarehouse } from "react-icons/fa";
 import SelfStorageMainTab from "./SelfStorageMainTab";
 import SelfStorageOrderInfo from "./components/SelfStorageOrderInfo";
+import DoorToDoorMainTab from "./DoorToDoorMainTab";
+import DoorToDoorOrderInfo from "./components/DoorToDoorOrderInfo";
 export default function MakingOrder() {
   const [indexMain, setIndexMain] = useState(0);
   const [currentColor, setCurrentColor] = useState({
@@ -87,18 +89,108 @@ export default function MakingOrder() {
     },
   ]);
 
+  const [listBoxes, setListBoxes] = useState([
+    {
+      name: "Bolo",
+      price: 100000,
+      image: "/img/bolobox.png",
+      quantity: 0,
+      type: "product",
+    },
+    {
+      name: "Size S",
+      price: 70000,
+      image: "/img/boxSizeS.png",
+      quantity: 0,
+      type: "product",
+    },
+    {
+      name: "Size M",
+      price: 100000,
+      image: "/img/boxSizeM.png",
+      quantity: 0,
+      type: "product",
+    },
+    {
+      name: "Size L",
+      price: 150000,
+      image: "/img/boxSizeL.png",
+      quantity: 0,
+      type: "product",
+    },
+    {
+      name: "Size XL",
+      price: 200000,
+      image: "/img/boxSizeXL.png",
+      quantity: 0,
+      type: "product",
+    },
+  ]);
+
+  const [listAreas, setListAreas] = useState([
+    {
+      name: "Area 0.5m2",
+      price: 400000,
+      image: "/img/areaSize0.5m2.png",
+      quantity: 0,
+      type: "product",
+    },
+    {
+      name: "Area 1m2",
+      price: 750000,
+      image: "/img/areaSize1m2.png",
+      quantity: 0,
+      type: "product",
+    },
+    {
+      name: "Area 2m2",
+      price: 1330000,
+      image: "/img/areaSize2m2.png",
+      quantity: 0,
+      type: "product",
+    },
+    {
+      name: "Area 3m2",
+      price: 1835000,
+      image: "/img/areaSize3m2.png",
+      quantity: 0,
+      type: "product",
+    },
+  ]);
+
+  const [listServices, setListServices] = useState([
+    {
+      name: "Packaging",
+      price: 50000,
+      image: "/img/package.png",
+      quantity: 0,
+      type: "services",
+    },
+  ]);
+
   const [choosenProduct, setChoosenProduct] = useState({
     product: [],
     accessory: [],
+    services: [],
   });
 
   const onClickMainTab = (name) => {
     if (name === "Self-Storage") {
       setIndexMain(0);
       setCurrentColor({ selfStorage: "#04BFFE", doorToDoor: "#A19FA8" });
+      setChoosenProduct({
+        product: [],
+        accessory: [],
+        services: [],
+      });
     } else {
       setIndexMain(1);
       setCurrentColor({ selfStorage: "#A19FA8", doorToDoor: "#04BFFE" });
+      setChoosenProduct({
+        product: [],
+        accessory: [],
+        services: [],
+      });
     }
   };
 
@@ -171,14 +263,29 @@ export default function MakingOrder() {
           width: "60%",
         }}
       >
-        <SelfStorageMainTab
-          listStorages={listStorages}
-          listAccessory={listAccessory}
-          setListStorages={setListStorages}
-          setListAccessory={setListAccessory}
-          setChoosenProduct={setChoosenProduct}
-          choosenProduct={choosenProduct}
-        />
+        {indexMain === 0 ? (
+          <SelfStorageMainTab
+            listStorages={listStorages}
+            listAccessory={listAccessory}
+            setListStorages={setListStorages}
+            setListAccessory={setListAccessory}
+            setChoosenProduct={setChoosenProduct}
+            choosenProduct={choosenProduct}
+          />
+        ) : (
+          <DoorToDoorMainTab
+            listBoxes={listBoxes}
+            listAreas={listAreas}
+            listServices={listServices}
+            listAccessory={listAccessory}
+            setChoosenProduct={setChoosenProduct}
+            setListServices={setListServices}
+            setListBoxes={setListBoxes}
+            setListAreas={setListAreas}
+            setListAccessory={setListAccessory}
+            choosenProduct={choosenProduct}
+          />
+        )}
       </Box>
       <Box
         sx={{
@@ -188,7 +295,11 @@ export default function MakingOrder() {
           width: "30%",
         }}
       >
-        <SelfStorageOrderInfo choosenProduct={choosenProduct} />
+        {indexMain === 0 ? (
+          <SelfStorageOrderInfo choosenProduct={choosenProduct} />
+        ) : (
+          <DoorToDoorOrderInfo choosenProduct={choosenProduct} />
+        )}
       </Box>
     </Box>
   );
