@@ -1,29 +1,52 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { createStore, applyMiddleware, compose } from "redux";
+import { createStore } from "redux";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
-import thunk from "redux-thunk";
 import rootReducer from "./redux/reducer/rootReducer";
-import { PersistGate } from "redux-persist/integration/react";
-import { persistor } from "./configs/configureStore";
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-const store = createStore(
-  rootReducer,
-  composeEnhancers(applyMiddleware(thunk))
-);
+const saveState = (state) => {
+  try {
+    let serializedState = JSON.stringify(state);
+    localStorage.setItem("information", serializedState);
+  } catch (err) {}
+};
+
+const initializeState = () => {
+  return {
+    application: {},
+    information: {},
+  };
+};
+
+const loadState = () => {
+  try {
+    let serializedState = localStorage.getItem("information");
+
+    if (serializedState === null) {
+      return initializeState();
+    }
+
+    return JSON.parse(serializedState);
+  } catch (err) {
+    return initializeState();
+  }
+};
+
+const store = createStore(rootReducer, loadState());
+
+store.subscribe(() => {
+  saveState(store.getState());
+});
 
 ReactDOM.render(
   <Provider store={store}>
-    {/* <PersistGate loading={null} presistor={persistor}> */}
     <BrowserRouter>
       <App />
     </BrowserRouter>
-    {/* </PersistGate> */}
   </Provider>,
   document.getElementById("root")
 );

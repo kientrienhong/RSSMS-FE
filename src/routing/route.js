@@ -28,7 +28,6 @@ const routes = [
   },
   {
     path: "/",
-    // element: <MainLayout />,
     children: [
       { element: <LogIn /> },
       { path: "404", element: <NotFound /> },
