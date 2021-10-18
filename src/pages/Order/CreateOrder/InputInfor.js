@@ -2,14 +2,10 @@ import React from "react";
 import {
   Box,
   TextField,
-  Grid,
   Typography,
-  Card,
-  Checkbox,
   FormControlLabel,
   Button,
   RadioGroup,
-  FormLabel,
   FormControl,
   Radio,
   InputAdornment,
@@ -179,7 +175,7 @@ export default function InputInfor() {
           Payment method
         </Typography>
         <FormControl component="fieldset">
-          <RadioGroup aria-label="gender" name="row-radio-buttons-group">
+          <RadioGroup aria-label="gender">
             <FormControlLabel
               value={0}
               control={<Radio />}
@@ -192,18 +188,29 @@ export default function InputInfor() {
             />
           </RadioGroup>
         </FormControl>
-        <Button
-          style={{
-            height: "45px",
-            paddingLeft: "16px",
-            paddingRight: "16px",
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
           }}
-          color="primary"
-          variant="contained"
-          type="submit"
         >
-          Submit
-        </Button>
+          <Button
+            style={{
+              display: "block",
+              height: "45px",
+              paddingLeft: "16px",
+              marginTop: "16px",
+              paddingRight: "16px",
+            }}
+            color="primary"
+            variant="contained"
+            type="submit"
+          >
+            Submit
+          </Button>
+        </Box>
       </form>
     </Box>
   );

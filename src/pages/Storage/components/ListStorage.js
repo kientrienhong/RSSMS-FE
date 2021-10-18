@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Item } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import Storage from "./Storage";
 import ConfirmModal from "../../../components/ConfirmModal";
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import {
   Box,
   Card,
@@ -25,7 +25,6 @@ import { connect } from "react-redux";
 import * as action from "../../redux/action/action";
 import { useForm } from "react-hook-form";
 import CustomInput from "../../components/CustomInput";
-import { CustomSelect } from "../../components/CustomSelect";
 import { storageFirebase } from "../../firebase/firebase";
 let inputFile;
 

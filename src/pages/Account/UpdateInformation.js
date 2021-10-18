@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { Box, Button } from "@material-ui/core";
 import CustomAvatar from "../../components/CustomAvatar";
 import { connect } from "react-redux";
@@ -15,7 +15,7 @@ function UpdateInformation({
   showSnackbar,
 }) {
   const [imageFile, setImageFile] = useState({});
-  const { handleSubmit, reset, control } = useForm();
+  const { handleSubmit, control } = useForm();
   let imageUrl;
   const styleBoxInput = {
     display: "flex",

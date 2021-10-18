@@ -1,5 +1,4 @@
 import LogIn from "../pages/LogIn/LogIn";
-import MainLayout from "../components/MainLayout";
 import DashboardLayout from "../components/DashboardLayout";
 import { Navigate } from "react-router";
 import Account from "../pages/Account/Account";

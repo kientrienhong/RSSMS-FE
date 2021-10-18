@@ -6,7 +6,7 @@ import CustomInput from "../../components/CustomInput";
 import { Box, Button } from "@material-ui/core";
 import { changePassword } from "../../apis/Apis";
 function ChangePassword({ showLoading, hideLoading, showSnackbar, userId }) {
-  const { handleSubmit, reset, control, watch } = useForm();
+  const { handleSubmit, control, watch } = useForm();
   const password = useRef({});
   password.current = watch("password", "");
   const styleBoxInput = {

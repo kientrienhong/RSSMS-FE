@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Box, Card, Typography, Button, Modal } from "@material-ui/core";
+import React from "react";
+import { Box, Typography, Button, Modal } from "@material-ui/core";
 import CustomInput from "../../components/CustomInput";
 
 export default function ModalArea({

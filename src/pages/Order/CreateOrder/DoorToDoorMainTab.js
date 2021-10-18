@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import { Box } from "@material-ui/core";
-import Item from "./components/Item";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import PropTypes from "prop-types";

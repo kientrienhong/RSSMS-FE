@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Card, Typography, CircularProgress } from "@material-ui/core";
+import { Box, Card, Typography } from "@material-ui/core";
 
 export default function DetailBox() {
   return (

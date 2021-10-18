@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Box, TextField, Typography, Card, Divider } from "@material-ui/core";
-import TagSelection from "./TagSelection";
 import { formatCurrency } from "../../../../utils/FormatCurrency";
 const styleButtonPlus = {
   width: "26px",

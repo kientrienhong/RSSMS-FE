@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Box, Container, Grid, Card, Typography } from "@material-ui/core";
+import React from "react";
+import { Box, Card, Typography } from "@material-ui/core";
 import { connect } from "react-redux";
 import UpdateInformation from "./UpdateInformation";
 import ChangePassword from "./ChangePassword";
