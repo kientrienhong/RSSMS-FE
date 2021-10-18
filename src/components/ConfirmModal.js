@@ -70,7 +70,7 @@ function ConfirmModal({
             onClick={async () => {
               try {
                 showLoading();
-                const response = await onHandleYes(id);
+                await onHandleYes(id);
                 handleClose();
                 showSnackbar("success", msg);
               } catch (error) {
