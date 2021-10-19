@@ -20,9 +20,13 @@ import { findUserByPhone } from "../../../apis/Apis";
 import * as action from "../../../redux/action/action";
 import { createOrder } from "../../../apis/Apis";
 import LoadingPage from "../../../pages/Loading/LoadingPage";
+import { useNavigate } from "react-router";
+
 const styleInput = { marginRight: "2.5%", backgroundColor: "white" };
 
 function InputInfor({ order, showSnackbar, showLoading, hideLoading }) {
+  const navigate = useNavigate();
+
   const { handleSubmit, reset, control, setValue } = useForm();
   const [returnAddressChoice, setReturnAddressChoice] = useState(0);
   const [phone, setPhone] = useState("");
@@ -63,22 +67,43 @@ function InputInfor({ order, showSnackbar, showLoading, hideLoading }) {
         });
       });
 
-      let orderTemp = {
-        customerId: user.id,
-        deliveryAddress: data.deliveryAddress,
-        addressReturn: addressReturn,
-        totalPrice: order.totalPrice,
-        typeOrder: order.type,
-        isPaid: false,
-        paymentMethod: paymentMethod,
-        isUserDelivery: order.isCustomerDelivery,
-        deliveryDate: order.dateDelivery,
-        deliveryTime: order.timeDelivery.name,
-        duration: order.duration,
-        listProduct: listProduct,
-      };
-      await createOrder(orderTemp);
+      let orderTemp = {};
 
+      if (order.type === 0) {
+        orderTemp = {
+          customerId: user.id,
+          deliveryAddress: data.deliveryAddress,
+          addressReturn: addressReturn,
+          totalPrice: order.totalPrice,
+          typeOrder: order.type,
+          isPaid: false,
+          paymentMethod: paymentMethod,
+          isUserDelivery: null,
+          deliveryDate: order.dateStart,
+          deliveryTime: null,
+          duration: order.duration,
+          listProduct: listProduct,
+          totalPrice: order.totalPrice,
+        };
+      } else {
+        orderTemp = {
+          customerId: user.id,
+          deliveryAddress: data.deliveryAddress,
+          addressReturn: addressReturn,
+          totalPrice: order.totalPrice,
+          typeOrder: order.type,
+          isPaid: false,
+          paymentMethod: paymentMethod,
+          isUserDelivery: order.isCustomerDelivery,
+          deliveryDate: order.dateDelivery,
+          deliveryTime: order.timeDelivery.name,
+          duration: order.duration,
+          listProduct: listProduct,
+        };
+      }
+      console.log(order);
+      await createOrder(orderTemp);
+      navigate("/app/orders", { replace: true });
       showSnackbar("success", "Create order success");
     } catch (e) {
       console.log(e.response);
@@ -164,7 +189,6 @@ function InputInfor({ order, showSnackbar, showLoading, hideLoading }) {
         <Box sx={{ display: "flex", flexDirection: "row", marginTop: "2%" }}>
           <CustomInput
             control={control}
-            disabled={true}
             rules={{
               required: "Name required",
             }}
@@ -177,7 +201,6 @@ function InputInfor({ order, showSnackbar, showLoading, hideLoading }) {
 
           <CustomInput
             control={control}
-            disabled={true}
             rules={{
               required: "Email required",
             }}
@@ -189,7 +212,6 @@ function InputInfor({ order, showSnackbar, showLoading, hideLoading }) {
           />
           <CustomInput
             control={control}
-            disabled={true}
             rules={{
               required: "Phone required",
             }}
@@ -199,54 +221,58 @@ function InputInfor({ order, showSnackbar, showLoading, hideLoading }) {
             inlineStyle={styleInput}
           />
         </Box>
-        <Typography
-          color="primary"
-          variant="h2"
-          style={{ marginTop: "2%", textAlign: "left", marginBottom: "2%" }}
-        >
-          Delivery Address
-        </Typography>
-        <CustomInput
-          control={control}
-          rules={ruleOfDeliveryAddress}
-          styles={{ width: "320px" }}
-          name="deliveryAddress"
-          label="Delivery Address"
-          disabled={false}
-          userInfo={""}
-          inlineStyle={styleInput}
-        />
-        <Typography
-          color="primary"
-          variant="h2"
-          style={{ marginTop: "2%", textAlign: "left", marginBottom: "2%" }}
-        >
-          Return item address
-        </Typography>
-        <FormControl component="fieldset">
-          <RadioGroup
-            aria-label="gender"
-            name="row-radio-buttons-group"
-            value={returnAddressChoice}
-            onChange={handleChangeRadioButton}
-          >
-            <FormControlLabel
-              value={0}
-              control={<Radio />}
-              label="The same with delivery address"
+        {order.type === 0 ? null : (
+          <Box>
+            <Typography
+              color="primary"
+              variant="h2"
+              style={{ marginTop: "2%", textAlign: "left", marginBottom: "2%" }}
+            >
+              Delivery Address
+            </Typography>
+            <CustomInput
+              control={control}
+              rules={ruleOfDeliveryAddress}
+              styles={{ width: "320px" }}
+              name="deliveryAddress"
+              label="Delivery Address"
+              disabled={false}
+              userInfo={""}
+              inlineStyle={styleInput}
             />
-            <FormControlLabel
-              value={1}
-              control={<Radio />}
-              label="Difference with delivery address"
-            />
-            <FormControlLabel
-              value={2}
-              control={<Radio />}
-              label="Not determine yet"
-            />
-          </RadioGroup>
-        </FormControl>
+            <Typography
+              color="primary"
+              variant="h2"
+              style={{ marginTop: "2%", textAlign: "left", marginBottom: "2%" }}
+            >
+              Return item address
+            </Typography>
+            <FormControl component="fieldset">
+              <RadioGroup
+                aria-label="gender"
+                name="row-radio-buttons-group"
+                value={returnAddressChoice}
+                onChange={handleChangeRadioButton}
+              >
+                <FormControlLabel
+                  value={0}
+                  control={<Radio />}
+                  label="The same with delivery address"
+                />
+                <FormControlLabel
+                  value={1}
+                  control={<Radio />}
+                  label="Difference with delivery address"
+                />
+                <FormControlLabel
+                  value={2}
+                  control={<Radio />}
+                  label="Not determine yet"
+                />
+              </RadioGroup>
+            </FormControl>
+          </Box>
+        )}
 
         {returnAddressChoice === 1 ? (
           <Box>

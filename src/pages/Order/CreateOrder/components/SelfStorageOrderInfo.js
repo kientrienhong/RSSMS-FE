@@ -74,6 +74,17 @@ function SelfStorageOrderInfo({ choosenProduct, setUpOrder }) {
     setDateEnd(new Date(e.target.value).toLocaleDateString("en-US"));
   };
 
+  const totalPrice = () => {
+    let sum = 0;
+    choosenProduct.product.forEach((e) => {
+      sum += e.price * e.quantity * duration;
+    });
+    choosenProduct.accessory.forEach((e) => {
+      sum += e.price * e.quantity;
+    });
+    return sum;
+  };
+
   const buildTotalPrice = () => {
     let sum = 0;
     choosenProduct.product.forEach((e) => {
@@ -414,6 +425,7 @@ function SelfStorageOrderInfo({ choosenProduct, setUpOrder }) {
             duration: duration,
             choosenProduct: choosenProduct,
             type: 0,
+            totalPrice: totalPrice(),
           });
           navigate("/orders/inputInfor");
         }}
