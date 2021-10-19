@@ -50,11 +50,11 @@ export default function OrderModal({
   };
 
   const listStatus = [
-    { label: "Booked", value: 0 },
-    { label: "Paid", value: 1 },
-    { label: "Delivery", value: 2 },
-    { label: "Stored", value: 3 },
-    { label: "Expired", value: 4 },
+    { label: "Booked", value: 1 },
+    { label: "Paid", value: 2 },
+    { label: "Delivery", value: 3 },
+    { label: "Stored", value: 4 },
+    { label: "Expired", value: 5 },
   ];
 
   const generateSelectOptions = () => {

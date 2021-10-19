@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -12,8 +12,10 @@ import { useNavigate } from "react-router";
 import OrderModal from "./ViewOrder/OrderModal";
 import ListOrder from "./ViewOrder/ListOrder";
 import { useForm } from "react-hook-form";
-
-export default function Order() {
+import { connect } from "react-redux";
+import * as action from "../../redux/action/action";
+import { getOrder } from "../../apis/Apis";
+function Order({ showLoading, hideLoading, showSnackbar }) {
   const navigate = useNavigate();
   const { handleSubmit, reset, control } = useForm();
 
@@ -41,7 +43,33 @@ export default function Order() {
     setOpen(false);
   };
 
-  const getData = () => {};
+  const getData = async (id, page, size) => {
+    try {
+      showLoading();
+      let list = await getOrder(page, size);
+      console.log(list.data.data);
+      setListOrder(list.data.data);
+      setTotalOrder(list.data.metadata.total);
+    } catch (error) {
+      console.log(error.response);
+    } finally {
+      hideLoading();
+    }
+  };
+
+  useEffect(() => {
+    const firstCall = async () => {
+      try {
+        showLoading();
+        await getData("", page, 8);
+        hideLoading();
+      } catch (error) {
+        console.log(error);
+        hideLoading();
+      }
+    };
+    firstCall();
+  }, []);
 
   return (
     <Box
@@ -116,3 +144,11 @@ export default function Order() {
     </Box>
   );
 }
+const mapDispatchToProps = (dispatch) => {
+  return {
+    showLoading: () => dispatch(action.showLoader()),
+    hideLoading: () => dispatch(action.hideLoader()),
+    showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
+  };
+};
+export default connect(null, mapDispatchToProps)(Order);

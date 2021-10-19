@@ -72,8 +72,8 @@ function InputInfor({ order, showSnackbar, showLoading, hideLoading }) {
       if (order.type === 0) {
         orderTemp = {
           customerId: user.id,
-          deliveryAddress: data.deliveryAddress,
-          addressReturn: addressReturn,
+          deliveryAddress: "",
+          addressReturn: "",
           totalPrice: order.totalPrice,
           typeOrder: order.type,
           isPaid: false,
@@ -83,7 +83,6 @@ function InputInfor({ order, showSnackbar, showLoading, hideLoading }) {
           deliveryTime: null,
           duration: order.duration,
           listProduct: listProduct,
-          totalPrice: order.totalPrice,
         };
       } else {
         orderTemp = {
@@ -101,7 +100,6 @@ function InputInfor({ order, showSnackbar, showLoading, hideLoading }) {
           listProduct: listProduct,
         };
       }
-      console.log(order);
       await createOrder(orderTemp);
       navigate("/app/orders", { replace: true });
       showSnackbar("success", "Create order success");

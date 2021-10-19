@@ -333,9 +333,16 @@ function Users(props) {
   const { showLoading, hideLoading, showSnackbar } = props;
   inputFile = useRef(null);
   const getData = async (name, page, size) => {
-    let list = await getListUser(name, page, size);
-    setListUser(list.data.data);
-    setTotalUser(list.data.metadata.total);
+    try {
+      showLoading();
+      let list = await getListUser(name, page, size);
+      setListUser(list.data.data);
+      setTotalUser(list.data.metadata.total);
+    } catch (error) {
+      console.log(error.response);
+    } finally {
+      hideLoading();
+    }
   };
 
   const onHandleSearch = (e) => {

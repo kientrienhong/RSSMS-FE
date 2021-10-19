@@ -191,6 +191,21 @@ export default function ListOrder({
         {mapListTableHeader(listHeaderName)}
         <TableBody>
           {listOrder.map((row, index) => {
+            let typeOrder =
+              row.typeOrder === 0 ? "Self-Storage" : "Door to door";
+            let status;
+            if (row.status === 1) {
+              status = "Booked";
+            } else if (row.status === 2) {
+              status = "Paid";
+            } else if (row.status === 3) {
+              status = "Delivery";
+            } else if (row.status === 4) {
+              status = "Stored";
+            } else if (row.status === 5) {
+              status = "Expired";
+            }
+
             return (
               <TableRow key={row.id}>
                 <TableCell
@@ -225,7 +240,7 @@ export default function ListOrder({
                     handleClickRow(row, setOrder, handleOpen, reset)
                   }
                 >
-                  {row.addressDelivery}
+                  {row.deliveryAddress}
                 </TableCell>
                 <TableCell
                   style={{ color: "black" }}
@@ -233,7 +248,7 @@ export default function ListOrder({
                     handleClickRow(row, setOrder, handleOpen, reset)
                   }
                 >
-                  {row.type}
+                  {typeOrder}
                 </TableCell>
                 <TableCell
                   style={{ color: "black" }}
@@ -254,7 +269,7 @@ export default function ListOrder({
                     handleClickRow(row, setOrder, handleOpen, reset)
                   }
                 >
-                  {row.status}
+                  {status}
                 </TableCell>
                 <TableCell style={{ color: "black" }}>
                   <Button

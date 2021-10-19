@@ -321,3 +321,11 @@ export const createOrder = async (order) => {
 
   return response;
 };
+
+export const getOrder = async (page, size) => {
+  const response = await axios.get(
+    `https://localhost:44304/api/v1/orders?page=${page}&size=${size}`
+  );
+
+  return response;
+};
