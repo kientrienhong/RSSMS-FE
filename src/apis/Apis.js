@@ -329,3 +329,29 @@ export const getOrder = async (page, size) => {
 
   return response;
 };
+
+export const getOrderById = async (id) => {
+  const response = await axios.get(
+    `https://localhost:44304/api/v1/orders/${id}`
+  );
+
+  return response;
+};
+
+export const updateOrder = async (id, order) => {
+  const response = await axios.put(
+    `https://localhost:44304/api/v1/orders/${id}`,
+    {
+      id: order.id,
+      isUserDelivery: order.isUserDelivery,
+      deliveryDate: order.deliveryDate,
+      deliveryTime: order.deliveryTime,
+      returnDate: order.returnDate,
+      deliveryAddress: order.deliveryAddress,
+      addressReturn: order.addressReturn,
+      status: order.status,
+    }
+  );
+
+  return response;
+};

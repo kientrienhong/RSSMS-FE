@@ -17,21 +17,11 @@ import * as action from "../../redux/action/action";
 import { getOrder } from "../../apis/Apis";
 function Order({ showLoading, hideLoading, showSnackbar }) {
   const navigate = useNavigate();
-  const { handleSubmit, reset, control } = useForm();
+  const { handleSubmit, reset, control, setValue } = useForm();
 
   const [currentOrder, setCurrentOrder] = useState();
   const [open, setOpen] = useState(false);
-  const [listOrder, setListOrder] = useState([
-    {
-      id: 1,
-      customerName: "Hong Kien Trien",
-      addressDelivery: "2 Gia Phu phuong 13, quan 5",
-      type: "Keeping item",
-      isPaid: true,
-      status: "paid",
-      customerPhone: "0777457405",
-    },
-  ]);
+  const [listOrder, setListOrder] = useState([]);
   const [page, setPage] = useState(1);
   const [totalOrder, setTotalOrder] = useState(0);
   const [searchId, setSearchId] = useState("");
@@ -47,7 +37,6 @@ function Order({ showLoading, hideLoading, showSnackbar }) {
     try {
       showLoading();
       let list = await getOrder(page, size);
-      console.log(list.data.data);
       setListOrder(list.data.data);
       setTotalOrder(list.data.metadata.total);
     } catch (error) {
@@ -81,10 +70,14 @@ function Order({ showLoading, hideLoading, showSnackbar }) {
     >
       <OrderModal
         open={open}
+        reset={reset}
         handleClose={onHandleClose}
         handleSubmit={handleSubmit}
         control={control}
         currentOrder={currentOrder}
+        getData={getData}
+        page={page}
+        searchId={searchId}
       />
       <Box
         sx={{

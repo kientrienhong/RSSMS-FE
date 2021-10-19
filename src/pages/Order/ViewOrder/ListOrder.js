@@ -19,7 +19,9 @@ import { Checkbox, FormControlLabel } from "@material-ui/core";
 import { Button, TableHead } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import ConfirmModal from "../../../components/ConfirmModal";
-
+import { connect } from "react-redux";
+import * as action from "../../../redux/action/action";
+import { getOrderById } from "../../../apis/Apis";
 function TablePaginationActions(props) {
   const theme = useTheme();
   const { count, page, rowsPerPage, onPageChange } = props;
@@ -110,12 +112,6 @@ const mapListTableHeader = (listHeader) => (
   </TableHead>
 );
 
-const handleClickRow = (row, setOrder, handleOpen, reset) => {
-  reset();
-
-  setOrder(row);
-  handleOpen(true);
-};
 const useStyles = makeStyles({
   button: {
     backgroundColor: "#CE0200",
@@ -127,7 +123,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function ListOrder({
+function ListOrder({
   reset,
   setOrder,
   handleOpen,
@@ -137,6 +133,8 @@ export default function ListOrder({
   totalOrder,
   searchId,
   getData,
+  hideLoading,
+  showLoading,
 }) {
   const classes = useStyles();
 
@@ -152,7 +150,6 @@ export default function ListOrder({
   const handleDeleteOrder = async (id) => {
     let response;
     try {
-      //   response = await deleteUser(id);
       if (listOrder.length === 1) {
         if (page !== 1) {
           setPage(page - 1);
@@ -165,6 +162,19 @@ export default function ListOrder({
 
     return response;
   };
+  const handleClickRow = async (row) => {
+    try {
+      showLoading();
+      let orderTemp = await getOrderById(row.id);
+      setOrder(orderTemp.data);
+      handleOpen(true);
+    } catch (e) {
+      console.log(e.response);
+    } finally {
+      hideLoading();
+    }
+  };
+
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page - 1 > 0 ? Math.max(0, (1 + page) * rowsPerPage - listOrder.length) : 0;
@@ -212,62 +222,48 @@ export default function ListOrder({
                   component="th"
                   scope="row"
                   style={{ color: "black" }}
-                  onClick={(e) =>
-                    handleClickRow(row, setOrder, handleOpen, reset)
-                  }
+                  onClick={(e) => handleClickRow(row)}
                 >
                   {row.id}
                 </TableCell>
                 <TableCell
                   style={{ color: "black" }}
-                  onClick={(e) =>
-                    handleClickRow(row, setOrder, handleOpen, reset)
-                  }
+                  onClick={(e) => handleClickRow(row)}
                 >
                   {row.customerName}
                 </TableCell>
                 <TableCell
                   style={{ color: "black" }}
-                  onClick={(e) =>
-                    handleClickRow(row, setOrder, handleOpen, reset)
-                  }
+                  onClick={(e) => handleClickRow(row)}
                 >
                   {row.customerPhone}
                 </TableCell>
                 <TableCell
                   style={{ color: "black" }}
-                  onClick={(e) =>
-                    handleClickRow(row, setOrder, handleOpen, reset)
-                  }
+                  onClick={(e) => handleClickRow(row)}
                 >
                   {row.deliveryAddress}
                 </TableCell>
                 <TableCell
                   style={{ color: "black" }}
-                  onClick={(e) =>
-                    handleClickRow(row, setOrder, handleOpen, reset)
-                  }
+                  onClick={(e) => handleClickRow(row)}
                 >
                   {typeOrder}
                 </TableCell>
                 <TableCell
                   style={{ color: "black" }}
-                  onClick={(e) =>
-                    handleClickRow(row, setOrder, handleOpen, reset)
-                  }
+                  onClick={(e) => handleClickRow(row)}
                 >
                   <FormControlLabel
                     value="isPaid"
-                    control={<Checkbox checked={row.isPaid} />}
+                    control={<Checkbox checked={row.isPaid} disabled={true} />}
                     label="Is Paid"
                     labelPlacement="Is Paid"
                   />
                 </TableCell>
                 <TableCell
                   style={{ color: "black" }}
-                  onClick={(e) =>
-                    handleClickRow(row, setOrder, handleOpen, reset)
-                  }
+                  onClick={(e) => handleClickRow(row)}
                 >
                   {status}
                 </TableCell>
@@ -310,3 +306,11 @@ export default function ListOrder({
     </TableContainer>
   );
 }
+const mapDispatchToProps = (dispatch) => {
+  return {
+    showLoading: () => dispatch(action.showLoader()),
+    hideLoading: () => dispatch(action.hideLoader()),
+    showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
+  };
+};
+export default connect(null, mapDispatchToProps)(ListOrder);

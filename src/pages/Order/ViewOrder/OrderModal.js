@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Modal,
@@ -7,11 +7,15 @@ import {
   FormControlLabel,
   Checkbox,
   Grid,
+  Button,
 } from "@material-ui/core";
 import TagSelection from "../CreateOrder/components/TagSelection";
 import CustomInput from "../../../components/CustomInput";
 import { MenuItem, Select, FormControl } from "@material-ui/core";
-
+import OrderDetail from "./components/OrderDetail";
+import { connect } from "react-redux";
+import * as action from "../../../redux/action/action";
+import { updateOrder } from "../../../apis/Apis";
 const styleModal = {
   position: "absolute",
   top: "0%",
@@ -25,6 +29,27 @@ const styleModal = {
   boxShadow: 24,
   p: 4,
 };
+const styleButtonPlus = {
+  width: "26px",
+  height: "26px",
+  borderRadius: "4px",
+  padding: "2%",
+  backgroundColor: "#04BFFE",
+  color: "white",
+  marginRight: "6%",
+  marginLeft: "6%",
+  fontSize: "16px",
+  fontWeight: "bold",
+  border: "none",
+  cursor: "pointer",
+};
+
+const styleButtonMinus = {
+  ...styleButtonPlus,
+  color: "#A19FA8",
+  backgroundColor: "white",
+  border: "1px #A19FA8 solid",
+};
 const listTime = [
   { name: "8am - 10am", isAvailable: true },
   { name: "10am - 12am", isAvailable: true },
@@ -32,22 +57,59 @@ const listTime = [
   { name: "14am - 16pm", isAvailable: true },
   { name: "18am - 20am", isAvailable: true },
 ];
-export default function OrderModal({
+const styleInput = {
+  border: "1px #A19FA8 solid",
+  textAlign: "center",
+  borderRadius: "4px",
+  height: "32px",
+  width: "20%",
+};
+function OrderModal({
   open,
   handleClose,
   currentOrder,
   handleSubmit,
   control,
+  reset,
+  hideLoading,
+  showLoading,
+  showSnackbar,
+  getData,
+  page,
+  searchId,
 }) {
-  const [isCustomerDelivery, setIsCustomerDelivery] = useState(false);
-  const [timeDelivery, setTimeDelivery] = useState({});
-  const [duration, setDuration] = useState(0);
+  const [isCustomerDelivery, setIsCustomerDelivery] = useState();
+  const [timeDelivery, setTimeDelivery] = useState();
+  const [duration, setDuration] = useState();
   const [dateDelivery, setDateDelivery] = useState();
   const [dateReturn, setDateReturn] = useState();
+  const [statusOrder, setStatusOrder] = useState();
   const handleChangeCheckBox = (event) => {
     setIsCustomerDelivery(event.target.checked);
     setTimeDelivery({});
   };
+
+  useEffect(() => {
+    setDateDelivery(currentOrder?.deliveryDate?.split("T")[0]);
+    setTimeDelivery({
+      name: currentOrder?.deliveryTime,
+      isAvailable: true,
+    });
+    setDuration(currentOrder?.duration);
+    setIsCustomerDelivery(currentOrder?.isUserDelivery);
+    setStatusOrder(currentOrder?.status);
+    if (currentOrder?.deliveryDate !== undefined) {
+      let date = new Date(currentOrder?.deliveryDate);
+      if (date) {
+        if (currentOrder?.type === 0) {
+          date.setMonth(date.getMonth() + currentOrder?.duration);
+        } else {
+          date.setDate(date.getDate() + currentOrder?.duration);
+        }
+        setDateReturn(new Date(date).toISOString().split("T")[0]);
+      }
+    }
+  }, [currentOrder]);
 
   const listStatus = [
     { label: "Booked", value: 1 },
@@ -76,6 +138,29 @@ export default function OrderModal({
       let diffDays = diffTime / (1000 * 3600 * 24);
       setDuration(diffDays);
     }
+  };
+
+  const handleOnClickMinus = (event) => {
+    event.preventDefault();
+
+    if (duration > 0) {
+      let newDuration = duration - 1;
+      setDuration(newDuration);
+      let currentDate = new Date(dateReturn);
+
+      let newDate = new Date(currentDate.setMonth(currentDate.getMonth() - 1));
+      setDateReturn(newDate.toLocaleDateString("en-US"));
+    }
+  };
+
+  const handleOnClickPlus = (event) => {
+    event.preventDefault();
+
+    let newDuration = duration + 1;
+    setDuration(newDuration);
+    let currentDate = new Date(dateReturn);
+    let newDate = new Date(currentDate.setMonth(currentDate.getMonth() + 1));
+    setDateReturn(newDate.toLocaleDateString("en-US"));
   };
 
   const handleChaneReturnDate = (e) => {
@@ -120,6 +205,63 @@ export default function OrderModal({
     );
   };
 
+  const formatToChosenProduct = () => {
+    let result = {
+      product: [],
+      services: [],
+      accessory: [],
+    };
+
+    currentOrder?.orderDetails.forEach((e) => {
+      let type;
+
+      if (e.productType === 0 || e.productType === 2 || e.productType === 4) {
+        type = "product";
+      } else if (e.producType === 1) {
+        type = "accessory";
+      } else {
+        type = "services";
+      }
+
+      result[type].push({
+        name: e.productName,
+        quantity: e.amount,
+        price: e.price,
+      });
+    });
+
+    return result;
+  };
+
+  const handleChangeStatus = (e) => {
+    setStatusOrder(parseInt(e.target.value));
+  };
+
+  const onSubmit = async (data) => {
+    try {
+      showLoading();
+      const orderTemp = {
+        id: currentOrder.id,
+        isUserDelivery: isCustomerDelivery,
+        deliveryDate: new Date(dateDelivery).toISOString(),
+        deliveryTime: timeDelivery.name,
+        returnDate: new Date(dateReturn).toISOString(),
+        deliveryAddress: data.deliveryAddress,
+        addressReturn: data.returnAddress,
+        status: statusOrder,
+      };
+
+      await updateOrder(orderTemp.id, orderTemp);
+      await getData(searchId, page, 8);
+      handleClose();
+      showSnackbar("success", "Update order success");
+    } catch (error) {
+      console.log(error.response);
+    } finally {
+      hideLoading();
+    }
+  };
+
   return (
     <Modal
       open={open}
@@ -137,7 +279,7 @@ export default function OrderModal({
           pading: "3%",
         }}
       >
-        <form style={{ width: "100%" }}>
+        <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
           <Typography color="black" variant="h2" sx={{ marginBottom: "4%" }}>
             Order Information
           </Typography>
@@ -158,7 +300,10 @@ export default function OrderModal({
           </Box>
           {buildInformation("Customer name", currentOrder?.customerName)}
           {buildInformation("Customer phone", currentOrder?.customerPhone)}
-          {buildInformation("Type", currentOrder?.type)}
+          {buildInformation(
+            "Type",
+            currentOrder?.typeOrder === 0 ? "Self-Storage" : "Door to door"
+          )}
           <Typography
             color="black"
             variant="h2"
@@ -167,64 +312,105 @@ export default function OrderModal({
             Time
           </Typography>
           <Typography color="black" variant="h3" sx={{ marginBottom: "2%" }}>
-            Delivery Date Time
+            {currentOrder?.typeOrder === 0
+              ? "Start Date"
+              : "Delivery Date Time"}
           </Typography>
           <TextField
             id="date"
             type="date"
+            defaultValue={dateDelivery}
             onChange={handleChangeDeliveryDate}
             sx={{ width: 220, marginBottom: "16px" }}
             InputLabelProps={{
               shrink: true,
             }}
           />
-          <Grid
-            container
-            spacing={2}
-            sx={{
-              width: "98%",
-              marginBottom: "3%",
-            }}
-          >
-            {mapListTime(timeDelivery, setTimeDelivery)}
-          </Grid>
-          <FormControlLabel
-            value="isCustomerDelivery"
-            control={
-              <Checkbox
-                checked={isCustomerDelivery}
-                onChange={handleChangeCheckBox}
+          {currentOrder?.typeOrder === 0 ? null : (
+            <Box>
+              <Grid
+                container
+                spacing={2}
+                sx={{
+                  width: "98%",
+                  marginBottom: "3%",
+                }}
+              >
+                {mapListTime(timeDelivery, setTimeDelivery)}
+              </Grid>
+              <FormControlLabel
+                value="isCustomerDelivery"
+                control={
+                  <Checkbox
+                    checked={isCustomerDelivery}
+                    onChange={handleChangeCheckBox}
+                  />
+                }
+                label="Customer delivery by themselves"
+                labelPlacement="Customer delivery by themselves"
               />
-            }
-            label="Customer delivery by themselves"
-            labelPlacement="Customer delivery by themselves"
-          />
+            </Box>
+          )}
+          {currentOrder?.typeOrder === 0 ? (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "6%",
+              }}
+            >
+              <Typography variant="h2" style={{ marginBottom: "3%" }}>
+                Duration (months)
+              </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <button style={styleButtonMinus} onClick={handleOnClickMinus}>
+                  -
+                </button>
+                <input style={styleInput} value={duration}></input>
+                <button style={styleButtonPlus} onClick={handleOnClickPlus}>
+                  +
+                </button>
+              </Box>
+            </Box>
+          ) : null}
           <Typography color="black" variant="h3" sx={{ marginBottom: "2%" }}>
-            Return Date Time
+            {currentOrder?.typeOrder === 0 ? "End Date" : "Return Date Time"}
           </Typography>
           <TextField
             id="date"
             onChange={handleChaneReturnDate}
             type="date"
+            defaultValue={dateReturn}
             sx={{ width: 220, marginBottom: "16px" }}
             InputLabelProps={{
               shrink: true,
             }}
           />
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              marginBottom: "2%",
-            }}
-          >
-            <Typography color="black" variant="h3" sx={{ marginRight: "2%" }}>
-              Durations:
-            </Typography>
-            <Typography color="primary" variant="h3">
-              {duration} days
-            </Typography>
-          </Box>
+          {currentOrder?.typeOrder === 0 ? null : (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                marginBottom: "2%",
+              }}
+            >
+              <Typography color="black" variant="h3" sx={{ marginRight: "2%" }}>
+                Durations:
+              </Typography>
+              <Typography color="primary" variant="h3">
+                {duration} {currentOrder?.typeOrder === 0 ? "months" : "days"}
+              </Typography>
+            </Box>
+          )}
+
           <Typography
             color="black"
             variant="h3"
@@ -239,7 +425,7 @@ export default function OrderModal({
             name="deliveryAddress"
             label="Delivery Address"
             disabled={false}
-            userInfo={""}
+            userInfo={currentOrder?.deliveryAddress}
             inlineStyle={{}}
           />
           <Typography
@@ -256,7 +442,7 @@ export default function OrderModal({
             name="returnAddress"
             label="Return Address"
             disabled={false}
-            userInfo={""}
+            userInfo={currentOrder?.addressReturn}
             inlineStyle={{}}
           />
           <Typography
@@ -267,20 +453,87 @@ export default function OrderModal({
             Status
           </Typography>
           <FormControl
-            sx={{ m: 1, minWidth: 120, color: "black", margin: "0" }}
-            name="boxSize"
+            sx={{ m: 1, minWidth: 120, color: "black", margin: "0 0 16px 0" }}
+            name="status"
           >
             <Select
               displayEmpty
+              value={statusOrder}
               sx={{
                 marginTop: "11%",
               }}
+              onChange={handleChangeStatus}
             >
               {generateSelectOptions()}
             </Select>
           </FormControl>
+          <Typography
+            color="black"
+            variant="h2"
+            sx={{ marginBottom: "4%", marginTop: "4%" }}
+          >
+            Order Detail
+          </Typography>
+          <OrderDetail
+            choosenProduct={formatToChosenProduct()}
+            duration={duration}
+          />
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              width: "100%",
+              justifyContent: "center",
+            }}
+          >
+            <Button
+              style={{
+                height: "45px",
+                paddingLeft: "16px",
+                paddingRight: "16px",
+                marginRight: "4%",
+              }}
+              color="primary"
+              variant="contained"
+            >
+              Store
+            </Button>
+            <Button
+              style={{
+                height: "45px",
+                paddingLeft: "16px",
+                paddingRight: "16px",
+                marginRight: "4%",
+              }}
+              color="success"
+              variant="contained"
+              type="submit"
+            >
+              Edit
+            </Button>
+            <Button
+              style={{
+                height: "45px",
+                paddingLeft: "16px",
+                paddingRight: "16px",
+              }}
+              color="error"
+              onClick={() => handleClose()}
+              variant="outlined"
+            >
+              Cancel
+            </Button>
+          </Box>
         </form>
       </Box>
     </Modal>
   );
 }
+const mapDispatchToProps = (dispatch) => {
+  return {
+    showLoading: () => dispatch(action.showLoader()),
+    hideLoading: () => dispatch(action.hideLoader()),
+    showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
+  };
+};
+export default connect(null, mapDispatchToProps)(OrderModal);
