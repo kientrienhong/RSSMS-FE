@@ -20,6 +20,8 @@ export default function MakingOrder() {
       image: "/img/storage2m2.png",
       quantity: 0,
       type: "product",
+      id: 1,
+      typeInt: 0,
     },
     {
       name: "Storage 4m2",
@@ -27,6 +29,8 @@ export default function MakingOrder() {
       image: "/img/storage4m2.png",
       quantity: 0,
       type: "product",
+      id: 2,
+      typeInt: 0,
     },
     {
       name: "Storage 8m2",
@@ -34,6 +38,8 @@ export default function MakingOrder() {
       image: "/img/storage8m2.png",
       quantity: 0,
       type: "product",
+      id: 3,
+      typeInt: 0,
     },
     {
       name: "Storage 16m2",
@@ -41,6 +47,8 @@ export default function MakingOrder() {
       image: "/img/storage16m2.png",
       quantity: 0,
       type: "product",
+      id: 4,
+      typeInt: 0,
     },
   ]);
 
@@ -51,6 +59,8 @@ export default function MakingOrder() {
       image: "/img/tape.png",
       quantity: 0,
       type: "accessory",
+      id: 5,
+      typeInt: 1,
     },
     {
       name: "Locker",
@@ -58,6 +68,8 @@ export default function MakingOrder() {
       image: "/img/locker.png",
       quantity: 0,
       type: "accessory",
+      id: 6,
+      typeInt: 1,
     },
     {
       name: "Carton box",
@@ -65,6 +77,8 @@ export default function MakingOrder() {
       image: "/img/carton.png",
       quantity: 0,
       type: "accessory",
+      id: 7,
+      typeInt: 1,
     },
     {
       name: "PE Foam",
@@ -72,6 +86,8 @@ export default function MakingOrder() {
       image: "/img/peFoam.png",
       quantity: 0,
       type: "accessory",
+      id: 8,
+      typeInt: 1,
     },
     {
       name: "Bubble Wrap",
@@ -79,6 +95,8 @@ export default function MakingOrder() {
       image: "/img/bubbleWrap.png",
       quantity: 0,
       type: "accessory",
+      id: 9,
+      typeInt: 1,
     },
     {
       name: "PE strech film",
@@ -86,6 +104,8 @@ export default function MakingOrder() {
       image: "/img/PEstretchfilm.png",
       quantity: 0,
       type: "accessory",
+      id: 10,
+      typeInt: 1,
     },
   ]);
 
@@ -96,6 +116,8 @@ export default function MakingOrder() {
       image: "/img/bolobox.png",
       quantity: 0,
       type: "product",
+      id: 11,
+      typeInt: 2,
     },
     {
       name: "Size S",
@@ -103,6 +125,8 @@ export default function MakingOrder() {
       image: "/img/boxSizeS.png",
       quantity: 0,
       type: "product",
+      id: 12,
+      typeInt: 2,
     },
     {
       name: "Size M",
@@ -110,6 +134,8 @@ export default function MakingOrder() {
       image: "/img/boxSizeM.png",
       quantity: 0,
       type: "product",
+      id: 13,
+      typeInt: 2,
     },
     {
       name: "Size L",
@@ -117,6 +143,8 @@ export default function MakingOrder() {
       image: "/img/boxSizeL.png",
       quantity: 0,
       type: "product",
+      id: 14,
+      typeInt: 2,
     },
     {
       name: "Size XL",
@@ -124,6 +152,8 @@ export default function MakingOrder() {
       image: "/img/boxSizeXL.png",
       quantity: 0,
       type: "product",
+      id: 16,
+      typeInt: 2,
     },
   ]);
 
@@ -134,6 +164,8 @@ export default function MakingOrder() {
       image: "/img/areaSize0.5m2.png",
       quantity: 0,
       type: "product",
+      id: 18,
+      typeInt: 4,
     },
     {
       name: "Area 1m2",
@@ -141,6 +173,8 @@ export default function MakingOrder() {
       image: "/img/areaSize1m2.png",
       quantity: 0,
       type: "product",
+      id: 19,
+      typeInt: 4,
     },
     {
       name: "Area 2m2",
@@ -148,6 +182,8 @@ export default function MakingOrder() {
       image: "/img/areaSize2m2.png",
       quantity: 0,
       type: "product",
+      id: 19,
+      typeInt: 4,
     },
     {
       name: "Area 3m2",
@@ -155,6 +191,8 @@ export default function MakingOrder() {
       image: "/img/areaSize3m2.png",
       quantity: 0,
       type: "product",
+      id: 19,
+      typeInt: 4,
     },
   ]);
 
@@ -165,6 +203,8 @@ export default function MakingOrder() {
       image: "/img/package.png",
       quantity: 0,
       type: "services",
+      id: 17,
+      typeInt: 3,
     },
   ]);
 

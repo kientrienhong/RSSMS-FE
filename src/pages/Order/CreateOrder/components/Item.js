@@ -38,9 +38,11 @@ export default function Item({
   price,
   setList,
   list,
+  id,
   choosenProduct,
   setChoosenProduct,
   type,
+  typeInt,
 }) {
   const handleOnClickMinus = () => {
     if (quantity > 0) {
@@ -61,7 +63,6 @@ export default function Item({
         --choosenProductTemp[type][indexProduct].quantity;
       }
       setChoosenProduct(choosenProductTemp);
-      console.log(choosenProductTemp);
     }
   };
 
@@ -82,6 +83,8 @@ export default function Item({
         quantity: 1,
         price: price,
         type: type,
+        id: id,
+        typeInt: typeInt,
       });
     } else {
       ++choosenProductTemp[type][indexProduct].quantity;

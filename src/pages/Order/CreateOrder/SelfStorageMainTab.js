@@ -15,6 +15,8 @@ export default function SelfStorageMainTab({
         <Item
           image={e.image}
           type={e.type}
+          typeInt={e.typeInt}
+          id={e.id}
           price={e.price}
           quantity={e.quantity}
           name={e.name}

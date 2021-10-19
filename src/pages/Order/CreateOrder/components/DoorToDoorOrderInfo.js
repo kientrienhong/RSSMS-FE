@@ -13,8 +13,9 @@ import {
 import TagSelection from "./TagSelection";
 import { formatCurrency } from "../../../../utils/FormatCurrency";
 import { useNavigate } from "react-router";
-
-export default function DoorToDoorOrderInfo({ choosenProduct }) {
+import { connect } from "react-redux";
+import * as action from "../../../../redux/action/action";
+function DoorToDoorOrderInfo({ choosenProduct, setUpOrder }) {
   const navigate = useNavigate();
 
   const [timeDelivery, setTimeDelivery] = useState({});
@@ -39,7 +40,7 @@ export default function DoorToDoorOrderInfo({ choosenProduct }) {
     }
   };
 
-  const handleChaneReturnDate = (e) => {
+  const handleChangeReturnDate = (e) => {
     setDateReturn(e.target.value);
     if (dateDelivery !== undefined || dateReturn !== undefined) {
       let parseDateReturn = new Date(e.target.value);
@@ -206,12 +207,24 @@ export default function DoorToDoorOrderInfo({ choosenProduct }) {
     ));
   };
 
+  const totalPriceProduct = () => {
+    let months = Math.ceil(duration / 30);
+
+    let sum = 0;
+    choosenProduct.product.forEach((e) => {
+      sum += e.price * e.quantity * months;
+    });
+    choosenProduct.accessory.forEach((e) => {
+      sum += e.price * e.quantity;
+    });
+    return sum;
+  };
+
   const buildTotalProduct = (value) => {
     let months = Math.ceil(duration / 30);
 
     let total = choosenProduct[value].reduce(
       (a, b) => {
-        console.log(a, b);
         return a.price * a.quantity * months + b.price * b.quantity * months;
       },
       { price: 0, quantity: 1 }
@@ -328,7 +341,7 @@ export default function DoorToDoorOrderInfo({ choosenProduct }) {
           id="date"
           type="date"
           sx={{ width: 220, marginBottom: "16px" }}
-          onChange={handleChaneReturnDate}
+          onChange={handleChangeReturnDate}
           InputLabelProps={{
             shrink: true,
           }}
@@ -427,6 +440,16 @@ export default function DoorToDoorOrderInfo({ choosenProduct }) {
         color="primary"
         variant="contained"
         onClick={(e) => {
+          setUpOrder({
+            timeDelivery: timeDelivery,
+            isCustomerDelivery: isCustomerDelivery,
+            dateDelivery: dateDelivery,
+            dateReturn: dateReturn,
+            duration: duration,
+            choosenProduct: choosenProduct,
+            type: 1,
+            totalPrice: totalPriceProduct(),
+          });
           navigate("/orders/inputInfor");
         }}
       >
@@ -435,3 +458,11 @@ export default function DoorToDoorOrderInfo({ choosenProduct }) {
     </Box>
   );
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setUpOrder: (order) => dispatch(action.setUpOrder(order)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(DoorToDoorOrderInfo);

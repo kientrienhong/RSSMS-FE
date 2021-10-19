@@ -15,6 +15,14 @@ export const getListUser = async (name, page, size, storageId) => {
   return listUser;
 };
 
+export const findUserByPhone = async (phone) => {
+  let user = await axios.get(
+    `https://localhost:44304/api/v1/users/user/${phone}`
+  );
+
+  return user;
+};
+
 export const login = async (email, password) => {
   const response = await axios.post(
     "https://localhost:44304/api/v1/users/login",
@@ -291,6 +299,25 @@ export const deleteShelf = async (id) => {
   const response = await axios.delete(
     `https://localhost:44304/api/v1/shelves/${id}`
   );
+
+  return response;
+};
+
+export const createOrder = async (order) => {
+  const response = await axios.post(`https://localhost:44304/api/v1/orders`, {
+    customerId: order.customerId,
+    deliveryAddress: order.deliveryAddress,
+    addressReturn: order.addressReturn,
+    totalPrice: order.totalPrice,
+    typeOrder: order.typeOrder,
+    deliveryTime: order.deliveryTime,
+    isPaid: order.isPaid,
+    paymentMethod: order.paymentMethod,
+    isUserDelivery: order.isUserDelivery,
+    deliveryDate: order.deliveryDate,
+    duration: order.duration,
+    listProduct: order.listProduct,
+  });
 
   return response;
 };

@@ -19,6 +19,8 @@ export default function BoxTab({
           image={e.image}
           type={e.type}
           price={e.price}
+          id={e.id}
+          typeInt={e.typeInt}
           quantity={e.quantity}
           name={e.name}
           setList={setListData}

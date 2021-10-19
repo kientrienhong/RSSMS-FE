@@ -19,6 +19,8 @@ export default function AreaTab({
           image={e.image}
           type={e.type}
           price={e.price}
+          typeInt={e.typeInt}
+          id={e.id}
           quantity={e.quantity}
           name={e.name}
           setList={setListData}

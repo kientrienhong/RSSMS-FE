@@ -91,7 +91,6 @@ function FormHandy({
   };
 
   const onSubmit = async (data) => {
-    console.log(isEdit);
     if (isEdit === false) {
       await onHandleCreateShelf(data, areaId);
     } else {

@@ -31,3 +31,10 @@ export const setUpUser = (user) => {
     payload: user,
   };
 };
+
+export const setUpOrder = (order) => {
+  return {
+    type: ActionType.SET_UP_ORDER,
+    payload: order,
+  };
+};

@@ -1,6 +1,17 @@
 import React, { useState } from "react";
-import { Box, TextField, Typography, Card, Divider } from "@material-ui/core";
+import {
+  Box,
+  TextField,
+  Typography,
+  Card,
+  Divider,
+  Button,
+} from "@material-ui/core";
 import { formatCurrency } from "../../../../utils/FormatCurrency";
+import { connect } from "react-redux";
+import * as action from "../../../../redux/action/action";
+import { useNavigate } from "react-router";
+
 const styleButtonPlus = {
   width: "26px",
   height: "26px",
@@ -31,7 +42,9 @@ const styleInput = {
   width: "20%",
 };
 
-export default function SelfStorageOrderInfo({ choosenProduct }) {
+function SelfStorageOrderInfo({ choosenProduct, setUpOrder }) {
+  const navigate = useNavigate();
+
   const [dateStart, setDateStart] = useState({});
 
   const [dateEnd, setDateEnd] = useState("");
@@ -93,7 +106,6 @@ export default function SelfStorageOrderInfo({ choosenProduct }) {
   const buildTotalProduct = (value) => {
     let total = choosenProduct[value].reduce(
       (a, b) => {
-        console.log(a, b);
         return (
           a.price * a.quantity * duration + b.price * b.quantity * duration
         );
@@ -391,6 +403,31 @@ export default function SelfStorageOrderInfo({ choosenProduct }) {
         {buildTotalEachPartPrice("accessory")}
         {buildTotalPrice()}
       </Card>
+      <Button
+        style={{ height: "45px", paddingLeft: "16px", paddingRight: "16px" }}
+        color="primary"
+        variant="contained"
+        onClick={(e) => {
+          setUpOrder({
+            dateEnd: dateEnd,
+            dateStart: dateStart,
+            duration: duration,
+            choosenProduct: choosenProduct,
+            type: 0,
+          });
+          navigate("/orders/inputInfor");
+        }}
+      >
+        Next
+      </Button>
     </Box>
   );
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setUpOrder: (order) => dispatch(action.setUpOrder(order)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(SelfStorageOrderInfo);
