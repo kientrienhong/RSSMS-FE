@@ -11,6 +11,7 @@ export default function ListShelf({
   currentBox,
   setCurrentBox,
   isModifyShelf,
+  handleOpenModalDetail,
 }) {
   const handleOnClickEdit = (shelf) => {
     if (shelf.type === 0) {
@@ -29,7 +30,7 @@ export default function ListShelf({
 
   const handleOnClickSeeMore = (shelf) => {
     setCurrentShelf(shelf);
-    handleOpen(true);
+    handleOpenModalDetail();
   };
 
   const mapListToGrid = (listShelf) =>

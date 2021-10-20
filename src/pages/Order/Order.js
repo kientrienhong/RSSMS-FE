@@ -33,10 +33,14 @@ function Order({ showLoading, hideLoading, showSnackbar }) {
     setOpen(false);
   };
 
+  const handleChangeSearchId = (e) => {
+    setSearchId(e.target.value);
+  };
+
   const getData = async (id, page, size) => {
     try {
       showLoading();
-      let list = await getOrder(page, size);
+      let list = await getOrder(id, page, size);
       setListOrder(list.data.data);
       setTotalOrder(list.data.metadata.total);
     } catch (error) {
@@ -45,6 +49,26 @@ function Order({ showLoading, hideLoading, showSnackbar }) {
       hideLoading();
     }
   };
+
+  useEffect(() => {
+    const searchNameCall = async () => {
+      try {
+        showLoading();
+        await getData(searchId, 1, 6);
+        setPage(1);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        hideLoading();
+      }
+    };
+
+    const timeOut = setTimeout(() => searchNameCall(), 700);
+
+    return () => {
+      clearTimeout(timeOut);
+    };
+  }, [searchId]);
 
   useEffect(() => {
     const firstCall = async () => {
@@ -93,6 +117,7 @@ function Order({ showLoading, hideLoading, showSnackbar }) {
           sx={{
             width: "80%",
           }}
+          onChange={handleChangeSearchId}
           InputProps={{
             style: { height: "45px", backgroundColor: "white" },
             startAdornment: (

@@ -5,6 +5,7 @@ import ConfirmModal from "../../../components/ConfirmModal";
 import { connect } from "react-redux";
 import * as action from "../../../redux/action/action";
 import { deleteShelf } from "../../../apis/Apis";
+import ShelfModalDetail from "./ShelfModalDetail";
 
 function AreaDetailView({
   storage,
@@ -26,6 +27,7 @@ function AreaDetailView({
 }) {
   const [openConfirm, setOpenConfirm] = useState(false);
   const [currentBox, setCurrentBox] = useState({});
+  const [openModalDetail, setOpenModalDetail] = useState(false);
 
   const listNote = [
     { color: "#99E5FE", name: "Available" },
@@ -81,6 +83,14 @@ function AreaDetailView({
     await getData(searchName, page, 6);
   };
 
+  const handleOpenModalDetail = () => {
+    setOpenModalDetail(true);
+  };
+
+  const handleCloseModalDetail = () => {
+    setOpenModalDetail(false);
+  };
+
   return (
     <Card
       style={{ height: "78vh" }}
@@ -94,6 +104,13 @@ function AreaDetailView({
         alignItems: "flex-start",
       }}
     >
+      <ShelfModalDetail
+        currentShelf={currentShelf}
+        open={openModalDetail}
+        handleClose={handleCloseModalDetail}
+        currentBox={currentBox}
+        setCurrentBox={setCurrentBox}
+      />
       <ConfirmModal
         open={openConfirm}
         handleClose={handleCloseConfirm}
@@ -117,6 +134,7 @@ function AreaDetailView({
         currentBox={currentBox}
         setCurrentBox={setCurrentBox}
         isModifyShelf={isModifyShelf}
+        handleOpenModalDetail={handleOpenModalDetail}
       />
       <Box
         sx={{

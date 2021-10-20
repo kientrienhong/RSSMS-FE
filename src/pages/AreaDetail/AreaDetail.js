@@ -20,7 +20,6 @@ import AreaDetailView from "./components/AreaDetailView";
 import AreaUsage from "./components/AreaUsage";
 import DetailBox from "./components/DetailBox";
 import SheflModal from "./components/SheflModal";
-
 function AreaDetail(props) {
   const { storageId, areaId } = useParams();
   const [storage, setStorage] = useState({});
@@ -35,7 +34,6 @@ function AreaDetail(props) {
   const [isHandy, setIsHandy] = useState(true);
   const [currentArea, setCurrentArea] = useState({});
   const [isModifyShelf, setIsModifyShelf] = useState(false);
-
   const handleOpen = (isEdit) => {
     setIsEdit(isEdit);
     setOpen(true);
@@ -165,6 +163,7 @@ function AreaDetail(props) {
         isHandy={isHandy}
         isModifyShelf={isModifyShelf}
       />
+
       <Box
         sx={{
           marginLeft: "2%",

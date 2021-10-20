@@ -95,17 +95,26 @@ function OrderModal({
       name: currentOrder?.deliveryTime,
       isAvailable: true,
     });
-    setDuration(currentOrder?.duration);
+    let currentDuration;
+    if (currentOrder?.typeOrder === 0) {
+      setDuration(currentOrder?.durationMonths);
+      currentDuration = currentOrder?.durationMonths;
+    } else {
+      setDuration(currentOrder?.durationDays);
+      currentDuration = currentOrder?.durationDays;
+    }
+
     setIsCustomerDelivery(currentOrder?.isUserDelivery);
     setStatusOrder(currentOrder?.status);
     if (currentOrder?.deliveryDate !== undefined) {
       let date = new Date(currentOrder?.deliveryDate);
       if (date) {
-        if (currentOrder?.type === 0) {
-          date.setMonth(date.getMonth() + currentOrder?.duration);
+        if (currentOrder?.typeOrder === 0) {
+          date.setMonth(date.getMonth() + currentDuration);
         } else {
-          date.setDate(date.getDate() + currentOrder?.duration);
+          date.setDate(date.getDate() + currentDuration);
         }
+        console.log(date);
         setDateReturn(new Date(date).toISOString().split("T")[0]);
       }
     }
