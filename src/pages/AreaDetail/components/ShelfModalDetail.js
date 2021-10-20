@@ -20,34 +20,34 @@ export default function ShelfModalDetail({
   handleClose,
   currentBox,
 }) {
+  let nameBox;
+  if (currentShelf?.type === 0) {
+    if (currentShelf?.boxSize === 0) {
+      nameBox = "S";
+    } else if (currentShelf?.boxSize === 1) {
+      nameBox = "M";
+    } else if (currentShelf?.boxSize === 2) {
+      nameBox = "L";
+    } else if (currentShelf?.boxSize === 3) {
+      nameBox = "XL";
+    }
+  } else {
+    if (currentShelf?.boxSize === 0) {
+      nameBox = "0.5m2";
+    } else if (currentShelf?.boxSize === 1) {
+      nameBox = "1m2";
+    } else if (currentShelf?.boxSize === 2) {
+      nameBox = "2m2";
+    } else if (currentShelf?.boxSize === 3) {
+      nameBox = "3m2";
+    }
+  }
+
   const buildBox = () => {
     let size = 12 / currentShelf.boxesInWidth;
     let height = (100 / currentShelf.boxesInHeight) * 4;
     let totalBox = currentShelf.boxesInWidth * currentShelf.boxesInHeight;
     if (totalBox >= 401) {
-      let nameBox;
-      if (currentShelf?.type === 0) {
-        if (currentShelf?.boxSize === 0) {
-          nameBox = "S";
-        } else if (currentShelf?.boxSize === 1) {
-          nameBox = "M";
-        } else if (currentShelf?.boxSize === 2) {
-          nameBox = "L";
-        } else if (currentShelf?.boxSize === 3) {
-          nameBox = "XL";
-        }
-      } else {
-        if (currentShelf?.boxSize === 0) {
-          nameBox = "0.5m2";
-        } else if (currentShelf?.boxSize === 1) {
-          nameBox = "1m2";
-        } else if (currentShelf?.boxSize === 2) {
-          nameBox = "2m2";
-        } else if (currentShelf?.boxSize === 3) {
-          nameBox = "3m2";
-        }
-      }
-
       return (
         <Box
           sx={{
@@ -64,35 +64,14 @@ export default function ShelfModalDetail({
         </Box>
       );
     }
-
     return currentShelf?.boxes?.map((e, i) => {
       let color = "#99E5FE";
-      let nameBox;
       if (currentBox?.id === e.id && currentBox !== undefined) {
         color = "#26FF7B";
       }
-
+      let nameBoxPrint = nameBox;
       if (currentShelf?.type === 0) {
-        if (currentShelf?.boxSize === 0) {
-          nameBox = "S";
-        } else if (currentShelf?.boxSize === 1) {
-          nameBox = "M";
-        } else if (currentShelf?.boxSize === 2) {
-          nameBox = "L";
-        } else if (currentShelf?.boxSize === 3) {
-          nameBox = "XL";
-        }
-        nameBox += `- ${i + 1}`;
-      } else {
-        if (currentShelf?.boxSize === 0) {
-          nameBox = "0.5m2";
-        } else if (currentShelf?.boxSize === 1) {
-          nameBox = "1m2";
-        } else if (currentShelf?.boxSize === 2) {
-          nameBox = "2m2";
-        } else if (currentShelf?.boxSize === 3) {
-          nameBox = "3m2";
-        }
+        nameBoxPrint += `- ${i + 1}`;
       }
 
       return (
@@ -119,7 +98,7 @@ export default function ShelfModalDetail({
                 fontWeight: 700,
               }}
             >
-              {nameBox}
+              {nameBoxPrint}
             </p>
           </Box>
         </Grid>
@@ -142,6 +121,46 @@ export default function ShelfModalDetail({
           alignItems: "center",
         }}
       >
+        <Box sx={{ display: "flex", flexDirection: "row" }}>
+          <Box
+            sx={{
+              diplay: "flex",
+              flexDirection: "column",
+              marginRight: "32px",
+            }}
+          >
+            <Typography
+              color="black"
+              variant="h2"
+              sx={{ marginBottom: "16px" }}
+            >
+              Name: {currentShelf.name}
+            </Typography>
+            <Typography
+              color="black"
+              variant="h2"
+              sx={{ marginBottom: "16px" }}
+            >
+              Box size: {nameBox}
+            </Typography>
+          </Box>
+          <Box sx={{ diplay: "flex", flexDirection: "column" }}>
+            <Typography
+              color="black"
+              variant="h2"
+              sx={{ marginBottom: "16px" }}
+            >
+              Amount boxes in width: {currentShelf.boxesInWidth}
+            </Typography>
+            <Typography
+              color="black"
+              variant="h2"
+              sx={{ marginBottom: "16px" }}
+            >
+              Amount boxes in width: {currentShelf.boxesInHeight}
+            </Typography>
+          </Box>
+        </Box>
         <Box sx={{ width: "100%", height: "auto" }}>
           <Grid
             container
