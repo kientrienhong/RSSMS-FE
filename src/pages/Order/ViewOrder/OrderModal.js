@@ -8,6 +8,8 @@ import {
   Checkbox,
   Grid,
   Button,
+  RadioGroup,
+  Radio,
 } from "@material-ui/core";
 import TagSelection from "../CreateOrder/components/TagSelection";
 import CustomInput from "../../../components/CustomInput";
@@ -85,14 +87,14 @@ function OrderModal({
   const [dateReturn, setDateReturn] = useState();
   const [statusOrder, setStatusOrder] = useState();
   const [isPaid, setIsPaid] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState(0);
 
+  const handleChangePaymentMethod = (e) => {
+    setPaymentMethod(parseInt(e.target.value));
+  };
   const handleChangeCheckBox = (event) => {
     setIsCustomerDelivery(event.target.checked);
     setTimeDelivery({});
-  };
-
-  const handleChangeIsPaid = (event) => {
-    setIsPaid(event.target.checked);
   };
 
   useEffect(() => {
@@ -462,15 +464,37 @@ function OrderModal({
             userInfo={currentOrder?.addressReturn}
             inlineStyle={{}}
           />
-          <Box sx={{ marginTop: "1%" }}>
-            <FormControlLabel
-              value="isPaid"
-              control={
-                <Checkbox checked={isPaid} onChange={handleChangeIsPaid} />
-              }
-              label="Is paid"
-              labelPlacement="Is paid"
-            />
+          <Typography
+            color="black"
+            variant="h3"
+            sx={{ marginBottom: "2%", marginTop: "4%" }}
+          >
+            Payment
+          </Typography>
+          <Box>
+            <FormControl component="fieldset">
+              <RadioGroup
+                aria-label="gender"
+                value={paymentMethod}
+                onChange={handleChangePaymentMethod}
+              >
+                <FormControlLabel
+                  value={0}
+                  control={<Radio />}
+                  label="Not paid yet"
+                />
+                <FormControlLabel
+                  value={2}
+                  control={<Radio />}
+                  label="Pay on cash"
+                />
+                <FormControlLabel
+                  value={3}
+                  control={<Radio />}
+                  label="Transfer money"
+                />
+              </RadioGroup>
+            </FormControl>
           </Box>
           <Typography
             color="black"

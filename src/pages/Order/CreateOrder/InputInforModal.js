@@ -30,7 +30,7 @@ const styleModal = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: "80%",
-  height: "85%",
+  height: "auto",
   overflow: "hidden",
   overflowY: "scroll",
   bgcolor: "background.paper",
@@ -52,16 +52,10 @@ function InputInforModal({
   const [returnAddressChoice, setReturnAddressChoice] = useState(0);
   const [phone, setPhone] = useState("");
   const [user, setUser] = useState();
-  const [paymentMethod, setPaymentMethod] = useState(0);
 
   const handleChangeRadioButton = (e) => {
     setReturnAddressChoice(parseInt(e.target.value));
   };
-
-  const handleChangePaymentMethod = (e) => {
-    setPaymentMethod(parseInt(e.target.value));
-  };
-
   const onSubmit = async (data) => {
     try {
       showLoading();
@@ -98,7 +92,7 @@ function InputInforModal({
           totalPrice: order.totalPrice,
           typeOrder: order.type,
           isPaid: false,
-          paymentMethod: paymentMethod,
+          paymentMethod: null,
           isUserDelivery: null,
           deliveryDate: order.dateStart,
           deliveryTime: null,
@@ -113,7 +107,7 @@ function InputInforModal({
           totalPrice: order.totalPrice,
           typeOrder: order.type,
           isPaid: false,
-          paymentMethod: paymentMethod,
+          paymentMethod: null,
           isUserDelivery: order.isCustomerDelivery,
           deliveryDate: order.dateDelivery,
           deliveryTime: order.timeDelivery.name,
@@ -156,6 +150,8 @@ function InputInforModal({
   if (order.isCustomerDelivery) {
     ruleOfDeliveryAddress = {};
   }
+
+  let heightModal = order.type === 1 ? "80%" : "auto";
   return (
     <Modal
       open={open}
@@ -171,6 +167,7 @@ function InputInforModal({
           backgroundColor: "background.default",
           flexDirection: "column",
           paddingLeft: "48px",
+          height: heightModal,
         }}
       >
         <LoadingPage />
@@ -350,31 +347,6 @@ function InputInforModal({
             label=""
             inlineStyle={{ ...styleInput }}
           />
-          <Typography
-            color="primary"
-            variant="h2"
-            style={{ marginTop: "2%", textAlign: "left", marginBottom: "2%" }}
-          >
-            Payment method
-          </Typography>
-          <FormControl component="fieldset">
-            <RadioGroup
-              aria-label="gender"
-              value={paymentMethod}
-              onChange={handleChangePaymentMethod}
-            >
-              <FormControlLabel
-                value={0}
-                control={<Radio />}
-                label="Pay on cash"
-              />
-              <FormControlLabel
-                value={1}
-                control={<Radio />}
-                label="Transfer money"
-              />
-            </RadioGroup>
-          </FormControl>
           <Box
             sx={{
               width: "100%",
