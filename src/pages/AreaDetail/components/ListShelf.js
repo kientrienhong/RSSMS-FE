@@ -12,6 +12,7 @@ export default function ListShelf({
   setCurrentBox,
   isModifyShelf,
   handleOpenModalDetail,
+  handleOpenDetailBox,
 }) {
   const handleOnClickEdit = (shelf) => {
     if (shelf.type === 0) {
@@ -104,6 +105,7 @@ export default function ListShelf({
               currentBox={currentBox}
               setCurrentBox={setCurrentBox}
               isModifyShelf={isModifyShelf}
+              handleOpenDetailBox={handleOpenDetailBox}
             />
           </Box>
         </Box>

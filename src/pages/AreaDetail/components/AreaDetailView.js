@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import * as action from "../../../redux/action/action";
 import { deleteShelf } from "../../../apis/Apis";
 import ShelfModalDetail from "./ShelfModalDetail";
+import DetailBoxModal from "./DetailBoxModal";
 
 function AreaDetailView({
   storage,
@@ -28,6 +29,7 @@ function AreaDetailView({
   const [openConfirm, setOpenConfirm] = useState(false);
   const [currentBox, setCurrentBox] = useState({});
   const [openModalDetail, setOpenModalDetail] = useState(false);
+  const [openDetailBox, setOpenDetailBox] = useState(false);
 
   const listNote = [
     { color: "#99E5FE", name: "Available" },
@@ -91,6 +93,15 @@ function AreaDetailView({
     setOpenModalDetail(false);
   };
 
+  const handleOpenDetailBox = () => {
+    setOpenDetailBox(true);
+  };
+
+  const handleCloseDetailBox = () => {
+    setOpenDetailBox(false);
+    setCurrentBox({});
+  };
+
   return (
     <Card
       style={{ height: "78vh" }}
@@ -121,6 +132,8 @@ function AreaDetailView({
         showSnackbar={showSnackbar}
         msg="Delete shelf success"
       />
+
+      <DetailBoxModal open={openDetailBox} handleClose={handleCloseDetailBox} />
       <Typography color="black" variant="h2" sx={{ textAlign: "left" }}>
         {storage.name} {area.name}
       </Typography>
@@ -135,6 +148,7 @@ function AreaDetailView({
         setCurrentBox={setCurrentBox}
         isModifyShelf={isModifyShelf}
         handleOpenModalDetail={handleOpenModalDetail}
+        handleOpenDetailBox={handleOpenDetailBox}
       />
       <Box
         sx={{

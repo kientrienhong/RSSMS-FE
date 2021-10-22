@@ -18,7 +18,6 @@ import { connect } from "react-redux";
 import * as action from "../../redux/action/action";
 import AreaDetailView from "./components/AreaDetailView";
 import AreaUsage from "./components/AreaUsage";
-import DetailBox from "./components/DetailBox";
 import SheflModal from "./components/SheflModal";
 
 const listHandy = [

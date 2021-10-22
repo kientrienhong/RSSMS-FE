@@ -4,11 +4,11 @@ import CircularProgressWithLabel from "./CircularProgressWithLabel";
 
 export default function AreaUsage({ list, name, numberInRow }) {
   const mapListToView = () =>
-    list.map((e) => buildProductUsage(e.name, e.usage));
+    list.map((e, index) => buildProductUsage(e.name, e.usage, index));
 
-  const buildProductUsage = (name, usage) => {
+  const buildProductUsage = (name, usage, index) => {
     return (
-      <Grid item xs={12 / numberInRow}>
+      <Grid item xs={12 / numberInRow} key={index}>
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           <CircularProgressWithLabel
             value={usage}

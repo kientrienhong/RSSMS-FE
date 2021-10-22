@@ -8,6 +8,7 @@ export default function Shelf({
   setCurrentBox,
   lengthList,
   isModifyShelf,
+  handleOpenDetailBox,
 }) {
   const buildBox = () => {
     let size = 12 / shelf.boxesInWidth;
@@ -99,6 +100,7 @@ export default function Shelf({
             onClick={() => {
               if (isModifyShelf === false) {
                 setCurrentBox(e);
+                handleOpenDetailBox();
               }
             }}
           >
