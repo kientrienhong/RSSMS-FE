@@ -338,6 +338,14 @@ export const getOrderById = async (id) => {
   return response;
 };
 
+export const cancelOrder = async (id) => {
+  const response = await axios.put(
+    `https://localhost:44304/api/v1/orders/cancel/${id}`
+  );
+
+  return response;
+};
+
 export const updateOrder = async (id, order) => {
   const response = await axios.put(
     `https://localhost:44304/api/v1/orders/${id}`,
@@ -350,6 +358,7 @@ export const updateOrder = async (id, order) => {
       deliveryAddress: order.deliveryAddress,
       addressReturn: order.addressReturn,
       status: order.status,
+      isPaid: order.isPaid,
     }
   );
 

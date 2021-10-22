@@ -21,7 +21,7 @@ import { makeStyles } from "@material-ui/styles";
 import ConfirmModal from "../../../components/ConfirmModal";
 import { connect } from "react-redux";
 import * as action from "../../../redux/action/action";
-import { getOrderById } from "../../../apis/Apis";
+import { getOrderById, cancelOrder } from "../../../apis/Apis";
 function TablePaginationActions(props) {
   const theme = useTheme();
   const { count, page, rowsPerPage, onPageChange } = props;
@@ -147,7 +147,7 @@ function ListOrder({
   const handleClose = () => {
     setOpen(false);
   };
-  const handleDeleteOrder = async (id) => {
+  const handleDeleteOrder = async (currentId) => {
     let response;
     try {
       if (listOrder.length === 1) {
@@ -155,6 +155,7 @@ function ListOrder({
           setPage(page - 1);
         }
       }
+      await cancelOrder(currentId);
       await getData(searchId, page, 8);
     } catch (error) {
       console.log(error);
@@ -196,7 +197,7 @@ function ListOrder({
           handleClose={handleClose}
           onHandleYes={handleDeleteOrder}
           id={currentId}
-          msg={"Delete order success!"}
+          msg={"Cancel order success!"}
         />
         {mapListTableHeader(listHeaderName)}
         <TableBody>
@@ -204,7 +205,9 @@ function ListOrder({
             let typeOrder =
               row.typeOrder === 0 ? "Self-Storage" : "Door to door";
             let status;
-            if (row.status === 1) {
+            if (row.status === 0) {
+              status = "Canceled";
+            } else if (row.status === 1) {
               status = "Booked";
             } else if (row.status === 2) {
               status = "Paid";
@@ -275,7 +278,7 @@ function ListOrder({
                       handleConfirmOpen();
                     }}
                   >
-                    Delete
+                    Cancel
                   </Button>
                 </TableCell>
               </TableRow>

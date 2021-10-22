@@ -15,9 +15,9 @@ import { useForm } from "react-hook-form";
 import { connect } from "react-redux";
 import * as action from "../../redux/action/action";
 import { getOrder } from "../../apis/Apis";
-function Order({ showLoading, hideLoading, showSnackbar }) {
+function Order({ showLoading, hideLoading }) {
   const navigate = useNavigate();
-  const { handleSubmit, reset, control, setValue } = useForm();
+  const { handleSubmit, reset, control } = useForm();
 
   const [currentOrder, setCurrentOrder] = useState();
   const [open, setOpen] = useState(false);
@@ -54,7 +54,7 @@ function Order({ showLoading, hideLoading, showSnackbar }) {
     const searchNameCall = async () => {
       try {
         showLoading();
-        await getData(searchId, 1, 6);
+        await getData(searchId, 1, 8);
         setPage(1);
       } catch (error) {
         console.log(error);
@@ -69,6 +69,20 @@ function Order({ showLoading, hideLoading, showSnackbar }) {
       clearTimeout(timeOut);
     };
   }, [searchId]);
+
+  useEffect(() => {
+    const process = async () => {
+      try {
+        showLoading();
+        await getData(searchId, page, 8);
+        hideLoading();
+      } catch (error) {
+        console.log(error);
+        hideLoading();
+      }
+    };
+    process();
+  }, [page]);
 
   useEffect(() => {
     const firstCall = async () => {
@@ -88,7 +102,7 @@ function Order({ showLoading, hideLoading, showSnackbar }) {
     <Box
       sx={{
         backgroundColor: "background.default",
-        height: "100vh",
+        height: "auto",
         py: 3,
       }}
     >
@@ -103,6 +117,7 @@ function Order({ showLoading, hideLoading, showSnackbar }) {
         page={page}
         searchId={searchId}
       />
+
       <Box
         sx={{
           marginLeft: "2%",

@@ -84,9 +84,15 @@ function OrderModal({
   const [dateDelivery, setDateDelivery] = useState();
   const [dateReturn, setDateReturn] = useState();
   const [statusOrder, setStatusOrder] = useState();
+  const [isPaid, setIsPaid] = useState(false);
+
   const handleChangeCheckBox = (event) => {
     setIsCustomerDelivery(event.target.checked);
     setTimeDelivery({});
+  };
+
+  const handleChangeIsPaid = (event) => {
+    setIsPaid(event.target.checked);
   };
 
   useEffect(() => {
@@ -103,7 +109,7 @@ function OrderModal({
       setDuration(currentOrder?.durationDays);
       currentDuration = currentOrder?.durationDays;
     }
-
+    setIsPaid(currentOrder?.isPaid);
     setIsCustomerDelivery(currentOrder?.isUserDelivery);
     setStatusOrder(currentOrder?.status);
     if (currentOrder?.deliveryDate !== undefined) {
@@ -121,6 +127,7 @@ function OrderModal({
   }, [currentOrder]);
 
   const listStatus = [
+    { label: "Canceled", value: 0 },
     { label: "Booked", value: 1 },
     { label: "Paid", value: 2 },
     { label: "Delivery", value: 3 },
@@ -258,6 +265,7 @@ function OrderModal({
         deliveryAddress: data.deliveryAddress,
         addressReturn: data.returnAddress,
         status: statusOrder,
+        isPaid: isPaid,
       };
 
       await updateOrder(orderTemp.id, orderTemp);
@@ -447,13 +455,23 @@ function OrderModal({
           <CustomInput
             control={control}
             rules={{}}
-            styles={{ width: "300px" }}
+            styles={{ width: "300px", display: "block" }}
             name="returnAddress"
             label="Return Address"
             disabled={false}
             userInfo={currentOrder?.addressReturn}
             inlineStyle={{}}
           />
+          <Box sx={{ marginTop: "1%" }}>
+            <FormControlLabel
+              value="isPaid"
+              control={
+                <Checkbox checked={isPaid} onChange={handleChangeIsPaid} />
+              }
+              label="Is paid"
+              labelPlacement="Is paid"
+            />
+          </Box>
           <Typography
             color="black"
             variant="h3"
