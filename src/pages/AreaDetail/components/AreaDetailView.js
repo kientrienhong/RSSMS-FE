@@ -95,7 +95,7 @@ function AreaDetailView({
     <Card
       style={{ height: "78vh" }}
       sx={{
-        margin: "2%",
+        margin: "2% 0% 2% 2%",
         display: "flex",
         flexDirection: "column",
         width: "65%",

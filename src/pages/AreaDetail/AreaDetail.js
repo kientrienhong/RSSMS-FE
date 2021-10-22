@@ -20,6 +20,21 @@ import AreaDetailView from "./components/AreaDetailView";
 import AreaUsage from "./components/AreaUsage";
 import DetailBox from "./components/DetailBox";
 import SheflModal from "./components/SheflModal";
+
+const listHandy = [
+  { name: "Bolo", usage: 100 },
+  { name: "Size S", usage: 100 },
+  { name: "Size M", usage: 100 },
+  { name: "Size L", usage: 100 },
+  { name: "Size XL", usage: 100 },
+];
+
+const listUnwieldy = [
+  { name: "0.5m2", usage: 100 },
+  { name: "1m2", usage: 100 },
+  { name: "2m2", usage: 100 },
+  { name: "3m2", usage: 100 },
+];
 function AreaDetail(props) {
   const { storageId, areaId } = useParams();
   const [storage, setStorage] = useState({});
@@ -229,11 +244,15 @@ function AreaDetail(props) {
             margin: "2%",
             display: "flex",
             flexDirection: "column",
-            width: "25%",
+            width: "30%",
           }}
         >
-          <AreaUsage area={currentArea} />
-          <DetailBox />
+          <AreaUsage list={listHandy} name={"Handy Usage"} numberInRow={3} />
+          <AreaUsage
+            list={listUnwieldy}
+            name={"Unwieldy Usage"}
+            numberInRow={2}
+          />
         </Box>
       </Box>
     </Box>
