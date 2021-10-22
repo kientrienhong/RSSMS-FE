@@ -42,7 +42,7 @@ const styleInput = {
   width: "20%",
 };
 
-function SelfStorageOrderInfo({ choosenProduct, setUpOrder }) {
+function SelfStorageOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
   const navigate = useNavigate();
 
   const [dateStart, setDateStart] = useState({});
@@ -427,7 +427,7 @@ function SelfStorageOrderInfo({ choosenProduct, setUpOrder }) {
             type: 0,
             totalPrice: totalPrice(),
           });
-          navigate("/orders/inputInfor");
+          onHandleOpen();
         }}
       >
         Next

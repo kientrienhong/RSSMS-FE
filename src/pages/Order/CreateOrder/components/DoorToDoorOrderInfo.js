@@ -15,7 +15,8 @@ import { formatCurrency } from "../../../../utils/FormatCurrency";
 import { useNavigate } from "react-router";
 import { connect } from "react-redux";
 import * as action from "../../../../redux/action/action";
-function DoorToDoorOrderInfo({ choosenProduct, setUpOrder }) {
+import InputInforModal from "../InputInforModal";
+function DoorToDoorOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
   const navigate = useNavigate();
 
   const [timeDelivery, setTimeDelivery] = useState({});
@@ -450,7 +451,8 @@ function DoorToDoorOrderInfo({ choosenProduct, setUpOrder }) {
             type: 1,
             totalPrice: totalPriceProduct(),
           });
-          navigate("/orders/inputInfor");
+          // navigate("/orders/inputInfor");
+          onHandleOpen();
         }}
       >
         Next

@@ -6,8 +6,10 @@ import SelfStorageMainTab from "./SelfStorageMainTab";
 import SelfStorageOrderInfo from "./components/SelfStorageOrderInfo";
 import DoorToDoorMainTab from "./DoorToDoorMainTab";
 import DoorToDoorOrderInfo from "./components/DoorToDoorOrderInfo";
+import InputInforModal from "./InputInforModal";
 export default function MakingOrder() {
   const [indexMain, setIndexMain] = useState(0);
+  const [openInputFormation, setOpenInputFormation] = useState(false);
   const [currentColor, setCurrentColor] = useState({
     selfStorage: "#04BFFE",
     doorToDoor: "#A19FA8",
@@ -252,6 +254,14 @@ export default function MakingOrder() {
     );
   };
 
+  const onHandleOpen = () => {
+    setOpenInputFormation(true);
+  };
+
+  const onHandleClose = () => {
+    setOpenInputFormation(false);
+  };
+
   return (
     <Box
       sx={{
@@ -276,6 +286,11 @@ export default function MakingOrder() {
           justifyContent: "center",
         }}
       >
+        <InputInforModal
+          open={openInputFormation}
+          handleClose={onHandleClose}
+        />
+
         {buildMainTab(
           <FaWarehouse size={40} color={currentColor.selfStorage} />,
           "Self-Storage",
@@ -336,9 +351,15 @@ export default function MakingOrder() {
         }}
       >
         {indexMain === 0 ? (
-          <SelfStorageOrderInfo choosenProduct={choosenProduct} />
+          <SelfStorageOrderInfo
+            choosenProduct={choosenProduct}
+            onHandleOpen={onHandleOpen}
+          />
         ) : (
-          <DoorToDoorOrderInfo choosenProduct={choosenProduct} />
+          <DoorToDoorOrderInfo
+            choosenProduct={choosenProduct}
+            onHandleOpen={onHandleOpen}
+          />
         )}
       </Box>
     </Box>
