@@ -38,3 +38,12 @@ export const setUpOrder = (order) => {
     payload: order,
   };
 };
+
+export const storeOrder = (order) => {
+  console.log(order);
+
+  return {
+    type: ActionType.STORE_ORDER,
+    payload: order,
+  };
+};

@@ -22,7 +22,6 @@ const styleModal = {
   position: "absolute",
   top: "0%",
   right: "0",
-  //   transform: "translate(-50%, -50%)",
   width: "40%",
   height: "92vh",
   overflow: "hidden",
@@ -79,6 +78,7 @@ function OrderModal({
   getData,
   page,
   searchId,
+  storeOrder,
 }) {
   const [isCustomerDelivery, setIsCustomerDelivery] = useState();
   const [timeDelivery, setTimeDelivery] = useState();
@@ -95,6 +95,11 @@ function OrderModal({
   const handleChangeCheckBox = (event) => {
     setIsCustomerDelivery(event.target.checked);
     setTimeDelivery({});
+  };
+
+  const handleStoreOrder = () => {
+    storeOrder(currentOrder);
+    handleClose();
   };
 
   useEffect(() => {
@@ -546,6 +551,7 @@ function OrderModal({
               }}
               color="primary"
               variant="contained"
+              onClick={() => handleStoreOrder()}
             >
               Store
             </Button>
@@ -585,6 +591,7 @@ const mapDispatchToProps = (dispatch) => {
     showLoading: () => dispatch(action.showLoader()),
     hideLoading: () => dispatch(action.hideLoader()),
     showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
+    storeOrder: (order) => dispatch(action.storeOrder(order)),
   };
 };
 export default connect(null, mapDispatchToProps)(OrderModal);

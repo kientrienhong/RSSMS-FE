@@ -12,19 +12,16 @@ import {
 } from "@material-ui/core";
 import TagSelection from "./TagSelection";
 import { formatCurrency } from "../../../../utils/FormatCurrency";
-import { useNavigate } from "react-router";
 import { connect } from "react-redux";
 import * as action from "../../../../redux/action/action";
-import InputInforModal from "../InputInforModal";
 function DoorToDoorOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
-  const navigate = useNavigate();
-
   const [timeDelivery, setTimeDelivery] = useState({});
 
   const [isCustomerDelivery, setIsCustomerDelivery] = React.useState(false);
   const [dateDelivery, setDateDelivery] = useState();
   const [dateReturn, setDateReturn] = useState();
   const [duration, setDuration] = useState(0);
+  const [error, setError] = useState({});
   const handleChange = (event) => {
     setIsCustomerDelivery(event.target.checked);
     setTimeDelivery({});
@@ -319,6 +316,8 @@ function DoorToDoorOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
         <TextField
           id="date"
           type="date"
+          error={!!error?.dateDelivery}
+          helperText={error?.dateDelivery?.message}
           sx={{ width: 220, marginBottom: "16px" }}
           InputLabelProps={{
             shrink: true,
@@ -341,6 +340,8 @@ function DoorToDoorOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
         <TextField
           id="date"
           type="date"
+          error={!!error?.dateReturn}
+          helperText={error?.dateReturn?.message}
           sx={{ width: 220, marginBottom: "16px" }}
           onChange={handleChangeReturnDate}
           InputLabelProps={{
@@ -436,6 +437,8 @@ function DoorToDoorOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
         {buildTotalEachPartPrice("services")}
         {buildTotalPrice()}
       </Card>
+      <p style={{ color: "red", textAlign: "center" }}>{error?.time}</p>
+      <p style={{ color: "red", textAlign: "center" }}>{error?.product}</p>
       <Button
         style={{ height: "45px", paddingLeft: "16px", paddingRight: "16px" }}
         color="primary"
@@ -452,7 +455,41 @@ function DoorToDoorOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
             totalPrice: totalPriceProduct(),
           });
           // navigate("/orders/inputInfor");
-          onHandleOpen();
+          let errorTemp = {};
+          if (!dateDelivery) {
+            errorTemp = {
+              dateDelivery: {
+                message: "Required Date Delivery",
+              },
+            };
+          }
+          if (!dateReturn) {
+            errorTemp = {
+              ...errorTemp,
+              dateReturn: {
+                message: "Required Date Return",
+              },
+            };
+          }
+
+          if (timeDelivery || isCustomerDelivery) {
+            errorTemp.time =
+              "Please choose customer delivery or choose time delivery";
+          }
+
+          if (
+            choosenProduct.product.length === 0 &&
+            choosenProduct.accessory.length === 0 &&
+            choosenProduct.services.length === 0
+          ) {
+            errorTemp.product = "Please buy something";
+          }
+
+          if (!errorTemp) {
+            onHandleOpen();
+          } else {
+            setError(errorTemp);
+          }
         }}
       >
         Next

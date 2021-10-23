@@ -10,7 +10,6 @@ import {
 import { formatCurrency } from "../../../../utils/FormatCurrency";
 import { connect } from "react-redux";
 import * as action from "../../../../redux/action/action";
-import { useNavigate } from "react-router";
 
 const styleButtonPlus = {
   width: "26px",
@@ -43,9 +42,9 @@ const styleInput = {
 };
 
 function SelfStorageOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
-  const navigate = useNavigate();
+  const [error, setError] = useState({});
 
-  const [dateStart, setDateStart] = useState({});
+  const [dateStart, setDateStart] = useState();
 
   const [dateEnd, setDateEnd] = useState("");
   const [duration, setDuration] = useState(0);
@@ -308,6 +307,8 @@ function SelfStorageOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
         <TextField
           id="date"
           type="date"
+          error={!!error?.dateStart}
+          helperText={error?.dateStart?.message}
           sx={{ width: 220, marginBottom: "6%" }}
           InputLabelProps={{
             shrink: true,
@@ -414,6 +415,17 @@ function SelfStorageOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
         {buildTotalEachPartPrice("accessory")}
         {buildTotalPrice()}
       </Card>
+      <p
+        style={{
+          color: "red",
+          textAlign: "center",
+          margin: "8px, 0px 8px 0px",
+        }}
+      >
+        {error?.duration}
+      </p>
+      <p style={{ color: "red", textAlign: "center" }}>{error?.product}</p>
+
       <Button
         style={{ height: "45px", paddingLeft: "16px", paddingRight: "16px" }}
         color="primary"
@@ -427,7 +439,31 @@ function SelfStorageOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
             type: 0,
             totalPrice: totalPrice(),
           });
-          onHandleOpen();
+          let errorTemp = {};
+          if (!dateStart) {
+            errorTemp = {
+              dateStart: {
+                message: "Required Date Start",
+              },
+            };
+          }
+
+          if (duration === 0) {
+            errorTemp.duration = "Please input duration";
+          }
+
+          if (
+            choosenProduct.product.length === 0 &&
+            choosenProduct.accessory.length === 0
+          ) {
+            errorTemp.product = "Please buy something";
+          }
+
+          if (!errorTemp) {
+            onHandleOpen();
+          } else {
+            setError(errorTemp);
+          }
         }}
       >
         Next

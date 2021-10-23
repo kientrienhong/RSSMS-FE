@@ -15,7 +15,8 @@ import { useForm } from "react-hook-form";
 import { connect } from "react-redux";
 import * as action from "../../redux/action/action";
 import { getOrder } from "../../apis/Apis";
-function Order({ showLoading, hideLoading }) {
+import ProductButton from "./CreateOrder/components/ProductButton";
+function Order({ showLoading, hideLoading, storedOrder }) {
   const navigate = useNavigate();
   const { handleSubmit, reset, control } = useForm();
 
@@ -144,9 +145,17 @@ function Order({ showLoading, hideLoading }) {
             ),
           }}
         />
-        <Box sx={{ width: "2%" }} />
+        <ProductButton
+          imgUrl={"/img/product.png"}
+          quantity={storedOrder.totalQuantity}
+        />
         <Button
-          style={{ height: "45px", paddingLeft: "16px", paddingRight: "16px" }}
+          style={{
+            height: "45px",
+            paddingLeft: "16px",
+            paddingRight: "16px",
+            marginLeft: "2%",
+          }}
           color="primary"
           variant="contained"
           onClick={(e) => {
@@ -177,6 +186,11 @@ function Order({ showLoading, hideLoading }) {
     </Box>
   );
 }
+
+const mapStateToProps = (state) => ({
+  storedOrder: state.order.storedOrder,
+});
+
 const mapDispatchToProps = (dispatch) => {
   return {
     showLoading: () => dispatch(action.showLoader()),
@@ -184,4 +198,5 @@ const mapDispatchToProps = (dispatch) => {
     showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
   };
 };
-export default connect(null, mapDispatchToProps)(Order);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Order);
