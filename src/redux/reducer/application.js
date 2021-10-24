@@ -5,6 +5,8 @@ const initialState = {
   snackbar: false,
   typeSnackbar: "success",
   msgSnackbar: "",
+  isViewStoredModal: false,
+  isOpenStoredModal: false,
 };
 
 const application = (state = initialState, action) => {
@@ -35,6 +37,19 @@ const application = (state = initialState, action) => {
 
       return { ...state };
     }
+
+    case ActionType.OPEN_ORDER_MODAL: {
+      state.isViewStoredModal = action.payload;
+      state.isOpenStoredModal = true;
+      return { ...state };
+    }
+
+    case ActionType.CLOSE_ORDER_MODAL: {
+      state.isOpenStoredModal = false;
+      state.isViewStoredModal = false;
+      return { ...state };
+    }
+
     default: {
       return { ...state };
     }

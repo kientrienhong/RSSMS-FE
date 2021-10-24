@@ -1,6 +1,8 @@
 import React from "react";
 import { Box, Typography } from "@material-ui/core";
+import * as action from "../../../../redux/action/action";
 
+import { connect } from "react-redux";
 const buttonBox = {
   borderRadius: "4px",
   backgroundColor: "white",
@@ -44,10 +46,9 @@ const textStyle = {
   marign: "0",
   padding: "0",
 };
-
-export default function ProductButton({ imgUrl, quantity }) {
+function ProductButton({ imgUrl, quantity, isView, openStoredOrderModal }) {
   return (
-    <Box sx={buttonBox}>
+    <Box sx={buttonBox} onClick={() => openStoredOrderModal(isView)}>
       <img src={imgUrl} alt="product" style={imgStyle} />
       {quantity > 0 ? (
         <div style={quantityStyle}>
@@ -57,3 +58,12 @@ export default function ProductButton({ imgUrl, quantity }) {
     </Box>
   );
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    openStoredOrderModal: (isView) =>
+      dispatch(action.openStoredOrderModal(isView)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(ProductButton);

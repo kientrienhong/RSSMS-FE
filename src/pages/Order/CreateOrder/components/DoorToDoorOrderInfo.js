@@ -472,7 +472,7 @@ function DoorToDoorOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
             };
           }
 
-          if (timeDelivery || isCustomerDelivery) {
+          if (!timeDelivery.name && isCustomerDelivery === false) {
             errorTemp.time =
               "Please choose customer delivery or choose time delivery";
           }
@@ -485,7 +485,7 @@ function DoorToDoorOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
             errorTemp.product = "Please buy something";
           }
 
-          if (!errorTemp) {
+          if (Object.keys(errorTemp).length === 0) {
             onHandleOpen();
           } else {
             setError(errorTemp);

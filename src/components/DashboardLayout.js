@@ -7,6 +7,7 @@ import DashboardSidebar from "./DashboardSidebar";
 import LoadingPage from "../pages/Loading/LoadingPage";
 import { connect } from "react-redux";
 import * as action from "../redux/action/action";
+import StoredOrderModal from "./StoredOrderModal";
 
 const DashboardLayoutRoot = styled("div")(({ theme }) => ({
   backgroundColor: theme.palette.background.default,
@@ -41,6 +42,13 @@ const DashboardLayoutContent = styled("div")({
 const DashboardLayout = (props) => {
   const [isMobileNavOpen, setMobileNavOpen] = useState(false);
 
+  const {
+    storedOrder,
+    closeStoredOrderModal,
+    isOpenStoredModal,
+    isViewStoredModal,
+  } = props;
+
   return (
     <DashboardLayoutRoot>
       <Snackbar
@@ -57,6 +65,12 @@ const DashboardLayout = (props) => {
           {props.msgSnackbar}
         </Alert>
       </Snackbar>
+      <StoredOrderModal
+        storedOrder={storedOrder}
+        handleClose={closeStoredOrderModal}
+        open={isOpenStoredModal}
+        isView={isViewStoredModal}
+      />
       <LoadingPage />
       <DashboardNavbar onMobileNavOpen={() => setMobileNavOpen(true)} />
       <DashboardSidebar
@@ -78,11 +92,15 @@ const mapStateToProps = (state) => ({
   snackbar: state.application.snackbar,
   typeSnackbar: state.application.typeSnackbar,
   msgSnackbar: state.application.msgSnackbar,
+  isOpenStoredModal: state.application.isOpenStoredModal,
+  isViewStoredModal: state.application.isViewStoredModal,
+  storedOrder: state.order.storedOrder,
 });
 
 const mapDispatchToProps = (dispatch) => {
   return {
     closeSnackbar: () => dispatch(action.hideSnackbar()),
+    closeStoredOrderModal: () => dispatch(action.closeStoredOrderModal()),
   };
 };
 

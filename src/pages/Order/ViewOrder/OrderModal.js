@@ -98,6 +98,7 @@ function OrderModal({
   };
 
   const handleStoreOrder = () => {
+    console.log(currentOrder);
     storeOrder(currentOrder);
     handleClose();
   };
@@ -127,7 +128,6 @@ function OrderModal({
         } else {
           date.setDate(date.getDate() + currentDuration);
         }
-        console.log(date);
         setDateReturn(new Date(date).toISOString().split("T")[0]);
       }
     }

@@ -16,15 +16,18 @@ const order = (state = initialState, action) => {
     }
 
     case ActionType.STORE_ORDER: {
-      state.storedOrder.products = action.payload.orderDetails;
+      state.storedOrder.products = action.payload.orderDetails.filter((e) => {
+        if (e.productType === 0 || e.producType === 2 || e.productType === 4) {
+          return e;
+        }
+      });
 
       let quantity = 0;
-      action.payload.orderDetails.forEach((e) => {
+      state.storedOrder.products.forEach((e) => {
         quantity += e.amount;
       });
 
       state.storedOrder.totalQuantity = quantity;
-      console.log("state ===== ", state);
       return { ...state };
     }
 

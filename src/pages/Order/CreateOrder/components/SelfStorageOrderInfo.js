@@ -459,7 +459,7 @@ function SelfStorageOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
             errorTemp.product = "Please buy something";
           }
 
-          if (!errorTemp) {
+          if (Object.keys(errorTemp).length === 0) {
             onHandleOpen();
           } else {
             setError(errorTemp);

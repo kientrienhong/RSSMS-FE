@@ -40,10 +40,21 @@ export const setUpOrder = (order) => {
 };
 
 export const storeOrder = (order) => {
-  console.log(order);
-
   return {
     type: ActionType.STORE_ORDER,
     payload: order,
+  };
+};
+
+export const openStoredOrderModal = (isView) => {
+  return {
+    type: ActionType.OPEN_ORDER_MODAL,
+    payload: isView,
+  };
+};
+
+export const closeStoredOrderModal = () => {
+  return {
+    type: ActionType.CLOSE_ORDER_MODAL,
   };
 };
