@@ -1,6 +1,7 @@
 import React from "react";
-import { Box, Modal, Grid, Radio, Typography } from "@material-ui/core";
-
+import { Box, Modal, Grid, Radio, Typography, Button } from "@material-ui/core";
+import { connect } from "react-redux";
+import * as action from "../redux/action/action";
 const styleModal = {
   position: "absolute",
   top: "50%",
@@ -21,11 +22,13 @@ const styleInput = {
   width: "50%",
 };
 
-export default function StoredOrderModal({
+function StoredOrderModal({
   storedOrder,
   open,
   handleClose,
   isView,
+  currentBox,
+  placeProductToShelf,
 }) {
   const list = [
     {
@@ -52,8 +55,24 @@ export default function StoredOrderModal({
     {},
   ];
 
-  const [selectedValue, setSelectedValue] = React.useState("a");
+  const mapping = {
+    1: "Storage 2m2",
+    2: "Storage 4m2",
+    3: "Storage 8m2",
+    4: "Storage 16m2",
+    11: "Bolo",
+    12: "Size S",
+    13: "Size M",
+    14: "Size L",
+    16: "Size XL",
+    18: "Area 0.5m2",
+    19: "Area 1m2",
+    20: "Area 2m2",
+    21: "Area 3m2",
+  };
 
+  const [selectedValue, setSelectedValue] = React.useState();
+  const [error, setError] = React.useState();
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
   };
@@ -130,61 +149,170 @@ export default function StoredOrderModal({
           display: "flex",
           justifyContent: "flex-start",
           alignItems: "center",
-          flexDirection: "row",
+          flexDirection: "column",
         }}
       >
         <Box
           sx={{
-            width: "60%",
             display: "flex",
-            flexDirection: "column",
             justifyContent: "flex-start",
-            alignItems: "flex-start",
+            alignItems: "center",
+            flexDirection: "row",
           }}
         >
-          <Typography
-            color="black"
-            variant="h2"
-            style={{
-              marginBottom: "8%",
-            }}
-          >
-            Total products in order (#13)
-          </Typography>
-          <Grid container spacing={2}>
-            {buildRadioSelect(storedOrder.product)}
-          </Grid>
-        </Box>
-        <Box
-          sx={{
-            width: "40%",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "flex-start",
-            alignItems: "flex-start",
-          }}
-        >
-          <Typography
-            color="black"
-            variant="h2"
-            style={{
-              marginBottom: "8%",
-            }}
-          >
-            List products is placing
-          </Typography>
           <Box
             sx={{
+              width: "60%",
+              display: "flex",
               flexDirection: "column",
-              marginTop: "16px",
-              height: "400px",
-              border: "solid 1px #000",
-              padding: "8px",
-              overflowY: "auto",
+              justifyContent: "flex-start",
+              alignItems: "flex-start",
             }}
-          ></Box>
+          >
+            <Typography
+              color="black"
+              variant="h2"
+              style={{
+                marginBottom: "8%",
+              }}
+            >
+              Total products in order (#13)
+            </Typography>
+            <Grid container spacing={2}>
+              {buildRadioSelect(storedOrder.product)}
+            </Grid>
+          </Box>
+          <Box
+            sx={{
+              width: "40%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "flex-start",
+              alignItems: "flex-start",
+            }}
+          >
+            <Typography
+              color="black"
+              variant="h2"
+              style={{
+                marginBottom: "8%",
+              }}
+            >
+              List products is placing
+            </Typography>
+            <Box
+              sx={{
+                flexDirection: "column",
+                marginTop: "16px",
+                height: "345px",
+                width: "100%",
+                border: "solid 1px #000",
+                padding: "8px",
+                overflowY: "auto",
+              }}
+            ></Box>
+          </Box>
         </Box>
+        {isView === true ? null : (
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
+            {error?.length > 0 ? (
+              <p style={{ color: "red", textAlign: "center" }}>{error}</p>
+            ) : null}
+
+            <Box sx={{ display: "flex", flexDirection: "row" }}>
+              <Button
+                style={{
+                  height: "45px",
+                  paddingLeft: "16px",
+                  paddingRight: "16px",
+                  marginRight: "16px",
+                }}
+                onClick={() => {
+                  let idProductTemp = -1;
+                  if (currentBox.shelfType === 0) {
+                    if (currentBox?.boxSize === 0) {
+                      idProductTemp = 12;
+                    } else if (currentBox?.boxSize === 1) {
+                      idProductTemp = 13;
+                    } else if (currentBox?.boxSize === 2) {
+                      idProductTemp = 14;
+                    } else if (currentBox?.boxSize === 3) {
+                      idProductTemp = 16;
+                    }
+                  } else {
+                    if (currentBox?.boxSize === 0) {
+                      idProductTemp = 18;
+                    } else if (currentBox?.boxSize === 1) {
+                      idProductTemp = 19;
+                    } else if (currentBox?.boxSize === 2) {
+                      idProductTemp = 20;
+                    } else if (currentBox?.boxSize === 3) {
+                      idProductTemp = 21;
+                    }
+                  }
+
+                  let productTemp = storedOrder.products.find(
+                    (e) => idProductTemp === e.productId
+                  );
+
+                  if (productTemp.amount <= 0) {
+                    setError("There is no product to place");
+                    return;
+                  }
+
+                  if (selectedValue.toString() === idProductTemp.toString()) {
+                    placeProductToShelf({
+                      idProduct: selectedValue,
+                      nameProduct: mapping[selectedValue],
+                    });
+                    setError("");
+                  } else {
+                    setError("You must choose right product to place");
+                  }
+                }}
+                color="primary"
+                variant="contained"
+              >
+                Place
+              </Button>
+              <Button
+                style={{
+                  height: "45px",
+                  paddingLeft: "16px",
+                  paddingRight: "16px",
+                }}
+                onClick={() => {}}
+                color="success"
+                variant="contained"
+              >
+                Submit
+              </Button>
+            </Box>
+          </Box>
+        )}
       </Box>
     </Modal>
   );
 }
+
+const mapStateToProps = (state) => ({
+  currentBox: state.order.currentBox,
+});
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    openStoredOrderModal: (isView) =>
+      dispatch(action.openStoredOrderModal(isView)),
+    placeProductToShelf: (product) =>
+      dispatch(action.placeProductToShelf(product)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(StoredOrderModal);

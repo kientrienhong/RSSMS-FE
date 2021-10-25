@@ -1,14 +1,18 @@
 import React from "react";
 import { Box, Grid, Typography } from "@material-ui/core";
-
-export default function Shelf({
+import { connect } from "react-redux";
+import * as action from "../../../redux/action/action";
+function Shelf({
   shelf,
   index,
-  currentBox,
-  setCurrentBox,
   lengthList,
   isModifyShelf,
   handleOpenDetailBox,
+  setUpCurrentBox,
+  currentBox,
+  storage,
+  area,
+  placingProducts,
 }) {
   const buildBox = () => {
     let size = 12 / shelf.boxesInWidth;
@@ -57,9 +61,16 @@ export default function Shelf({
     return shelf?.boxes?.map((e, i) => {
       let color = "#99E5FE";
       let nameBox;
+
       if (currentBox?.id === e.id && currentBox !== undefined) {
         color = "#26FF7B";
       }
+
+      placingProducts.boxes.forEach((ele) => {
+        if (e.id === ele.idBox) {
+          color = "#00993C";
+        }
+      });
 
       if (shelf?.type === 0) {
         if (shelf?.boxSize === 0) {
@@ -99,8 +110,17 @@ export default function Shelf({
             }}
             onClick={() => {
               if (isModifyShelf === false) {
-                setCurrentBox(e);
-                handleOpenDetailBox();
+                setUpCurrentBox({
+                  ...e,
+                  areaName: area.name,
+                  storageName: storage.name,
+                  shelfType: shelf.type,
+                  boxSize: shelf.boxSize,
+                });
+                if (e.orderId !== null) {
+                  handleOpenDetailBox();
+                } else {
+                }
               }
             }}
           >
@@ -161,3 +181,16 @@ export default function Shelf({
     </React.Fragment>
   );
 }
+
+const mapStateToProps = (state) => ({
+  currentBox: state.order.currentBox,
+  placingProducts: state.order.placingProducts,
+});
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setUpCurrentBox: (box) => dispatch(action.setUpCurrentBox(box)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Shelf);

@@ -3,8 +3,14 @@ import * as ActionType from "./../constants/ActionType";
 const initialState = {
   order: {},
   storedOrder: {
+    orderId: -1,
     products: [],
     totalQuantity: 0,
+  },
+  currentBox: {},
+  placingProducts: {
+    orderId: -1,
+    boxes: [],
   },
 };
 
@@ -16,19 +22,51 @@ const order = (state = initialState, action) => {
     }
 
     case ActionType.STORE_ORDER: {
-      state.storedOrder.products = action.payload.orderDetails.filter((e) => {
-        if (e.productType === 0 || e.producType === 2 || e.productType === 4) {
+      let storedOrderTemp = { ...state.storedOrder };
+      storedOrderTemp.products = action.payload.orderDetails.filter((e) => {
+        if (e.productType === 0 || e.productType === 2 || e.productType === 4) {
           return e;
         }
       });
+      storedOrderTemp.orderId = action.payload.id;
 
       let quantity = 0;
-      state.storedOrder.products.forEach((e) => {
+      storedOrderTemp.products.forEach((e) => {
         quantity += e.amount;
       });
 
-      state.storedOrder.totalQuantity = quantity;
+      storedOrderTemp.totalQuantity = quantity;
+      return { ...state, storedOrder: storedOrderTemp };
+    }
+
+    case ActionType.SET_CURRENT_BOX: {
+      state.currentBox = action.payload;
       return { ...state };
+    }
+
+    case ActionType.PLACE_PRODUCT_TO_SHELF: {
+      // state.placingProducts = action.payload;
+      let placingProductTemp = { ...state.placingProducts };
+      let storedOrderTemp = { ...state.storedOrder };
+
+      let foundProduct = storedOrderTemp.products.find(
+        (e) => e.productId.toString() === action.payload.idProduct
+      );
+
+      foundProduct.amount -= 1;
+      placingProductTemp.orderId = storedOrderTemp.orderId;
+      placingProductTemp.boxes.push({
+        idItemPlacing: placingProductTemp.boxes.length,
+        areaName: state.currentBox.areaName,
+        storageName: state.currentBox.storageName,
+        idBox: state.currentBox.id,
+        nameProduct: action.payload.nameProduct,
+      });
+      return {
+        ...state,
+        placingProducts: placingProductTemp,
+        storedOrder: storedOrderTemp,
+      };
     }
 
     default: {

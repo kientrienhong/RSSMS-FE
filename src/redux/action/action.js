@@ -58,3 +58,17 @@ export const closeStoredOrderModal = () => {
     type: ActionType.CLOSE_ORDER_MODAL,
   };
 };
+
+export const setUpCurrentBox = (box) => {
+  return {
+    type: ActionType.SET_CURRENT_BOX,
+    payload: box,
+  };
+};
+
+export const placeProductToShelf = (product) => {
+  return {
+    type: ActionType.PLACE_PRODUCT_TO_SHELF,
+    payload: product,
+  };
+};

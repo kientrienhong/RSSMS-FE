@@ -19,6 +19,7 @@ import * as action from "../../redux/action/action";
 import AreaDetailView from "./components/AreaDetailView";
 import AreaUsage from "./components/AreaUsage";
 import SheflModal from "./components/SheflModal";
+import ProductButton from "../Order/CreateOrder/components/ProductButton";
 
 const listHandy = [
   { name: "Bolo", usage: 100 },
@@ -37,7 +38,7 @@ const listUnwieldy = [
 function AreaDetail(props) {
   const { storageId, areaId } = useParams();
   const [storage, setStorage] = useState({});
-  const { showLoading, hideLoading } = props;
+  const { showLoading, hideLoading, storedOrder } = props;
   const [open, setOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [currentShelf, setCurrentShelf] = useState({});
@@ -203,9 +204,18 @@ function AreaDetail(props) {
             ),
           }}
         />
-        <Box sx={{ width: "2%" }} />
+        <ProductButton
+          imgUrl={"/img/product.png"}
+          quantity={storedOrder.totalQuantity}
+          isView={false}
+        />
         <Button
-          style={{ height: "45px", paddingLeft: "16px", paddingRight: "16px" }}
+          style={{
+            height: "45px",
+            paddingLeft: "16px",
+            paddingRight: "16px",
+            marginLeft: "2%",
+          }}
           color="primary"
           variant="contained"
           onClick={() => {
@@ -258,11 +268,17 @@ function AreaDetail(props) {
   );
 }
 
+const mapStateToProps = (state) => ({
+  storedOrder: state.order.storedOrder,
+});
+
 const mapDispatchToProps = (dispatch) => {
   return {
     showLoading: () => dispatch(action.showLoader()),
     hideLoading: () => dispatch(action.hideLoader()),
     showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
+    openStoredOrderModal: (isView) =>
+      dispatch(action.openStoredOrderModal(isView)),
   };
 };
-export default connect(null, mapDispatchToProps)(AreaDetail);
+export default connect(mapStateToProps, mapDispatchToProps)(AreaDetail);

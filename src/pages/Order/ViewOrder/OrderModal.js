@@ -98,7 +98,6 @@ function OrderModal({
   };
 
   const handleStoreOrder = () => {
-    console.log(currentOrder);
     storeOrder(currentOrder);
     handleClose();
   };

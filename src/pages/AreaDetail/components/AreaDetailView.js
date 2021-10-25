@@ -27,7 +27,6 @@ function AreaDetailView({
   isModifyShelf,
 }) {
   const [openConfirm, setOpenConfirm] = useState(false);
-  const [currentBox, setCurrentBox] = useState({});
   const [openModalDetail, setOpenModalDetail] = useState(false);
   const [openDetailBox, setOpenDetailBox] = useState(false);
 
@@ -37,6 +36,7 @@ function AreaDetailView({
     { color: "#FF615F", name: "Expired" },
     { color: "#FF7C33", name: "Expired soon" },
     { color: "#26FF7B", name: "Selected" },
+    { color: "#00993C", name: "Placing" },
   ];
 
   const mapListNote = () =>
@@ -99,7 +99,6 @@ function AreaDetailView({
 
   const handleCloseDetailBox = () => {
     setOpenDetailBox(false);
-    setCurrentBox({});
   };
 
   return (
@@ -119,8 +118,6 @@ function AreaDetailView({
         currentShelf={currentShelf}
         open={openModalDetail}
         handleClose={handleCloseModalDetail}
-        currentBox={currentBox}
-        setCurrentBox={setCurrentBox}
       />
       <ConfirmModal
         open={openConfirm}
@@ -144,11 +141,11 @@ function AreaDetailView({
         handleOpen={handleOpen}
         setIsHandy={setIsHandy}
         handleOpenConfirm={handleOpenConfirm}
-        currentBox={currentBox}
-        setCurrentBox={setCurrentBox}
         isModifyShelf={isModifyShelf}
         handleOpenModalDetail={handleOpenModalDetail}
         handleOpenDetailBox={handleOpenDetailBox}
+        storage={storage}
+        area={area}
       />
       <Box
         sx={{
