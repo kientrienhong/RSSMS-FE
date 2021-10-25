@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Modal, Typography, Grid } from "@material-ui/core";
-
+import { connect } from "react-redux";
+import * as action from "../../../redux/action/action";
 const styleModal = {
   position: "absolute",
   top: "50%",
@@ -13,22 +14,27 @@ const styleModal = {
   borderRadius: "10px",
 };
 
-export default function ShelfModalDetail({
+function ShelfModalDetail({
   currentShelf,
   open,
-  setCurrentBox,
   handleClose,
   currentBox,
+  storage,
+  area,
+  setUpCurrentBox,
+  placingProducts,
 }) {
   let nameBox;
   if (currentShelf?.type === 0) {
     if (currentShelf?.boxSize === 0) {
-      nameBox = "S";
+      nameBox = "Bolo";
     } else if (currentShelf?.boxSize === 1) {
-      nameBox = "M";
+      nameBox = "S";
     } else if (currentShelf?.boxSize === 2) {
-      nameBox = "L";
+      nameBox = "M";
     } else if (currentShelf?.boxSize === 3) {
+      nameBox = "L";
+    } else if (currentShelf?.boxSize === 4) {
       nameBox = "XL";
     }
   } else {
@@ -66,12 +72,24 @@ export default function ShelfModalDetail({
     }
     return currentShelf?.boxes?.map((e, i) => {
       let color = "#99E5FE";
+
+      if (e.orderId !== null) {
+        color = "#04BFFE";
+      }
+
       if (currentBox?.id === e.id && currentBox !== undefined) {
         color = "#26FF7B";
       }
+
+      placingProducts.boxes.forEach((ele) => {
+        if (e.id === ele.idBox) {
+          color = "#00993C";
+        }
+      });
+
       let nameBoxPrint = nameBox;
       if (currentShelf?.type === 0) {
-        nameBoxPrint += `- ${i + 1}`;
+        nameBoxPrint += ` - ${i + 1}`;
       }
 
       return (
@@ -88,7 +106,17 @@ export default function ShelfModalDetail({
               borderRadius: 0.5,
             }}
             onClick={() => {
-              setCurrentBox(e);
+              setUpCurrentBox({
+                ...e,
+                areaName: area.name,
+                storageName: storage.name,
+                storageId: storage.id,
+                areaId: area.id,
+                shelfName: currentShelf.name,
+                shelfType: currentShelf.type,
+                nameBox: nameBox,
+                boxSize: currentShelf.boxSize,
+              });
             }}
           >
             <p
@@ -182,3 +210,16 @@ export default function ShelfModalDetail({
     </Modal>
   );
 }
+
+const mapStateToProps = (state) => ({
+  currentBox: state.order.currentBox,
+  placingProducts: state.order.placingProducts,
+});
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setUpCurrentBox: (box) => dispatch(action.setUpCurrentBox(box)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ShelfModalDetail);

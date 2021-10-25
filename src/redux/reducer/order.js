@@ -49,6 +49,7 @@ const order = (state = initialState, action) => {
 
     case ActionType.SET_CURRENT_BOX: {
       state.currentBox = action.payload;
+      console.log(action.payload);
       return { ...state };
     }
 

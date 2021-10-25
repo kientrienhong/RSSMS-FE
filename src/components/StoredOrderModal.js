@@ -206,12 +206,14 @@ function StoredOrderModal({
     let idProductTemp = -1;
     if (currentBox.shelfType === 0) {
       if (currentBox?.boxSize === 0) {
-        idProductTemp = 12;
+        idProductTemp = 11;
       } else if (currentBox?.boxSize === 1) {
-        idProductTemp = 13;
+        idProductTemp = 12;
       } else if (currentBox?.boxSize === 2) {
-        idProductTemp = 14;
+        idProductTemp = 13;
       } else if (currentBox?.boxSize === 3) {
+        idProductTemp = 14;
+      } else if (currentBox?.boxSize === 4) {
         idProductTemp = 16;
       }
     } else {

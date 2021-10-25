@@ -118,6 +118,8 @@ function AreaDetailView({
         currentShelf={currentShelf}
         open={openModalDetail}
         handleClose={handleCloseModalDetail}
+        storage={storage}
+        area={area}
       />
       <ConfirmModal
         open={openConfirm}

@@ -187,10 +187,11 @@ function FormHandy({
                 marginTop: "11%",
               }}
             >
-              <MenuItem value={0}>S</MenuItem>
-              <MenuItem value={1}>M</MenuItem>
-              <MenuItem value={2}>L</MenuItem>
-              <MenuItem value={3}>XL</MenuItem>
+              <MenuItem value={0}>Bolo</MenuItem>
+              <MenuItem value={1}>S</MenuItem>
+              <MenuItem value={2}>M</MenuItem>
+              <MenuItem value={3}>L</MenuItem>
+              <MenuItem value={4}>XL</MenuItem>
             </Select>
           </FormControl>
         </Box>
