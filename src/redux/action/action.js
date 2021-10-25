@@ -72,3 +72,16 @@ export const placeProductToShelf = (product) => {
     payload: product,
   };
 };
+
+export const removePlacedProduct = (product) => {
+  return {
+    type: ActionType.REMOVE_PLACED_PRODUCT,
+    payload: product,
+  };
+};
+
+export const emptyPlacedProduct = () => {
+  return {
+    type: ActionType.EMPTY_PRODUCT,
+  };
+};

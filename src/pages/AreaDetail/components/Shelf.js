@@ -62,6 +62,10 @@ function Shelf({
       let color = "#99E5FE";
       let nameBox;
 
+      if (e.orderId !== null) {
+        color = "#04BFFE";
+      }
+
       if (currentBox?.id === e.id && currentBox !== undefined) {
         color = "#26FF7B";
       }
@@ -114,7 +118,11 @@ function Shelf({
                   ...e,
                   areaName: area.name,
                   storageName: storage.name,
+                  storageId: storage.id,
+                  areaId: area.id,
+                  shelfName: shelf.name,
                   shelfType: shelf.type,
+                  nameBox: nameBox,
                   boxSize: shelf.boxSize,
                 });
                 if (e.orderId !== null) {

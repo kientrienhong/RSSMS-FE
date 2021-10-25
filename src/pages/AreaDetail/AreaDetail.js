@@ -65,7 +65,7 @@ function AreaDetail(props) {
     setIsModifyShelf(false);
   };
 
-  const getData = async (name, page, size) => {
+  const getData = async (name, page) => {
     try {
       showLoading();
       let response = await getListShelves(name, page, 6, parseInt(areaId));
@@ -256,11 +256,17 @@ function AreaDetail(props) {
             width: "30%",
           }}
         >
-          <AreaUsage list={listHandy} name={"Handy Usage"} numberInRow={3} />
+          <AreaUsage
+            list={listHandy}
+            name={"Handy Usage"}
+            numberInRow={3}
+            currentArea={currentArea}
+          />
           <AreaUsage
             list={listUnwieldy}
             name={"Unwieldy Usage"}
             numberInRow={2}
+            currentArea={currentArea}
           />
         </Box>
       </Box>
