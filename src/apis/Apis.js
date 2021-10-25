@@ -217,11 +217,12 @@ export const getArea = async (storageId) => {
   return response;
 };
 
-export const createArea = async (storageId, name) => {
+export const createArea = async (storageId, name, description) => {
   const response = await axios.post("https://localhost:44304/api/v1/areas", {
     name: name,
     storageId: parseInt(storageId),
     status: 1,
+    description: description,
   });
 
   return response;
@@ -235,12 +236,13 @@ export const deleteArea = async (id) => {
   return response;
 };
 
-export const updateArea = async (id, name) => {
+export const updateArea = async (id, name, description) => {
   const response = await axios.put(
     `https://localhost:44304/api/v1/areas/${id}`,
     {
       id: id,
       name: name,
+      description: description,
     }
   );
 

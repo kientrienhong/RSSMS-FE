@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Typography, Button, Modal } from "@material-ui/core";
 import CustomInput from "../../components/CustomInput";
+import CustomAreaInput from "../../components/CustomAreaInput";
 
 export default function ModalArea({
   open,
@@ -54,6 +55,17 @@ export default function ModalArea({
               name="name"
               label="Name"
               userInfo={currentArea.name}
+              inlineStyle={{ ...styleInput, marginBottom: "4%" }}
+            />
+            <CustomAreaInput
+              control={control}
+              rules={{
+                required: "Description required",
+              }}
+              styles={{ width: "400px" }}
+              name="description"
+              label="Description"
+              userInfo={currentArea.description}
               inlineStyle={styleInput}
             />
           </Box>

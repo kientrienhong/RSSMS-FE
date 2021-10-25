@@ -38,10 +38,10 @@ function AreaList({
       );
     });
 
-  const addArea = async (name) => {
+  const addArea = async (name, description) => {
     try {
       showLoading();
-      await createArea(parseInt(storageId), name);
+      await createArea(parseInt(storageId), name, description);
       let listAreaTemp = await getArea(parseInt(storageId));
 
       setListArea(listAreaTemp.data.data);
@@ -54,10 +54,10 @@ function AreaList({
     }
   };
 
-  const editArea = async (name) => {
+  const editArea = async (name, description) => {
     try {
       showLoading();
-      await updateArea(parseInt(currentArea.id), name);
+      await updateArea(parseInt(currentArea.id), name, description);
       let listAreaTemp = await getArea(parseInt(storageId));
       setListArea(listAreaTemp.data.data);
       showSnackbar("success", "Update area success!");
@@ -84,9 +84,9 @@ function AreaList({
 
   const onSubmit = (data) => {
     if (isEdit === false) {
-      addArea(data.name);
+      addArea(data.name, data.description);
     } else {
-      editArea(data.name);
+      editArea(data.name, data.description);
     }
   };
 

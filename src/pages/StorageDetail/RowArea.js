@@ -2,11 +2,6 @@ import React from "react";
 import { Box, Typography } from "@material-ui/core";
 import { styled } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
-
-import LinearProgress, {
-  linearProgressClasses,
-} from "@mui/material/LinearProgress";
-
 export default function RowArea({
   area,
   setCurrentArea,
@@ -16,51 +11,21 @@ export default function RowArea({
 }) {
   const navigate = useNavigate();
 
-  const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
-    height: 10,
-    borderRadius: 5,
-    [`&.${linearProgressClasses.colorPrimary}`]: {
-      backgroundColor:
-        theme.palette.grey[theme.palette.mode === "light" ? 200 : 800],
-    },
-    [`& .${linearProgressClasses.bar}`]: {
-      borderRadius: 5,
-      backgroundColor: theme.palette.mode === "light" ? "#04BFFE" : "#308fe8",
-    },
-  }));
-
   return (
     <Box
       sx={{
         display: "flex",
         flexDirection: "row",
         width: "100%",
-        alignItems: "center",
+        alignItems: "flex-start",
         marginBottom: "8px",
       }}
     >
-      <Box sx={{ width: "20%" }}>
+      <Box sx={{ width: "80%", display: "flex", flexDirection: "column" }}>
         <Typography color="black" variant="h3">
           {area.name}
         </Typography>
-      </Box>
-
-      <Box
-        sx={{
-          width: "60%",
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-        }}
-      >
-        <BorderLinearProgress
-          variant="determinate"
-          value={area.usage}
-          sx={{ width: "60%", marginRight: "7%" }}
-        />
-        <Typography color="black" variant="h3">
-          {area.usage}%
-        </Typography>
+        <p>{area.description}</p>
       </Box>
       <Box sx={{ width: "20%", display: "flex", flexDirection: "row" }}>
         <img
