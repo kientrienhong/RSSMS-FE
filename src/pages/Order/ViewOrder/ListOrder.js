@@ -15,13 +15,20 @@ import FirstPageIcon from "@mui/icons-material/FirstPage";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
-import { Checkbox, FormControlLabel } from "@material-ui/core";
+import {
+  Checkbox,
+  FormControlLabel,
+  Modal,
+  Typography,
+} from "@material-ui/core";
 import { Button, TableHead } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
-import ConfirmModal from "../../../components/ConfirmModal";
+import { useForm } from "react-hook-form";
 import { connect } from "react-redux";
 import * as action from "../../../redux/action/action";
 import { getOrderById, cancelOrder } from "../../../apis/Apis";
+import CustomAreaInput from "../../../components/CustomAreaInput";
+
 function TablePaginationActions(props) {
   const theme = useTheme();
   const { count, page, rowsPerPage, onPageChange } = props;
@@ -123,6 +130,19 @@ const useStyles = makeStyles({
   },
 });
 
+const styleModal = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "40%",
+  height: "auto",
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  p: 4,
+  borderRadius: "10px",
+};
+
 function ListOrder({
   reset,
   setOrder,
@@ -135,19 +155,22 @@ function ListOrder({
   getData,
   hideLoading,
   showLoading,
+  showSnackbar,
 }) {
   const classes = useStyles();
 
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   const [open, setOpen] = React.useState(false);
   const [currentId, setCurrentId] = React.useState(-1);
+  const { handleSubmit, control } = useForm();
+
   const handleConfirmOpen = () => {
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
   };
-  const handleDeleteOrder = async (currentId) => {
+  const handleDeleteOrder = async (currentId, reason) => {
     let response;
     try {
       if (listOrder.length === 1) {
@@ -155,7 +178,7 @@ function ListOrder({
           setPage(page - 1);
         }
       }
-      await cancelOrder(currentId);
+      await cancelOrder(currentId, reason);
       await getData(searchId, page, 8);
     } catch (error) {
       console.log(error);
@@ -176,6 +199,109 @@ function ListOrder({
     }
   };
 
+  const onSubmit = async (data) => {
+    try {
+      showLoading();
+      await handleDeleteOrder(currentId, data.reason);
+      handleClose();
+      showSnackbar("success", " Cancel order success!");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      hideLoading();
+    }
+  };
+
+  const buildModalCancelOrder = () => {
+    return (
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box
+          sx={{
+            ...styleModal,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "flex-start",
+            flexDirection: "column",
+          }}
+        >
+          <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
+            <Typography
+              color="black"
+              variant="h2"
+              style={{
+                marginTop: "2%",
+                textAlign: "left",
+                marginBottom: "2%",
+              }}
+            >
+              Are you sure?
+            </Typography>
+            <CustomAreaInput
+              control={control}
+              rules={{
+                required: "Reason required",
+              }}
+              styles={{ width: "550px" }}
+              name="reason"
+              label="Reason"
+              userInfo={""}
+            />
+            <Box
+              sx={{
+                width: "100%",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Box
+                sx={{
+                  width: "60%",
+                  margin: "40px auto 10px auto",
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                }}
+              >
+                <Button
+                  style={{
+                    height: "45px",
+                    paddingLeft: "16px",
+                    paddingRight: "16px",
+                    marginRight: "6%",
+                  }}
+                  color="primary"
+                  variant="contained"
+                  type="submit"
+                >
+                  Yes
+                </Button>
+                <Button
+                  style={{
+                    height: "45px",
+                    paddingLeft: "16px",
+                    paddingRight: "16px",
+                  }}
+                  onClick={() => handleClose()}
+                  color="error"
+                  variant="outlined"
+                >
+                  No
+                </Button>
+              </Box>
+            </Box>
+          </form>
+        </Box>
+      </Modal>
+    );
+  };
+
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page - 1 > 0 ? Math.max(0, (1 + page) * rowsPerPage - listOrder.length) : 0;
@@ -192,13 +318,7 @@ function ListOrder({
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
-        <ConfirmModal
-          open={open}
-          handleClose={handleClose}
-          onHandleYes={handleDeleteOrder}
-          id={currentId}
-          msg={"Cancel order success!"}
-        />
+        {buildModalCancelOrder()}
         {mapListTableHeader(listHeaderName)}
         <TableBody>
           {listOrder.map((row, index) => {
@@ -271,15 +391,17 @@ function ListOrder({
                   {status}
                 </TableCell>
                 <TableCell style={{ color: "black" }}>
-                  <Button
-                    className={classes.button}
-                    onClick={() => {
-                      setCurrentId(row.id);
-                      handleConfirmOpen();
-                    }}
-                  >
-                    Cancel
-                  </Button>
+                  {row.status === 0 ? null : (
+                    <Button
+                      className={classes.button}
+                      onClick={() => {
+                        setCurrentId(row.id);
+                        handleConfirmOpen();
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  )}
                 </TableCell>
               </TableRow>
             );

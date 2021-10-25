@@ -340,9 +340,13 @@ export const getOrderById = async (id) => {
   return response;
 };
 
-export const cancelOrder = async (id) => {
+export const cancelOrder = async (id, reason) => {
   const response = await axios.put(
-    `https://localhost:44304/api/v1/orders/cancel/${id}`
+    `https://localhost:44304/api/v1/orders/cancel/${id}`,
+    {
+      id: id,
+      rejectedReason: reason,
+    }
   );
 
   return response;
