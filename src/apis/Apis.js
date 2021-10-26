@@ -373,7 +373,6 @@ export const updateOrder = async (id, order) => {
 
 export const placeBoxes = async (placingProducts) => {
   const boxesId = placingProducts.boxes.map((e) => e.idBox);
-  console.log(boxesId);
   const response = await axios.post(
     `https://localhost:44304/api/v1/orderboxdetails`,
     {

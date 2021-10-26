@@ -261,7 +261,6 @@ function StoredOrderModal({
           ...styleModal,
           display: "flex",
           justifyContent: "flex-start",
-          alignItems: "center",
           flexDirection: "column",
         }}
       >
@@ -269,7 +268,6 @@ function StoredOrderModal({
           sx={{
             display: "flex",
             justifyContent: "flex-start",
-            alignItems: "center",
             flexDirection: "row",
             width: "100%",
           }}
@@ -290,7 +288,7 @@ function StoredOrderModal({
                 marginBottom: "8%",
               }}
             >
-              Total products in order (#13)
+              Total products in order
             </Typography>
             <Grid container spacing={2}>
               {buildRadioSelect(storedOrder.product)}
@@ -319,6 +317,7 @@ function StoredOrderModal({
                 display: "flex",
                 flexDirection: "column",
                 marginTop: "16px",
+                borderRadius: "4px",
                 height: "345px",
                 width: "100%",
                 border: "solid 1px #000",
@@ -424,8 +423,6 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    openStoredOrderModal: (isView) =>
-      dispatch(action.openStoredOrderModal(isView)),
     placeProductToShelf: (product) =>
       dispatch(action.placeProductToShelf(product)),
     removePlacedProduct: (product) =>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import * as action from "../../../../redux/action/action";
 
 import { connect } from "react-redux";
@@ -9,7 +9,7 @@ const buttonBox = {
   width: "45px",
   height: "45px",
   position: "relative",
-  marginLeft: "2%",
+  marginLeft: "1%",
   border: "1px solid #A19FA8",
 };
 

@@ -11,7 +11,7 @@ import rootReducer from "./redux/reducer/rootReducer";
 const saveState = (state) => {
   try {
     let serializedState = JSON.stringify(state);
-    localStorage.setItem("information", serializedState);
+    sessionStorage.setItem("information", serializedState);
   } catch (err) {}
 };
 
@@ -24,7 +24,7 @@ const initializeState = () => {
 
 const loadState = () => {
   try {
-    let serializedState = localStorage.getItem("information");
+    let serializedState = sessionStorage.getItem("information");
 
     if (serializedState === null) {
       return initializeState();

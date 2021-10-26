@@ -18,6 +18,7 @@ import Tab from "@mui/material/Tab";
 import TabPanel from "../../components/TabPanel";
 import { useForm } from "react-hook-form";
 import CustomInput from "../../components/CustomInput";
+import ProductButton from "../Order/CreateOrder/components/ProductButton";
 import {
   getListStorage,
   createStorage,
@@ -413,7 +414,7 @@ const buildModal = (
 
 function Storages(props) {
   inputFile = useRef(null);
-  const { showLoading, hideLoading, showSnackbar } = props;
+  const { showLoading, hideLoading, showSnackbar, storedOrder } = props;
   const [open, setOpen] = React.useState(false);
   const [searchName, setSearchName] = React.useState("");
 
@@ -854,9 +855,18 @@ function Storages(props) {
             ),
           }}
         />
-        <Box sx={{ width: "2%" }} />
+        <ProductButton
+          imgUrl={"/img/product.png"}
+          quantity={storedOrder.totalQuantity}
+          isView={false}
+        />
         <Button
-          style={{ height: "45px", paddingLeft: "16px", paddingRight: "16px" }}
+          style={{
+            height: "45px",
+            paddingLeft: "16px",
+            paddingRight: "16px",
+            marginLeft: "4px",
+          }}
           color="primary"
           variant="contained"
           onClick={() => handleOpen(false)}
@@ -888,6 +898,10 @@ function Storages(props) {
   );
 }
 
+const mapStateToProps = (state) => ({
+  storedOrder: state.order.storedOrder,
+});
+
 const mapDispatchToProps = (dispatch) => {
   return {
     showLoading: () => dispatch(action.showLoader()),
@@ -896,4 +910,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(Storages);
+export default connect(mapStateToProps, mapDispatchToProps)(Storages);

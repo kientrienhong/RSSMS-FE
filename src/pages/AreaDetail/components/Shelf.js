@@ -13,6 +13,7 @@ function Shelf({
   storage,
   area,
   placingProducts,
+  openStoredOrderModal,
 }) {
   const buildBox = () => {
     let size = 12 / shelf.boxesInWidth;
@@ -132,6 +133,7 @@ function Shelf({
                 if (e.orderId !== null) {
                   handleOpenDetailBox();
                 } else {
+                  openStoredOrderModal(false);
                 }
               }
             }}
@@ -201,6 +203,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    openStoredOrderModal: (isView) =>
+      dispatch(action.openStoredOrderModal(isView)),
     setUpCurrentBox: (box) => dispatch(action.setUpCurrentBox(box)),
   };
 };

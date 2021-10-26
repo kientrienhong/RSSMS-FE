@@ -18,6 +18,8 @@ import OrderDetail from "./components/OrderDetail";
 import { connect } from "react-redux";
 import * as action from "../../../redux/action/action";
 import { updateOrder } from "../../../apis/Apis";
+import { useNavigate } from "react-router";
+
 const styleModal = {
   position: "absolute",
   top: "0%",
@@ -88,6 +90,7 @@ function OrderModal({
   const [statusOrder, setStatusOrder] = useState();
   const [isPaid, setIsPaid] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState(0);
+  const navigate = useNavigate();
 
   const handleChangePaymentMethod = (e) => {
     setPaymentMethod(parseInt(e.target.value));
@@ -99,6 +102,8 @@ function OrderModal({
 
   const handleStoreOrder = () => {
     storeOrder(currentOrder);
+    showSnackbar("success", "Store order success");
+    navigate("/app/storages", { replace: true });
     handleClose();
   };
 
@@ -522,6 +527,24 @@ function OrderModal({
               {generateSelectOptions()}
             </Select>
           </FormControl>
+          {currentOrder?.status === 0 ? (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "flex-start",
+              }}
+            >
+              <Typography
+                color="black"
+                variant="h3"
+                sx={{ marginBottom: "2%", marginTop: "4%" }}
+              >
+                Reason
+              </Typography>
+              <p style={{ color: "red" }}>{currentOrder?.rejectedReason}</p>
+            </Box>
+          ) : null}
           <Typography
             color="black"
             variant="h2"
