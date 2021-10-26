@@ -14,7 +14,28 @@ const styleModal = {
   borderRadius: "10px",
 };
 
-export default function DetailBoxModal({ open, handleClose }) {
+export default function DetailBoxModal({ open, handleClose, orderDetailBox }) {
+  const calculateRemaningDate = () => {
+    let result = "";
+    let date1 = new Date();
+    let date2 = new Date(orderDetailBox.returnDate);
+    let differenceInTime = date2.getTime() - date1.getTime();
+    let differenceInDays = Math.floor(differenceInTime / (1000 * 3600 * 24));
+    const year = Math.floor(differenceInDays / 365);
+    const month = Math.floor((differenceInDays - year * 365) / 30);
+    const day = differenceInDays - year * 365 - month * 30;
+
+    if (year > 0) {
+      result += year + " years ";
+    }
+
+    if (month > 0) {
+      result += month + " months ";
+    }
+    result += day + " days";
+    return result;
+  };
+  calculateRemaningDate();
   return (
     <Modal
       open={open}
@@ -46,7 +67,7 @@ export default function DetailBoxModal({ open, handleClose }) {
             Order id:
           </Typography>
           <Typography color="black" variant="h3">
-            #32
+            #{orderDetailBox.id}
           </Typography>
         </Box>
         <Box
@@ -62,7 +83,7 @@ export default function DetailBoxModal({ open, handleClose }) {
           <Typography color="black" variant="h3">
             Time remaining:
           </Typography>
-          <p>4 years 3 weeks 3 days</p>
+          <p>{calculateRemaningDate()}</p>
         </Box>
         <Box
           sx={{
@@ -77,7 +98,7 @@ export default function DetailBoxModal({ open, handleClose }) {
           <Typography color="black" variant="h3">
             Customer name
           </Typography>
-          <p>Hong Kien Trien</p>
+          <p>{orderDetailBox.customerName}</p>
         </Box>
         <Box
           sx={{
@@ -92,7 +113,7 @@ export default function DetailBoxModal({ open, handleClose }) {
           <Typography color="black" variant="h3">
             Customer phone
           </Typography>
-          <p>0777457504</p>
+          <p>{orderDetailBox.customerPhone}</p>
         </Box>
         <Box
           sx={{
@@ -107,7 +128,7 @@ export default function DetailBoxModal({ open, handleClose }) {
           <Typography color="black" variant="h3">
             Customer address
           </Typography>
-          <p style={{ textAlign: "right" }}>12 Gia phu, phuong 13, quan 5</p>
+          <p style={{ textAlign: "right" }}>{orderDetailBox.deliveryAddress}</p>
         </Box>
       </Box>
     </Modal>

@@ -7,7 +7,7 @@ import * as action from "../../../redux/action/action";
 import { deleteShelf } from "../../../apis/Apis";
 import ShelfModalDetail from "./ShelfModalDetail";
 import DetailBoxModal from "./DetailBoxModal";
-
+import { getOrderById } from "../../../apis/Apis";
 function AreaDetailView({
   storage,
   listShelf,
@@ -25,11 +25,12 @@ function AreaDetailView({
   setPage,
   area,
   isModifyShelf,
+  currentBox,
 }) {
   const [openConfirm, setOpenConfirm] = useState(false);
   const [openModalDetail, setOpenModalDetail] = useState(false);
   const [openDetailBox, setOpenDetailBox] = useState(false);
-
+  const [orderDetailBox, setOrderDetailBox] = useState({});
   const listNote = [
     { color: "#99E5FE", name: "Available" },
     { color: "#04BFFE", name: "Not available" },
@@ -93,8 +94,18 @@ function AreaDetailView({
     setOpenModalDetail(false);
   };
 
-  const handleOpenDetailBox = () => {
-    setOpenDetailBox(true);
+  const handleOpenDetailBox = async () => {
+    try {
+      showLoading();
+      let order = await getOrderById(currentBox.orderId);
+      setOrderDetailBox(order.data);
+      console.log(order.data);
+      setOpenDetailBox(true);
+    } catch (e) {
+      console.log(e.response);
+    } finally {
+      hideLoading();
+    }
   };
 
   const handleCloseDetailBox = () => {
@@ -132,7 +143,11 @@ function AreaDetailView({
         msg="Delete shelf success"
       />
 
-      <DetailBoxModal open={openDetailBox} handleClose={handleCloseDetailBox} />
+      <DetailBoxModal
+        open={openDetailBox}
+        handleClose={handleCloseDetailBox}
+        orderDetailBox={orderDetailBox}
+      />
       <Typography color="black" variant="h2" sx={{ textAlign: "left" }}>
         {storage.name} {area.name}
       </Typography>
@@ -165,6 +180,10 @@ function AreaDetailView({
     </Card>
   );
 }
+const mapStateToProps = (state) => ({
+  currentBox: state.order.currentBox,
+});
+
 const mapDispatchToProps = (dispatch) => {
   return {
     showLoading: () => dispatch(action.showLoader()),
@@ -173,4 +192,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(AreaDetailView);
+export default connect(mapStateToProps, mapDispatchToProps)(AreaDetailView);

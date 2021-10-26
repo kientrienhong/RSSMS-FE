@@ -3,7 +3,6 @@ import { Box, Card, Typography, Grid } from "@material-ui/core";
 import CircularProgressWithLabel from "./CircularProgressWithLabel";
 
 export default function AreaUsage({ list, name, numberInRow, currentArea }) {
-  console.log(currentArea);
   const mapListToView = () => {
     if (Object.keys(currentArea).length > 0) {
       return list.map((e, index) => {
