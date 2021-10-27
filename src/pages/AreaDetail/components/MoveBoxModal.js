@@ -1,5 +1,5 @@
-import React from "react";
-import { Box, Grid, Typography, Modal, Button } from "@material-ui/core";
+import React, { useState } from "react";
+import { Box, Typography, Modal, Button } from "@material-ui/core";
 import { moveBoxApi } from "../../../apis/Apis";
 import { connect } from "react-redux";
 import * as action from "../../../redux/action/action";
@@ -27,6 +27,8 @@ function MoveBoxModal({
   currentBox,
   moveBox,
 }) {
+  const [error, setError] = useState(false);
+
   return (
     <Modal
       open={open}
@@ -54,6 +56,8 @@ function MoveBoxModal({
         >
           Are you want to move to this position?
         </Typography>
+        {error ? <p style={{ color: "red" }}>{error}</p> : null}
+
         <Box
           sx={{
             width: "60%",
@@ -73,9 +77,21 @@ function MoveBoxModal({
             onClick={async () => {
               try {
                 showLoading();
-                let boxTemp = { ...moveBox, newBoxId: currentBox.id };
-                console.log(boxTemp);
+
+                if (
+                  moveBox.shelfType !== currentBox.shelfType &&
+                  moveBox.boxSize !== currentBox.boxSize
+                ) {
+                  setError("You must move to same size");
+                  return;
+                }
+                let boxTemp = {
+                  orderId: moveBox.orderId,
+                  boxId: moveBox.boxId,
+                  newBoxId: currentBox.id,
+                };
                 await moveBoxApi(boxTemp);
+                setError();
                 showSnackbar("success", "Move success");
                 emptyMoveBox();
                 handleClose();
@@ -111,7 +127,10 @@ function MoveBoxModal({
               width: "200px",
             }}
             sx={{ width: "auto" }}
-            onClick={() => handleClose()}
+            onClick={() => {
+              emptyMoveBox();
+              handleClose();
+            }}
             color="error"
             variant="contained"
           >

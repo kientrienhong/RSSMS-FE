@@ -125,6 +125,8 @@ const order = (state = initialState, action) => {
         orderId: action.payload.orderId,
         boxId: action.payload.id,
         newBoxId: 0,
+        shelfType: action.payload.shelfType,
+        boxSize: action.payload.boxSize,
       };
       return { ...state };
     }
