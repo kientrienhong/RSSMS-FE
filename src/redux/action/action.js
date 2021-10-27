@@ -85,3 +85,9 @@ export const emptyPlacedProduct = () => {
     type: ActionType.EMPTY_PRODUCT,
   };
 };
+
+export const changeIsLoadShelf = () => {
+  return {
+    type: ActionType.CHANGE_IS_LOAD_SHELF,
+  };
+};

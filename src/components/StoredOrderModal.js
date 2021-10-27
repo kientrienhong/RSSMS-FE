@@ -82,6 +82,7 @@ function StoredOrderModal({
   hideLoading,
   showSnackbar,
   emptyPlacedProduct,
+  changeIsLoadShelf,
 }) {
   const [selectedValue, setSelectedValue] = React.useState();
   const [error, setError] = React.useState();
@@ -194,6 +195,7 @@ function StoredOrderModal({
       await placeBoxes(placingProducts);
       showSnackbar("success", "Save placing success");
       emptyPlacedProduct();
+      changeIsLoadShelf();
       handleClose();
     } catch (e) {
       console.log(e.response);
@@ -432,6 +434,7 @@ const mapDispatchToProps = (dispatch) => {
     showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
     emptyPlacedProduct: (type, msg) =>
       dispatch(action.emptyPlacedProduct(type, msg)),
+    changeIsLoadShelf: () => dispatch(action.changeIsLoadShelf()),
   };
 };
 

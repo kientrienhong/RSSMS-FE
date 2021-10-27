@@ -38,7 +38,7 @@ const listUnwieldy = [
 function AreaDetail(props) {
   const { storageId, areaId } = useParams();
   const [storage, setStorage] = useState({});
-  const { showLoading, hideLoading, storedOrder } = props;
+  const { showLoading, hideLoading, storedOrder, isLoadingShelf } = props;
   const [open, setOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [currentShelf, setCurrentShelf] = useState({});
@@ -134,7 +134,7 @@ function AreaDetail(props) {
       }
     };
     process();
-  }, [page]);
+  }, [page, isLoadingShelf]);
 
   useEffect(() => {
     const searchNameCall = async () => {
@@ -208,6 +208,9 @@ function AreaDetail(props) {
           imgUrl={"/img/product.png"}
           quantity={storedOrder.totalQuantity}
           isView={false}
+          getData={getData}
+          name={searchName}
+          page={page}
         />
         <Button
           style={{
@@ -276,6 +279,7 @@ function AreaDetail(props) {
 
 const mapStateToProps = (state) => ({
   storedOrder: state.order.storedOrder,
+  isLoadingShelf: state.order.isLoadingShelf,
 });
 
 const mapDispatchToProps = (dispatch) => {

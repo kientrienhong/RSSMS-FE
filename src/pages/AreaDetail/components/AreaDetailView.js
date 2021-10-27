@@ -99,7 +99,6 @@ function AreaDetailView({
       showLoading();
       let order = await getOrderById(currentBox.orderId);
       setOrderDetailBox(order.data);
-      console.log(order.data);
       setOpenDetailBox(true);
     } catch (e) {
       console.log(e.response);

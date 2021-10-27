@@ -46,9 +46,22 @@ const textStyle = {
   marign: "0",
   padding: "0",
 };
-function ProductButton({ imgUrl, quantity, isView, openStoredOrderModal }) {
+function ProductButton({
+  imgUrl,
+  quantity,
+  isView,
+  openStoredOrderModal,
+  getData,
+  name,
+  page,
+}) {
   return (
-    <Box sx={buttonBox} onClick={() => openStoredOrderModal(isView)}>
+    <Box
+      sx={buttonBox}
+      onClick={() => {
+        openStoredOrderModal(isView);
+      }}
+    >
       <img src={imgUrl} alt="product" style={imgStyle} />
       {quantity > 0 ? (
         <div style={quantityStyle}>

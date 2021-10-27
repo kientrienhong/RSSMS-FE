@@ -12,6 +12,7 @@ const initialState = {
     orderId: -1,
     boxes: [],
   },
+  isLoadingShelf: false,
 };
 
 const order = (state = initialState, action) => {
@@ -49,7 +50,11 @@ const order = (state = initialState, action) => {
 
     case ActionType.SET_CURRENT_BOX: {
       state.currentBox = action.payload;
-      console.log(action.payload);
+      return { ...state };
+    }
+
+    case ActionType.CHANGE_IS_LOAD_SHELF: {
+      state.isLoadingShelf = !state.isLoadingShelf;
       return { ...state };
     }
 
