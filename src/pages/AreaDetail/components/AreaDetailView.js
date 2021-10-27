@@ -8,6 +8,7 @@ import { deleteShelf } from "../../../apis/Apis";
 import ShelfModalDetail from "./ShelfModalDetail";
 import DetailBoxModal from "./DetailBoxModal";
 import { getOrderById } from "../../../apis/Apis";
+import MoveBoxModal from "./MoveBoxModal";
 function AreaDetailView({
   storage,
   listShelf,
@@ -31,6 +32,9 @@ function AreaDetailView({
   const [openModalDetail, setOpenModalDetail] = useState(false);
   const [openDetailBox, setOpenDetailBox] = useState(false);
   const [orderDetailBox, setOrderDetailBox] = useState({});
+
+  const [openMoveBox, setOpenMoveBox] = useState(false);
+
   const listNote = [
     { color: "#99E5FE", name: "Available" },
     { color: "#04BFFE", name: "Not available" },
@@ -111,6 +115,14 @@ function AreaDetailView({
     setOpenDetailBox(false);
   };
 
+  const handleCloseMoveBox = () => {
+    setOpenMoveBox(false);
+  };
+
+  const handleOpenMoveBox = () => {
+    setOpenMoveBox(true);
+  };
+
   return (
     <Card
       style={{ height: "78vh" }}
@@ -142,7 +154,11 @@ function AreaDetailView({
         showSnackbar={showSnackbar}
         msg="Delete shelf success"
       />
-
+      <MoveBoxModal
+        open={openMoveBox}
+        handleClose={handleCloseMoveBox}
+        handleCloseDetailBox={handleCloseDetailBox}
+      />
       <DetailBoxModal
         open={openDetailBox}
         handleClose={handleCloseDetailBox}
@@ -161,8 +177,10 @@ function AreaDetailView({
         isModifyShelf={isModifyShelf}
         handleOpenModalDetail={handleOpenModalDetail}
         handleOpenDetailBox={handleOpenDetailBox}
+        handleCloseDetailBox={handleCloseDetailBox}
         storage={storage}
         area={area}
+        handleOpenMoveBox={handleOpenMoveBox}
       />
       <Box
         sx={{

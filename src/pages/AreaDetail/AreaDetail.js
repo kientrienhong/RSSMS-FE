@@ -206,7 +206,7 @@ function AreaDetail(props) {
         />
         <ProductButton
           imgUrl={"/img/product.png"}
-          quantity={storedOrder.totalQuantity}
+          quantity={storedOrder?.totalQuantity}
           isView={false}
           getData={getData}
           name={searchName}

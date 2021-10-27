@@ -147,7 +147,7 @@ function Order({ showLoading, hideLoading, storedOrder }) {
         />
         <ProductButton
           imgUrl={"/img/product.png"}
-          quantity={storedOrder.totalQuantity}
+          quantity={storedOrder?.totalQuantity}
           isView={true}
         />
         <Button

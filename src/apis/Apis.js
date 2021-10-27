@@ -383,3 +383,16 @@ export const placeBoxes = async (placingProducts) => {
 
   return response;
 };
+
+export const moveBoxApi = async (box) => {
+  const response = await axios.put(
+    `https://localhost:44304/api/v1/orderboxdetails`,
+    {
+      orderId: box.orderId,
+      boxId: box.boxId,
+      newBoxId: box.newBoxId,
+    }
+  );
+
+  return response;
+};

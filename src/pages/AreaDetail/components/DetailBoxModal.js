@@ -1,6 +1,7 @@
 import React from "react";
-import { Box, Typography, Modal } from "@material-ui/core";
-
+import { Box, Typography, Modal, Button } from "@material-ui/core";
+import { connect } from "react-redux";
+import * as action from "../../../redux/action/action";
 const styleModal = {
   position: "absolute",
   top: "50%",
@@ -14,7 +15,13 @@ const styleModal = {
   borderRadius: "10px",
 };
 
-export default function DetailBoxModal({ open, handleClose, orderDetailBox }) {
+function DetailBoxModal({
+  open,
+  handleClose,
+  orderDetailBox,
+  setUpMoveBox,
+  currentBox,
+}) {
   const calculateRemaningDate = () => {
     let result = "";
     let date1 = new Date();
@@ -130,7 +137,49 @@ export default function DetailBoxModal({ open, handleClose, orderDetailBox }) {
           </Typography>
           <p style={{ textAlign: "right" }}>{orderDetailBox.deliveryAddress}</p>
         </Box>
+        <Box sx={{ display: "flex", flexDirection: "row" }}>
+          <Button
+            style={{
+              height: "45px",
+              paddingLeft: "16px",
+              paddingRight: "16px",
+              marginRight: "2%",
+            }}
+            onClick={() => {
+              setUpMoveBox(currentBox);
+            }}
+            color="primary"
+            variant="contained"
+            type="submit"
+          >
+            Move
+          </Button>
+          <Button
+            style={{
+              height: "45px",
+              width: "150px",
+            }}
+            sx={{ width: "auto" }}
+            // onClick={}
+            color="error"
+            variant="outlined"
+          >
+            Return item
+          </Button>
+        </Box>
       </Box>
     </Modal>
   );
 }
+
+const mapStateToProps = (state) => ({
+  currentBox: state.order.currentBox,
+});
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setUpMoveBox: (box) => dispatch(action.setUpMoveBox(box)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(DetailBoxModal);

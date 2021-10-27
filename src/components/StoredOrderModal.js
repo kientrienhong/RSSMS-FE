@@ -150,7 +150,7 @@ function StoredOrderModal({
   };
 
   const buildListPlacingProduct = () => {
-    return placingProducts.boxes.map((e) => (
+    return placingProducts?.boxes.map((e) => (
       <Box
         sx={{
           display: "flex",
@@ -293,7 +293,7 @@ function StoredOrderModal({
               Total products in order
             </Typography>
             <Grid container spacing={2}>
-              {buildRadioSelect(storedOrder.product)}
+              {buildRadioSelect(storedOrder?.product)}
             </Grid>
           </Box>
           <Box

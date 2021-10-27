@@ -1,7 +1,21 @@
-import React from "react";
-import { Box, Grid, Typography } from "@material-ui/core";
+import React, { useState } from "react";
+import { Box, Grid, Typography, Modal, Button } from "@material-ui/core";
 import { connect } from "react-redux";
 import * as action from "../../../redux/action/action";
+
+const styleModal = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "30%",
+  height: "auto",
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  p: 4,
+  borderRadius: "10px",
+};
+
 function Shelf({
   shelf,
   index,
@@ -14,6 +28,8 @@ function Shelf({
   area,
   placingProducts,
   openStoredOrderModal,
+  moveBox,
+  handleOpenMoveBox,
 }) {
   const buildBox = () => {
     let size = 12 / shelf.boxesInWidth;
@@ -65,7 +81,7 @@ function Shelf({
       let color = "#99E5FE";
       let nameBox;
 
-      if (e.orderId !== null) {
+      if (e?.orderId !== null) {
         color = "#04BFFE";
       }
 
@@ -73,8 +89,8 @@ function Shelf({
         color = "#26FF7B";
       }
 
-      placingProducts.boxes.forEach((ele) => {
-        if (e.id === ele.idBox) {
+      placingProducts?.boxes.forEach((ele) => {
+        if (e?.id === ele?.idBox) {
           color = "#00993C";
         }
       });
@@ -133,7 +149,11 @@ function Shelf({
                 if (e.orderId !== null) {
                   handleOpenDetailBox();
                 } else {
-                  openStoredOrderModal(false);
+                  if (moveBox === undefined) {
+                    openStoredOrderModal(false);
+                  } else {
+                    handleOpenMoveBox();
+                  }
                 }
               }
             }}
@@ -199,6 +219,7 @@ function Shelf({
 const mapStateToProps = (state) => ({
   currentBox: state.order.currentBox,
   placingProducts: state.order.placingProducts,
+  moveBox: state.order.moveBox,
 });
 
 const mapDispatchToProps = (dispatch) => {

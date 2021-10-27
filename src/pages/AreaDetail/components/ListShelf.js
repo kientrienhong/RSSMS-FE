@@ -11,8 +11,10 @@ export default function ListShelf({
   isModifyShelf,
   handleOpenModalDetail,
   handleOpenDetailBox,
+  handleCloseDetailBox,
   storage,
   area,
+  handleOpenMoveBox,
 }) {
   const handleOnClickEdit = (shelf) => {
     if (shelf.type === 0) {
@@ -106,6 +108,8 @@ export default function ListShelf({
               handleOpenDetailBox={handleOpenDetailBox}
               storage={storage}
               area={area}
+              handleOpenMoveBox={handleOpenMoveBox}
+              handleCloseDetailBox={handleCloseDetailBox}
             />
           </Box>
         </Box>

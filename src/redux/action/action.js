@@ -91,3 +91,16 @@ export const changeIsLoadShelf = () => {
     type: ActionType.CHANGE_IS_LOAD_SHELF,
   };
 };
+
+export const setUpMoveBox = (box) => {
+  return {
+    type: ActionType.SET_UP_MOVE_BOX,
+    payload: box,
+  };
+};
+
+export const emptyMoveBox = () => {
+  return {
+    type: ActionType.EMPTY_MOVE_BOX,
+  };
+};

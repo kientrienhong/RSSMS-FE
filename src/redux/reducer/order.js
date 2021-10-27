@@ -13,6 +13,7 @@ const initialState = {
     boxes: [],
   },
   isLoadingShelf: false,
+  moveBox: undefined,
 };
 
 const order = (state = initialState, action) => {
@@ -117,6 +118,20 @@ const order = (state = initialState, action) => {
         placingProducts: placingProductTemp,
         storedOrder: storedOrderTemp,
       };
+    }
+
+    case ActionType.SET_UP_MOVE_BOX: {
+      state.moveBox = {
+        orderId: action.payload.orderId,
+        boxId: action.payload.id,
+        newBoxId: 0,
+      };
+      return { ...state };
+    }
+
+    case ActionType.EMPTY_MOVE_BOX: {
+      state.moveBox = undefined;
+      return { ...state };
     }
 
     default: {
