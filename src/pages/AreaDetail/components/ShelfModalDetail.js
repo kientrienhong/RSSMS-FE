@@ -23,6 +23,8 @@ function ShelfModalDetail({
   area,
   setUpCurrentBox,
   placingProducts,
+  handleOpenDetailBox,
+  openStoredOrderModal,
 }) {
   let nameBox;
   if (currentShelf?.type === 0) {
@@ -117,6 +119,12 @@ function ShelfModalDetail({
                 nameBox: nameBox,
                 boxSize: currentShelf.boxSize,
               });
+
+              if (e.orderId !== null) {
+                handleOpenDetailBox();
+              } else {
+                openStoredOrderModal(false);
+              }
             }}
           >
             <p
@@ -219,6 +227,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
   return {
     setUpCurrentBox: (box) => dispatch(action.setUpCurrentBox(box)),
+    openStoredOrderModal: (isView) =>
+      dispatch(action.openStoredOrderModal(isView)),
   };
 };
 

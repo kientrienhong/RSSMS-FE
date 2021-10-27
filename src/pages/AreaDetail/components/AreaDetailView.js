@@ -130,6 +130,7 @@ function AreaDetailView({
         handleClose={handleCloseModalDetail}
         storage={storage}
         area={area}
+        handleOpenDetailBox={handleOpenDetailBox}
       />
       <ConfirmModal
         open={openConfirm}
