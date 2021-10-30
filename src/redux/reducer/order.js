@@ -15,6 +15,7 @@ const initialState = {
     boxes: [],
   },
   isLoadingShelf: false,
+  isLoadingStorage: false,
   moveBox: undefined,
 };
 
@@ -59,6 +60,11 @@ const order = (state = initialState, action) => {
 
     case ActionType.CHANGE_IS_LOAD_SHELF: {
       state.isLoadingShelf = !state.isLoadingShelf;
+      return { ...state };
+    }
+
+    case ActionType.CHANGE_IS_LOAD_STORAGE: {
+      state.isLoadingStorage = !state.isLoadingStorage;
       return { ...state };
     }
 
@@ -172,12 +178,8 @@ const order = (state = initialState, action) => {
     case ActionType.PLACING_STORAGE: {
       let placingProductTemp = { ...state.placingProducts };
       let storedOrderTemp = { ...state.storedOrder };
-      console.log(placingProductTemp);
-      console.log(storedOrderTemp);
 
       let foundProduct = storedOrderTemp.products.find((e) => {
-        console.log(e);
-        console.log(action.payload);
         return e.productId.toString() === action.payload.idProduct;
       });
       foundProduct.amount--;
@@ -190,7 +192,6 @@ const order = (state = initialState, action) => {
         idStorage: state.currentStorage.id,
         nameProduct: action.payload.nameProduct,
       });
-      console.log(placingProductTemp);
       return {
         ...state,
         placingProducts: placingProductTemp,

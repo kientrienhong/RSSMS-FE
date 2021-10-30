@@ -115,7 +115,13 @@ function a11yProps(index) {
 
 function Storages(props) {
   inputFile = useRef(null);
-  const { showLoading, hideLoading, showSnackbar, storedOrder } = props;
+  const {
+    showLoading,
+    hideLoading,
+    showSnackbar,
+    storedOrder,
+    isLoadingStorage,
+  } = props;
   const [open, setOpen] = React.useState(false);
   const [searchName, setSearchName] = React.useState("");
   const [listShowStaffAssigned, setListShowStaffAssigned] = React.useState([]);
@@ -201,7 +207,7 @@ function Storages(props) {
       }
     };
     process();
-  }, [page]);
+  }, [page, isLoadingStorage]);
 
   useEffect(() => {
     const searchNameCall = async () => {
@@ -356,10 +362,7 @@ function Storages(props) {
     };
     try {
       showLoading();
-
-      // if (response)
       let id = storage.id;
-
       let responseUpdate;
       if (storage.avatarFile !== undefined) {
         let urlFirebase;
@@ -456,6 +459,7 @@ function Storages(props) {
     try {
       showLoading();
       let list = await getListStorage(name, page, size);
+      console.log(list);
       setListStorages(list.data.data);
       setTotalPage(list.data.metadata.totalPage);
     } catch (e) {
@@ -929,6 +933,7 @@ function Storages(props) {
 
 const mapStateToProps = (state) => ({
   storedOrder: state.order.storedOrder,
+  isLoadingStorage: state.order.isLoadingStorage,
 });
 
 const mapDispatchToProps = (dispatch) => {

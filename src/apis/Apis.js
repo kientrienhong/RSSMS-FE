@@ -396,3 +396,17 @@ export const moveBoxApi = async (box) => {
 
   return response;
 };
+
+export const placeStorages = async (placingProducts) => {
+  const storageIds = placingProducts.boxes.map((e) => e.idStorage);
+
+  const response = await axios.post(
+    `https://localhost:44304/api/v1/orderstoragedetails`,
+    {
+      orderId: placingProducts.orderId,
+      storageIds: storageIds,
+    }
+  );
+
+  return response;
+};

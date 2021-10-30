@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Modal, Grid, Radio, Typography, Button } from "@material-ui/core";
 import { connect } from "react-redux";
 import * as action from "../redux/action/action";
-import { placeBoxes } from "../apis/Apis";
+import { placeBoxes, placeStorages } from "../apis/Apis";
 const styleModal = {
   position: "absolute",
   top: "50%",
@@ -84,6 +84,7 @@ function StoredOrderModal({
   emptyPlacedProduct,
   changeIsLoadShelf,
   placeStorage,
+  changeIsLoadStorage,
 }) {
   const [selectedValue, setSelectedValue] = React.useState();
   const [error, setError] = React.useState();
@@ -227,10 +228,16 @@ function StoredOrderModal({
     });
     try {
       showLoading();
-      await placeBoxes(placingProducts);
+      console.log(placingProducts);
+      if (placingProducts.typeOrder === 0) {
+        await placeStorages(placingProducts);
+        changeIsLoadStorage();
+      } else {
+        await placeBoxes(placingProducts);
+        changeIsLoadShelf();
+      }
       showSnackbar("success", "Save placing success");
       emptyPlacedProduct();
-      changeIsLoadShelf();
       handleClose();
     } catch (e) {
       console.log(e.response);
@@ -287,7 +294,6 @@ function StoredOrderModal({
   };
 
   const handlePlaceStorage = () => {
-    console.log("handlePlaceStorage");
     let productTemp = storedOrder.products.find(
       (e) => selectedValue === e.productId
     );
@@ -502,6 +508,7 @@ const mapDispatchToProps = (dispatch) => {
     changeIsLoadShelf: () => dispatch(action.changeIsLoadShelf()),
     placeStorage: (storage) => dispatch(action.placeStorage(storage)),
     removeStorage: () => dispatch(action.removeStorage()),
+    changeIsLoadStorage: () => dispatch(action.changeIsLoadStorage()),
   };
 };
 

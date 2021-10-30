@@ -25,10 +25,10 @@ function Storage({
   setUpCurrentStorage,
 }) {
   const statusList = [
-    {},
-    { color: "green", name: "Available" },
-    { color: "", name: "Rented" },
+    { color: "#04BFFE", name: "Rented" },
+    { color: "#99E5FE", name: "Available" },
     { color: "", name: "Placing" },
+    {},
   ];
   const typeList = ["Self-Storage", "Door-to-door"];
   const navigate = useNavigate();

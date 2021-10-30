@@ -113,6 +113,12 @@ export const changeIsLoadShelf = () => {
   };
 };
 
+export const changeIsLoadStorage = () => {
+  return {
+    type: ActionType.CHANGE_IS_LOAD_STORAGE,
+  };
+};
+
 export const setUpMoveBox = (box) => {
   return {
     type: ActionType.SET_UP_MOVE_BOX,
