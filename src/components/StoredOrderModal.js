@@ -83,6 +83,7 @@ function StoredOrderModal({
   showSnackbar,
   emptyPlacedProduct,
   changeIsLoadShelf,
+  placeStorage,
 }) {
   const [selectedValue, setSelectedValue] = React.useState();
   const [error, setError] = React.useState();
@@ -149,6 +150,39 @@ function StoredOrderModal({
     });
   };
 
+  const buildListPlacingStorage = () => {
+    return placingProducts?.boxes.map((e) => (
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+        }}
+        key={e.nameProduct}
+      >
+        <Box sx={{ width: "30%" }}>
+          <p>{e.nameProduct}</p>
+        </Box>
+        <Box sx={{ width: "60%" }}>
+          <p>{e.storageName}</p>
+        </Box>
+        <Box sx={{ width: "10%" }}>
+          <img
+            src="/img/minus.png"
+            alt="minus"
+            width="20px"
+            height="20px"
+            style={style}
+            onClick={() => {
+              removePlacedProduct(e);
+              showSnackbar("success", "Remove product success");
+            }}
+          />
+        </Box>
+      </Box>
+    ));
+  };
+
   const buildListPlacingProduct = () => {
     return placingProducts?.boxes.map((e) => (
       <Box
@@ -157,6 +191,7 @@ function StoredOrderModal({
           flexDirection: "row",
           alignItems: "center",
         }}
+        key={e.nameProduct}
       >
         <Box sx={{ width: "30%" }}>
           <p>{e.nameProduct}</p>
@@ -204,7 +239,7 @@ function StoredOrderModal({
     }
   };
 
-  const onHandlePlace = () => {
+  const handlePlaceBox = () => {
     let idProductTemp = -1;
     if (currentBox.shelfType === 0) {
       if (currentBox?.boxSize === 0) {
@@ -248,6 +283,34 @@ function StoredOrderModal({
       handleClose();
     } else {
       setError("You must choose right product to place");
+    }
+  };
+
+  const handlePlaceStorage = () => {
+    console.log("handlePlaceStorage");
+    let productTemp = storedOrder.products.find(
+      (e) => selectedValue === e.productId
+    );
+
+    if (productTemp?.amount === 0) {
+      setError("There is no product to place");
+      return;
+    }
+
+    placeStorage({
+      idProduct: selectedValue,
+      nameProduct: mapping[selectedValue],
+    });
+    setError("");
+    showSnackbar("success", "Place product success");
+    handleClose();
+  };
+
+  const onHandlePlace = () => {
+    if (placingProducts.typeOrder === 1) {
+      handlePlaceBox();
+    } else {
+      handlePlaceStorage();
     }
   };
 
@@ -367,7 +430,9 @@ function StoredOrderModal({
                   </Typography>
                 </Box>
               </Box>
-              {buildListPlacingProduct()}
+              {placingProducts.typeOrder === 0
+                ? buildListPlacingStorage()
+                : buildListPlacingProduct()}
             </Box>
           </Box>
         </Box>
@@ -435,6 +500,8 @@ const mapDispatchToProps = (dispatch) => {
     emptyPlacedProduct: (type, msg) =>
       dispatch(action.emptyPlacedProduct(type, msg)),
     changeIsLoadShelf: () => dispatch(action.changeIsLoadShelf()),
+    placeStorage: (storage) => dispatch(action.placeStorage(storage)),
+    removeStorage: () => dispatch(action.removeStorage()),
   };
 };
 

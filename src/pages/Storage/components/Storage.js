@@ -1,7 +1,8 @@
 import React from "react";
 import { Card, Box, Typography, Button } from "@material-ui/core";
 import { useNavigate } from "react-router-dom";
-
+import { connect } from "react-redux";
+import * as action from "../../../redux/action/action";
 const styleIcon = {
   marginRight: "2%",
   marginTop: "2%",
@@ -13,17 +14,30 @@ const styleBoxTypo = {
   marginTop: "2%",
   alignItems: "flex-end",
 };
-export default function Storage({
+function Storage({
   storage,
   setCurrentId,
   handleConfirmOpen,
   setStorage,
   handleOpen,
+  placingProducts,
+  openStoredOrderModal,
+  setUpCurrentStorage,
 }) {
-  const statusList = [{}, { color: "green", name: "Available" }];
+  const statusList = [
+    {},
+    { color: "green", name: "Available" },
+    { color: "", name: "Rented" },
+    { color: "", name: "Placing" },
+  ];
   const typeList = ["Self-Storage", "Door-to-door"];
   const navigate = useNavigate();
-
+  let isPlacing = false;
+  placingProducts.boxes.forEach((e) => {
+    if (e.idStorage === storage.id) {
+      isPlacing = true;
+    }
+  });
   return (
     <Card
       sx={{
@@ -72,11 +86,15 @@ export default function Storage({
               {storage.name}
             </Typography>
             <Typography
-              color={statusList[storage.status].color}
+              color={
+                isPlacing === true
+                  ? "#00993C"
+                  : statusList[storage.status].color
+              }
               variant="h2"
               style={{ marginTop: "1%", marginRight: "1%" }}
             >
-              {statusList[storage.status].name}
+              {isPlacing === true ? "Placing" : statusList[storage.status].name}
             </Typography>
           </Box>
           <Box
@@ -129,7 +147,74 @@ export default function Storage({
             </Typography>
           </Box>
         </Box>
-        <Box sx={{ display: "flex", flexDirection: "row", marginTop: "2%" }}>
+        {placingProducts.typeOrder === -1 || placingProducts.typeOrder === 1 ? (
+          <Box sx={{ display: "flex", flexDirection: "row", marginTop: "2%" }}>
+            <Button
+              style={{
+                height: "45px",
+                paddingLeft: "16px",
+                paddingRight: "16px",
+                marginRight: "2%",
+              }}
+              color="primary"
+              variant="contained"
+              onClick={() => {
+                let sizes;
+                if (storage.size) {
+                  sizes = storage.size.split("x");
+                  storage.width = sizes[0]
+                    ?.trim()
+                    .substring(0, sizes[0]?.trim().length - 1);
+                  storage.length = sizes[1]
+                    ?.trim()
+                    .substring(0, sizes[1]?.trim().length - 1);
+                  storage.height = sizes[2]
+                    ?.trim()
+                    .substring(0, sizes[2]?.trim().length - 1);
+                }
+                setStorage({
+                  ...storage,
+                  width: storage.width,
+                  length: storage.length,
+                  height: storage.height,
+                });
+
+                handleOpen(true);
+              }}
+            >
+              Edit
+            </Button>
+            <Button
+              style={{
+                height: "45px",
+                paddingLeft: "16px",
+                paddingRight: "16px",
+                marginRight: "2%",
+              }}
+              color="error"
+              variant="contained"
+              onClick={() => {
+                setCurrentId(storage.id);
+                handleConfirmOpen();
+              }}
+            >
+              Delete
+            </Button>
+            <Button
+              style={{
+                height: "45px",
+                width: "auto",
+              }}
+              color="success"
+              onClick={() =>
+                navigate("/app/storages/" + storage.id, { replace: false })
+              }
+              variant="contained"
+            >
+              See more
+            </Button>
+          </Box>
+        ) : (
           <Button
             style={{
               height: "45px",
@@ -140,62 +225,28 @@ export default function Storage({
             color="primary"
             variant="contained"
             onClick={() => {
-              let sizes;
-              if (storage.size) {
-                sizes = storage.size.split("x");
-                storage.width = sizes[0]
-                  ?.trim()
-                  .substring(0, sizes[0]?.trim().length - 1);
-                storage.length = sizes[1]
-                  ?.trim()
-                  .substring(0, sizes[1]?.trim().length - 1);
-                storage.height = sizes[2]
-                  ?.trim()
-                  .substring(0, sizes[2]?.trim().length - 1);
-              }
-              setStorage({
-                ...storage,
-                width: storage.width,
-                length: storage.length,
-                height: storage.height,
-              });
-
-              handleOpen(true);
+              setUpCurrentStorage(storage);
+              openStoredOrderModal(false);
             }}
           >
-            Edit
+            Place
           </Button>
-          <Button
-            style={{
-              height: "45px",
-              paddingLeft: "16px",
-              paddingRight: "16px",
-              marginRight: "2%",
-            }}
-            color="error"
-            variant="contained"
-            onClick={() => {
-              setCurrentId(storage.id);
-              handleConfirmOpen();
-            }}
-          >
-            Delete
-          </Button>
-          <Button
-            style={{
-              height: "45px",
-              width: "auto",
-            }}
-            color="success"
-            onClick={() =>
-              navigate("/app/storages/" + storage.id, { replace: false })
-            }
-            variant="contained"
-          >
-            See more
-          </Button>
-        </Box>
+        )}
       </Box>
     </Card>
   );
 }
+const mapStateToProps = (state) => ({
+  placingProducts: state.order.placingProducts,
+});
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    openStoredOrderModal: (isView) =>
+      dispatch(action.openStoredOrderModal(isView)),
+    setUpCurrentStorage: (storage) =>
+      dispatch(action.setUpCurrentStorage(storage)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Storage);

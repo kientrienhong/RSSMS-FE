@@ -9,6 +9,7 @@ import {
   FormControl,
   MenuItem,
   Select,
+  Typography,
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 import SearchIcon from "@mui/icons-material/Search";
@@ -99,167 +100,6 @@ const buildInputFileImage = (storage) => {
   );
 };
 
-const buildInputForm = (
-  handleSubmit,
-  onSubmit,
-  storage,
-  setStorage,
-  control,
-  isEdit,
-  handleClose,
-  handleChangeType,
-  onChangeInputFile
-) => {
-  const typeList = ["Self-Storage", "Door-to-door"];
-
-  return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <input
-        type="file"
-        id="file"
-        name="fileImage"
-        ref={inputFile}
-        onChange={(e) => onChangeInputFile(e, setStorage, storage)}
-        style={{ display: "none" }}
-      />
-
-      <Box sx={{ ...styleBoxInput, marginTop: "16px" }}>
-        <CustomInput
-          control={control}
-          rules={{
-            required: "Name required",
-          }}
-          styles={{ width: "400px" }}
-          name="name"
-          label="Name"
-          userInfo={storage.name}
-          inlineStyle={styleInput}
-        />
-      </Box>
-      <Box sx={{ ...styleBoxInput }}>
-        <CustomInput
-          control={control}
-          rules={{
-            required: "Width required",
-            pattern: {
-              value: /^\d+$/,
-              message: "Invalid width",
-            },
-          }}
-          styles={{ width: "120px" }}
-          name="width"
-          label="Width (m)"
-          userInfo={storage.width}
-          inlineStyle={styleInput}
-        />
-        <CustomInput
-          control={control}
-          rules={{
-            required: "Length required",
-            pattern: {
-              value: /^\d+$/,
-              message: "Invalid length",
-            },
-          }}
-          styles={{ width: "120px" }}
-          name="length"
-          label="Length (m)"
-          userInfo={storage.length}
-          inlineStyle={styleInput}
-        />
-        <CustomInput
-          control={control}
-          rules={{
-            required: "Height required",
-            pattern: {
-              value: /^\d+$/,
-              message: "Invalid height",
-            },
-          }}
-          styles={{ width: "120px" }}
-          name="height"
-          label="Height (m)"
-          userInfo={storage.height}
-          inlineStyle={styleInput}
-        />
-      </Box>
-      <Box sx={{ ...styleBoxInput }}>
-        <CustomInput
-          control={control}
-          rules={{
-            required: "Address required",
-          }}
-          styles={{ width: "400px" }}
-          name="address"
-          label="Address"
-          userInfo={storage.address}
-          inlineStyle={styleInput}
-        />
-      </Box>
-
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          marginTop: "10%",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <FormControl
-          sx={{ m: 1, minWidth: 120, color: "black" }}
-          name="roleName"
-        >
-          <Select
-            value={typeList[storage.type]}
-            onChange={handleChangeType}
-            displayEmpty
-          >
-            <MenuItem value={"Self-Storage"}>Self-Storage</MenuItem>
-            <MenuItem value={"Door-to-door"}>Door-to-door</MenuItem>
-          </Select>
-        </FormControl>
-      </Box>
-      <Box
-        sx={{
-          width: "200px",
-          margin: "2% auto",
-          display: "flex",
-          marginTop: "6%",
-          flexDirection: "row",
-          justifyContent: "space-between",
-        }}
-      >
-        <Button
-          style={{
-            height: "45px",
-            paddingLeft: "16px",
-            paddingRight: "16px",
-          }}
-          // onClick={() => onHandleSubmit(user)}
-          color="primary"
-          variant="contained"
-          type="submit"
-        >
-          Submit
-        </Button>
-        <Button
-          style={{
-            height: "45px",
-            paddingLeft: "16px",
-            paddingRight: "16px",
-          }}
-          onClick={() => handleClose()}
-          color="error"
-          variant="outlined"
-        >
-          Cancel
-        </Button>
-      </Box>
-    </form>
-  );
-};
-
 TabPanel.propTypes = {
   children: PropTypes.node,
   index: PropTypes.number.isRequired,
@@ -273,167 +113,46 @@ function a11yProps(index) {
   };
 }
 
-const buildModal = (
-  handleSubmit,
-  onSubmit,
-  storage,
-  setStorage,
-  control,
-  isEdit,
-  handleClose,
-  handleChangeType,
-  open,
-  handleChangeTab,
-  tabIndex,
-  onChangeInputFile,
-  addAssignStaff,
-  removeAssignStaff,
-  listShowStaffAssigned,
-  listShowStaffUnAssigned,
-  onHandleAssignUser,
-  handleChangeSearchUnAssigned,
-  handleChangeSearchAssigned,
-  listStaffAssigned,
-  listStaffUnAssigned
-) => {
-  return (
-    <Modal
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
-      <Box
-        sx={{
-          ...styleModal,
-          display: "flex",
-          justifyContent: "flex-start",
-          flexDirection: "column",
-        }}
-      >
-        <Box sx={{ borderBottom: 1, border: "none", height: "10%" }}>
-          <Tabs
-            value={tabIndex}
-            onChange={handleChangeTab}
-            aria-label="basic tabs example"
-          >
-            <Tab label="Storage Information" {...a11yProps(0)} />
-            <Tab label="Staff list" {...a11yProps(1)} />
-          </Tabs>
-        </Box>
-        <Box sx={{ height: "90%" }}>
-          <TabPanel
-            style={{ height: "100%", width: "100%" }}
-            value={tabIndex}
-            index={0}
-          >
-            <Box
-              sx={{
-                width: "100%",
-                height: "100%",
-                display: "flex",
-                flexDirection: "row",
-              }}
-            >
-              {buildInputFileImage(storage)}
-              {buildInputForm(
-                handleSubmit,
-                onSubmit,
-                storage,
-                setStorage,
-                control,
-                isEdit,
-                handleClose,
-                handleChangeType,
-                onChangeInputFile
-              )}
-            </Box>
-          </TabPanel>
-          <TabPanel value={tabIndex} index={1}>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                width: "100%",
-                marginTop: "3%",
-              }}
-            >
-              <ListStaff
-                listStaff={listShowStaffAssigned}
-                isAssigned={true}
-                name="Staffs belong to this storage"
-                addAssignStaff={addAssignStaff}
-                removeAssignStaff={removeAssignStaff}
-                onHandleSearch={handleChangeSearchAssigned}
-              />
-              <ListStaff
-                listStaff={listShowStaffUnAssigned}
-                isAssigned={false}
-                name="Staffs are not assigned yet"
-                addAssignStaff={addAssignStaff}
-                removeAssignStaff={removeAssignStaff}
-                onHandleSearch={handleChangeSearchUnAssigned}
-              />
-            </Box>
-            <Box
-              sx={{
-                width: "100%",
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "center",
-                marginTop: "16px",
-              }}
-            >
-              <Button
-                style={{
-                  height: "45px",
-                  paddingLeft: "16px",
-                  paddingRight: "16px",
-                  marginTop: "4%",
-                }}
-                color="primary"
-                variant="contained"
-                onClick={() =>
-                  onHandleAssignUser(
-                    listStaffAssigned,
-                    listStaffUnAssigned,
-                    storage
-                  )
-                }
-              >
-                Submit
-              </Button>
-            </Box>
-          </TabPanel>
-        </Box>
-      </Box>
-    </Modal>
-  );
-};
-
 function Storages(props) {
   inputFile = useRef(null);
   const { showLoading, hideLoading, showSnackbar, storedOrder } = props;
   const [open, setOpen] = React.useState(false);
   const [searchName, setSearchName] = React.useState("");
-
   const [listShowStaffAssigned, setListShowStaffAssigned] = React.useState([]);
   const [listShowStaffUnAssigned, setListShowStaffUnAssigned] = React.useState(
     []
   );
-
   const { handleSubmit, reset, control } = useForm();
   const [listStorages, setListStorages] = React.useState([]);
   const [listStaffAssigned, setListStaffAssigned] = React.useState([]);
   const [listStaffUnAssigned, setListStaffUnAssigned] = React.useState([]);
-
+  const [tabIndex, setTabIndex] = React.useState(0);
+  const [isEdit, setEdit] = React.useState(false);
+  const [type, setType] = React.useState("");
   const [storage, setStorage] = React.useState({
     images: [{ id: null, url: null }],
   });
   const [page, setPage] = React.useState(1);
+  const [sizeStorage, setSizeStorage] = React.useState({
+    value: 0,
+    label: "0.5m2",
+  });
+  const [listSizeStorage, setListSizeStorage] = React.useState([
+    { value: 0, label: "0.5m2" },
+    { value: 1, label: "1m2" },
+    { value: 2, label: "2m2" },
+    { value: 3, label: "3m2" },
+  ]);
+
+  const buildDropDown = (listSizeStorage) =>
+    listSizeStorage.map((e) => <MenuItem value={e.value}>{e.label}</MenuItem>);
+
   const handleChange = async (event, value) => {
     setPage(value);
+  };
+
+  const handleChangeSizeStorage = (event) => {
+    setSizeStorage(listSizeStorage[event.target.value]);
   };
 
   const handleChangeSearchUnAssigned = (event) => {
@@ -732,9 +451,6 @@ function Storages(props) {
     setStorage({ avatarFile: undefined, images: [{ id: null, url: null }] });
     reset();
   };
-  const [tabIndex, setTabIndex] = React.useState(0);
-  const [isEdit, setEdit] = React.useState(false);
-  const [type, setType] = React.useState("");
 
   const getData = async (name, page, size) => {
     try {
@@ -799,6 +515,341 @@ function Storages(props) {
     firstCall();
   }, []);
 
+  const buildInputForm = (
+    handleSubmit,
+    onSubmit,
+    storage,
+    setStorage,
+    control,
+    isEdit,
+    handleClose,
+    handleChangeType,
+    onChangeInputFile
+  ) => {
+    const typeList = ["Self-Storage", "Door-to-door"];
+
+    return (
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <input
+          type="file"
+          id="file"
+          name="fileImage"
+          ref={inputFile}
+          onChange={(e) => onChangeInputFile(e, setStorage, storage)}
+          style={{ display: "none" }}
+        />
+        <Typography
+          color="black"
+          variant="h2"
+          style={{ marginTop: "1%", marginLeft: "3%" }}
+        >
+          Storage Information
+        </Typography>
+        <Box sx={{ ...styleBoxInput, marginTop: "16px" }}>
+          <CustomInput
+            control={control}
+            rules={{
+              required: "Name required",
+            }}
+            styles={{ width: "400px" }}
+            name="name"
+            label="Name"
+            userInfo={storage.name}
+            inlineStyle={styleInput}
+          />
+        </Box>
+        <Box sx={{ ...styleBoxInput }}>
+          <CustomInput
+            control={control}
+            rules={{
+              required: "Address required",
+            }}
+            styles={{ width: "400px" }}
+            name="address"
+            label="Address"
+            userInfo={storage.address}
+            inlineStyle={styleInput}
+          />
+        </Box>
+        <Typography
+          color="black"
+          variant="h2"
+          style={{ marginTop: "8%", marginLeft: "3%" }}
+        >
+          Storage Size Detail
+        </Typography>
+        <Box sx={{ ...styleBoxInput, marginTop: "2%" }}>
+          <CustomInput
+            control={control}
+            rules={{
+              required: "Width required",
+              pattern: {
+                value: /^\d+$/,
+                message: "Invalid width",
+              },
+            }}
+            styles={{ width: "120px" }}
+            name="width"
+            label="Width (m)"
+            userInfo={storage.width}
+            inlineStyle={styleInput}
+          />
+          <CustomInput
+            control={control}
+            rules={{
+              required: "Length required",
+              pattern: {
+                value: /^\d+$/,
+                message: "Invalid length",
+              },
+            }}
+            styles={{ width: "120px" }}
+            name="length"
+            label="Length (m)"
+            userInfo={storage.length}
+            inlineStyle={styleInput}
+          />
+          <CustomInput
+            control={control}
+            rules={{
+              required: "Height required",
+              pattern: {
+                value: /^\d+$/,
+                message: "Invalid height",
+              },
+            }}
+            styles={{ width: "120px" }}
+            name="height"
+            label="Height (m)"
+            userInfo={storage.height}
+            inlineStyle={styleInput}
+          />
+        </Box>
+
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            marginTop: "10%",
+            alignItems: "center",
+            marginLeft: "1%",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "flex-start",
+              marginRight: "4%",
+            }}
+          >
+            <Typography
+              color="black"
+              variant="h2"
+              style={{ marginTop: "1%", marginLeft: "6%" }}
+            >
+              Storage type
+            </Typography>
+            <FormControl sx={{ m: 1, minWidth: 120, color: "black" }}>
+              <Select
+                value={typeList[storage.type]}
+                onChange={handleChangeType}
+                displayEmpty
+              >
+                <MenuItem value={"Self-Storage"}>Self-Storage</MenuItem>
+                <MenuItem value={"Door-to-door"}>Door-to-door</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+          {storage.type === 0 ? (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "flex-start",
+                width: "50%",
+              }}
+            >
+              <Typography
+                color="black"
+                variant="h2"
+                style={{ marginTop: "1%", marginLeft: "5%" }}
+              >
+                Size Area Storage
+              </Typography>
+              <FormControl
+                sx={{ m: 1, minWidth: 120, color: "black" }}
+                name="sizeStorage"
+              >
+                <Select
+                  value={sizeStorage.value}
+                  onChange={handleChangeSizeStorage}
+                  displayEmpty
+                >
+                  {buildDropDown(listSizeStorage)}
+                </Select>
+              </FormControl>
+            </Box>
+          ) : null}
+        </Box>
+        <Box
+          sx={{
+            width: "200px",
+            margin: "2% auto",
+            display: "flex",
+            marginTop: "6%",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <Button
+            style={{
+              height: "45px",
+              paddingLeft: "16px",
+              paddingRight: "16px",
+            }}
+            // onClick={() => onHandleSubmit(user)}
+            color="primary"
+            variant="contained"
+            type="submit"
+          >
+            Submit
+          </Button>
+          <Button
+            style={{
+              height: "45px",
+              paddingLeft: "16px",
+              paddingRight: "16px",
+            }}
+            onClick={() => handleClose()}
+            color="error"
+            variant="outlined"
+          >
+            Cancel
+          </Button>
+        </Box>
+      </form>
+    );
+  };
+
+  const buildModal = () => {
+    return (
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box
+          sx={{
+            ...styleModal,
+            display: "flex",
+            justifyContent: "flex-start",
+            flexDirection: "column",
+          }}
+        >
+          <Box sx={{ borderBottom: 1, border: "none", height: "10%" }}>
+            <Tabs
+              value={tabIndex}
+              onChange={handleChangeTab}
+              aria-label="basic tabs example"
+            >
+              <Tab label="Storage Information" {...a11yProps(0)} />
+              <Tab label="Staff list" {...a11yProps(1)} />
+            </Tabs>
+          </Box>
+          <Box sx={{ height: "90%" }}>
+            <TabPanel
+              style={{ height: "100%", width: "100%" }}
+              value={tabIndex}
+              index={0}
+            >
+              <Box
+                sx={{
+                  width: "100%",
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "row",
+                }}
+              >
+                {buildInputFileImage(storage)}
+                {buildInputForm(
+                  handleSubmit,
+                  onSubmit,
+                  storage,
+                  setStorage,
+                  control,
+                  isEdit,
+                  handleClose,
+                  handleChangeType,
+                  onChangeInputFile,
+                  type
+                )}
+              </Box>
+            </TabPanel>
+            <TabPanel value={tabIndex} index={1}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  width: "100%",
+                  marginTop: "3%",
+                }}
+              >
+                <ListStaff
+                  listStaff={listShowStaffAssigned}
+                  isAssigned={true}
+                  name="Staffs belong to this storage"
+                  addAssignStaff={addAssignStaff}
+                  removeAssignStaff={removeAssignStaff}
+                  onHandleSearch={handleChangeSearchAssigned}
+                />
+                <ListStaff
+                  listStaff={listShowStaffUnAssigned}
+                  isAssigned={false}
+                  name="Staffs are not assigned yet"
+                  addAssignStaff={addAssignStaff}
+                  removeAssignStaff={removeAssignStaff}
+                  onHandleSearch={handleChangeSearchUnAssigned}
+                />
+              </Box>
+              <Box
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  marginTop: "16px",
+                }}
+              >
+                <Button
+                  style={{
+                    height: "45px",
+                    paddingLeft: "16px",
+                    paddingRight: "16px",
+                    marginTop: "4%",
+                  }}
+                  color="primary"
+                  variant="contained"
+                  onClick={() =>
+                    onHandleAssignUser(
+                      listStaffAssigned,
+                      listStaffUnAssigned,
+                      storage
+                    )
+                  }
+                >
+                  Submit
+                </Button>
+              </Box>
+            </TabPanel>
+          </Box>
+        </Box>
+      </Modal>
+    );
+  };
+
   return (
     <Box
       sx={{
@@ -807,29 +858,7 @@ function Storages(props) {
         py: 3,
       }}
     >
-      {buildModal(
-        handleSubmit,
-        onSubmit,
-        storage,
-        setStorage,
-        control,
-        isEdit,
-        handleClose,
-        handleChangeType,
-        open,
-        handleChangeTab,
-        tabIndex,
-        onChangeInputFile,
-        addAssignStaff,
-        removeAssignStaff,
-        listShowStaffAssigned,
-        listShowStaffUnAssigned,
-        onHandleAssignUser,
-        handleChangeSearchUnAssigned,
-        handleChangeSearchAssigned,
-        listStaffAssigned,
-        listStaffUnAssigned
-      )}
+      {buildModal()}
       <Box
         sx={{
           marginLeft: "2%",

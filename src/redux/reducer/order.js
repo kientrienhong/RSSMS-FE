@@ -8,7 +8,9 @@ const initialState = {
     totalQuantity: 0,
   },
   currentBox: {},
+  currentStorage: {},
   placingProducts: {
+    typeOrder: -1,
     orderId: -1,
     boxes: [],
   },
@@ -28,6 +30,7 @@ const order = (state = initialState, action) => {
       let placingProductsTemp = {
         orderId: -1,
         boxes: [],
+        typeOrder: action.payload.typeOrder,
       };
       storedOrderTemp.products = action.payload.orderDetails.filter((e) => {
         if (e.productType === 0 || e.productType === 2 || e.productType === 4) {
@@ -63,6 +66,7 @@ const order = (state = initialState, action) => {
       state.placingProducts = {
         orderId: -1,
         boxes: [],
+        typeOrder: -1,
       };
       return { ...state };
     }
@@ -134,6 +138,64 @@ const order = (state = initialState, action) => {
     case ActionType.EMPTY_MOVE_BOX: {
       state.moveBox = undefined;
       return { ...state };
+    }
+
+    case ActionType.REMOVE_PLACING_STORAGE: {
+      let placingProductTemp = { ...state.placingProducts };
+      let storedOrderTemp = { ...state.storedOrder };
+      let foundProduct = storedOrderTemp.products.find(
+        (e) => e.productId.toString() === action.payload.idProduct
+      );
+      foundProduct.amount += 1;
+      storedOrderTemp.totalQuantity++;
+
+      let indexCurrentProduct = placingProductTemp.boxes.findIndex(
+        (e) => e.idItemPlacing === action.payload.id
+      );
+      placingProductTemp.boxes.splice(indexCurrentProduct, 1);
+      placingProductTemp.boxes.forEach((e, index) => {
+        e.idItemPlacing = index;
+      });
+
+      return {
+        ...state,
+        placingProducts: placingProductTemp,
+        storedOrder: storedOrderTemp,
+      };
+    }
+
+    case ActionType.SET_UP_CURRENT_STORAGE: {
+      state.currentStorage = action.payload;
+      return { ...state };
+    }
+
+    case ActionType.PLACING_STORAGE: {
+      let placingProductTemp = { ...state.placingProducts };
+      let storedOrderTemp = { ...state.storedOrder };
+      console.log(placingProductTemp);
+      console.log(storedOrderTemp);
+
+      let foundProduct = storedOrderTemp.products.find((e) => {
+        console.log(e);
+        console.log(action.payload);
+        return e.productId.toString() === action.payload.idProduct;
+      });
+      foundProduct.amount--;
+      storedOrderTemp.totalQuantity--;
+      placingProductTemp.orderId = storedOrderTemp.orderId;
+      placingProductTemp.boxes.push({
+        idProduct: action.payload.idProduct,
+        idItemPlacing: placingProductTemp.boxes.length,
+        storageName: state.currentStorage.name,
+        idStorage: state.currentStorage.id,
+        nameProduct: action.payload.nameProduct,
+      });
+      console.log(placingProductTemp);
+      return {
+        ...state,
+        placingProducts: placingProductTemp,
+        storedOrder: storedOrderTemp,
+      };
     }
 
     default: {

@@ -73,6 +73,27 @@ export const placeProductToShelf = (product) => {
   };
 };
 
+export const placeStorage = (storage) => {
+  return {
+    type: ActionType.PLACING_STORAGE,
+    payload: storage,
+  };
+};
+
+export const removeStorage = (storage) => {
+  return {
+    type: ActionType.REMOVE_PLACING_STORAGE,
+    payload: storage,
+  };
+};
+
+export const setUpCurrentStorage = (storage) => {
+  return {
+    type: ActionType.SET_UP_CURRENT_STORAGE,
+    payload: storage,
+  };
+};
+
 export const removePlacedProduct = (product) => {
   return {
     type: ActionType.REMOVE_PLACED_PRODUCT,
