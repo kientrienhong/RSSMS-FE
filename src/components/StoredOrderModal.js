@@ -228,7 +228,6 @@ function StoredOrderModal({
     });
     try {
       showLoading();
-      console.log(placingProducts);
       if (placingProducts.typeOrder === 0) {
         await placeStorages(placingProducts);
         changeIsLoadStorage();
