@@ -21,6 +21,7 @@ function DetailBoxModal({
   orderDetailBox,
   setUpMoveBox,
   currentBox,
+  showSnackbar,
 }) {
   const calculateRemaningDate = () => {
     let result = "";
@@ -147,6 +148,8 @@ function DetailBoxModal({
             }}
             onClick={() => {
               setUpMoveBox(currentBox);
+              handleClose();
+              showSnackbar("success", "Choose new position to place");
             }}
             color="primary"
             variant="contained"
@@ -179,6 +182,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
   return {
     setUpMoveBox: (box) => dispatch(action.setUpMoveBox(box)),
+    showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
   };
 };
 
