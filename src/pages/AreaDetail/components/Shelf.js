@@ -29,6 +29,7 @@ function Shelf({
   placingProducts,
   openStoredOrderModal,
   moveBox,
+  storageId,
   handleOpenMoveBox,
 }) {
   const buildBox = () => {
@@ -135,11 +136,12 @@ function Shelf({
             }}
             onClick={() => {
               if (isModifyShelf === false) {
+                console.log(storage);
                 setUpCurrentBox({
                   ...e,
                   areaName: area.name,
                   storageName: storage.name,
-                  storageId: storage.id,
+                  storageId: parseInt(storageId),
                   areaId: area.id,
                   shelfName: shelf.name,
                   shelfType: shelf.type,

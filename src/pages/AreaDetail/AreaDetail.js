@@ -250,6 +250,7 @@ function AreaDetail(props) {
           totalPage={totalPage}
           area={currentArea}
           isModifyShelf={isModifyShelf}
+          storageId={storageId}
         />
         <Box
           sx={{

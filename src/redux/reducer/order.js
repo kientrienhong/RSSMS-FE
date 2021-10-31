@@ -149,15 +149,17 @@ const order = (state = initialState, action) => {
     case ActionType.REMOVE_PLACING_STORAGE: {
       let placingProductTemp = { ...state.placingProducts };
       let storedOrderTemp = { ...state.storedOrder };
+      let indexCurrentProduct = placingProductTemp.boxes.findIndex(
+        (e) => e.idStorage === action.payload.id
+      );
       let foundProduct = storedOrderTemp.products.find(
-        (e) => e.productId.toString() === action.payload.idProduct
+        (e) =>
+          e.productId.toString() ===
+          placingProductTemp.boxes[indexCurrentProduct].idProduct
       );
       foundProduct.amount += 1;
       storedOrderTemp.totalQuantity++;
 
-      let indexCurrentProduct = placingProductTemp.boxes.findIndex(
-        (e) => e.idItemPlacing === action.payload.id
-      );
       placingProductTemp.boxes.splice(indexCurrentProduct, 1);
       placingProductTemp.boxes.forEach((e, index) => {
         e.idItemPlacing = index;

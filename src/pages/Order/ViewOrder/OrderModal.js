@@ -564,19 +564,22 @@ function OrderModal({
               justifyContent: "center",
             }}
           >
-            <Button
-              style={{
-                height: "45px",
-                paddingLeft: "16px",
-                paddingRight: "16px",
-                marginRight: "4%",
-              }}
-              color="primary"
-              variant="contained"
-              onClick={() => handleStoreOrder()}
-            >
-              Store
-            </Button>
+            {currentOrder?.status === 1 ? (
+              <Button
+                style={{
+                  height: "45px",
+                  paddingLeft: "16px",
+                  paddingRight: "16px",
+                  marginRight: "4%",
+                }}
+                color="primary"
+                variant="contained"
+                onClick={() => handleStoreOrder()}
+              >
+                Store
+              </Button>
+            ) : null}
+
             <Button
               style={{
                 height: "45px",

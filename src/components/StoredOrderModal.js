@@ -3,6 +3,8 @@ import { Box, Modal, Grid, Radio, Typography, Button } from "@material-ui/core";
 import { connect } from "react-redux";
 import * as action from "../redux/action/action";
 import { placeBoxes, placeStorages } from "../apis/Apis";
+import { useNavigate } from "react-router";
+
 const styleModal = {
   position: "absolute",
   top: "50%",
@@ -88,6 +90,8 @@ function StoredOrderModal({
 }) {
   const [selectedValue, setSelectedValue] = React.useState();
   const [error, setError] = React.useState();
+  const navigate = useNavigate();
+
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
   };
@@ -175,6 +179,7 @@ function StoredOrderModal({
             height="20px"
             style={style}
             onClick={() => {
+              console.log(e);
               removePlacedProduct(e);
               showSnackbar("success", "Remove product success");
             }}
@@ -198,8 +203,18 @@ function StoredOrderModal({
           <p>{e.nameProduct}</p>
         </Box>
         <Box sx={{ width: "60%" }}>
-          <p>
-            {e.storageName} / {e.areaName} / {e.shelfName} / {e.nameBox}
+          <p
+            style={{
+              cursor: "pointer",
+              color: "blue",
+            }}
+            onClick={() => {
+              navigate(`storages/${e.storageId}/areas/${e.areaId}`, {
+                replace: true,
+              });
+            }}
+          >
+            {e.shelfName} / {e.nameBox}
           </p>
         </Box>
         <Box sx={{ width: "10%" }}>
@@ -228,7 +243,6 @@ function StoredOrderModal({
     });
     try {
       showLoading();
-      console.log(placingProducts);
       if (placingProducts.typeOrder === 0) {
         await placeStorages(placingProducts);
         changeIsLoadStorage();

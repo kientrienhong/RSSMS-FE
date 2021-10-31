@@ -5,6 +5,7 @@ import { getStorageDetail, getArea } from "../../apis/Apis";
 import { useParams } from "react-router-dom";
 import { Box } from "@material-ui/core";
 import StorageDetailView from "./StorageDetailView";
+import DetailOrder from "./DetailOrder";
 import AreaList from "./AreaList";
 function StorageDetail({ showLoading, hideLoading, showSnackbar }) {
   const [storage, setStorage] = useState({});
@@ -32,13 +33,24 @@ function StorageDetail({ showLoading, hideLoading, showSnackbar }) {
   }, []);
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "row", height: "91vh" }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "row",
+        height: "91vh",
+        alignItems: "center",
+      }}
+    >
       <StorageDetailView storage={storage} />
-      <AreaList
-        listArea={listArea}
-        setListArea={setListArea}
-        storageId={storageId}
-      />
+      {storage.type === 1 ? (
+        <AreaList
+          listArea={listArea}
+          setListArea={setListArea}
+          storageId={storageId}
+        />
+      ) : (
+        <DetailOrder storage={storage} />
+      )}
     </Box>
   );
 }

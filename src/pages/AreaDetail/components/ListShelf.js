@@ -14,6 +14,7 @@ export default function ListShelf({
   handleCloseDetailBox,
   storage,
   area,
+  storageId,
   handleOpenMoveBox,
 }) {
   const handleOnClickEdit = (shelf) => {
@@ -108,6 +109,7 @@ export default function ListShelf({
               handleOpenDetailBox={handleOpenDetailBox}
               storage={storage}
               area={area}
+              storageId={storageId}
               handleOpenMoveBox={handleOpenMoveBox}
               handleCloseDetailBox={handleCloseDetailBox}
             />
