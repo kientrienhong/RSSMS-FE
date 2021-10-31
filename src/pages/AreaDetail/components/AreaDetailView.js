@@ -27,6 +27,7 @@ function AreaDetailView({
   area,
   isModifyShelf,
   currentBox,
+  storageId,
 }) {
   const [openConfirm, setOpenConfirm] = useState(false);
   const [openModalDetail, setOpenModalDetail] = useState(false);
@@ -173,6 +174,7 @@ function AreaDetailView({
         setCurrentShelf={setCurrentShelf}
         handleOpen={handleOpen}
         setIsHandy={setIsHandy}
+        storageId={storageId}
         handleOpenConfirm={handleOpenConfirm}
         isModifyShelf={isModifyShelf}
         handleOpenModalDetail={handleOpenModalDetail}
