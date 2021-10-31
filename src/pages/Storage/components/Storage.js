@@ -23,6 +23,8 @@ function Storage({
   placingProducts,
   openStoredOrderModal,
   setUpCurrentStorage,
+  removeStorage,
+  showSnackbar,
 }) {
   const statusList = [
     { color: "#04BFFE", name: "Rented" },
@@ -214,7 +216,7 @@ function Storage({
               See more
             </Button>
           </Box>
-        ) : (
+        ) : isPlacing === false ? (
           <Button
             style={{
               height: "45px",
@@ -231,6 +233,23 @@ function Storage({
           >
             Place
           </Button>
+        ) : (
+          <Button
+            style={{
+              height: "45px",
+              paddingLeft: "16px",
+              paddingRight: "16px",
+              marginRight: "2%",
+            }}
+            color="error"
+            variant="contained"
+            onClick={() => {
+              removeStorage(storage);
+              showSnackbar("success", "Remove product success");
+            }}
+          >
+            Remove
+          </Button>
         )}
       </Box>
     </Card>
@@ -246,6 +265,8 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(action.openStoredOrderModal(isView)),
     setUpCurrentStorage: (storage) =>
       dispatch(action.setUpCurrentStorage(storage)),
+    showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
+    removeStorage: (storage) => dispatch(action.removeStorage(storage)),
   };
 };
 

@@ -175,6 +175,7 @@ function StoredOrderModal({
             height="20px"
             style={style}
             onClick={() => {
+              console.log(e);
               removePlacedProduct(e);
               showSnackbar("success", "Remove product success");
             }}
