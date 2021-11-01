@@ -9,6 +9,7 @@ import ShelfModalDetail from "./ShelfModalDetail";
 import DetailBoxModal from "./DetailBoxModal";
 import { getOrderById } from "../../../apis/Apis";
 import MoveBoxModal from "./MoveBoxModal";
+import { LIST_NOTE } from "../../../constant/constant";
 function AreaDetailView({
   storage,
   listShelf,
@@ -36,17 +37,8 @@ function AreaDetailView({
 
   const [openMoveBox, setOpenMoveBox] = useState(false);
 
-  const listNote = [
-    { color: "#99E5FE", name: "Available" },
-    { color: "#04BFFE", name: "Not available" },
-    { color: "#FF615F", name: "Expired" },
-    { color: "#FF7C33", name: "Expired soon" },
-    { color: "#26FF7B", name: "Selected" },
-    { color: "#00993C", name: "Placing" },
-  ];
-
   const mapListNote = () =>
-    listNote.map((e) => (
+    LIST_NOTE.map((e) => (
       <Box
         sx={{
           display: "flex",

@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Typography, Button, Modal } from "@material-ui/core";
 import CustomInput from "../../components/CustomInput";
 import CustomAreaInput from "../../components/CustomAreaInput";
-
+import { STYLE_MODAL } from "../../constant/style";
 export default function ModalArea({
   open,
   handleClose,
@@ -14,16 +14,8 @@ export default function ModalArea({
   const styleInput = { marginRight: "2.5%" };
 
   const styleModal = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
+    ...STYLE_MODAL,
     width: "auto",
-    height: "auto",
-    bgcolor: "background.paper",
-    boxShadow: 24,
-    p: 4,
-    borderRadius: "10px",
   };
 
   return (

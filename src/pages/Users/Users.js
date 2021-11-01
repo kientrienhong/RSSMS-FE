@@ -26,20 +26,14 @@ import * as action from "../../redux/action/action";
 import { useForm } from "react-hook-form";
 import CustomInput from "../../components/CustomInput";
 import { storageFirebase } from "../../firebase/firebase";
-let inputFile;
+import { ROLE_USER } from "../../constant/constant";
+import { STYLE_MODAL } from "../../constant/style";
 
+let inputFile;
 const styleModal = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
+  ...STYLE_MODAL,
   width: "40%",
-  height: "auto",
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  p: 4,
-  borderRadius: "10px",
-  padding: "1%",
+  height: "90%",
 };
 
 const styleBoxInput = {
@@ -321,6 +315,7 @@ function Users(props) {
   const [storageCB, setStorageCB] = React.useState({});
   const handleChangeRole = (event) => {
     setRole(event.target.value);
+    console.log(ROLE_USER[event.target.value]);
   };
 
   const handleChangeStorageCB = (event) => {
@@ -354,16 +349,7 @@ function Users(props) {
   };
 
   const onHandleUpdateUser = async (data) => {
-    let roleName;
-    if (role === "Delivery Staff") {
-      roleName = 4;
-    } else if (role === "Customer") {
-      roleName = 3;
-    } else if (role === "Office Staff") {
-      roleName = 5;
-    } else if (role === "Manager") {
-      roleName = 2;
-    }
+    let roleName = ROLE_USER[role];
     let userTemp = {
       name: data.name,
       email: data.email,
@@ -380,10 +366,7 @@ function Users(props) {
     };
     try {
       showLoading();
-
-      // if (response)
       let id = user.id;
-
       let responseUpdate;
       if (user.avatarFile !== undefined) {
         let urlFirebase;
@@ -420,16 +403,7 @@ function Users(props) {
   };
 
   const onHandleCreateUser = async (data) => {
-    let roleName;
-    if (role === "Delivery Staff") {
-      roleName = 4;
-    } else if (role === "Customer") {
-      roleName = 3;
-    } else if (role === "Office Staff") {
-      roleName = 5;
-    } else if (role === "Manager") {
-      roleName = 2;
-    }
+    let roleName = ROLE_USER[role];
     let userTemp = {
       name: data.name,
       password: data.password,

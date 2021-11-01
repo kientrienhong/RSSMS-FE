@@ -34,18 +34,13 @@ import { storageFirebase } from "../../firebase/firebase";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import ListStaff from "./components/ListStaff";
+import { TYPE_STORAGE } from "../../constant/constant";
+import { STYLE_MODAL } from "../../constant/style";
+
 let inputFile;
 const styleModal = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
+  ...STYLE_MODAL,
   width: "50%",
-  height: "auto",
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  p: 4,
-  borderRadius: "10px",
 };
 
 const styleBoxInput = {
@@ -283,13 +278,7 @@ function Storages(props) {
   };
 
   const onHandleCreateStorage = async (data, typeName) => {
-    let type;
-    if (typeName === "Self-Storage") {
-      type = 0;
-    } else if (typeName === "Door-to-door") {
-      type = 1;
-    }
-
+    let type = TYPE_STORAGE[typeName];
     let size = `${data.width}m x ${data.length}m x ${data.height}m`;
 
     let storageTemp = {
@@ -338,12 +327,7 @@ function Storages(props) {
   };
 
   const onHandleUpdateUser = async (data, typeName) => {
-    let type;
-    if (typeName === "Self-Storage") {
-      type = 0;
-    } else if (typeName === "Door-to-door") {
-      type = 1;
-    }
+    let type = TYPE_STORAGE[typeName];
     let size = `${data.width}m x ${data.length}m x ${data.height}m`;
 
     let storageTemp = {
@@ -487,12 +471,7 @@ function Storages(props) {
   };
 
   const handleChangeType = (event) => {
-    let tempType = -1;
-    if (event.target.value === "Self-Storage") {
-      tempType = 0;
-    } else {
-      tempType = 1;
-    }
+    let tempType = TYPE_STORAGE[event.target.value];
     setType(event.target.value);
     setStorage({ ...storage, type: tempType });
   };

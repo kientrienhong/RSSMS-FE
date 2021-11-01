@@ -1,21 +1,14 @@
-import React, { useState } from "react";
-import { Box, Grid, Typography, Modal, Button } from "@material-ui/core";
+import React from "react";
+import { Box, Grid, Typography } from "@material-ui/core";
 import { connect } from "react-redux";
 import * as action from "../../../redux/action/action";
-
-const styleModal = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: "30%",
-  height: "auto",
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  p: 4,
-  borderRadius: "10px",
-};
-
+import { BOX_SIZE, AREA_SIZE } from "../../../constant/constant";
+import {
+  PRIMARY_BLUE,
+  SECOND_BLUE,
+  PRIMARY_SEMANTIC_GREEN,
+  SECOND_SEMANTIC_GREEN,
+} from "../../../constant/style";
 function Shelf({
   shelf,
   index,
@@ -39,27 +32,9 @@ function Shelf({
     if (totalBox >= 20) {
       let nameBox;
       if (shelf?.type === 0) {
-        if (shelf?.boxSize === 0) {
-          nameBox = "Bolo";
-        } else if (shelf?.boxSize === 1) {
-          nameBox = "S";
-        } else if (shelf?.boxSize === 2) {
-          nameBox = "M";
-        } else if (shelf?.boxSize === 3) {
-          nameBox = "L";
-        } else if (shelf?.boxSize === 4) {
-          nameBox = "XL";
-        }
+        nameBox = BOX_SIZE[shelf?.boxSize];
       } else {
-        if (shelf?.boxSize === 0) {
-          nameBox = "0.5m2";
-        } else if (shelf?.boxSize === 1) {
-          nameBox = "1m2";
-        } else if (shelf?.boxSize === 2) {
-          nameBox = "2m2";
-        } else if (shelf?.boxSize === 3) {
-          nameBox = "3m2";
-        }
+        nameBox = AREA_SIZE[shelf?.boxSize];
       }
 
       return (
@@ -79,46 +54,28 @@ function Shelf({
     }
 
     return shelf?.boxes?.map((e, i) => {
-      let color = "#99E5FE";
+      let color = SECOND_BLUE;
       let nameBox;
 
       if (e?.orderId !== null) {
-        color = "#04BFFE";
+        color = PRIMARY_BLUE;
       }
 
       if (currentBox?.id === e.id && currentBox !== undefined) {
-        color = "#26FF7B";
+        color = SECOND_SEMANTIC_GREEN;
       }
 
       placingProducts?.boxes.forEach((ele) => {
         if (e?.id === ele?.idBox) {
-          color = "#00993C";
+          color = PRIMARY_SEMANTIC_GREEN;
         }
       });
 
       if (shelf?.type === 0) {
-        if (shelf?.boxSize === 0) {
-          nameBox = "Bolo";
-        } else if (shelf?.boxSize === 1) {
-          nameBox = "S";
-        } else if (shelf?.boxSize === 2) {
-          nameBox = "M";
-        } else if (shelf?.boxSize === 3) {
-          nameBox = "L";
-        } else if (shelf?.boxSize === 4) {
-          nameBox = "XL";
-        }
+        nameBox = BOX_SIZE[shelf?.boxSize];
         nameBox += ` - ${i + 1}`;
       } else {
-        if (shelf?.boxSize === 0) {
-          nameBox = "0.5m2";
-        } else if (shelf?.boxSize === 1) {
-          nameBox = "1m2";
-        } else if (shelf?.boxSize === 2) {
-          nameBox = "2m2";
-        } else if (shelf?.boxSize === 3) {
-          nameBox = "3m2";
-        }
+        nameBox = AREA_SIZE[shelf?.boxSize];
       }
 
       return (

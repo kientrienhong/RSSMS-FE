@@ -22,21 +22,9 @@ import * as action from "../../../redux/action/action";
 import { createOrder } from "../../../apis/Apis";
 import LoadingPage from "../../Loading/LoadingPage";
 import { useNavigate } from "react-router";
-
+import { STYLE_MODAL } from "../../../constant/style";
 const styleInput = { marginRight: "2.5%", backgroundColor: "white" };
-const styleModal = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: "80%",
-  height: "auto",
-  overflow: "hidden",
-  overflowY: "scroll",
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  p: 4,
-};
+const styleModal = { ...STYLE_MODAL, overflow: "hidden", overflowY: "scroll" };
 
 function InputInforModal({
   order,
@@ -85,6 +73,7 @@ function InputInforModal({
       let orderTemp = {};
 
       if (order.type === 0) {
+        // Storage order
         orderTemp = {
           customerId: user.id,
           deliveryAddress: "",
@@ -100,6 +89,7 @@ function InputInforModal({
           listProduct: listProduct,
         };
       } else {
+        // door - to - door  order
         orderTemp = {
           customerId: user.id,
           deliveryAddress: data.deliveryAddress,

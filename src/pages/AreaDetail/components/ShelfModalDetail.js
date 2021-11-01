@@ -2,16 +2,17 @@ import React from "react";
 import { Box, Modal, Typography, Grid } from "@material-ui/core";
 import { connect } from "react-redux";
 import * as action from "../../../redux/action/action";
+import {
+  STYLE_MODAL,
+  PRIMARY_BLUE,
+  SECOND_BLUE,
+  PRIMARY_SEMANTIC_GREEN,
+  SECOND_SEMANTIC_GREEN,
+} from "../../../constant/style";
+import { BOX_SIZE, AREA_SIZE } from "../../../constant/constant";
 const styleModal = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
+  ...STYLE_MODAL,
   width: "90%",
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  p: 4,
-  borderRadius: "10px",
 };
 
 function ShelfModalDetail({
@@ -28,27 +29,9 @@ function ShelfModalDetail({
 }) {
   let nameBox;
   if (currentShelf?.type === 0) {
-    if (currentShelf?.boxSize === 0) {
-      nameBox = "Bolo";
-    } else if (currentShelf?.boxSize === 1) {
-      nameBox = "S";
-    } else if (currentShelf?.boxSize === 2) {
-      nameBox = "M";
-    } else if (currentShelf?.boxSize === 3) {
-      nameBox = "L";
-    } else if (currentShelf?.boxSize === 4) {
-      nameBox = "XL";
-    }
+    nameBox = BOX_SIZE[currentShelf?.boxSize];
   } else {
-    if (currentShelf?.boxSize === 0) {
-      nameBox = "0.5m2";
-    } else if (currentShelf?.boxSize === 1) {
-      nameBox = "1m2";
-    } else if (currentShelf?.boxSize === 2) {
-      nameBox = "2m2";
-    } else if (currentShelf?.boxSize === 3) {
-      nameBox = "3m2";
-    }
+    nameBox = AREA_SIZE[currentShelf?.boxSize];
   }
 
   const buildBox = () => {
@@ -73,19 +56,19 @@ function ShelfModalDetail({
       );
     }
     return currentShelf?.boxes?.map((e, i) => {
-      let color = "#99E5FE";
+      let color = SECOND_BLUE;
 
       if (e.orderId !== null) {
-        color = "#04BFFE";
+        color = PRIMARY_BLUE;
       }
 
       if (currentBox?.id === e.id && currentBox !== undefined) {
-        color = "#26FF7B";
+        color = SECOND_SEMANTIC_GREEN;
       }
 
       placingProducts.boxes.forEach((ele) => {
         if (e.id === ele.idBox) {
-          color = "#00993C";
+          color = PRIMARY_SEMANTIC_GREEN;
         }
       });
 

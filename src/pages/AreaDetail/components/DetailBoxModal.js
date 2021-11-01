@@ -2,17 +2,10 @@ import React from "react";
 import { Box, Typography, Modal, Button } from "@material-ui/core";
 import { connect } from "react-redux";
 import * as action from "../../../redux/action/action";
+import { STYLE_MODAL } from "../../../constant/style";
 const styleModal = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
+  ...STYLE_MODAL,
   width: "50%",
-  height: "auto",
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  p: 4,
-  borderRadius: "10px",
 };
 
 function DetailBoxModal({
@@ -163,7 +156,6 @@ function DetailBoxModal({
               width: "150px",
             }}
             sx={{ width: "auto" }}
-            // onClick={}
             color="error"
             variant="outlined"
           >

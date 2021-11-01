@@ -28,7 +28,7 @@ import { connect } from "react-redux";
 import * as action from "../../../redux/action/action";
 import { getOrderById, cancelOrder } from "../../../apis/Apis";
 import CustomAreaInput from "../../../components/CustomAreaInput";
-
+import { ORDER_STATUS, ORDER_TYPE } from "../../../constant/constant";
 function TablePaginationActions(props) {
   const theme = useTheme();
   const { count, page, rowsPerPage, onPageChange } = props;
@@ -322,22 +322,8 @@ function ListOrder({
         {mapListTableHeader(listHeaderName)}
         <TableBody>
           {listOrder.map((row, index) => {
-            let typeOrder =
-              row.typeOrder === 0 ? "Self-Storage" : "Door to door";
-            let status;
-            if (row.status === 0) {
-              status = "Canceled";
-            } else if (row.status === 1) {
-              status = "Booked";
-            } else if (row.status === 2) {
-              status = "Paid";
-            } else if (row.status === 3) {
-              status = "Delivery";
-            } else if (row.status === 4) {
-              status = "Stored";
-            } else if (row.status === 5) {
-              status = "Expired";
-            }
+            let typeOrder = ORDER_TYPE[row.typeOrder];
+            let status = ORDER_STATUS[row.status];
 
             return (
               <TableRow key={row.id}>

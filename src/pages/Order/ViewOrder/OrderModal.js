@@ -19,7 +19,11 @@ import { connect } from "react-redux";
 import * as action from "../../../redux/action/action";
 import { updateOrder } from "../../../apis/Apis";
 import { useNavigate } from "react-router";
-
+import {
+  PRODUCT_TYPE,
+  LIST_STATUS,
+  LIST_TIME,
+} from "../../../constant/constant";
 const styleModal = {
   position: "absolute",
   top: "0%",
@@ -53,13 +57,7 @@ const styleButtonMinus = {
   backgroundColor: "white",
   border: "1px #A19FA8 solid",
 };
-const listTime = [
-  { name: "8am - 10am", isAvailable: true },
-  { name: "10am - 12am", isAvailable: true },
-  { name: "12pm - 14pm", isAvailable: true },
-  { name: "14am - 16pm", isAvailable: true },
-  { name: "18am - 20am", isAvailable: true },
-];
+
 const styleInput = {
   border: "1px #A19FA8 solid",
   textAlign: "center",
@@ -137,17 +135,8 @@ function OrderModal({
     }
   }, [currentOrder]);
 
-  const listStatus = [
-    { label: "Canceled", value: 0 },
-    { label: "Booked", value: 1 },
-    { label: "Paid", value: 2 },
-    { label: "Delivery", value: 3 },
-    { label: "Stored", value: 4 },
-    { label: "Expired", value: 5 },
-  ];
-
   const generateSelectOptions = () => {
-    return listStatus.map((option) => {
+    return LIST_STATUS.map((option) => {
       return (
         <MenuItem key={option.value} value={option.value}>
           {option.label}
@@ -202,7 +191,7 @@ function OrderModal({
   };
 
   const mapListTime = (time, setTime) =>
-    listTime.map((e, index) => (
+    LIST_TIME.map((e, index) => (
       <Grid item xs={4} key={index}>
         <TagSelection
           tag={e}
@@ -240,16 +229,7 @@ function OrderModal({
     };
 
     currentOrder?.orderDetails.forEach((e) => {
-      let type;
-
-      if (e.productType === 0 || e.productType === 2 || e.productType === 4) {
-        type = "product";
-      } else if (e.producType === 1) {
-        type = "accessory";
-      } else {
-        type = "services";
-      }
-
+      let type = PRODUCT_TYPE[e.productType];
       result[type].push({
         name: e.productName,
         quantity: e.amount,

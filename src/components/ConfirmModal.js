@@ -2,17 +2,11 @@ import React from "react";
 import { Box, Modal, Button, Typography } from "@material-ui/core";
 import { connect } from "react-redux";
 import * as action from "../redux/action/action";
+import { STYLE_MODAL } from "../constant/style";
 const styleModal = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
+  ...STYLE_MODAL,
+
   width: "20%",
-  height: "auto",
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  p: 4,
-  borderRadius: "10px",
 };
 
 function ConfirmModal({

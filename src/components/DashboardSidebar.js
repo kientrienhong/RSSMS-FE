@@ -13,6 +13,8 @@ import { User as UserIcon, Users as UsersIcon } from "react-feather";
 import NavItem from "./NavItem";
 import { connect } from "react-redux";
 import { FaWarehouse, FaFileInvoiceDollar } from "react-icons/fa";
+import { VscTag } from "react-icons/vsc";
+
 const items = [
   {
     href: "/app/account",
@@ -23,6 +25,12 @@ const items = [
     href: "/app/users",
     icon: UsersIcon,
     title: "Users",
+  },
+  {
+    href: "/app/products",
+    icon: undefined,
+    title: "Product",
+    reactIcon: <VscTag />,
   },
   {
     href: "/app/storages",

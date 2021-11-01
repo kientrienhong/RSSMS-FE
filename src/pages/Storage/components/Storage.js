@@ -3,6 +3,7 @@ import { Card, Box, Typography, Button } from "@material-ui/core";
 import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import * as action from "../../../redux/action/action";
+import { TYPE_STORAGE, STORAGE_STATUS } from "../../../constant/constant";
 const styleIcon = {
   marginRight: "2%",
   marginTop: "2%",
@@ -26,13 +27,6 @@ function Storage({
   removeStorage,
   showSnackbar,
 }) {
-  const statusList = [
-    { color: "#04BFFE", name: "Rented" },
-    { color: "#99E5FE", name: "Available" },
-    { color: "", name: "Placing" },
-    {},
-  ];
-  const typeList = ["Self-Storage", "Door-to-door"];
   const navigate = useNavigate();
   let isPlacing = false;
   placingProducts.boxes.forEach((e) => {
@@ -91,12 +85,14 @@ function Storage({
               color={
                 isPlacing === true
                   ? "#00993C"
-                  : statusList[storage.status].color
+                  : STORAGE_STATUS[storage.status].color
               }
               variant="h2"
               style={{ marginTop: "1%", marginRight: "1%" }}
             >
-              {isPlacing === true ? "Placing" : statusList[storage.status].name}
+              {isPlacing === true
+                ? "Placing"
+                : STORAGE_STATUS[storage.status].name}
             </Typography>
           </Box>
           <Box
@@ -125,7 +121,7 @@ function Storage({
               Type:
             </Typography>
             <Typography color="black" variant="body">
-              {typeList[storage.type]}
+              {Object.keys(TYPE_STORAGE)[storage.type]}
             </Typography>
           </Box>
           {storage.type === "Self-storage" ? (

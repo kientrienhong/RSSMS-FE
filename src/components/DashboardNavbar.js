@@ -16,22 +16,15 @@ import NotificationsIcon from "@material-ui/icons/NotificationsOutlined";
 import InputIcon from "@material-ui/icons/Input";
 import Logo from "./Logo";
 import { useNavigate } from "react-router";
+import { STYLE_MODAL } from "../constant/style";
 const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
   const [notifications] = useState([]);
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
   const styleModal = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
+    ...STYLE_MODAL,
     width: "20%",
-    height: "auto",
-    bgcolor: "background.paper",
-    boxShadow: 24,
-    p: 4,
-    borderRadius: "10px",
   };
 
   const handleOpen = () => {
