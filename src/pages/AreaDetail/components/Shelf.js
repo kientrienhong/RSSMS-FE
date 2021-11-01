@@ -93,7 +93,6 @@ function Shelf({
             }}
             onClick={() => {
               if (isModifyShelf === false) {
-                console.log(storage);
                 setUpCurrentBox({
                   ...e,
                   areaName: area.name,

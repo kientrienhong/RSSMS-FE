@@ -9,6 +9,7 @@ import StorageDetail from "../pages/StorageDetail/StorageDetail";
 import AreaDetail from "../pages/AreaDetail/AreaDetail";
 import Order from "../pages/Order/Order";
 import MakingOrder from "../pages/Order/CreateOrder/MakingOrder";
+import Products from "../pages/Product/Products";
 
 const routes = [
   {
@@ -19,6 +20,7 @@ const routes = [
       { path: "users", element: <Users /> },
       { path: "storages", element: <Storages /> },
       { path: "orders", element: <Order /> },
+      { path: "products", element: <Products /> },
       { path: "storages/:storageId", element: <StorageDetail /> },
       { path: "storages/:storageId/areas/:areaId", element: <AreaDetail /> },
       { path: "*", element: <Navigate to="/404" /> },
