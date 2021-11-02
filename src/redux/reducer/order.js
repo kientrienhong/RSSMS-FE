@@ -69,6 +69,11 @@ const order = (state = initialState, action) => {
     }
 
     case ActionType.EMPTY_PRODUCT: {
+      state.storedOrder = {
+        orderId: -1,
+        products: [],
+        totalQuantity: 0,
+      };
       state.placingProducts = {
         orderId: -1,
         boxes: [],

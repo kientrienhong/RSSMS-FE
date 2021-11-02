@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Typography, Grid } from "@material-ui/core";
 import Product from "./Product";
 import ProductAdd from "./ProductAdd";
-export default function SectionProduct({ name, listProduct }) {
+export default function SectionProduct({ name, listProduct, handleOpen }) {
   const buildGridProduct = () =>
     listProduct.map((e, i) => (
       <Grid item xs={3} key={i}>
@@ -38,7 +38,7 @@ export default function SectionProduct({ name, listProduct }) {
         }}
       >
         <Grid item xs={3}>
-          <ProductAdd />
+          <ProductAdd handleOpen={handleOpen} />
         </Grid>
         {buildGridProduct()}
       </Grid>

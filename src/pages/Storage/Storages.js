@@ -691,7 +691,6 @@ function Storages(props) {
               paddingLeft: "16px",
               paddingRight: "16px",
             }}
-            // onClick={() => onHandleSubmit(user)}
             color="primary"
             variant="contained"
             type="submit"

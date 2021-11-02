@@ -323,6 +323,8 @@ function StoredOrderModal({
     }
   };
 
+  let widthModal = storedOrder.orderId === -1 ? "40%" : "80%";
+
   return (
     <Modal
       open={open}
@@ -330,164 +332,181 @@ function StoredOrderModal({
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Box
-        sx={{
-          ...styleModal,
-          display: "flex",
-          justifyContent: "flex-start",
-          flexDirection: "column",
-        }}
-      >
+      {storedOrder.orderId === -1 ? (
         <Box
           sx={{
+            ...styleModal,
+            display: "flex",
+            flexDirection: "center",
+            justifyContent: "center",
+            alignItems: "center",
+            width: widthModal,
+          }}
+        >
+          <Typography color="black" variant="h2">
+            Do not have any orders to place
+          </Typography>
+        </Box>
+      ) : (
+        <Box
+          sx={{
+            ...styleModal,
             display: "flex",
             justifyContent: "flex-start",
-            flexDirection: "row",
-            width: "100%",
+            flexDirection: "column",
           }}
         >
           <Box
             sx={{
-              width: "60%",
               display: "flex",
-              flexDirection: "column",
               justifyContent: "flex-start",
-              alignItems: "flex-start",
+              flexDirection: "row",
+              width: "100%",
             }}
           >
-            <Typography
-              color="black"
-              variant="h2"
-              style={{
-                marginBottom: "8%",
+            <Box
+              sx={{
+                width: "60%",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "flex-start",
+                alignItems: "flex-start",
               }}
             >
-              Total products in order
-            </Typography>
-            <Grid container spacing={2}>
-              {buildRadioSelect(storedOrder?.product)}
-            </Grid>
+              <Typography
+                color="black"
+                variant="h2"
+                style={{
+                  marginBottom: "8%",
+                }}
+              >
+                Total products in order
+              </Typography>
+              <Grid container spacing={2}>
+                {buildRadioSelect(storedOrder?.product)}
+              </Grid>
+            </Box>
+            <Box
+              sx={{
+                width: "40%",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "flex-start",
+                alignItems: "flex-start",
+              }}
+            >
+              <Typography
+                color="black"
+                variant="h2"
+                style={{
+                  marginBottom: "8%",
+                }}
+              >
+                List products is placing
+              </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  marginTop: "16px",
+                  borderRadius: "4px",
+                  height: "345px",
+                  width: "100%",
+                  border: "solid 1px #000",
+                  padding: "8px",
+                  overflowY: "auto",
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                  }}
+                >
+                  <Box sx={{ width: "30%" }}>
+                    <Typography
+                      color="black"
+                      variant="h3"
+                      style={{
+                        marginBottom: "1%",
+                      }}
+                    >
+                      Name Product
+                    </Typography>
+                  </Box>
+                  <Box sx={{ width: "60%" }}>
+                    <Typography
+                      color="black"
+                      variant="h3"
+                      style={{
+                        marginBottom: "1%",
+                      }}
+                    >
+                      Position
+                    </Typography>
+                  </Box>
+                  <Box sx={{ width: "10%" }}>
+                    <Typography
+                      color="black"
+                      variant="h3"
+                      style={{
+                        marginBottom: "1%",
+                      }}
+                    >
+                      Action
+                    </Typography>
+                  </Box>
+                </Box>
+                {placingProducts.typeOrder === 0
+                  ? buildListPlacingStorage()
+                  : buildListPlacingProduct()}
+              </Box>
+            </Box>
           </Box>
-          <Box
-            sx={{
-              width: "40%",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "flex-start",
-              alignItems: "flex-start",
-            }}
-          >
-            <Typography
-              color="black"
-              variant="h2"
-              style={{
-                marginBottom: "8%",
-              }}
-            >
-              List products is placing
-            </Typography>
+          {isView === true ? null : (
             <Box
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                marginTop: "16px",
-                borderRadius: "4px",
-                height: "345px",
+                alignItems: "center",
                 width: "100%",
-                border: "solid 1px #000",
-                padding: "8px",
-                overflowY: "auto",
               }}
             >
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                }}
-              >
-                <Box sx={{ width: "30%" }}>
-                  <Typography
-                    color="black"
-                    variant="h3"
-                    style={{
-                      marginBottom: "1%",
-                    }}
-                  >
-                    Name Product
-                  </Typography>
-                </Box>
-                <Box sx={{ width: "60%" }}>
-                  <Typography
-                    color="black"
-                    variant="h3"
-                    style={{
-                      marginBottom: "1%",
-                    }}
-                  >
-                    Position
-                  </Typography>
-                </Box>
-                <Box sx={{ width: "10%" }}>
-                  <Typography
-                    color="black"
-                    variant="h3"
-                    style={{
-                      marginBottom: "1%",
-                    }}
-                  >
-                    Action
-                  </Typography>
-                </Box>
-              </Box>
-              {placingProducts.typeOrder === 0
-                ? buildListPlacingStorage()
-                : buildListPlacingProduct()}
-            </Box>
-          </Box>
-        </Box>
-        {isView === true ? null : (
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              width: "100%",
-            }}
-          >
-            {error?.length > 0 ? (
-              <p style={{ color: "red", textAlign: "center" }}>{error}</p>
-            ) : null}
+              {error?.length > 0 ? (
+                <p style={{ color: "red", textAlign: "center" }}>{error}</p>
+              ) : null}
 
-            <Box sx={{ display: "flex", flexDirection: "row" }}>
-              <Button
-                style={{
-                  height: "45px",
-                  paddingLeft: "16px",
-                  paddingRight: "16px",
-                  marginRight: "16px",
-                }}
-                onClick={() => onHandlePlace()}
-                color="primary"
-                variant="contained"
-              >
-                Place
-              </Button>
-              <Button
-                style={{
-                  height: "45px",
-                  paddingLeft: "16px",
-                  paddingRight: "16px",
-                }}
-                onClick={() => onHandleSubmit()}
-                color="success"
-                variant="contained"
-              >
-                Submit
-              </Button>
+              <Box sx={{ display: "flex", flexDirection: "row" }}>
+                <Button
+                  style={{
+                    height: "45px",
+                    paddingLeft: "16px",
+                    paddingRight: "16px",
+                    marginRight: "16px",
+                  }}
+                  onClick={() => onHandlePlace()}
+                  color="primary"
+                  variant="contained"
+                >
+                  Place
+                </Button>
+                <Button
+                  style={{
+                    height: "45px",
+                    paddingLeft: "16px",
+                    paddingRight: "16px",
+                  }}
+                  onClick={() => onHandleSubmit()}
+                  color="success"
+                  variant="contained"
+                >
+                  Submit
+                </Button>
+              </Box>
             </Box>
-          </Box>
-        )}
-      </Box>
+          )}
+        </Box>
+      )}
     </Modal>
   );
 }
@@ -506,8 +525,7 @@ const mapDispatchToProps = (dispatch) => {
     showLoading: () => dispatch(action.showLoader()),
     hideLoading: () => dispatch(action.hideLoader()),
     showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
-    emptyPlacedProduct: (type, msg) =>
-      dispatch(action.emptyPlacedProduct(type, msg)),
+    emptyPlacedProduct: () => dispatch(action.emptyPlacedProduct()),
     changeIsLoadShelf: () => dispatch(action.changeIsLoadShelf()),
     placeStorage: (storage) => dispatch(action.placeStorage(storage)),
     removeStorage: () => dispatch(action.removeStorage()),

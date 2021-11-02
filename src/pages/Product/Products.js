@@ -8,7 +8,16 @@ import {
 } from "@material-ui/core";
 import SearchIcon from "@mui/icons-material/Search";
 import SectionProduct from "./components/SectionProduct";
+import ProductModal from "./components/ProductModal";
 export default function Products() {
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const [listStorages, setListStorages] = useState([
     {
       name: "Storage 2m2",
@@ -206,6 +215,7 @@ export default function Products() {
         py: 3,
       }}
     >
+      <ProductModal handleClose={handleClose} open={open} />
       <Box
         sx={{
           marginLeft: "2%",
@@ -231,10 +241,26 @@ export default function Products() {
           }}
         />
       </Box>
-      <SectionProduct name="Storage" listProduct={listStorages} />
-      <SectionProduct name="Boxes" listProduct={listBoxes} />
-      <SectionProduct name="Areas" listProduct={listAreas} />
-      <SectionProduct name="Services" listProduct={listServices} />
+      <SectionProduct
+        handleOpen={handleOpen}
+        name="Storage"
+        listProduct={listStorages}
+      />
+      <SectionProduct
+        handleOpen={handleOpen}
+        name="Boxes"
+        listProduct={listBoxes}
+      />
+      <SectionProduct
+        handleOpen={handleOpen}
+        name="Areas"
+        listProduct={listAreas}
+      />
+      <SectionProduct
+        handleOpen={handleOpen}
+        name="Services"
+        listProduct={listServices}
+      />
     </Box>
   );
 }

@@ -62,12 +62,12 @@ function Shelf({
       }
 
       if (currentBox?.id === e.id && currentBox !== undefined) {
-        color = SECOND_SEMANTIC_GREEN;
+        color = PRIMARY_SEMANTIC_GREEN;
       }
 
       placingProducts?.boxes.forEach((ele) => {
         if (e?.id === ele?.idBox) {
-          color = PRIMARY_SEMANTIC_GREEN;
+          color = SECOND_SEMANTIC_GREEN;
         }
       });
 

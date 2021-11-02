@@ -63,12 +63,12 @@ function ShelfModalDetail({
       }
 
       if (currentBox?.id === e.id && currentBox !== undefined) {
-        color = SECOND_SEMANTIC_GREEN;
+        color = PRIMARY_SEMANTIC_GREEN;
       }
 
       placingProducts.boxes.forEach((ele) => {
         if (e.id === ele.idBox) {
-          color = PRIMARY_SEMANTIC_GREEN;
+          color = SECOND_SEMANTIC_GREEN;
         }
       });
 
@@ -99,7 +99,7 @@ function ShelfModalDetail({
                 areaId: area.id,
                 shelfName: currentShelf.name,
                 shelfType: currentShelf.type,
-                nameBox: nameBox,
+                nameBox: nameBoxPrint,
                 boxSize: currentShelf.boxSize,
               });
 
