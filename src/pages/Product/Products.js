@@ -13,10 +13,13 @@ import { LIST_PRODUCT_MANAGE_TYPE } from "../../constant/constant";
 import { getProduct, deleteProduct } from "../../apis/Apis";
 import { connect } from "react-redux";
 import * as action from "../../redux/action/action";
+import { useForm } from "react-hook-form";
+
 import ConfirmModal from "../../components/ConfirmModal";
 function Products({ showLoading, hideLoading, showSnackbar }) {
   const [open, setOpen] = useState(false);
   const [openConfirm, setOpenConfirm] = useState(false);
+  const { handleSubmit, control, reset } = useForm();
 
   const [isEdit, setIsEdit] = useState(false);
   const [typeProduct, setTypeProduct] = useState(-1);
@@ -33,6 +36,10 @@ function Products({ showLoading, hideLoading, showSnackbar }) {
     setOpen(false);
     setIsEdit(isEdit);
     setTypeProduct(-1);
+    reset();
+    setCurrentProduct({
+      images: [{ id: null, url: null }],
+    });
   };
 
   const handleOpenConfirm = () => {
@@ -106,6 +113,8 @@ function Products({ showLoading, hideLoading, showSnackbar }) {
         setCurrentProduct={setCurrentProduct}
         isEdit={isEdit}
         getData={getData}
+        handleSubmit={handleSubmit}
+        control={control}
       />
       <Box
         sx={{

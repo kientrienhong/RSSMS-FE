@@ -460,7 +460,6 @@ export const updateProduct = async (product, id, imageUrl) => {
       images: [
         {
           id: product.images[0].id,
-
           url: image,
         },
       ],

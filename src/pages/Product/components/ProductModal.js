@@ -9,7 +9,6 @@ import {
   MenuItem,
 } from "@material-ui/core";
 import { STYLE_MODAL } from "../../../constant/style";
-import { useForm } from "react-hook-form";
 import CustomInput from "../../../components/CustomInput";
 import CustomAreaInput from "../../../components/CustomAreaInput";
 import { LIST_UNIT } from "../../../constant/constant";
@@ -40,11 +39,12 @@ function ProductModal({
   hideLoading,
   showSnackbar,
   getData,
+  handleSubmit,
+  control,
 }) {
   const [unit, setUnit] = useState();
   const buildDropDown = (listSizeStorage) =>
     listSizeStorage.map((e) => <MenuItem value={e.value}>{e.label}</MenuItem>);
-  const { handleSubmit, control } = useForm();
   const inputFile = useRef(null);
   const handleOnclickImage = () => {
     inputFile.current.click();
