@@ -1,9 +1,9 @@
 import React from "react";
 
-export default function ProductAdd({ handleOpen }) {
+export default function ProductAdd({ handleOpen, index }) {
   return (
     <div
-      onClick={() => handleOpen()}
+      onClick={() => handleOpen(false, index)}
       style={{
         borderRadius: "4px",
         backgroundColor: "#FFF",

@@ -36,7 +36,6 @@ const DashboardLayoutContainer = styled("div")({
 const DashboardLayoutContent = styled("div")({
   flex: "1 1 auto",
   height: "100%",
-  // overflow: "auto",
 });
 
 const DashboardLayout = (props) => {
@@ -55,7 +54,7 @@ const DashboardLayout = (props) => {
         open={props.snackbar}
         autoHideDuration={2000}
         onClose={props.closeSnackbar}
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
         <Alert
           onClose={props.closeSnackbar}

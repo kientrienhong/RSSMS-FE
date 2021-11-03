@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   TextField,
@@ -9,203 +9,76 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import SectionProduct from "./components/SectionProduct";
 import ProductModal from "./components/ProductModal";
-export default function Products() {
+import { LIST_PRODUCT_MANAGE_TYPE } from "../../constant/constant";
+import { getProduct, deleteProduct } from "../../apis/Apis";
+import { connect } from "react-redux";
+import * as action from "../../redux/action/action";
+import ConfirmModal from "../../components/ConfirmModal";
+function Products({ showLoading, hideLoading, showSnackbar }) {
   const [open, setOpen] = useState(false);
-  const handleOpen = () => {
+  const [openConfirm, setOpenConfirm] = useState(false);
+
+  const [isEdit, setIsEdit] = useState(false);
+  const [typeProduct, setTypeProduct] = useState(-1);
+  const [currentProduct, setCurrentProduct] = useState({
+    images: [{ id: null, url: null }],
+  });
+  const [listProduct, setListProduct] = useState([]);
+  const handleOpen = (isEdit, index) => {
+    setIsEdit(isEdit);
     setOpen(true);
+    setTypeProduct(index);
   };
   const handleClose = () => {
     setOpen(false);
+    setIsEdit(isEdit);
+    setTypeProduct(-1);
   };
 
-  const [listStorages, setListStorages] = useState([
-    {
-      name: "Storage 2m2",
-      price: 600000,
-      image: "/img/storage2m2.png",
-      type: "product",
-      id: 1,
-      typeInt: 0,
-      description: "Kích thước: 1m x 2m x 2,5m",
-    },
-    {
-      name: "Storage 4m2",
-      price: 1000000,
-      image: "/img/storage4m2.png",
-      type: "product",
-      id: 2,
-      typeInt: 0,
-      description: "Kích thước: 2m x 2m x 2,5m",
-    },
-    {
-      name: "Storage 8m2",
-      price: 1600000,
-      image: "/img/storage8m2.png",
-      type: "product",
-      id: 3,
-      typeInt: 0,
-      description: "Kích thước: 2m x 4m x 2,5m",
-    },
-    {
-      name: "Storage 16m2",
-      price: 2800000,
-      image: "/img/storage16m2.png",
-      type: "product",
-      id: 4,
-      typeInt: 0,
-      description: "Kích thước: 4m x 4m x 2,5m",
-    },
-  ]);
+  const handleOpenConfirm = () => {
+    setOpenConfirm(true);
+  };
 
-  const [listAccessory, setListAccessory] = useState([
-    {
-      name: "Tape",
-      price: 25000,
-      image: "/img/tape.png",
-      type: "accessory",
-      id: 5,
-      typeInt: 1,
-    },
-    {
-      name: "Locker",
-      price: 165000,
-      image: "/img/locker.png",
-      type: "accessory",
-      id: 6,
-      typeInt: 1,
-    },
-    {
-      name: "Carton box",
-      price: 30000,
-      image: "/img/carton.png",
-      type: "accessory",
-      id: 7,
-      typeInt: 1,
-    },
-    {
-      name: "PE Foam",
-      price: 25000,
-      image: "/img/peFoam.png",
-      type: "accessory",
-      id: 8,
-      typeInt: 1,
-    },
-    {
-      name: "Bubble Wrap",
-      price: 25000,
-      image: "/img/bubbleWrap.png",
-      type: "accessory",
-      id: 9,
-      typeInt: 1,
-    },
-    {
-      name: "PE strech film",
-      price: 150000,
-      image: "/img/PEstretchfilm.png",
-      type: "accessory",
-      id: 10,
-      typeInt: 1,
-    },
-  ]);
+  const handleCloseConfirm = () => {
+    setOpenConfirm(false);
+  };
 
-  const [listBoxes, setListBoxes] = useState([
-    {
-      name: "Bolo",
-      price: 100000,
-      image: "/img/bolobox.png",
-      quantity: 0,
-      type: "product",
-      id: 11,
-      typeInt: 2,
-    },
-    {
-      name: "Size S",
-      price: 70000,
-      image: "/img/boxSizeS.png",
-      quantity: 0,
-      type: "product",
-      id: 12,
-      typeInt: 2,
-    },
-    {
-      name: "Size M",
-      price: 100000,
-      image: "/img/boxSizeM.png",
-      quantity: 0,
-      type: "product",
-      id: 13,
-      typeInt: 2,
-    },
-    {
-      name: "Size L",
-      price: 150000,
-      image: "/img/boxSizeL.png",
-      quantity: 0,
-      type: "product",
-      id: 14,
-      typeInt: 2,
-    },
-    {
-      name: "Size XL",
-      price: 200000,
-      image: "/img/boxSizeXL.png",
-      quantity: 0,
-      type: "product",
-      id: 16,
-      typeInt: 2,
-    },
-  ]);
+  const getData = async () => {
+    let listProductTemp = await getProduct();
+    setListProduct(listProductTemp.data);
+  };
 
-  const [listAreas, setListAreas] = useState([
-    {
-      name: "Area 0.5m2",
-      price: 400000,
-      image: "/img/areaSize0.5m2.png",
-      quantity: 0,
-      type: "product",
-      id: 18,
-      typeInt: 4,
-    },
-    {
-      name: "Area 1m2",
-      price: 750000,
-      image: "/img/areaSize1m2.png",
-      quantity: 0,
-      type: "product",
-      id: 19,
-      typeInt: 4,
-    },
-    {
-      name: "Area 2m2",
-      price: 1330000,
-      image: "/img/areaSize2m2.png",
-      quantity: 0,
-      type: "product",
-      id: 19,
-      typeInt: 4,
-    },
-    {
-      name: "Area 3m2",
-      price: 1835000,
-      image: "/img/areaSize3m2.png",
-      quantity: 0,
-      type: "product",
-      id: 19,
-      typeInt: 4,
-    },
-  ]);
+  useEffect(() => {
+    const firstCall = async () => {
+      try {
+        showLoading();
+        await getData();
+        hideLoading();
+      } catch (error) {
+        console.log(error);
+        hideLoading();
+      }
+    };
+    firstCall();
+  }, []);
 
-  const [listServices, setListServices] = useState([
-    {
-      name: "Packaging",
-      price: 50000,
-      image: "/img/package.png",
-      quantity: 0,
-      type: "services",
-      id: 17,
-      typeInt: 3,
-    },
-  ]);
+  const handleDeleteProduct = async (id) => {
+    await deleteProduct(id);
+    await getData();
+  };
+
+  const buildListSection = () =>
+    LIST_PRODUCT_MANAGE_TYPE.map((e, index) => (
+      <SectionProduct
+        handleOpen={handleOpen}
+        setCurrentProduct={setCurrentProduct}
+        name={e}
+        handleOpenConfirm={handleOpenConfirm}
+        setTypeProduct={setTypeProduct}
+        index={index}
+        listProduct={listProduct ? listProduct[index.toString()] : []}
+      />
+    ));
 
   return (
     <Box
@@ -215,7 +88,25 @@ export default function Products() {
         py: 3,
       }}
     >
-      <ProductModal handleClose={handleClose} open={open} />
+      <ConfirmModal
+        open={openConfirm}
+        handleClose={handleCloseConfirm}
+        onHandleYes={handleDeleteProduct}
+        id={currentProduct.id}
+        showLoading={showLoading}
+        hideLoading={hideLoading}
+        showSnackbar={showSnackbar}
+        msg="Delete product success"
+      />
+      <ProductModal
+        handleClose={handleClose}
+        open={open}
+        typeProduct={typeProduct}
+        currentProduct={currentProduct}
+        setCurrentProduct={setCurrentProduct}
+        isEdit={isEdit}
+        getData={getData}
+      />
       <Box
         sx={{
           marginLeft: "2%",
@@ -241,26 +132,17 @@ export default function Products() {
           }}
         />
       </Box>
-      <SectionProduct
-        handleOpen={handleOpen}
-        name="Storage"
-        listProduct={listStorages}
-      />
-      <SectionProduct
-        handleOpen={handleOpen}
-        name="Boxes"
-        listProduct={listBoxes}
-      />
-      <SectionProduct
-        handleOpen={handleOpen}
-        name="Areas"
-        listProduct={listAreas}
-      />
-      <SectionProduct
-        handleOpen={handleOpen}
-        name="Services"
-        listProduct={listServices}
-      />
+      {buildListSection()}
     </Box>
   );
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    showLoading: () => dispatch(action.showLoader()),
+    hideLoading: () => dispatch(action.hideLoader()),
+    showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(Products);

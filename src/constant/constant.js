@@ -55,6 +55,14 @@ export const AREA_SIZE = {
   3: "3m2",
 };
 
+export const LIST_PRODUCT_MANAGE_TYPE = [
+  "Storages",
+  "Accessories",
+  "Boxes",
+  "Services",
+  "Areas",
+];
+
 export const LIST_STATUS = [
   { label: "Canceled", value: 0 },
   { label: "Booked", value: 1 },
@@ -62,6 +70,11 @@ export const LIST_STATUS = [
   { label: "Delivery", value: 3 },
   { label: "Stored", value: 4 },
   { label: "Expired", value: 5 },
+];
+
+export const LIST_UNIT = [
+  { label: "Month", value: "month" },
+  { label: "Quantity", value: "quantity" },
 ];
 
 export const LIST_TIME = [

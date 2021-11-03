@@ -2,11 +2,24 @@ import React from "react";
 import { Box, Typography, Grid } from "@material-ui/core";
 import Product from "./Product";
 import ProductAdd from "./ProductAdd";
-export default function SectionProduct({ name, listProduct, handleOpen }) {
+export default function SectionProduct({
+  name,
+  listProduct,
+  handleOpen,
+  index,
+  setCurrentProduct,
+  handleOpenConfirm,
+}) {
   const buildGridProduct = () =>
-    listProduct.map((e, i) => (
+    listProduct?.map((e, i) => (
       <Grid item xs={3} key={i}>
-        <Product product={e} />
+        <Product
+          handleOpenConfirm={handleOpenConfirm}
+          product={e}
+          setCurrentProduct={setCurrentProduct}
+          handleOpen={handleOpen}
+          index={index}
+        />
       </Grid>
     ));
 
@@ -38,7 +51,7 @@ export default function SectionProduct({ name, listProduct, handleOpen }) {
         }}
       >
         <Grid item xs={3}>
-          <ProductAdd handleOpen={handleOpen} />
+          <ProductAdd handleOpen={handleOpen} index={index} />
         </Grid>
         {buildGridProduct()}
       </Grid>

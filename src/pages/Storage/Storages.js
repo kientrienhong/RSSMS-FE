@@ -272,7 +272,7 @@ function Storages(props) {
       showSnackbar("success", "Assign Success!");
       handleClose();
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
       hideLoading();
     }
   };

@@ -6,7 +6,7 @@ import { useRoutes } from "react-router-dom";
 
 function App() {
   const content = useRoutes(route);
-
+  console.log(content);
   return <ThemeProvider theme={theme}>{content}</ThemeProvider>;
 }
 

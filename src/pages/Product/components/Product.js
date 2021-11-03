@@ -1,12 +1,24 @@
 import React from "react";
 import { Box, Typography, Card } from "@material-ui/core";
 import { formatCurrency } from "../../../utils/FormatCurrency";
-export default function Product({ product }) {
-  const handleOnClickEdit = (shelf) => {};
+export default function Product({
+  product,
+  setCurrentProduct,
+  index,
+  handleOpen,
+  handleOpenConfirm,
+}) {
+  const handleOnClickEdit = () => {
+    setCurrentProduct(product);
+    handleOpen(true, index);
+  };
 
-  const handleOnClickDelete = (shelf) => {};
+  const handleOnClickDelete = () => {
+    setCurrentProduct(product);
+    handleOpenConfirm();
+  };
 
-  const handleOnClickSeeMore = (shelf) => {};
+  const handleOnClickSeeMore = () => {};
 
   return (
     <Card
@@ -19,8 +31,8 @@ export default function Product({ product }) {
       }}
     >
       <img
-        src={product.image}
-        alt={product.name}
+        src={product?.images[0]?.url}
+        alt={product?.name}
         width="80px"
         height="80px"
         style={{
@@ -32,9 +44,11 @@ export default function Product({ product }) {
         variant="h2"
         style={{ marginTop: "3%", marginLeft: "3%" }}
       >
-        {product.name}
+        {product?.name}
       </Typography>
-      <p style={{ marginLeft: "3%", marginTop: "3%" }}>{product.description}</p>
+      <p style={{ marginLeft: "3%", marginTop: "3%" }}>
+        {product?.description}
+      </p>
       <Box
         sx={{
           display: "flex",
@@ -46,7 +60,7 @@ export default function Product({ product }) {
         }}
       >
         <Typography color="primary" variant="h2" style={{ marginLeft: "3%" }}>
-          {formatCurrency(product.price, "đ")}
+          {formatCurrency(product?.price, "đ")}
         </Typography>
         <Box
           sx={{

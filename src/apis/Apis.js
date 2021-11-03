@@ -410,3 +410,70 @@ export const placeStorages = async (placingProducts) => {
 
   return response;
 };
+
+export const getProduct = async () => {
+  const response = await axios.get(`https://localhost:44304/api/v1/products`);
+
+  return response;
+};
+
+export const createProduct = async (product) => {
+  const response = await axios.post(`https://localhost:44304/api/v1/products`, {
+    name: product.name,
+    price: product.price,
+    description: product.description,
+    type: product.type,
+    unit: product.unit,
+    tooltip: product.tooltip,
+    images: [
+      {
+        url: null,
+      },
+    ],
+  });
+
+  return response;
+};
+
+export const updateProduct = async (product, id, imageUrl) => {
+  let image;
+  if (imageUrl === "") {
+    if (product.images === undefined) {
+      image = null;
+    } else {
+      image = product.images[0].url;
+    }
+  } else {
+    image = imageUrl;
+  }
+
+  const response = await axios.put(
+    `https://localhost:44304/api/v1/products/${id}`,
+    {
+      id: id,
+      name: product.name,
+      price: product.price,
+      description: product.description,
+      type: product.type,
+      unit: product.unit,
+      tooltip: product.tooltip,
+      images: [
+        {
+          id: product.images[0].id,
+
+          url: image,
+        },
+      ],
+    }
+  );
+
+  return response;
+};
+
+export const deleteProduct = async (id) => {
+  const response = await axios.delete(
+    `https://localhost:44304/api/v1/products/${id}`
+  );
+
+  return response;
+};
