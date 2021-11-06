@@ -59,8 +59,8 @@ export default function Product({
           marginTop: "3%",
         }}
       >
-        <Typography color="primary" variant="h2" style={{ marginLeft: "3%" }}>
-          {formatCurrency(product?.price, "đ")}
+        <Typography color="primary" variant="h3" style={{ marginLeft: "3%" }}>
+          {formatCurrency(product?.price, "đ")} / {product?.unit}
         </Typography>
         <Box
           sx={{

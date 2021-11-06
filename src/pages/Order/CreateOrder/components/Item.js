@@ -33,6 +33,7 @@ const styleInput = {
 
 export default function Item({
   image,
+  unit,
   name,
   quantity,
   price,
@@ -44,6 +45,7 @@ export default function Item({
   type,
   typeInt,
 }) {
+  console.log(unit);
   const handleOnClickMinus = () => {
     if (quantity > 0) {
       let quantityTemp = --quantity;
@@ -92,11 +94,6 @@ export default function Item({
     setChoosenProduct(choosenProductTemp);
   };
 
-  let priceString =
-    type !== "product"
-      ? `${formatCurrency(price, "đ")} / item`
-      : `${formatCurrency(price, "đ")} / month`;
-
   return (
     <Card
       sx={{
@@ -108,7 +105,7 @@ export default function Item({
       }}
     >
       <img
-        src={image}
+        src={image ? image[0]?.url : undefined}
         alt={name}
         style={{
           marginTop: "20px",
@@ -121,7 +118,7 @@ export default function Item({
         {name}
       </Typography>
       <Typography color="primary" variant="h2" style={{ marginBottom: "5%" }}>
-        {priceString}
+        {`${formatCurrency(price, "đ")} / ${unit}`}
       </Typography>
       <Box
         sx={{

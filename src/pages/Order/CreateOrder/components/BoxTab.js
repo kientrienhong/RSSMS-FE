@@ -16,7 +16,8 @@ export default function BoxTab({
     return listData.map((e, index) => (
       <Grid item xs={4} key={index}>
         <Item
-          image={e.image}
+          image={e?.images}
+          unit={e.unit}
           type={e.type}
           price={e.price}
           id={e.id}

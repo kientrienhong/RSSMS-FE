@@ -115,7 +115,7 @@ function ProductModal({
       images: [
         {
           id: currentProduct?.images[0]?.id,
-          url: null,
+          url: currentProduct?.images[0]?.url,
         },
       ],
     };

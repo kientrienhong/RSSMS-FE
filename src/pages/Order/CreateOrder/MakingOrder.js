@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box } from "@material-ui/core";
 import { BsBoxSeam } from "react-icons/bs";
 import { FaWarehouse } from "react-icons/fa";
@@ -7,7 +7,11 @@ import SelfStorageOrderInfo from "./components/SelfStorageOrderInfo";
 import DoorToDoorMainTab from "./DoorToDoorMainTab";
 import DoorToDoorOrderInfo from "./components/DoorToDoorOrderInfo";
 import InputInforModal from "./InputInforModal";
-export default function MakingOrder() {
+import { connect } from "react-redux";
+import * as action from "../../../redux/action/action";
+import { getProduct } from "../../../apis/Apis";
+import LoadingPage from "../../../pages/Loading/LoadingPage";
+function MakingOrder({ showLoading, hideLoading, showSnackbar }) {
   const [indexMain, setIndexMain] = useState(0);
   const [openInputFormation, setOpenInputFormation] = useState(false);
   const [currentColor, setCurrentColor] = useState({
@@ -15,200 +19,60 @@ export default function MakingOrder() {
     doorToDoor: "#A19FA8",
   });
 
-  const [listStorages, setListStorages] = useState([
-    {
-      name: "Storage 2m2",
-      price: 600000,
-      image: "/img/storage2m2.png",
-      quantity: 0,
-      type: "product",
-      id: 1,
-      typeInt: 0,
-    },
-    {
-      name: "Storage 4m2",
-      price: 1000000,
-      image: "/img/storage4m2.png",
-      quantity: 0,
-      type: "product",
-      id: 2,
-      typeInt: 0,
-    },
-    {
-      name: "Storage 8m2",
-      price: 1600000,
-      image: "/img/storage8m2.png",
-      quantity: 0,
-      type: "product",
-      id: 3,
-      typeInt: 0,
-    },
-    {
-      name: "Storage 16m2",
-      price: 2800000,
-      image: "/img/storage16m2.png",
-      quantity: 0,
-      type: "product",
-      id: 4,
-      typeInt: 0,
-    },
-  ]);
+  const getData = async () => {
+    const listProductTemp = await getProduct();
+    const listStoragesTemp = setResetQuantity(
+      listProductTemp.data[0],
+      "product"
+    );
+    const listAccessoryTemp = setResetQuantity(
+      listProductTemp.data[1],
+      "accessory"
+    );
+    const listBoxesTemp = setResetQuantity(listProductTemp.data[2], "product");
+    const listAreasTemp = setResetQuantity(listProductTemp.data[4], "product");
+    const listServicesTemp = setResetQuantity(
+      listProductTemp.data[3],
+      "services"
+    );
 
-  const [listAccessory, setListAccessory] = useState([
-    {
-      name: "Tape",
-      price: 25000,
-      image: "/img/tape.png",
-      quantity: 0,
-      type: "accessory",
-      id: 5,
-      typeInt: 1,
-    },
-    {
-      name: "Locker",
-      price: 165000,
-      image: "/img/locker.png",
-      quantity: 0,
-      type: "accessory",
-      id: 6,
-      typeInt: 1,
-    },
-    {
-      name: "Carton box",
-      price: 30000,
-      image: "/img/carton.png",
-      quantity: 0,
-      type: "accessory",
-      id: 7,
-      typeInt: 1,
-    },
-    {
-      name: "PE Foam",
-      price: 25000,
-      image: "/img/peFoam.png",
-      quantity: 0,
-      type: "accessory",
-      id: 8,
-      typeInt: 1,
-    },
-    {
-      name: "Bubble Wrap",
-      price: 25000,
-      image: "/img/bubbleWrap.png",
-      quantity: 0,
-      type: "accessory",
-      id: 9,
-      typeInt: 1,
-    },
-    {
-      name: "PE strech film",
-      price: 150000,
-      image: "/img/PEstretchfilm.png",
-      quantity: 0,
-      type: "accessory",
-      id: 10,
-      typeInt: 1,
-    },
-  ]);
+    setListAccessory(listAccessoryTemp);
+    setListStorages(listStoragesTemp);
+    setListServices(listServicesTemp);
+    setListBoxes(listBoxesTemp);
+    setListAreas(listAreasTemp);
+  };
 
-  const [listBoxes, setListBoxes] = useState([
-    {
-      name: "Bolo",
-      price: 100000,
-      image: "/img/bolobox.png",
-      quantity: 0,
-      type: "product",
-      id: 11,
-      typeInt: 2,
-    },
-    {
-      name: "Size S",
-      price: 70000,
-      image: "/img/boxSizeS.png",
-      quantity: 0,
-      type: "product",
-      id: 12,
-      typeInt: 2,
-    },
-    {
-      name: "Size M",
-      price: 100000,
-      image: "/img/boxSizeM.png",
-      quantity: 0,
-      type: "product",
-      id: 13,
-      typeInt: 2,
-    },
-    {
-      name: "Size L",
-      price: 150000,
-      image: "/img/boxSizeL.png",
-      quantity: 0,
-      type: "product",
-      id: 14,
-      typeInt: 2,
-    },
-    {
-      name: "Size XL",
-      price: 200000,
-      image: "/img/boxSizeXL.png",
-      quantity: 0,
-      type: "product",
-      id: 16,
-      typeInt: 2,
-    },
-  ]);
+  const setResetQuantity = (list, typeString) => {
+    return list.map((e) => {
+      let typeTemp = e.type;
+      return { ...e, quantity: 0, type: typeString, typeInt: typeTemp };
+    });
+  };
 
-  const [listAreas, setListAreas] = useState([
-    {
-      name: "Area 0.5m2",
-      price: 400000,
-      image: "/img/areaSize0.5m2.png",
-      quantity: 0,
-      type: "product",
-      id: 18,
-      typeInt: 4,
-    },
-    {
-      name: "Area 1m2",
-      price: 750000,
-      image: "/img/areaSize1m2.png",
-      quantity: 0,
-      type: "product",
-      id: 19,
-      typeInt: 4,
-    },
-    {
-      name: "Area 2m2",
-      price: 1330000,
-      image: "/img/areaSize2m2.png",
-      quantity: 0,
-      type: "product",
-      id: 19,
-      typeInt: 4,
-    },
-    {
-      name: "Area 3m2",
-      price: 1835000,
-      image: "/img/areaSize3m2.png",
-      quantity: 0,
-      type: "product",
-      id: 19,
-      typeInt: 4,
-    },
-  ]);
+  useEffect(() => {
+    const firstCall = async () => {
+      try {
+        showLoading();
+        await getData();
+        hideLoading();
+      } catch (error) {
+        console.log(error.response);
+        hideLoading();
+      }
+    };
+    firstCall();
+  }, []);
 
-  const [listServices, setListServices] = useState([
-    {
-      name: "Packaging",
-      price: 50000,
-      image: "/img/package.png",
-      quantity: 0,
-      type: "services",
-      id: 17,
-      typeInt: 3,
-    },
-  ]);
+  const [listStorages, setListStorages] = useState([]);
+
+  const [listAccessory, setListAccessory] = useState([]);
+
+  const [listBoxes, setListBoxes] = useState([]);
+
+  const [listAreas, setListAreas] = useState([]);
+
+  const [listServices, setListServices] = useState([]);
 
   const [choosenProduct, setChoosenProduct] = useState({
     product: [],
@@ -273,6 +137,8 @@ export default function MakingOrder() {
         flexDirection: "row",
       }}
     >
+      <LoadingPage />
+
       <Box
         sx={{
           width: "10%",
@@ -365,3 +231,13 @@ export default function MakingOrder() {
     </Box>
   );
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    showLoading: () => dispatch(action.showLoader()),
+    hideLoading: () => dispatch(action.hideLoader()),
+    showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(MakingOrder);

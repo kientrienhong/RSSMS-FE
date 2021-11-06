@@ -62,7 +62,7 @@ function Products({ showLoading, hideLoading, showSnackbar }) {
         await getData();
         hideLoading();
       } catch (error) {
-        console.log(error);
+        console.log(error.response);
         hideLoading();
       }
     };

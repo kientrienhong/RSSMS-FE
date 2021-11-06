@@ -16,8 +16,9 @@ export default function AreaTab({
     return listData.map((e, index) => (
       <Grid item xs={4} key={index}>
         <Item
-          image={e.image}
           type={e.type}
+          image={e?.images}
+          unit={e.unit}
           price={e.price}
           typeInt={e.typeInt}
           id={e.id}

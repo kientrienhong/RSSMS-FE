@@ -10,23 +10,26 @@ export default function SelfStorageMainTab({
   choosenProduct,
 }) {
   const mapListStoragesToGrid = (listData, setListData) => {
-    return listData.map((e, index) => (
-      <Grid item xs={4} key={index}>
-        <Item
-          image={e.image}
-          type={e.type}
-          typeInt={e.typeInt}
-          id={e.id}
-          price={e.price}
-          quantity={e.quantity}
-          name={e.name}
-          setList={setListData}
-          list={listData}
-          setChoosenProduct={setChoosenProduct}
-          choosenProduct={choosenProduct}
-        />
-      </Grid>
-    ));
+    return listData.map((e, index) => {
+      return (
+        <Grid item xs={4} key={index}>
+          <Item
+            image={e?.images}
+            unit={e.unit}
+            type={e.type}
+            typeInt={e.typeInt}
+            id={e.id}
+            price={e.price}
+            quantity={e.quantity}
+            name={e.name}
+            setList={setListData}
+            list={listData}
+            setChoosenProduct={setChoosenProduct}
+            choosenProduct={choosenProduct}
+          />
+        </Grid>
+      );
+    });
   };
 
   return (
