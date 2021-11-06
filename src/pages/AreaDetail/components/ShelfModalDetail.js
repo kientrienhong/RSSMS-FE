@@ -28,11 +28,6 @@ function ShelfModalDetail({
   openStoredOrderModal,
 }) {
   let nameBox;
-  if (currentShelf?.type === 0) {
-    nameBox = BOX_SIZE[currentShelf?.boxSize];
-  } else {
-    nameBox = AREA_SIZE[currentShelf?.boxSize];
-  }
 
   const buildBox = () => {
     let size = 12 / currentShelf.boxesInWidth;
@@ -50,7 +45,7 @@ function ShelfModalDetail({
           }}
         >
           <Typography color="black" variant="h2" sx={{ textAlign: "center" }}>
-            {nameBox} x {totalBox} Boxes
+            {currentShelf?.sizeType} x {totalBox} Boxes
           </Typography>
         </Box>
       );
@@ -72,9 +67,14 @@ function ShelfModalDetail({
         }
       });
 
-      let nameBoxPrint = nameBox;
       if (currentShelf?.type === 0) {
-        nameBoxPrint += ` - ${i + 1}`;
+        nameBox =
+          currentShelf?.sizeType === "Bolo"
+            ? "Bolo"
+            : currentShelf?.sizeType?.split(" ")[1];
+        nameBox += ` - ${i + 1}`;
+      } else {
+        nameBox = currentShelf?.sizeType;
       }
 
       return (
@@ -99,7 +99,7 @@ function ShelfModalDetail({
                 areaId: area.id,
                 shelfName: currentShelf.name,
                 shelfType: currentShelf.type,
-                nameBox: nameBoxPrint,
+                nameBox: nameBox,
                 boxSize: currentShelf.boxSize,
               });
 
@@ -117,7 +117,7 @@ function ShelfModalDetail({
                 fontWeight: 700,
               }}
             >
-              {nameBoxPrint}
+              {nameBox}
             </p>
           </Box>
         </Grid>
@@ -160,7 +160,7 @@ function ShelfModalDetail({
               variant="h2"
               sx={{ marginBottom: "16px" }}
             >
-              Box size: {nameBox}
+              Box size: {currentShelf.sizeType}
             </Typography>
           </Box>
           <Box sx={{ diplay: "flex", flexDirection: "column" }}>

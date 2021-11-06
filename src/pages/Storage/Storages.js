@@ -443,7 +443,6 @@ function Storages(props) {
     try {
       showLoading();
       let list = await getListStorage(name, page, size);
-      console.log(list);
       setListStorages(list.data.data);
       setTotalPage(list.data.metadata.totalPage);
     } catch (e) {

@@ -30,6 +30,8 @@ export default function SheflModal({
   isHandy,
   setIsHandy,
   isModifyShelf,
+  listAreas,
+  listBoxes,
 }) {
   const handleChangeRadioButton = (event) => {
     if (event.target.value === "0") {
@@ -117,6 +119,7 @@ export default function SheflModal({
               areaId={areaId}
               searchName={searchName}
               handleClose={handleClose}
+              listBoxes={listBoxes}
             />
           ) : (
             <FormUnwieldy
@@ -124,6 +127,7 @@ export default function SheflModal({
               currentShelf={currentShelf}
               setCurrentShelf={setCurrentShelf}
               getData={getData}
+              listAreas={listAreas}
               page={page}
               areaId={areaId}
               searchName={searchName}

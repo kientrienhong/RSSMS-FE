@@ -1,5 +1,8 @@
 import * as style from "./style";
 
+export const AREA_TYPE = 4;
+export const BOX_TYPE = 2;
+
 export const ROLE_USER = {
   Manager: 2,
   Customer: 3,

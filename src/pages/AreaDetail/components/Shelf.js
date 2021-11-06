@@ -2,7 +2,6 @@ import React from "react";
 import { Box, Grid, Typography } from "@material-ui/core";
 import { connect } from "react-redux";
 import * as action from "../../../redux/action/action";
-import { BOX_SIZE, AREA_SIZE } from "../../../constant/constant";
 import {
   PRIMARY_BLUE,
   SECOND_BLUE,
@@ -30,13 +29,6 @@ function Shelf({
     let height = (100 / shelf.boxesInHeight) * 1.5;
     let totalBox = shelf.boxesInWidth * shelf.boxesInHeight;
     if (totalBox >= 20) {
-      let nameBox;
-      if (shelf?.type === 0) {
-        nameBox = BOX_SIZE[shelf?.boxSize];
-      } else {
-        nameBox = AREA_SIZE[shelf?.boxSize];
-      }
-
       return (
         <Box
           sx={{
@@ -47,7 +39,7 @@ function Shelf({
           }}
         >
           <Typography color="black" variant="h2" sx={{ textAlign: "center" }}>
-            {nameBox} x {totalBox} Boxes
+            {shelf?.sizeType} x {totalBox} Boxes
           </Typography>
         </Box>
       );
@@ -72,10 +64,11 @@ function Shelf({
       });
 
       if (shelf?.type === 0) {
-        nameBox = BOX_SIZE[shelf?.boxSize];
+        nameBox =
+          shelf?.sizeType === "Bolo" ? "Bolo" : shelf?.sizeType?.split(" ")[1];
         nameBox += ` - ${i + 1}`;
       } else {
-        nameBox = AREA_SIZE[shelf?.boxSize];
+        nameBox = shelf?.sizeType;
       }
 
       return (
@@ -102,7 +95,8 @@ function Shelf({
                   shelfName: shelf.name,
                   shelfType: shelf.type,
                   nameBox: nameBox,
-                  boxSize: shelf.boxSize,
+                  productId: shelf.productId,
+                  sizeType: shelf.sizeType,
                 });
                 if (e.orderId !== null) {
                   handleOpenDetailBox();

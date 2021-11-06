@@ -27,6 +27,7 @@ const styleBoxInput = {
   marginBottom: "4%",
 };
 const styleInput = { marginRight: "5%" };
+let unitTemp;
 
 function ProductModal({
   open,
@@ -42,7 +43,7 @@ function ProductModal({
   handleSubmit,
   control,
 }) {
-  const [unit, setUnit] = useState();
+  const [unit, setUnit] = useState("month");
   const buildDropDown = (listSizeStorage) =>
     listSizeStorage.map((e) => <MenuItem value={e.value}>{e.label}</MenuItem>);
   const inputFile = useRef(null);
@@ -60,7 +61,8 @@ function ProductModal({
       price: parseInt(data.price),
       description: data.description,
       type: typeProduct,
-      unit: unit,
+      size: data.size,
+      unit: unitTemp,
       tooltip: data.tooltip,
       images: [
         {
@@ -83,7 +85,7 @@ function ProductModal({
           urlFirebase = await ref.getDownloadURL();
           try {
             let responseUpdate = await updateProduct(
-              response.data,
+              { ...response.data, size: data.size },
               id,
               urlFirebase
             );
@@ -94,12 +96,13 @@ function ProductModal({
             }
           } catch (e) {
             console.log(e.response);
+          } finally {
+            hideLoading();
           }
         });
       }
     } catch (error) {
       console.log(error.response);
-    } finally {
       hideLoading();
     }
   };
@@ -110,6 +113,7 @@ function ProductModal({
       price: parseInt(data.price),
       description: data.description,
       type: typeProduct,
+      size: data.size,
       unit: unit,
       tooltip: data.tooltip,
       images: [
@@ -221,6 +225,7 @@ function ProductModal({
 
   const handleChangeUnit = (event) => {
     setUnit(event.target.value);
+    unitTemp = event.target.value;
   };
 
   return (
@@ -282,23 +287,40 @@ function ProductModal({
                   inlineStyle={{ ...styleInput }}
                 />
               </Box>
+              <Box
+                sx={{
+                  ...styleBoxInput,
+                  marginTop: "3%",
+                  justifyContent: "flex-start",
+                }}
+              >
+                <CustomInput
+                  control={control}
+                  rules={{ required: "Size is required" }}
+                  styles={{ width: "400px" }}
+                  name="size"
+                  label="Size"
+                  userInfo={currentProduct?.size}
+                  inlineStyle={{ ...styleInput }}
+                />
+              </Box>
               <CustomAreaInput
                 control={control}
                 rules={{ required: "Description is required" }}
-                styles={{ width: "400px" }}
+                styles={{ width: "480px" }}
                 name="description"
                 label="Description"
                 userInfo={currentProduct?.description}
-                inlineStyle={{ ...styleInput, marginTop: "4%" }}
+                inlineStyle={{ ...styleInput, marginTop: "4%", width: "480px" }}
               />
               <CustomAreaInput
                 control={control}
                 rules={{ required: "Tooltip is required" }}
-                styles={{ width: "400px" }}
+                styles={{ width: "480px" }}
                 name="tooltip"
                 label="Tooltip"
                 userInfo={currentProduct?.tooltip}
-                inlineStyle={{ ...styleInput, marginTop: "4%" }}
+                inlineStyle={{ ...styleInput, marginTop: "4%", width: "480px" }}
               />
               <Box
                 sx={{
@@ -357,11 +379,7 @@ function ProductModal({
                     sx={{ m: 1, minWidth: 120, color: "black" }}
                     name="sizeStorage"
                   >
-                    <Select
-                      value={unit}
-                      onChange={handleChangeUnit}
-                      displayEmpty
-                    >
+                    <Select value={unit} onChange={handleChangeUnit}>
                       {buildDropDown(LIST_UNIT)}
                     </Select>
                   </FormControl>

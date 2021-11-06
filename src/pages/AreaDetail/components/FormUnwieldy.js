@@ -28,13 +28,26 @@ function FormUnwieldy({
   areaId,
   searchName,
   handleClose,
+  listAreas,
 }) {
   const { handleSubmit, control } = useForm();
   const handleChangeSize = (event) => {
-    setCurrentShelf({ ...currentShelf, boxSize: event.target.value });
+    const nameBox = listAreas.find((e) => {
+      return e.id === event.target.value;
+    }).size;
+    setCurrentShelf({
+      ...currentShelf,
+      productId: event.target.value,
+      sizeType: nameBox,
+    });
   };
 
   const [error, setError] = useState({});
+
+  const buildListCombo = (listAreas) =>
+    listAreas?.map((e) => (
+      <MenuItem value={e.id}>{e.name.split(" ")[1]}</MenuItem>
+    ));
 
   const onHandleEditShelf = async (data) => {
     try {
@@ -46,6 +59,7 @@ function FormUnwieldy({
         boxesInWidth: parseInt(currentShelf.boxesInWidth),
         boxesInHeight: parseInt(currentShelf.boxesInHeight),
         boxSize: currentShelf.boxSize,
+        productId: currentShelf.productId,
       };
       await updateShelf(currentShelf.id, shelf);
       await getData(searchName, page, 4);
@@ -65,10 +79,11 @@ function FormUnwieldy({
       const shelf = {
         type: currentShelf.type,
         name: data.name,
-        note: "test",
+        note: data.note,
         boxesInWidth: parseInt(currentShelf.boxesInWidth),
         boxesInHeight: parseInt(currentShelf.boxesInHeight),
         boxSize: currentShelf.boxSize,
+        productId: currentShelf.productId,
       };
       await createShelf(shelf, parseInt(areaId));
       await getData(searchName, page, 4);
@@ -164,17 +179,14 @@ function FormUnwieldy({
             name="boxSize"
           >
             <Select
-              value={currentShelf.boxSize}
+              value={currentShelf?.productId}
               onChange={handleChangeSize}
               displayEmpty
               sx={{
                 marginTop: "11%",
               }}
             >
-              <MenuItem value={0}>0.5m2</MenuItem>
-              <MenuItem value={1}>1m2</MenuItem>
-              <MenuItem value={2}>2m2</MenuItem>
-              <MenuItem value={3}>3m2</MenuItem>
+              {buildListCombo(listAreas)}
             </Select>
           </FormControl>
         </Box>

@@ -45,7 +45,6 @@ export default function Item({
   type,
   typeInt,
 }) {
-  console.log(unit);
   const handleOnClickMinus = () => {
     if (quantity > 0) {
       let quantityTemp = --quantity;

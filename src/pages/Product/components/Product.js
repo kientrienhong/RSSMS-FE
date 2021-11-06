@@ -93,12 +93,6 @@ export default function Product({
             }}
             onClick={() => handleOnClickDelete()}
           />
-          <img
-            src="/img/info.png"
-            alt="edit"
-            style={{ cursor: "pointer", width: "18px", height: "18px" }}
-            onClick={() => handleOnClickSeeMore()}
-          />
         </Box>
       </Box>
     </Card>

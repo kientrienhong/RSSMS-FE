@@ -12,58 +12,6 @@ import * as action from "../../../redux/action/action";
 import { getProduct } from "../../../apis/Apis";
 import LoadingPage from "../../../pages/Loading/LoadingPage";
 function MakingOrder({ showLoading, hideLoading, showSnackbar }) {
-  const [indexMain, setIndexMain] = useState(0);
-  const [openInputFormation, setOpenInputFormation] = useState(false);
-  const [currentColor, setCurrentColor] = useState({
-    selfStorage: "#04BFFE",
-    doorToDoor: "#A19FA8",
-  });
-
-  const getData = async () => {
-    const listProductTemp = await getProduct();
-    const listStoragesTemp = setResetQuantity(
-      listProductTemp.data[0],
-      "product"
-    );
-    const listAccessoryTemp = setResetQuantity(
-      listProductTemp.data[1],
-      "accessory"
-    );
-    const listBoxesTemp = setResetQuantity(listProductTemp.data[2], "product");
-    const listAreasTemp = setResetQuantity(listProductTemp.data[4], "product");
-    const listServicesTemp = setResetQuantity(
-      listProductTemp.data[3],
-      "services"
-    );
-
-    setListAccessory(listAccessoryTemp);
-    setListStorages(listStoragesTemp);
-    setListServices(listServicesTemp);
-    setListBoxes(listBoxesTemp);
-    setListAreas(listAreasTemp);
-  };
-
-  const setResetQuantity = (list, typeString) => {
-    return list.map((e) => {
-      let typeTemp = e.type;
-      return { ...e, quantity: 0, type: typeString, typeInt: typeTemp };
-    });
-  };
-
-  useEffect(() => {
-    const firstCall = async () => {
-      try {
-        showLoading();
-        await getData();
-        hideLoading();
-      } catch (error) {
-        console.log(error.response);
-        hideLoading();
-      }
-    };
-    firstCall();
-  }, []);
-
   const [listStorages, setListStorages] = useState([]);
 
   const [listAccessory, setListAccessory] = useState([]);
@@ -79,6 +27,54 @@ function MakingOrder({ showLoading, hideLoading, showSnackbar }) {
     accessory: [],
     services: [],
   });
+  const [indexMain, setIndexMain] = useState(0);
+  const [openInputFormation, setOpenInputFormation] = useState(false);
+  const [currentColor, setCurrentColor] = useState({
+    selfStorage: "#04BFFE",
+    doorToDoor: "#A19FA8",
+  });
+
+  const getData = async () => {
+    let listProductTemp = await getProduct();
+    let listStoragesTemp = setResetQuantity(listProductTemp.data[0], "product");
+    let listAccessoryTemp = setResetQuantity(
+      listProductTemp.data[1],
+      "accessory"
+    );
+    let listBoxesTemp = setResetQuantity(listProductTemp.data[2], "product");
+    let listAreasTemp = setResetQuantity(listProductTemp.data[4], "product");
+    let listServicesTemp = setResetQuantity(
+      listProductTemp.data[3],
+      "services"
+    );
+
+    setListAccessory(listAccessoryTemp);
+    setListStorages(listStoragesTemp);
+    setListServices(listServicesTemp);
+    setListBoxes(listBoxesTemp);
+    setListAreas(listAreasTemp);
+  };
+
+  const setResetQuantity = (list, typeString) => {
+    return list?.map((e) => {
+      let typeTemp = e.type;
+      return { ...e, quantity: 0, type: typeString, typeInt: typeTemp };
+    });
+  };
+
+  useEffect(() => {
+    const firstCall = async () => {
+      try {
+        showLoading();
+        await getData();
+        hideLoading();
+      } catch (error) {
+        console.log(error);
+        hideLoading();
+      }
+    };
+    firstCall();
+  }, []);
 
   const onClickMainTab = (name) => {
     if (name === "Self-Storage") {

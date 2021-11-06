@@ -34,7 +34,6 @@ function AreaDetailView({
   const [openModalDetail, setOpenModalDetail] = useState(false);
   const [openDetailBox, setOpenDetailBox] = useState(false);
   const [orderDetailBox, setOrderDetailBox] = useState({});
-
   const [openMoveBox, setOpenMoveBox] = useState(false);
 
   const mapListNote = () =>

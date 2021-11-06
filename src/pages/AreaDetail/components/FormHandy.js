@@ -36,10 +36,18 @@ function FormHandy({
   areaId,
   searchName,
   handleClose,
+  listBoxes,
 }) {
   const { handleSubmit, control, reset } = useForm();
   const handleChangeSize = (event) => {
-    setCurrentShelf({ ...currentShelf, boxSize: event.target.value });
+    let nameBox = listBoxes.find((e) => {
+      return e.id === event.target.value;
+    }).size;
+    setCurrentShelf({
+      ...currentShelf,
+      productId: event.target.value,
+      sizeType: nameBox,
+    });
   };
 
   const [error, setError] = useState({});
@@ -50,10 +58,11 @@ function FormHandy({
       const shelf = {
         type: currentShelf.type,
         name: data.name,
-        note: "test",
+        note: data.note ? data.note : "",
         boxesInWidth: parseInt(currentShelf.boxesInWidth),
         boxesInHeight: parseInt(currentShelf.boxesInHeight),
         boxSize: currentShelf.boxSize,
+        productId: currentShelf.productId,
       };
       await createShelf(shelf, parseInt(areaId));
       await getData(searchName, page, 4);
@@ -77,6 +86,7 @@ function FormHandy({
         boxesInWidth: parseInt(currentShelf.boxesInWidth),
         boxesInHeight: parseInt(currentShelf.boxesInHeight),
         boxSize: currentShelf.boxSize,
+        productId: currentShelf.productId,
       };
       await updateShelf(currentShelf.id, shelf);
       await getData(searchName, page, 4);
@@ -129,6 +139,9 @@ function FormHandy({
     }
   };
 
+  const buildListCombo = (listBoxes) =>
+    listBoxes?.map((e) => <MenuItem value={e.id}>{e.name}</MenuItem>);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Box
@@ -180,18 +193,14 @@ function FormHandy({
             name="boxSize"
           >
             <Select
-              value={currentShelf.boxSize}
+              value={currentShelf?.productId}
               onChange={handleChangeSize}
               displayEmpty
               sx={{
                 marginTop: "11%",
               }}
             >
-              <MenuItem value={0}>Bolo</MenuItem>
-              <MenuItem value={1}>S</MenuItem>
-              <MenuItem value={2}>M</MenuItem>
-              <MenuItem value={3}>L</MenuItem>
-              <MenuItem value={4}>XL</MenuItem>
+              {buildListCombo(listBoxes)}
             </Select>
           </FormControl>
         </Box>

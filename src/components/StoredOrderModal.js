@@ -122,7 +122,7 @@ function StoredOrderModal({
             onClick={() => handleChange(eventTemp)}
           >
             <img
-              src={list[e.productType][e.productName]}
+              src={e?.images[0]?.url}
               alt={e.productName}
               width={80}
               height={80}
@@ -250,34 +250,9 @@ function StoredOrderModal({
   };
 
   const handlePlaceBox = () => {
-    let idProductTemp = -1;
-    if (currentBox.shelfType === 0) {
-      if (currentBox?.boxSize === 0) {
-        idProductTemp = 11;
-      } else if (currentBox?.boxSize === 1) {
-        idProductTemp = 12;
-      } else if (currentBox?.boxSize === 2) {
-        idProductTemp = 13;
-      } else if (currentBox?.boxSize === 3) {
-        idProductTemp = 14;
-      } else if (currentBox?.boxSize === 4) {
-        idProductTemp = 16;
-      }
-    } else {
-      if (currentBox?.boxSize === 0) {
-        idProductTemp = 18;
-      } else if (currentBox?.boxSize === 1) {
-        idProductTemp = 19;
-      } else if (currentBox?.boxSize === 2) {
-        idProductTemp = 20;
-      } else if (currentBox?.boxSize === 3) {
-        idProductTemp = 21;
-      }
-    }
-
-    if (selectedValue.toString() === idProductTemp.toString()) {
+    if (selectedValue.toString() === currentBox.productId.toString()) {
       let productTemp = storedOrder.products.find(
-        (e) => idProductTemp === e.productId
+        (e) => currentBox.productId === e.productId
       );
 
       if (productTemp?.amount === 0) {

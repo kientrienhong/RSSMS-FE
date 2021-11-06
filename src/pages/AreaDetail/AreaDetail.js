@@ -12,7 +12,9 @@ import {
   getStorageDetail,
   getListShelves,
   getDetailArea,
+  getProduct,
 } from "../../apis/Apis";
+import { AREA_TYPE, BOX_TYPE } from "../../constant/constant";
 import SearchIcon from "@mui/icons-material/Search";
 import { connect } from "react-redux";
 import * as action from "../../redux/action/action";
@@ -49,10 +51,25 @@ function AreaDetail(props) {
   const [isHandy, setIsHandy] = useState(true);
   const [currentArea, setCurrentArea] = useState({});
   const [isModifyShelf, setIsModifyShelf] = useState(false);
-  const handleOpen = (isEdit) => {
-    setIsEdit(isEdit);
-    setOpen(true);
-    setIsModifyShelf(true);
+  const [listBoxes, setListBoxes] = useState([]);
+  const [listAreas, setListAreas] = useState([]);
+
+  const handleOpen = async (isEdit) => {
+    try {
+      showLoading();
+      setIsEdit(isEdit);
+      const listBoxexTemp = await getProduct(BOX_TYPE);
+      const listAreasTemp = await getProduct(AREA_TYPE);
+      console.log(listBoxexTemp);
+      setListBoxes(listBoxexTemp.data[BOX_TYPE.toString()]);
+      setListAreas(listAreasTemp.data[AREA_TYPE.toString()]);
+      setOpen(true);
+      setIsModifyShelf(true);
+    } catch (e) {
+      console.log(e.response);
+    } finally {
+      hideLoading();
+    }
   };
 
   const onHandleSearch = (e) => {
@@ -171,6 +188,8 @@ function AreaDetail(props) {
         handleClose={handleClose}
         page={page}
         getData={getData}
+        listBoxes={listBoxes}
+        listAreas={listAreas}
         areaId={areaId}
         isEdit={isEdit}
         searchName={searchName}

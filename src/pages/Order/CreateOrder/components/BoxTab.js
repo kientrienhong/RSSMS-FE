@@ -13,7 +13,7 @@ export default function BoxTab({
   choosenProduct,
 }) {
   const mapListItemsToGrid = (listData, setListData) => {
-    return listData.map((e, index) => (
+    return listData?.map((e, index) => (
       <Grid item xs={4} key={index}>
         <Item
           image={e?.images}

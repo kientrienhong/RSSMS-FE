@@ -274,7 +274,8 @@ export const createShelf = async (shelf, areaId) => {
     note: shelf.note,
     boxesInWidth: shelf.boxesInWidth,
     boxesInHeight: shelf.boxesInHeight,
-    boxSize: shelf.boxSize,
+    boxSize: -1,
+    productId: shelf.productId,
   });
 
   return listShelves;
@@ -290,7 +291,8 @@ export const updateShelf = async (id, shelf) => {
       note: shelf.note,
       boxesInWidth: shelf.boxesInWidth,
       boxesInHeight: shelf.boxesInHeight,
-      boxSize: shelf.boxSize,
+      boxSize: -1,
+      productId: shelf.productId,
     }
   );
 
@@ -411,18 +413,37 @@ export const placeStorages = async (placingProducts) => {
   return response;
 };
 
-export const getProduct = async () => {
-  const response = await axios.get(`https://localhost:44304/api/v1/products`);
+export const getProduct = async (type) => {
+  let response =
+    type === undefined
+      ? await axios.get(`https://localhost:44304/api/v1/products`)
+      : await axios.get(`https://localhost:44304/api/v1/products?Type=${type}`);
 
   return response;
 };
 
 export const createProduct = async (product) => {
+  console.log({
+    name: product.name,
+    price: product.price,
+    description: product.description,
+    type: product.type,
+    size: product.size,
+    unit: product.unit,
+    tooltip: product.tooltip,
+    images: [
+      {
+        url: null,
+      },
+    ],
+  });
+
   const response = await axios.post(`https://localhost:44304/api/v1/products`, {
     name: product.name,
     price: product.price,
     description: product.description,
     type: product.type,
+    size: product.size,
     unit: product.unit,
     tooltip: product.tooltip,
     images: [
@@ -446,7 +467,22 @@ export const updateProduct = async (product, id, imageUrl) => {
   } else {
     image = imageUrl;
   }
-
+  console.log({
+    id: id,
+    name: product.name,
+    price: product.price,
+    description: product.description,
+    type: product.type,
+    size: product.size,
+    unit: product.unit,
+    tooltip: product.tooltip,
+    images: [
+      {
+        id: product.images[0].id,
+        url: image,
+      },
+    ],
+  });
   const response = await axios.put(
     `https://localhost:44304/api/v1/products/${id}`,
     {
@@ -455,6 +491,7 @@ export const updateProduct = async (product, id, imageUrl) => {
       price: product.price,
       description: product.description,
       type: product.type,
+      size: product.size,
       unit: product.unit,
       tooltip: product.tooltip,
       images: [

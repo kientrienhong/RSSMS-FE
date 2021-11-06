@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Box,
-  TextField,
-  InputAdornment,
-  IconButton,
-  Typography,
-} from "@material-ui/core";
-import SearchIcon from "@mui/icons-material/Search";
+import { Box } from "@material-ui/core";
 import SectionProduct from "./components/SectionProduct";
 import ProductModal from "./components/ProductModal";
 import { LIST_PRODUCT_MANAGE_TYPE } from "../../constant/constant";
@@ -72,6 +65,9 @@ function Products({ showLoading, hideLoading, showSnackbar }) {
   const handleDeleteProduct = async (id) => {
     await deleteProduct(id);
     await getData();
+    setCurrentProduct({
+      images: [{ id: null, url: null }],
+    });
   };
 
   const buildListSection = () =>
@@ -116,31 +112,7 @@ function Products({ showLoading, hideLoading, showSnackbar }) {
         handleSubmit={handleSubmit}
         control={control}
       />
-      <Box
-        sx={{
-          marginLeft: "2%",
-          marginBottom: "1%",
-          display: "flex",
-          height: "45px",
-          flexDirection: "row",
-        }}
-      >
-        <TextField
-          sx={{
-            width: "80%",
-          }}
-          InputProps={{
-            style: { height: "45px", backgroundColor: "white" },
-            startAdornment: (
-              <InputAdornment>
-                <IconButton>
-                  <SearchIcon />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Box>
+
       {buildListSection()}
     </Box>
   );
