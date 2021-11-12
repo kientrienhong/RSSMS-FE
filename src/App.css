@@ -1,3 +1,183 @@
+@import "../node_modules/@syncfusion/ej2-base/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-buttons/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-calendars/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-dropdowns/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-inputs/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-lists/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-navigations/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-popups/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-splitbuttons/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-react-schedule/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-react-buttons/styles/material.css";
+
+* {
+  box-sizing: border-box;
+}
+
+p {
+  margin: 0;
+}
+
+.e-appointment {
+  width: 90% !important;
+
+  height: auto !important;
+  border-radius: 8px !important;
+  margin-top: 4px;
+  margin-left: 5%;
+  margin-right: auto;
+  box-shadow: 0px 0px 5px 3px rgba(0, 0, 0, 0.04);
+  -webkit-box-shadow: 0px 0px 5px 3px rgba(0, 0, 0, 0.04);
+  -moz-box-shadow: 0px 0px 5px 3px rgba(0, 0, 0, 0.04);
+}
+
+.e-schedule .e-vertical-view .e-day-wrapper .e-appointment {
+  background: #eff3ff !important;
+}
+
+.e-schedule .e-appointment-details {
+  padding: 16px !important;
+}
+
+.e-appointment-details {
+  height: 100%;
+}
+
+.e-appointment-details div:first-child {
+  height: 100%;
+}
+
+.schedule__order {
+  background: #eff3ff !important;
+  color: #130f26;
+  height: 100%;
+  width: 100%;
+  padding: 16px;
+  cursor: pointer;
+  border-radius: 8px;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.schedule__order__outsite {
+  background: #eff3ff !important;
+  color: #130f26;
+  height: 100%;
+  width: 100%;
+  cursor: pointer;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.schedule__order:hover {
+  background: #dde5fd !important;
+}
+
+.schedule__order__avatar {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.schedule__order__title {
+  width: 100%;
+  display: flex;
+  font-size: 17px !important;
+  margin: 0px;
+  margin-top: 1px;
+  flex-direction: row;
+}
+.schedule__order__header {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.schedule__order__footer {
+  width: 100%;
+  display: flex;
+  margin-top: 20px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.schedule__order__header__avatar {
+  display: flex;
+  justify-content: flex-end;
+  width: 70%;
+  height: 0;
+}
+
+.e-appointment-details div:first-child {
+  height: auto;
+  margin-bottom: 4px;
+}
+
+.schedule__order__header__orderId {
+  width: 30%;
+  margin: 0;
+  font-size: 17px !important;
+  text-align: left;
+  font-weight: bold;
+}
+
+.schedule__order__title__time {
+  width: 50%;
+  text-align: left;
+  font-size: 17px !important;
+}
+
+.schedule__order__footer__status {
+  width: 30%;
+  font-size: 17px !important;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.schedule__order__footer__status--Delivery {
+  color: #04bffe;
+}
+
+.schedule__order__footer__status--Complete {
+  color: #00993c;
+}
+#_dialog_wrapper {
+  width: 80% !important;
+  left: 7% !important;
+}
+
+.custom_editor__assign_section {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.custom_editor__assign_section__assigned {
+  display: flex;
+  flex-direction: column;
+  width: 45%;
+}
+
+.custom_editor__assign_section__assigned__list {
+  display: flex;
+  flex-direction: column;
+  border-style: solid;
+  border-width: 1px;
+  border-color: black;
+  height: 300px;
+}
+
+.e-dlg-header {
+  display: none !important;
+}
+
+.e-footer-content {
+  display: none !important;
+}
+
 .App {
   text-align: center;
 }

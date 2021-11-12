@@ -33,7 +33,7 @@ let inputFile;
 const styleModal = {
   ...STYLE_MODAL,
   width: "40%",
-  height: "90%",
+  height: "auto",
 };
 
 const styleBoxInput = {

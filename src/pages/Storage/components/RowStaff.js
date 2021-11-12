@@ -6,6 +6,7 @@ export default function RowStaff({
   addAssignStaff,
   removeAssignStaff,
 }) {
+  console.log(staff);
   const style = {
     marginLeft: "16px",
     cursor: "pointer",

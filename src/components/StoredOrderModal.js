@@ -19,31 +19,6 @@ const style = {
   cursor: "pointer",
 };
 
-const list = [
-  {
-    "Storage 2m2": "/img/storage2m2.png",
-    "Storage 4m2": "/img/storage4m2.png",
-    "Storage 8m2": "/img/storage8m2.png",
-    "Storage 16m2": "/img/storage16m2.png",
-  },
-  {},
-  {
-    Bolo: "/img/bolobox.png",
-    "Size S": "/img/boxSizeS.png",
-    "Size M": "/img/boxSizeM.png",
-    "Size L": "/img/boxSizeL.png",
-    "Size XL": "/img/boxSizeXL.png",
-  },
-  {},
-  {
-    "Area 0.5m2": "/img/areaSize0.5m2.png",
-    "Area 1m2": "/img/areaSize1m2.png",
-    "Area 2m2": "/img/areaSize2m2.png",
-    "Area 3m2": "/img/areaSize3m2.png",
-  },
-  {},
-];
-
 const mapping = {
   1: "Storage 2m2",
   2: "Storage 4m2",

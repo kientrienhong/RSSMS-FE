@@ -14,7 +14,7 @@ import NavItem from "./NavItem";
 import { connect } from "react-redux";
 import { FaWarehouse, FaFileInvoiceDollar } from "react-icons/fa";
 import { VscTag } from "react-icons/vsc";
-
+import { GrSchedule } from "react-icons/gr";
 const items = [
   {
     href: "/app/account",
@@ -37,6 +37,12 @@ const items = [
     title: "Storages",
     icon: undefined,
     reactIcon: <FaWarehouse />,
+  },
+  {
+    href: "/app/schedule",
+    title: "Schedule",
+    icon: undefined,
+    reactIcon: <GrSchedule />,
   },
   {
     href: "/app/orders",
@@ -116,7 +122,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile, user }) => {
           variant="temporary"
           PaperProps={{
             sx: {
-              width: 256,
+              width: 180,
             },
           }}
         >
@@ -130,7 +136,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile, user }) => {
           variant="persistent"
           PaperProps={{
             sx: {
-              width: 256,
+              width: 180,
               top: 64,
               height: "calc(100% - 64px)",
             },
