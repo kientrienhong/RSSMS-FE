@@ -2,9 +2,11 @@ import React from "react";
 import { STYLE_MODAL } from "../../../constant/style";
 import ListStaff from "../../Storage/components/ListStaff";
 import { Box, Modal, Grid, Radio, Typography, Button } from "@material-ui/core";
+import { connect } from "react-redux";
+import * as action from "../../../redux/action/action";
 const styleModal = STYLE_MODAL;
 
-export default function OrderAssignModal({
+function OrderAssignModal({
   open,
   handleClose,
   removeAssignStaff,
@@ -13,6 +15,7 @@ export default function OrderAssignModal({
   handleChangeSearchUnAssigned,
   listShowStaffAssigned,
   listShowStaffUnAssigned,
+  showSnackbar,
 }) {
   return (
     <Modal
@@ -78,6 +81,10 @@ export default function OrderAssignModal({
               paddingRight: "16px",
               marginTop: "4%",
             }}
+            onClick={() => {
+              handleClose();
+              showSnackbar("success", "Assign delivery staff success");
+            }}
             color="primary"
             variant="contained"
           >
@@ -88,3 +95,13 @@ export default function OrderAssignModal({
     </Modal>
   );
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    showLoading: () => dispatch(action.showLoader()),
+    hideLoading: () => dispatch(action.hideLoader()),
+    showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(OrderAssignModal);

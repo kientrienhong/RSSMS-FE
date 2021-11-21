@@ -6,7 +6,6 @@ export default function RowStaff({
   addAssignStaff,
   removeAssignStaff,
 }) {
-  console.log(staff);
   const style = {
     marginLeft: "16px",
     cursor: "pointer",
@@ -18,6 +17,7 @@ export default function RowStaff({
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
+        marginBottom: "8px",
       }}
     >
       <Box
