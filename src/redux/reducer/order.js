@@ -89,6 +89,8 @@ const order = (state = initialState, action) => {
       let foundProduct = storedOrderTemp.products.find(
         (e) => e.productId.toString() === action.payload.idProduct
       );
+      console.log(state.currentBox.nameBox);
+
       foundProduct.amount--;
       storedOrderTemp.totalQuantity--;
       placingProductTemp.orderId = storedOrderTemp.orderId;

@@ -14,7 +14,11 @@ import {
   getDetailArea,
   getProduct,
 } from "../../apis/Apis";
-import { AREA_TYPE, BOX_TYPE } from "../../constant/constant";
+import {
+  AREA_TYPE,
+  BOX_TYPE,
+  SELF_STORAGE_TYPE,
+} from "../../constant/constant";
 import SearchIcon from "@mui/icons-material/Search";
 import { connect } from "react-redux";
 import * as action from "../../redux/action/action";
@@ -22,7 +26,8 @@ import AreaDetailView from "./components/AreaDetailView";
 import AreaUsage from "./components/AreaUsage";
 import SheflModal from "./components/SheflModal";
 import ProductButton from "../Order/CreateOrder/components/ProductButton";
-
+import { TYPE_STORAGE, TYPE_SHELF } from "../../constant/constant";
+import SelfStorageModal from "./components/SelfStorageModal";
 const listHandy = [
   { name: "Bolo", usage: 100 },
   { name: "Size S", usage: 100 },
@@ -53,16 +58,23 @@ function AreaDetail(props) {
   const [isModifyShelf, setIsModifyShelf] = useState(false);
   const [listBoxes, setListBoxes] = useState([]);
   const [listAreas, setListAreas] = useState([]);
-
+  const [listSelfStorage, setListSelfStorage] = useState([]);
   const handleOpen = async (isEdit) => {
     try {
       showLoading();
       setIsEdit(isEdit);
-      const listBoxexTemp = await getProduct(BOX_TYPE);
-      const listAreasTemp = await getProduct(AREA_TYPE);
-      console.log(listBoxexTemp);
-      setListBoxes(listBoxexTemp.data[BOX_TYPE.toString()]);
-      setListAreas(listAreasTemp.data[AREA_TYPE.toString()]);
+      if (storage.type === TYPE_STORAGE["Self-Storage"]) {
+        const listSelfStorageTemp = await getProduct(SELF_STORAGE_TYPE);
+        setListSelfStorage(
+          listSelfStorageTemp.data[SELF_STORAGE_TYPE.toString()]
+        );
+      } else {
+        const listBoxexTemp = await getProduct(BOX_TYPE);
+        const listAreasTemp = await getProduct(AREA_TYPE);
+        setListBoxes(listBoxexTemp.data[BOX_TYPE.toString()]);
+        setListAreas(listAreasTemp.data[AREA_TYPE.toString()]);
+      }
+
       setOpen(true);
       setIsModifyShelf(true);
     } catch (e) {
@@ -181,22 +193,38 @@ function AreaDetail(props) {
         py: 3,
       }}
     >
-      <SheflModal
-        currentShelf={currentShelf}
-        open={open}
-        setCurrentShelf={setCurrentShelf}
-        handleClose={handleClose}
-        page={page}
-        getData={getData}
-        listBoxes={listBoxes}
-        listAreas={listAreas}
-        areaId={areaId}
-        isEdit={isEdit}
-        searchName={searchName}
-        setIsHandy={setIsHandy}
-        isHandy={isHandy}
-        isModifyShelf={isModifyShelf}
-      />
+      {storage.type === TYPE_STORAGE["Self-Storage"] ? (
+        <SelfStorageModal
+          currentShelf={currentShelf}
+          open={open}
+          setCurrentShelf={setCurrentShelf}
+          handleClose={handleClose}
+          page={page}
+          getData={getData}
+          areaId={areaId}
+          isEdit={isEdit}
+          searchName={searchName}
+          isModifyShelf={isModifyShelf}
+          listSelfStorage={listSelfStorage}
+        />
+      ) : (
+        <SheflModal
+          currentShelf={currentShelf}
+          open={open}
+          setCurrentShelf={setCurrentShelf}
+          handleClose={handleClose}
+          page={page}
+          getData={getData}
+          listBoxes={listBoxes}
+          listAreas={listAreas}
+          areaId={areaId}
+          isEdit={isEdit}
+          searchName={searchName}
+          setIsHandy={setIsHandy}
+          isHandy={isHandy}
+          isModifyShelf={isModifyShelf}
+        />
+      )}
 
       <Box
         sx={{
@@ -241,12 +269,23 @@ function AreaDetail(props) {
           color="primary"
           variant="contained"
           onClick={() => {
+            setIsEdit(false);
             setIsHandy(true);
             handleOpen(false);
-            setCurrentShelf({});
+            storage.type === TYPE_STORAGE["Self-Storage"]
+              ? setCurrentShelf({
+                  ...currentShelf,
+                  boxesInWidth: 1,
+                  boxesInHeight: 1,
+                  boxes: [{}],
+                  type: TYPE_SHELF["Self-storage"],
+                })
+              : setCurrentShelf({});
           }}
         >
-          Create shelf
+          {storage.type === TYPE_STORAGE["Self-Storage"]
+            ? "Create storage"
+            : "Create shelf"}
         </Button>
       </Box>
       <Box

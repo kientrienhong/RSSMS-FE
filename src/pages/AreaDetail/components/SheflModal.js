@@ -11,6 +11,8 @@ import {
 import Shelf from "./Shelf";
 import FormHandy from "./FormHandy";
 import FormUnwieldy from "./FormUnwieldy";
+import { TYPE_SHELF } from "../../../constant/constant";
+
 import { STYLE_MODAL } from "../../../constant/style";
 const styleModal = {
   ...STYLE_MODAL,
@@ -38,7 +40,7 @@ export default function SheflModal({
       setIsHandy(true);
       setCurrentShelf({
         ...currentShelf,
-        type: 0,
+        type: TYPE_SHELF["Hanldy"],
         boxesInHeight: 0,
         boxesInWidth: 0,
         boxes: [],
@@ -47,7 +49,7 @@ export default function SheflModal({
       setIsHandy(false);
       setCurrentShelf({
         ...currentShelf,
-        type: 1,
+        type: TYPE_SHELF["Unweildy"],
         boxesInHeight: 1,
         boxesInWidth: 1,
         boxes: [{}],

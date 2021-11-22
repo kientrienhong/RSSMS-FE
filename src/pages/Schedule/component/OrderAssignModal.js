@@ -1,7 +1,7 @@
 import React from "react";
 import { STYLE_MODAL } from "../../../constant/style";
 import ListStaff from "../../Storage/components/ListStaff";
-import { Box, Modal, Grid, Radio, Typography, Button } from "@material-ui/core";
+import { Box, Modal, Button } from "@material-ui/core";
 import { connect } from "react-redux";
 import * as action from "../../../redux/action/action";
 const styleModal = STYLE_MODAL;

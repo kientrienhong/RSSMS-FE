@@ -10,6 +10,7 @@ export default function ModalArea({
   handleSubmit,
   control,
   onSubmit,
+  isEdit,
 }) {
   const styleInput = { marginRight: "2.5%" };
 
@@ -34,7 +35,7 @@ export default function ModalArea({
         }}
       >
         <Typography color="black" variant="h2">
-          Create area
+          {isEdit === true ? "Edit area" : "Create area"}
         </Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Box sx={{ marginTop: "16px" }}>

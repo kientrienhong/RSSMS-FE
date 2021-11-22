@@ -5,13 +5,12 @@ import { getStorageDetail, getArea } from "../../apis/Apis";
 import { useParams } from "react-router-dom";
 import { Box } from "@material-ui/core";
 import StorageDetailView from "./StorageDetailView";
-import DetailOrder from "./DetailOrder";
 import AreaList from "./AreaList";
-function StorageDetail({ showLoading, hideLoading, showSnackbar }) {
+function StorageDetail({ showLoading, hideLoading }) {
   const [storage, setStorage] = useState({});
   const [listArea, setListArea] = useState([]);
   const { storageId } = useParams();
-  useEffect((e) => {
+  useEffect(() => {
     const getData = async () => {
       let storageTemp = await getStorageDetail(storageId);
       setStorage(storageTemp.data);
@@ -42,15 +41,11 @@ function StorageDetail({ showLoading, hideLoading, showSnackbar }) {
       }}
     >
       <StorageDetailView storage={storage} />
-      {storage.type === 1 ? (
-        <AreaList
-          listArea={listArea}
-          setListArea={setListArea}
-          storageId={storageId}
-        />
-      ) : (
-        <DetailOrder storage={storage} />
-      )}
+      <AreaList
+        listArea={listArea}
+        setListArea={setListArea}
+        storageId={storageId}
+      />
     </Box>
   );
 }

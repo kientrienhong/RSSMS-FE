@@ -1,4 +1,4 @@
-@import "../node_modules/@syncfusion/ej2-base/styles/material.css";
+/* @import "../node_modules/@syncfusion/ej2-base/styles/material.css";
 @import "../node_modules/@syncfusion/ej2-buttons/styles/material.css";
 @import "../node_modules/@syncfusion/ej2-calendars/styles/material.css";
 @import "../node_modules/@syncfusion/ej2-dropdowns/styles/material.css";
@@ -14,7 +14,7 @@
   box-sizing: border-box;
 }
 
-p {
+.schedule__order__header__orderId {
   margin: 0;
 }
 
@@ -94,6 +94,11 @@ p {
   align-items: flex-start;
   justify-content: space-between;
 }
+
+.e-schedule .e-appointment-details {
+  padding: 9px !important;
+}
+
 .schedule__order__footer {
   width: 100%;
   display: flex;
@@ -133,7 +138,7 @@ p {
   width: 30%;
   font-size: 17px !important;
   font-weight: bold;
-  margin-bottom: 4px;
+  margin: 0px 0px 4px 0px;
 }
 
 .schedule__order__footer__status--Delivery {
@@ -215,4 +220,4 @@ p {
   to {
     transform: rotate(360deg);
   }
-}
+} */

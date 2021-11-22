@@ -49,7 +49,6 @@ function StoredOrderModal({
   showSnackbar,
   emptyPlacedProduct,
   changeIsLoadShelf,
-  placeStorage,
   changeIsLoadStorage,
 }) {
   const [selectedValue, setSelectedValue] = React.useState();
@@ -143,7 +142,6 @@ function StoredOrderModal({
             height="20px"
             style={style}
             onClick={() => {
-              console.log(e);
               removePlacedProduct(e);
               showSnackbar("success", "Remove product success");
             }}
@@ -169,8 +167,8 @@ function StoredOrderModal({
         <Box sx={{ width: "60%" }}>
           <p
             style={{
-              cursor: "pointer",
-              color: "blue",
+              cursor: "pointer !important",
+              color: "blue !important",
             }}
             onClick={() => {
               navigate(`storages/${e.storageId}/areas/${e.areaId}`, {
@@ -229,7 +227,6 @@ function StoredOrderModal({
       let productTemp = storedOrder.products.find(
         (e) => currentBox.productId === e.productId
       );
-
       if (productTemp?.amount === 0) {
         setError("There is no product to place");
         return;
@@ -246,31 +243,8 @@ function StoredOrderModal({
     }
   };
 
-  const handlePlaceStorage = () => {
-    let productTemp = storedOrder.products.find(
-      (e) => selectedValue === e.productId
-    );
-
-    if (productTemp?.amount === 0) {
-      setError("There is no product to place");
-      return;
-    }
-
-    placeStorage({
-      idProduct: selectedValue,
-      nameProduct: mapping[selectedValue],
-    });
-    setError("");
-    showSnackbar("success", "Place product success");
-    handleClose();
-  };
-
   const onHandlePlace = () => {
-    if (placingProducts.typeOrder === 1) {
-      handlePlaceBox();
-    } else {
-      handlePlaceStorage();
-    }
+    handlePlaceBox();
   };
 
   let widthModal = storedOrder.orderId === -1 ? "40%" : "80%";
@@ -477,7 +451,6 @@ const mapDispatchToProps = (dispatch) => {
     showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
     emptyPlacedProduct: () => dispatch(action.emptyPlacedProduct()),
     changeIsLoadShelf: () => dispatch(action.changeIsLoadShelf()),
-    placeStorage: (storage) => dispatch(action.placeStorage(storage)),
     removeStorage: () => dispatch(action.removeStorage()),
     changeIsLoadStorage: () => dispatch(action.changeIsLoadStorage()),
   };

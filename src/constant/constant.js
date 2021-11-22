@@ -2,7 +2,7 @@ import * as style from "./style";
 
 export const AREA_TYPE = 4;
 export const BOX_TYPE = 2;
-
+export const SELF_STORAGE_TYPE = 0;
 export const ROLE_USER = {
   Manager: 2,
   Customer: 3,
@@ -13,6 +13,12 @@ export const ROLE_USER = {
 export const TYPE_STORAGE = {
   "Self-Storage": 0,
   "Door-to-door": 1,
+};
+
+export const TYPE_SHELF = {
+  Hanldy: 0,
+  Unweildy: 1,
+  "Self-storage": 2,
 };
 
 export const STORAGE_STATUS = {

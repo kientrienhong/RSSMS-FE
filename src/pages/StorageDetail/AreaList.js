@@ -34,6 +34,7 @@ function AreaList({
           deleteArea={deleteArea}
           handleOpenConfirm={handleOpenConfirm}
           storageId={storageId}
+          setIsEdit={setIsEdit}
         />
       );
     });
@@ -125,7 +126,7 @@ function AreaList({
         margin: "2%",
         display: "flex",
         flexDirection: "column",
-        width: "50%",
+        width: "60%",
         height: "68vh",
         padding: "2%",
         alignItems: "center",
@@ -138,6 +139,7 @@ function AreaList({
         handleSubmit={handleSubmit}
         control={control}
         onSubmit={onSubmit}
+        isEdit={isEdit}
       />
       <ConfirmModal
         open={openConfirm}
@@ -153,6 +155,7 @@ function AreaList({
           alignItems: "center",
           flexDirection: "row",
           justifyContent: "space-between",
+          marginBottom: "24px",
         }}
       >
         <Typography color="black" variant="h2">
@@ -163,11 +166,13 @@ function AreaList({
             height: "45px",
             paddingLeft: "16px",
             paddingRight: "16px",
-            marginBottom: "4%",
           }}
           color="primary"
           variant="contained"
-          onClick={() => handleOpen(false)}
+          onClick={() => {
+            handleOpen(false);
+            setIsEdit(false);
+          }}
         >
           Create area
         </Button>

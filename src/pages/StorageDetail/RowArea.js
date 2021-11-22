@@ -8,6 +8,7 @@ export default function RowArea({
   handleOpen,
   handleOpenConfirm,
   storageId,
+  setIsEdit,
 }) {
   const navigate = useNavigate();
 
@@ -35,6 +36,7 @@ export default function RowArea({
           onClick={() => {
             handleOpen(true);
             setCurrentArea(area);
+            setIsEdit(true);
           }}
         />
         <img
