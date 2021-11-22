@@ -83,8 +83,7 @@ const buildModal = (
   isEdit,
   password,
   handleChangeRole,
-  listStorage,
-  handleChangeStorageCB
+  error
 ) => {
   return (
     <Modal
@@ -138,10 +137,6 @@ const buildModal = (
               control={control}
               rules={{
                 required: "Email required",
-                // pattern: {
-                //   value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                //   message: "Invalid email",
-                // },
               }}
               styles={{ width: "540px" }}
               name="email"
@@ -247,6 +242,8 @@ const buildModal = (
                     value={user.roleName}
                     onChange={handleChangeRole}
                     displayEmpty
+                    error={!!error?.roleName}
+                    helperText={error?.roleName?.message}
                   >
                     <MenuItem value={"Customer"}>Customer</MenuItem>
                     <MenuItem value={"Manager"}>Manager</MenuItem>
@@ -254,13 +251,6 @@ const buildModal = (
                     <MenuItem value={"Delivery Staff"}>Delivery Staff</MenuItem>
                   </Select>
                 </FormControl>
-                {/* <CustomSelect
-                name={"roleName"}
-                value={user.roleName || " "}
-                control={control}
-                options={listRoleOption}
-                rules={{ required: "Type required" }}
-              /> */}
               </Box>
             ) : null}
           </Box>
@@ -313,9 +303,9 @@ function Users(props) {
   const [open, setOpen] = React.useState(false);
   const [listStorage, setListStorage] = React.useState([]);
   const [storageCB, setStorageCB] = React.useState({});
+  const [error, setError] = React.useState({});
   const handleChangeRole = (event) => {
     setRole(event.target.value);
-    console.log(ROLE_USER[event.target.value]);
   };
 
   const handleChangeStorageCB = (event) => {
@@ -403,6 +393,15 @@ function Users(props) {
   };
 
   const onHandleCreateUser = async (data) => {
+    if (role === "") {
+      setError({
+        roleName: {
+          message: "Please select role",
+        },
+      });
+      return;
+    }
+
     let roleName = ROLE_USER[role];
     let userTemp = {
       name: data.name,
@@ -527,7 +526,8 @@ function Users(props) {
         password,
         handleChangeRole,
         listStorage,
-        handleChangeStorageCB
+        handleChangeStorageCB,
+        error
       )}
       <Box
         sx={{

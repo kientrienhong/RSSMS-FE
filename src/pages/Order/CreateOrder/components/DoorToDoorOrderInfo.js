@@ -454,7 +454,6 @@ function DoorToDoorOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
             type: 1,
             totalPrice: totalPriceProduct(),
           });
-          // navigate("/orders/inputInfor");
           let errorTemp = {};
           if (!dateDelivery) {
             errorTemp = {

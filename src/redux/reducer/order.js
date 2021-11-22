@@ -138,12 +138,13 @@ const order = (state = initialState, action) => {
     }
 
     case ActionType.SET_UP_MOVE_BOX: {
+      console.log(action.payload);
       state.moveBox = {
         orderId: action.payload.orderId,
         boxId: action.payload.id,
         newBoxId: 0,
         shelfType: action.payload.shelfType,
-        boxSize: action.payload.boxSize,
+        sizeType: action.payload.sizeType,
       };
       return { ...state };
     }
