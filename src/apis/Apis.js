@@ -326,10 +326,17 @@ export const createOrder = async (order) => {
   return response;
 };
 
-export const getOrder = async (id, page, size) => {
-  const response = await axios.get(
-    `https://localhost:44304/api/v1/orders?Id=${id}&page=${page}&size=${size}`
-  );
+export const getOrder = async (id, page, size, dateStart, dateEnd) => {
+  let response;
+  if (dateStart && dateEnd) {
+    response = await axios.get(
+      `https://localhost:44304/api/v1/orders?dateFrom=${dateStart}&dateTo=${dateEnd}&page=1&size=-1`
+    );
+  } else {
+    response = await axios.get(
+      `https://localhost:44304/api/v1/orders?Id=${id}&page=${page}&size=${size}`
+    );
+  }
 
   return response;
 };

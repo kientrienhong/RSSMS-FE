@@ -172,16 +172,11 @@ function StoredOrderModal({
     });
     try {
       showLoading();
-      if (placingProducts.typeOrder === 0) {
-        await placeStorages(placingProducts);
-        changeIsLoadStorage();
-      } else {
-        await placeBoxes(placingProducts);
-        changeIsLoadShelf();
-      }
+      await placeBoxes(placingProducts);
       showSnackbar("success", "Save placing success");
       emptyPlacedProduct();
       handleClose();
+      changeIsLoadShelf();
     } catch (e) {
       console.log(e.response);
     } finally {

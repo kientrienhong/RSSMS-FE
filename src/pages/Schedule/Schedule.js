@@ -11,11 +11,15 @@ import {
 import { Grid } from "@material-ui/core";
 import Order from "./component/Order";
 import OrderAssignModal from "./component/OrderAssignModal";
-export default function Shedule() {
+import { connect } from "react-redux";
+import * as action from "../../redux/action/action";
+import { getOrder } from "../../apis/Apis";
+function Shedule({ showLoading, hideLoading }) {
   const [listShowStaffAssigned, setListShowStaffAssigned] = React.useState([]);
   const [listShowStaffUnAssigned, setListShowStaffUnAssigned] = React.useState(
     []
   );
+  const [listOrder, setListOrder] = React.useState([]);
   const [currentOrder, setCurrentOrder] = React.useState({});
   const [listStaffAssigned, setListStaffAssigned] = React.useState([
     { id: 1, name: "Giang Thanh Dinh" },
@@ -99,6 +103,18 @@ export default function Shedule() {
     setListShowStaffUnAssigned(listShowStaffUnAssignedTemp);
   };
 
+  const getData = async (dateStart, dateEnd) => {
+    try {
+      showLoading();
+      let response = await getOrder("", "", "", dateStart, dateEnd);
+      console.log(response);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      hideLoading();
+    }
+  };
+
   const localData = [
     {
       Id: 1,
@@ -147,13 +163,45 @@ export default function Shedule() {
   };
 
   const onNavigatingEvent = (navigatingEventArgs) => {
-    var curr = new Date(navigatingEventArgs.currentDate); // get current date
-    var first = curr.getDate() - curr.getDay() + 1; // First day is the day of the month - the day of the week
-    var last = first + 6; // last day is the first day + 6
+    let curr = new Date(navigatingEventArgs.currentDate); // get current date
+    let first = curr.getDate() - curr.getDay() + 1; // First day is the day of the month - the day of the week
+    let last = first + 6; // last day is the first day + 6
 
-    var firstday = new Date(curr.setDate(first)).toUTCString();
-    var lastday = new Date(curr.setDate(last)).toUTCString();
+    let firstday = new Date(curr.setDate(first)).toUTCString();
+    let lastday = new Date(curr.setDate(last)).toUTCString();
   };
+
+  useEffect(() => {
+    const getData = async (dateStart, dateEnd) => {
+      try {
+        showLoading();
+        let response = await getOrder("", "", "", dateStart, dateEnd);
+        console.log(response);
+      } catch (e) {
+        console.log(e);
+      } finally {
+        hideLoading();
+      }
+    };
+
+    const firstCall = async () => {
+      try {
+        let curr = new Date(); // get current date
+        let first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
+        let last = first + 6; // last day is the first day + 6
+
+        let firstday = new Date(curr.setDate(first)).toISOString();
+        let lastday = new Date(curr.setDate(last)).toISOString();
+        showLoading();
+        await getData(firstday.split("T")[0], lastday.split("T")[0]);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        hideLoading();
+      }
+    };
+    firstCall();
+  }, []);
 
   const onEventClick = (args) => {
     setCurrentOrder(args.event);
@@ -162,7 +210,7 @@ export default function Shedule() {
   return (
     <ScheduleComponent
       currentView="Week"
-      selectedDate={new Date(2021, 10, 3)}
+      selectedDate={new Date()}
       eventSettings={{
         dataSource: localData,
         template: eventTemplate.bind(this),
@@ -193,3 +241,12 @@ export default function Shedule() {
     </ScheduleComponent>
   );
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    showLoading: () => dispatch(action.showLoader()),
+    hideLoading: () => dispatch(action.hideLoader()),
+    showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
+  };
+};
+export default connect(null, mapDispatchToProps)(Shedule);

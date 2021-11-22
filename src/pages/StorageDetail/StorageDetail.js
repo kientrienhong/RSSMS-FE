@@ -13,6 +13,7 @@ function StorageDetail({ showLoading, hideLoading }) {
   useEffect(() => {
     const getData = async () => {
       let storageTemp = await getStorageDetail(storageId);
+      console.log(storageTemp);
       setStorage(storageTemp.data);
     };
 
@@ -23,7 +24,7 @@ function StorageDetail({ showLoading, hideLoading }) {
         let listAreaTemp = await getArea(parseInt(storageId));
         setListArea(listAreaTemp.data.data);
       } catch (error) {
-        console.log(error);
+        console.log(error?.response);
       } finally {
         hideLoading();
       }
