@@ -118,39 +118,6 @@ function StoredOrderModal({
     });
   };
 
-  const buildListPlacingStorage = () => {
-    return placingProducts?.boxes.map((e) => (
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-        }}
-        key={e.nameProduct}
-      >
-        <Box sx={{ width: "30%" }}>
-          <p>{e.nameProduct}</p>
-        </Box>
-        <Box sx={{ width: "60%" }}>
-          <p>{e.storageName}</p>
-        </Box>
-        <Box sx={{ width: "10%" }}>
-          <img
-            src="/img/minus.png"
-            alt="minus"
-            width="20px"
-            height="20px"
-            style={style}
-            onClick={() => {
-              removePlacedProduct(e);
-              showSnackbar("success", "Remove product success");
-            }}
-          />
-        </Box>
-      </Box>
-    ));
-  };
-
   const buildListPlacingProduct = () => {
     return placingProducts?.boxes.map((e) => (
       <Box
@@ -165,8 +132,8 @@ function StoredOrderModal({
           <p>{e.nameProduct}</p>
         </Box>
         <Box sx={{ width: "60%" }}>
-          <p
-            style={{
+          <Typography
+            sx={{
               cursor: "pointer !important",
               color: "blue !important",
             }}
@@ -177,7 +144,7 @@ function StoredOrderModal({
             }}
           >
             {e.shelfName} / {e.nameBox}
-          </p>
+          </Typography>
         </Box>
         <Box sx={{ width: "10%" }}>
           <img
@@ -381,9 +348,7 @@ function StoredOrderModal({
                     </Typography>
                   </Box>
                 </Box>
-                {placingProducts.typeOrder === 0
-                  ? buildListPlacingStorage()
-                  : buildListPlacingProduct()}
+                {buildListPlacingProduct()}
               </Box>
             </Box>
           </Box>
