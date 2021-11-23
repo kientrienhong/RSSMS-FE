@@ -8,19 +8,12 @@ import {
   Button,
   Modal,
   Typography,
-  FormControl,
-  Select,
   MenuItem,
 } from "@material-ui/core";
 import SearchIcon from "@mui/icons-material/Search";
 import ListUsers from "./components/ListUsers";
 import CustomAvatar from "../../components/CustomAvatar";
-import {
-  getListUser,
-  createUser,
-  updateUser,
-  getListStorage,
-} from "../../apis/Apis";
+import { getListUser, createUser, updateUser } from "../../apis/Apis";
 import { connect } from "react-redux";
 import * as action from "../../redux/action/action";
 import { useForm } from "react-hook-form";

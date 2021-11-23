@@ -8,6 +8,7 @@ import {
   MenuItem,
   TextField,
   Select,
+  FormHelperText,
 } from "@material-ui/core";
 import CustomInput from "../../../components/CustomInput";
 import { connect } from "react-redux";
@@ -51,10 +52,36 @@ function FormHandy({
   };
 
   const [error, setError] = useState({});
-
+  const validation = () => {
+    let valid = true;
+    if (currentShelf.sizeType === undefined) {
+      setError({ sizeType: { msg: "*Required" } });
+      valid = false;
+    }
+    const inputAmountBoxTemp = { ...inputAmountBox };
+    if (inputAmountBoxTemp.boxesInHeight.value === "") {
+      inputAmountBoxTemp.boxesInHeight.error = {
+        message: "*Required",
+      };
+      setInputAmountBox({ ...inputAmountBox, inputAmountBoxTemp });
+      valid = false;
+    }
+    if (inputAmountBoxTemp.boxesInWidth.value === "") {
+      inputAmountBoxTemp.boxesInWidth.error = {
+        message: "*Required",
+      };
+      setInputAmountBox({ ...inputAmountBox, inputAmountBoxTemp });
+      valid = false;
+    }
+    return valid;
+  };
   const onHandleCreateShelf = async (data, areaId) => {
     try {
       showLoading();
+      const valid = validation();
+      if (valid === false) {
+        return;
+      }
       const shelf = {
         type: currentShelf.type,
         name: data.name,
@@ -67,10 +94,11 @@ function FormHandy({
       await createShelf(shelf, parseInt(areaId));
       await getData(searchName, page, 4);
       showSnackbar("success", "Create shelf success");
+      setError({});
       handleClose();
     } catch (e) {
       console.log(e.response);
-      setError({ msg: e.response.data.error.message });
+      setError({ submit: { msg: e.response.data.error.message } });
     } finally {
       hideLoading();
     }
@@ -79,6 +107,11 @@ function FormHandy({
   const onHandleEditShelf = async (data) => {
     try {
       showLoading();
+      showLoading();
+      const valid = validation();
+      if (valid === false) {
+        return;
+      }
       const shelf = {
         type: currentShelf.type,
         name: data.name,
@@ -94,7 +127,7 @@ function FormHandy({
       handleClose();
     } catch (e) {
       console.log(e.response);
-      setError({ msg: e.response.data.error.message });
+      setError({ submit: { msg: e.response.data.error.message } });
     } finally {
       hideLoading();
     }
@@ -109,8 +142,8 @@ function FormHandy({
   };
 
   const [inputAmountBox, setInputAmountBox] = useState({
-    boxesInHeight: { value: 0 },
-    boxesInWidth: { value: 0 },
+    boxesInHeight: { value: "" },
+    boxesInWidth: { value: "" },
   });
 
   const onChangeAmountBox = (e, value) => {
@@ -175,6 +208,7 @@ function FormHandy({
           alignItems: "flex-start",
           justifyContent: "flex-start",
           marginTop: "32px",
+          marginBottom: "32px",
         }}
       >
         <Box
@@ -189,6 +223,7 @@ function FormHandy({
             Box size
           </Typography>
           <FormControl
+            error={error?.sizeType}
             sx={{ m: 1, minWidth: 120, color: "black", margin: "0" }}
             name="boxSize"
           >
@@ -202,6 +237,9 @@ function FormHandy({
             >
               {buildListCombo(listBoxes)}
             </Select>
+            <FormHelperText error={error?.sizeType}>
+              {error?.sizeType ? error?.sizeType?.msg : ""}
+            </FormHelperText>
           </FormControl>
         </Box>
         <Box sx={{ width: "60%", display: "flex", flexDirection: "column" }}>
@@ -225,7 +263,7 @@ function FormHandy({
                   ? inputAmountBox.boxesInWidth.error.message
                   : null
               }
-              style={styleInput}
+              style={{ ...styleInput, marginBottom: "8px" }}
               onChange={(e) => onChangeAmountBox(e, "boxesInWidth")}
               inputProps={{ style: { width: "50px" } }}
             />
@@ -247,8 +285,10 @@ function FormHandy({
           </Box>
         </Box>
       </Box>
-      {error.msg ? (
-        <p style={{ textAlign: "center", color: "red" }}>{error.msg}</p>
+      {error?.submit?.msg ? (
+        <p style={{ textAlign: "center", color: "red" }}>
+          {error?.submit?.msg}
+        </p>
       ) : null}
       <Box
         sx={{

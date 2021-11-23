@@ -7,6 +7,7 @@ import {
   FormControl,
   MenuItem,
   Select,
+  FormHelperText,
 } from "@material-ui/core";
 import CustomInput from "../../../components/CustomInput";
 import CustomAreaInput from "../../../components/CustomAreaInput";
@@ -49,9 +50,22 @@ function FormUnwieldy({
       <MenuItem value={e.id}>{e.name.split(" ")[1]}</MenuItem>
     ));
 
+  const validation = () => {
+    let valid = true;
+    if (currentShelf.sizeType === undefined) {
+      setError({ sizeType: { msg: "*Required" } });
+      valid = false;
+    }
+    return valid;
+  };
+
   const onHandleEditShelf = async (data) => {
     try {
       showLoading();
+      const valid = validation();
+      if (valid === false) {
+        return;
+      }
       const shelf = {
         type: currentShelf.type,
         name: data.name,
@@ -76,6 +90,10 @@ function FormUnwieldy({
   const onHandleCreateShelf = async (data, areaId) => {
     try {
       showLoading();
+      const valid = validation();
+      if (valid === false) {
+        return;
+      }
       const shelf = {
         type: currentShelf.type,
         name: data.name,
@@ -177,6 +195,7 @@ function FormUnwieldy({
           <FormControl
             sx={{ m: 1, minWidth: 120, color: "black", margin: "0" }}
             name="boxSize"
+            error={error?.sizeType}
           >
             <Select
               value={currentShelf?.productId}
@@ -188,6 +207,9 @@ function FormUnwieldy({
             >
               {buildListCombo(listAreas)}
             </Select>
+            <FormHelperText error={error?.sizeType}>
+              {error?.sizeType ? error?.sizeType?.msg : ""}
+            </FormHelperText>
           </FormControl>
         </Box>
       </Box>

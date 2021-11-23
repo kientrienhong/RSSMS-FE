@@ -9,6 +9,7 @@ export default function CustomSelect({
   errors,
   errorMsg,
   defaultValue,
+  muiStyle,
 }) {
   return (
     <FormControl error={errors[name]} sx={{ marginLeft: "8px" }}>
@@ -18,7 +19,7 @@ export default function CustomSelect({
         defaultValue={defaultValue}
         render={({ field: { onChange, value } }) => {
           return (
-            <Select onChange={onChange} value={value}>
+            <Select onChange={onChange} value={value} sx={muiStyle}>
               {children}
             </Select>
           );
