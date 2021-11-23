@@ -18,6 +18,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import TabPanel from "../../components/TabPanel";
 import { useForm } from "react-hook-form";
+import CustomSelect from "../../components/CustomSelect";
 import CustomInput from "../../components/CustomInput";
 import ProductButton from "../Order/CreateOrder/components/ProductButton";
 import {
@@ -123,7 +124,13 @@ function Storages(props) {
   const [listShowStaffUnAssigned, setListShowStaffUnAssigned] = React.useState(
     []
   );
-  const { handleSubmit, reset, control } = useForm();
+  const {
+    handleSubmit,
+    reset,
+    control,
+    formState: { errors },
+  } = useForm();
+  const [error, setError] = React.useState({});
   const [listStorages, setListStorages] = React.useState([]);
   const [listStaffAssigned, setListStaffAssigned] = React.useState([]);
   const [listStaffUnAssigned, setListStaffUnAssigned] = React.useState([]);
@@ -134,26 +141,9 @@ function Storages(props) {
     images: [{ id: null, url: null }],
   });
   const [page, setPage] = React.useState(1);
-  const [sizeStorage, setSizeStorage] = React.useState({
-    value: 0,
-    label: "0.5m2",
-  });
-  const [listSizeStorage, setListSizeStorage] = React.useState([
-    { value: 0, label: "0.5m2" },
-    { value: 1, label: "1m2" },
-    { value: 2, label: "2m2" },
-    { value: 3, label: "3m2" },
-  ]);
-
-  const buildDropDown = (listSizeStorage) =>
-    listSizeStorage.map((e) => <MenuItem value={e.value}>{e.label}</MenuItem>);
 
   const handleChange = async (event, value) => {
     setPage(value);
-  };
-
-  const handleChangeSizeStorage = (event) => {
-    setSizeStorage(listSizeStorage[event.target.value]);
   };
 
   const handleChangeSearchUnAssigned = (event) => {
@@ -172,6 +162,10 @@ function Storages(props) {
 
     setListShowStaffAssigned(listShowStaffAssignedTemp);
   };
+
+  useEffect(() => {
+    reset();
+  }, [open]);
 
   const onHandleDeleteStorage = async (id) => {
     let response;
@@ -270,15 +264,23 @@ function Storages(props) {
 
       hideLoading();
       showSnackbar("success", "Assign Success!");
+      setError({});
       handleClose();
     } catch (error) {
       console.log(error.response);
+
+      setError({
+        ...error,
+        assignStaff: {
+          message: error.response.data.error.message,
+        },
+      });
       hideLoading();
     }
   };
 
-  const onHandleCreateStorage = async (data, typeName) => {
-    let type = TYPE_STORAGE[typeName];
+  const onHandleCreateStorage = async (data) => {
+    let type = TYPE_STORAGE[data.type];
     let size = `${data.width}m x ${data.length}m x ${data.height}m`;
 
     let storageTemp = {
@@ -296,6 +298,15 @@ function Storages(props) {
     };
     try {
       showLoading();
+      if (!storage.avatarFile) {
+        setError({
+          ...error,
+          avatarFile: { message: "Please provide storage image!" },
+        });
+        hideLoading();
+
+        return;
+      }
 
       const response = await createStorage(storageTemp);
       if (response.status === 200) {
@@ -316,18 +327,19 @@ function Storages(props) {
             showSnackbar("success", "Create storage successful!");
             await getData(searchName, page, 4);
             handleClose();
+            setError({});
           }
+          hideLoading();
         });
       }
     } catch (error) {
       console.log(error);
-    } finally {
       hideLoading();
     }
   };
 
-  const onHandleUpdateUser = async (data, typeName) => {
-    let type = TYPE_STORAGE[typeName];
+  const onHandleUpdateUser = async (data) => {
+    let type = TYPE_STORAGE[data.type];
     let size = `${data.width}m x ${data.length}m x ${data.height}m`;
 
     let storageTemp = {
@@ -362,6 +374,7 @@ function Storages(props) {
             await getData(searchName, page, 4);
             handleClose();
             hideLoading();
+            setError({});
           } else {
             hideLoading();
           }
@@ -373,13 +386,13 @@ function Storages(props) {
           await getData(searchName, page, 4);
           handleClose();
           hideLoading();
+          setError({});
         } else {
           hideLoading();
         }
       }
     } catch (error) {
       console.log(error);
-      hideLoading();
     }
   };
 
@@ -427,9 +440,9 @@ function Storages(props) {
 
   const onSubmit = (data) => {
     if (isEdit === false) {
-      onHandleCreateStorage(data, type);
+      onHandleCreateStorage(data);
     } else {
-      onHandleUpdateUser(data, type);
+      onHandleUpdateUser(data);
     }
   };
   const handleClose = () => {
@@ -506,10 +519,11 @@ function Storages(props) {
     isEdit,
     handleClose,
     handleChangeType,
-    onChangeInputFile
+    onChangeInputFile,
+    errors,
+    error
   ) => {
     const typeList = ["Self-Storage", "Door-to-door"];
-
     return (
       <form onSubmit={handleSubmit(onSubmit)}>
         <input
@@ -628,52 +642,35 @@ function Storages(props) {
             <Typography
               color="black"
               variant="h2"
-              style={{ marginTop: "1%", marginLeft: "6%" }}
+              style={{
+                marginTop: "1%",
+                marginLeft: "6%",
+                width: "100%",
+                marginBottom: "16px",
+              }}
             >
               Storage type
             </Typography>
-            <FormControl sx={{ m: 1, minWidth: 120, color: "black" }}>
-              <Select
-                value={typeList[storage.type]}
-                onChange={handleChangeType}
-                displayEmpty
-              >
-                <MenuItem value={"Self-Storage"}>Self-Storage</MenuItem>
-                <MenuItem value={"Door-to-door"}>Door-to-door</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
-          {storage.type === 0 ? (
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "flex-start",
-                width: "50%",
-              }}
+            <CustomSelect
+              name="type"
+              control={control}
+              errors={errors}
+              errorMsg={"Required type"}
+              defaultValue={typeList[storage.type] || ""}
             >
-              <Typography
-                color="black"
-                variant="h2"
-                style={{ marginTop: "1%", marginLeft: "5%" }}
-              >
-                Size Area Storage
-              </Typography>
-              <FormControl
-                sx={{ m: 1, minWidth: 120, color: "black" }}
-                name="sizeStorage"
-              >
-                <Select
-                  value={sizeStorage.value}
-                  onChange={handleChangeSizeStorage}
-                  displayEmpty
-                >
-                  {buildDropDown(listSizeStorage)}
-                </Select>
-              </FormControl>
-            </Box>
-          ) : null}
+              <MenuItem value={"Self-Storage"}>Self-Storage</MenuItem>
+              <MenuItem value={"Door-to-door"}>Door-to-door</MenuItem>
+            </CustomSelect>
+          </Box>
         </Box>
+        <p
+          style={{
+            textAlign: "center",
+            color: "red",
+          }}
+        >
+          {error?.avatarFile?.message ? error?.avatarFile?.message : ""}
+        </p>
         <Box
           sx={{
             width: "200px",
@@ -764,7 +761,8 @@ function Storages(props) {
                   handleClose,
                   handleChangeType,
                   onChangeInputFile,
-                  type
+                  errors,
+                  error
                 )}
               </Box>
             </TabPanel>
@@ -795,6 +793,16 @@ function Storages(props) {
                   onHandleSearch={handleChangeSearchUnAssigned}
                 />
               </Box>
+              <p
+                style={{
+                  width: "100%",
+                  textAlign: "center",
+                  color: "red",
+                }}
+              >
+                {error?.assignStaff?.message ? error?.assignStaff?.message : ""}
+              </p>
+
               <Box
                 sx={{
                   width: "100%",

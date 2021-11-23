@@ -3,19 +3,19 @@ import { FormHelperText, Select, FormControl } from "@material-ui/core";
 import { Controller } from "react-hook-form";
 
 export default function CustomSelect({
-  label,
   name,
   control,
   children,
   errors,
   errorMsg,
+  defaultValue,
 }) {
   return (
-    <FormControl error={errors[name]}>
+    <FormControl error={errors[name]} sx={{ marginLeft: "8px" }}>
       <Controller
         control={control}
         name={name}
-        defaultValue={""}
+        defaultValue={defaultValue}
         render={({ field: { onChange, value } }) => {
           return (
             <Select onChange={onChange} value={value}>
