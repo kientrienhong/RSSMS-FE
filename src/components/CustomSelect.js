@@ -1,31 +1,33 @@
 import React from "react";
-import { MenuItem, Select, FormControl } from "@material-ui/core";
+import { FormHelperText, Select, FormControl } from "@material-ui/core";
 import { Controller } from "react-hook-form";
 
-export const CustomSelect = ({ name, userInfo, control, options, rules }) => {
-  const generateSelectOptions = () => {
-    return options.map((option) => {
-      return (
-        <MenuItem key={option.value} value={option.value}>
-          {option.label}
-        </MenuItem>
-      );
-    });
-  };
-
+export default function CustomSelect({
+  label,
+  name,
+  control,
+  children,
+  errors,
+  errorMsg,
+}) {
   return (
-    <FormControl sx={{ m: 1, minWidth: 120, color: "black" }}>
+    <FormControl error={errors[name]}>
       <Controller
         control={control}
         name={name}
-        defaultValue={userInfo}
-        render={({ field: { onChange, value } }) => (
-          <Select onChange={onChange} value={value}>
-            {generateSelectOptions()}
-          </Select>
-        )}
-        rules={rules}
+        defaultValue={""}
+        render={({ field: { onChange, value } }) => {
+          return (
+            <Select onChange={onChange} value={value}>
+              {children}
+            </Select>
+          );
+        }}
+        rules={{ required: errorMsg }}
       />
+      <FormHelperText error={errors[name]}>
+        {errors[name] ? errors[name].message : ""}
+      </FormHelperText>
     </FormControl>
   );
-};
+}

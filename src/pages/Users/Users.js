@@ -28,7 +28,7 @@ import CustomInput from "../../components/CustomInput";
 import { storageFirebase } from "../../firebase/firebase";
 import { ROLE_USER } from "../../constant/constant";
 import { STYLE_MODAL } from "../../constant/style";
-
+import CustomSelect from "../../components/CustomSelect";
 let inputFile;
 const styleModal = {
   ...STYLE_MODAL,
@@ -82,7 +82,7 @@ const buildModal = (
   control,
   isEdit,
   password,
-  handleChangeRole,
+  errors,
   error
 ) => {
   return (
@@ -230,30 +230,34 @@ const buildModal = (
                     marginTop: "2%",
                     textAlign: "left",
                     marginLeft: "2.5%",
+                    marginBottom: "5%",
                   }}
                 >
                   Type
                 </Typography>
-                <FormControl
-                  sx={{ m: 1, minWidth: 120, color: "black" }}
+                <CustomSelect
+                  label="Type"
                   name="roleName"
+                  control={control}
+                  errors={errors}
+                  errorMsg={"Required role"}
                 >
-                  <Select
-                    value={user.roleName}
-                    onChange={handleChangeRole}
-                    displayEmpty
-                    error={!!error?.roleName}
-                    helperText={error?.roleName?.message}
-                  >
-                    <MenuItem value={"Customer"}>Customer</MenuItem>
-                    <MenuItem value={"Manager"}>Manager</MenuItem>
-                    <MenuItem value={"Office Staff"}>Office Staff</MenuItem>
-                    <MenuItem value={"Delivery Staff"}>Delivery Staff</MenuItem>
-                  </Select>
-                </FormControl>
+                  <MenuItem value={"Customer"}>Customer</MenuItem>
+                  <MenuItem value={"Manager"}>Manager</MenuItem>
+                  <MenuItem value={"Office Staff"}>Office Staff</MenuItem>
+                  <MenuItem value={"Delivery Staff"}>Delivery Staff</MenuItem>
+                </CustomSelect>
               </Box>
             ) : null}
           </Box>
+          <p
+            style={{
+              textAlign: "center",
+              color: "red",
+            }}
+          >
+            {error.message ? error.message : ""}
+          </p>
           <Box
             sx={{
               width: "35%",
@@ -296,23 +300,19 @@ const buildModal = (
 };
 
 function Users(props) {
-  const [role, setRole] = React.useState("");
   const [page, setPage] = React.useState(1);
   const [searchName, setSearchName] = React.useState("");
   const [totalUser, setTotalUser] = React.useState(0);
   const [open, setOpen] = React.useState(false);
-  const [listStorage, setListStorage] = React.useState([]);
-  const [storageCB, setStorageCB] = React.useState({});
   const [error, setError] = React.useState({});
-  const handleChangeRole = (event) => {
-    setRole(event.target.value);
-  };
-
-  const handleChangeStorageCB = (event) => {
-    setStorageCB(event.target.value);
-  };
-  const { handleSubmit, reset, control, watch } = useForm();
-  const password = useRef({});
+  const {
+    handleSubmit,
+    reset,
+    control,
+    watch,
+    formState: { errors },
+  } = useForm();
+  let password = useRef({});
   password.current = watch("password", "");
 
   const { showLoading, hideLoading, showSnackbar } = props;
@@ -339,14 +339,13 @@ function Users(props) {
   };
 
   const onHandleUpdateUser = async (data) => {
-    let roleName = ROLE_USER[role];
+    let roleName = ROLE_USER[data.roleName];
     let userTemp = {
       name: data.name,
       email: data.email,
       address: data.address,
       phone: data.phone,
       roleId: roleName,
-      storageId: storageCB,
       images: [
         {
           id: user?.images[0]?.id,
@@ -382,27 +381,29 @@ function Users(props) {
           await getData(searchName, page, 8);
           handleClose();
           hideLoading();
+          setError({});
         } else {
           hideLoading();
         }
       }
     } catch (error) {
+      if (error.response.message === "Email is existed") {
+        setError({
+          message: "Email is existed",
+        });
+      } else {
+        setError({
+          message: error.response.message,
+        });
+      }
       console.log(error);
+
       hideLoading();
     }
   };
 
   const onHandleCreateUser = async (data) => {
-    if (role === "") {
-      setError({
-        roleName: {
-          message: "Please select role",
-        },
-      });
-      return;
-    }
-
-    let roleName = ROLE_USER[role];
+    let roleName = ROLE_USER[data.roleName];
     let userTemp = {
       name: data.name,
       password: data.password,
@@ -410,7 +411,6 @@ function Users(props) {
       address: data.address,
       phone: data.phone,
       roleId: roleName,
-      storageId: storageCB,
       avatarLink: null,
     };
     try {
@@ -433,11 +433,21 @@ function Users(props) {
 
             handleClose();
             hideLoading();
-          } else hideLoading();
+            setError({});
+          }
         });
       }
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
+      if (error.response.data.error.message === "Email is existed") {
+        setError({
+          message: "Email is existed",
+        });
+      } else {
+        setError({
+          message: error.response.data.error.message,
+        });
+      }
       hideLoading();
     }
   };
@@ -462,23 +472,6 @@ function Users(props) {
     };
     firstCall();
   }, []);
-
-  useEffect(() => {
-    const process = async () => {
-      if (open === true) {
-        try {
-          showLoading();
-          let listStorage = await getListStorage("", 1, -1);
-          setListStorage(listStorage.data.data);
-          hideLoading();
-        } catch (error) {
-          console.log(error);
-          hideLoading();
-        }
-      }
-    };
-    process();
-  }, [open]);
 
   useEffect(() => {
     const process = async () => {
@@ -524,9 +517,7 @@ function Users(props) {
         control,
         isEdit,
         password,
-        handleChangeRole,
-        listStorage,
-        handleChangeStorageCB,
+        errors,
         error
       )}
       <Box

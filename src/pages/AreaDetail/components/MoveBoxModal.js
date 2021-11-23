@@ -70,8 +70,6 @@ function MoveBoxModal({
             onClick={async () => {
               try {
                 showLoading();
-                console.log(moveBox);
-                console.log(currentBox);
                 if (moveBox.sizeType !== currentBox.sizeType) {
                   setError("You must move to same size");
                   return;
