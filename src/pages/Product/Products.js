@@ -12,7 +12,7 @@ import ConfirmModal from "../../components/ConfirmModal";
 function Products({ showLoading, hideLoading, showSnackbar }) {
   const [open, setOpen] = useState(false);
   const [openConfirm, setOpenConfirm] = useState(false);
-  const { handleSubmit, control, reset } = useForm();
+  const { handleSubmit, control, reset, errors } = useForm();
 
   const [isEdit, setIsEdit] = useState(false);
   const [typeProduct, setTypeProduct] = useState(-1);
@@ -111,6 +111,7 @@ function Products({ showLoading, hideLoading, showSnackbar }) {
         getData={getData}
         handleSubmit={handleSubmit}
         control={control}
+        errors={errors}
       />
 
       {buildListSection()}

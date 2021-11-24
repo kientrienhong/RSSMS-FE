@@ -7,6 +7,7 @@ import {
   FormControl,
   MenuItem,
   TextField,
+  FormHelperText,
   Select,
 } from "@material-ui/core";
 import CustomInput from "../../../components/CustomInput";
@@ -30,6 +31,16 @@ function FormSelfStorage({
   listSelfStorage,
 }) {
   const { handleSubmit, control } = useForm();
+  const [error, setError] = useState({});
+
+  const validation = () => {
+    let valid = true;
+    if (currentShelf.sizeType === undefined) {
+      setError({ sizeType: { msg: "*Required" } });
+      valid = false;
+    }
+    return valid;
+  };
 
   const handleChangeSize = (event) => {
     const nameBox = listSelfStorage.find((e) => {
@@ -40,6 +51,7 @@ function FormSelfStorage({
       productId: event.target.value,
       sizeType: nameBox,
     });
+    setError({ ...error, sizeType: undefined });
   };
 
   const buildListCombo = (listSelfStorage) =>
@@ -48,6 +60,11 @@ function FormSelfStorage({
   const onHandleEditShelf = async (data) => {
     try {
       showLoading();
+      const valid = validation();
+      if (valid === false) {
+        return;
+      }
+
       const shelf = {
         type: currentShelf.type,
         name: data.name,
@@ -72,6 +89,12 @@ function FormSelfStorage({
   const onHandleCreateShelf = async (data, areaId) => {
     try {
       showLoading();
+
+      const valid = validation();
+      if (valid === false) {
+        return;
+      }
+
       const shelf = {
         type: currentShelf.type,
         name: data.name,
@@ -100,7 +123,6 @@ function FormSelfStorage({
       await onHandleEditShelf(data);
     }
   };
-  const [error, setError] = useState({});
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -174,6 +196,7 @@ function FormSelfStorage({
           <FormControl
             sx={{ m: 1, minWidth: 120, color: "black", margin: "0" }}
             name="boxSize"
+            error={error?.sizeType}
           >
             <Select
               value={currentShelf?.productId}
@@ -185,6 +208,9 @@ function FormSelfStorage({
             >
               {buildListCombo(listSelfStorage)}
             </Select>
+            <FormHelperText error={error?.sizeType}>
+              {error?.sizeType ? error?.sizeType?.msg : ""}
+            </FormHelperText>
           </FormControl>
         </Box>
       </Box>

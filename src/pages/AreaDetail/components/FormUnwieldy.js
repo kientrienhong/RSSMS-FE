@@ -41,6 +41,7 @@ function FormUnwieldy({
       productId: event.target.value,
       sizeType: nameBox,
     });
+    setError({ ...error, sizeType: undefined });
   };
 
   const [error, setError] = useState({});

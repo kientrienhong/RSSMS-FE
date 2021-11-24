@@ -7,6 +7,7 @@ import {
   FormControl,
   Select,
   MenuItem,
+  FormHelperText,
 } from "@material-ui/core";
 import { STYLE_MODAL } from "../../../constant/style";
 import CustomInput from "../../../components/CustomInput";
@@ -43,7 +44,8 @@ function ProductModal({
   handleSubmit,
   control,
 }) {
-  const [unit, setUnit] = useState("month");
+  const [unit, setUnit] = useState("");
+  const [error, setError] = useState({});
   const buildDropDown = (listSizeStorage) =>
     listSizeStorage.map((e) => <MenuItem value={e.value}>{e.label}</MenuItem>);
   const inputFile = useRef(null);
@@ -51,11 +53,32 @@ function ProductModal({
     inputFile.current.click();
   };
 
+  const validation = () => {
+    if (unit === undefined) {
+      return false;
+    }
+
+    return true;
+  };
+
   useEffect(() => {
     setUnit(currentProduct.unit);
   }, [currentProduct]);
 
+  useEffect(() => {
+    setError({});
+  }, [open]);
+
   const onHandleCreateProduct = async (data) => {
+    if (validation() === false) {
+      setError({
+        unit: {
+          msg: "*Required",
+        },
+      });
+      return;
+    }
+
     let productTemp = {
       name: data.name,
       price: parseInt(data.price),
@@ -72,6 +95,16 @@ function ProductModal({
     };
     try {
       showLoading();
+
+      if (!currentProduct.avatarFile) {
+        setError({
+          ...error,
+          avatarFile: { message: "Please provide product image!" },
+        });
+        hideLoading();
+
+        return;
+      }
 
       const response = await createProduct(productTemp);
       if (response.status === 200) {
@@ -93,6 +126,7 @@ function ProductModal({
               showSnackbar("success", "Create product successful!");
               await getData();
               handleClose();
+              setError({});
             }
           } catch (e) {
             console.log(e.response);
@@ -225,6 +259,7 @@ function ProductModal({
 
   const handleChangeUnit = (event) => {
     setUnit(event.target.value);
+    setError({ ...error, unit: undefined });
     unitTemp = event.target.value;
   };
 
@@ -326,7 +361,7 @@ function ProductModal({
                 sx={{
                   ...styleBoxInput,
                   marginTop: "2%",
-                  marginBottom: "8%",
+                  marginBottom: "12%",
 
                   justifyContent: "flex-start",
                   alignItems: "flex-start",
@@ -352,7 +387,14 @@ function ProductModal({
                   </Typography>
                   <CustomInput
                     control={control}
-                    rules={{ required: "Price is required" }}
+                    rules={{
+                      required: "Price is required",
+
+                      pattern: {
+                        value: /[^a-zA-Z]+/,
+                        message: "Invalid phone number",
+                      },
+                    }}
                     styles={{ width: "240px" }}
                     name="price"
                     label="Price"
@@ -375,22 +417,34 @@ function ProductModal({
                   >
                     Unit
                   </Typography>
+
                   <FormControl
                     sx={{ m: 1, minWidth: 120, color: "black" }}
                     name="sizeStorage"
+                    error={error?.unit}
                   >
                     <Select value={unit} onChange={handleChangeUnit}>
                       {buildDropDown(LIST_UNIT)}
                     </Select>
+                    <FormHelperText error={error?.unit}>
+                      {error?.unit ? error?.unit?.msg : ""}
+                    </FormHelperText>
                   </FormControl>
                 </Box>
               </Box>
+              <p
+                style={{
+                  textAlign: "center",
+                  color: "red",
+                }}
+              >
+                {error?.avatarFile?.message ? error?.avatarFile?.message : ""}
+              </p>
               <Box
                 sx={{
                   width: "200px",
-                  margin: "2% auto",
+                  margin: "0 auto 2% auto",
                   display: "flex",
-                  marginTop: "6%",
                   flexDirection: "row",
                   justifyContent: "space-between",
                 }}
