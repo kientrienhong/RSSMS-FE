@@ -14,31 +14,35 @@ import OrderAssignModal from "./component/OrderAssignModal";
 import { connect } from "react-redux";
 import * as action from "../../redux/action/action";
 import { getOrder } from "../../apis/Apis";
+import {
+  isDateBefore,
+  isDateAfter,
+  getTimeStart,
+  getTimeEnd,
+} from "../../utils/DateUtils";
 function Shedule({ showLoading, hideLoading }) {
   const [listShowStaffAssigned, setListShowStaffAssigned] = React.useState([]);
   const [listShowStaffUnAssigned, setListShowStaffUnAssigned] = React.useState(
     []
   );
-  const [listOrder, setListOrder] = React.useState([]);
+  const [listSchedule, setListSchedule] = React.useState([]);
   const [currentOrder, setCurrentOrder] = React.useState({});
+
   const [listStaffAssigned, setListStaffAssigned] = React.useState([
     { id: 1, name: "Giang Thanh Dinh" },
     { id: 2, name: "Lam Nhut Phuc" },
   ]);
+
   const [listStaffUnAssigned, setListStaffUnAssigned] = React.useState([
     { id: 3, name: "Nguyen Dang Khoa" },
     { id: 4, name: "Tran The Dong Anh" },
   ]);
+
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
     setOpen(true);
   };
-
-  useEffect(() => {
-    setListShowStaffAssigned(listStaffAssigned);
-    setListShowStaffUnAssigned(listStaffUnAssigned);
-  }, []);
 
   const handleClose = () => {
     setOpen(false);
@@ -115,23 +119,6 @@ function Shedule({ showLoading, hideLoading }) {
     }
   };
 
-  const localData = [
-    {
-      Id: 1,
-      StartTime: new Date(2021, 10, 3, 6, 0),
-      ListOrder: ["#31", "#32", "#33", "#34"],
-      Status: 0,
-      EndTime: new Date(2021, 10, 3, 8, 0),
-    },
-    {
-      Id: 2,
-      StartTime: new Date(2021, 10, 3, 8, 0),
-      ListOrder: ["#35", "#36"],
-      Status: 1,
-      EndTime: new Date(2021, 10, 3, 10, 0),
-    },
-  ];
-
   const onDragStart = (dragEventArgs) => {
     dragEventArgs.enable = false;
   };
@@ -156,7 +143,7 @@ function Shedule({ showLoading, hideLoading }) {
       <div className="custom_editor" style={{ zIndex: "1" }}>
         <h1>List order</h1>
         <Grid container spacing={2}>
-          {buildListOrder(currentOrder.ListOrder, currentOrder)}
+          {buildListOrder(props.ListOrder, props)}
         </Grid>
       </div>
     );
@@ -177,8 +164,9 @@ function Shedule({ showLoading, hideLoading }) {
         showLoading();
         let response = await getOrder("", "", "", dateStart, dateEnd);
         console.log(response);
+        return response.data.data;
       } catch (e) {
-        console.log(e);
+        console.log(e.response);
       } finally {
         hideLoading();
       }
@@ -190,10 +178,55 @@ function Shedule({ showLoading, hideLoading }) {
         let first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
         let last = first + 6; // last day is the first day + 6
 
-        let firstday = new Date(curr.setDate(first)).toISOString();
-        let lastday = new Date(curr.setDate(last)).toISOString();
+        let firstDay = new Date(curr.setDate(first));
+        let lastDay = new Date(curr.setDate(last));
         showLoading();
-        await getData(firstday.split("T")[0], lastday.split("T")[0]);
+        let response = await getData(
+          firstDay.toISOString().split("T")[0],
+          lastDay.toISOString().split("T")[0]
+        );
+        let result = [];
+
+        response.forEach((e) => {
+          let dateDelivery = new Date(e.deliveryDate);
+          if (e.deliveryTime === null) {
+            return;
+          }
+          if (
+            isDateBefore(dateDelivery, lastDay) === true &&
+            isDateAfter(dateDelivery, firstDay) === true
+          ) {
+            let deliveryTime = e.deliveryTime.split("-");
+            let currentScheduleStartDateTime = new Date(
+              dateDelivery.getTime() + getTimeStart(deliveryTime[0]) * 3600000
+            );
+            let currentSheduleEndDateTime = new Date(
+              dateDelivery.getTime() + getTimeEnd(deliveryTime[1]) * 3600000
+            );
+            let currentSchedule = result.find((ele) => {
+              if (
+                ele.StartTime.toISOString() ===
+                  currentScheduleStartDateTime.toISOString() &&
+                ele.EndTime.toISOString() ===
+                  currentSheduleEndDateTime.toISOString()
+              ) {
+                return true;
+              }
+            });
+            if (currentSchedule) {
+              currentSchedule.ListOrder.push(e);
+            } else {
+              result.push({
+                Id: result.length,
+                StartTime: currentScheduleStartDateTime,
+                EndTime: currentSheduleEndDateTime,
+                Status: e.status,
+                ListOrder: [e],
+              });
+            }
+          }
+          setListSchedule(result);
+        });
       } catch (error) {
         console.log(error);
       } finally {
@@ -201,10 +234,12 @@ function Shedule({ showLoading, hideLoading }) {
       }
     };
     firstCall();
+    setListShowStaffAssigned(listStaffAssigned);
+    setListShowStaffUnAssigned(listStaffUnAssigned);
   }, []);
 
   const onEventClick = (args) => {
-    setCurrentOrder(args.event);
+    // setCurrentOrder(args.event);
   };
 
   return (
@@ -212,7 +247,7 @@ function Shedule({ showLoading, hideLoading }) {
       currentView="Week"
       selectedDate={new Date()}
       eventSettings={{
-        dataSource: localData,
+        dataSource: listSchedule,
         template: eventTemplate.bind(this),
       }}
       editorTemplate={editorWindowTemplate.bind(this)}
