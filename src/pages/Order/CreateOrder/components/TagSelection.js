@@ -9,7 +9,7 @@ export default function TagSelection({
   let colorText = "#A19FA8";
   let backgroundColor = "white";
   let border = "1px solid #A19FA8";
-  if (currentTag.name === tag.name) {
+  if (currentTag?.name === tag?.name) {
     colorText = "white";
     backgroundColor = "#04BFFE";
     border = "none";
@@ -31,7 +31,7 @@ export default function TagSelection({
         setCurrentTag(tag);
       }}
     >
-      {tag.name}
+      {tag?.name}
     </Box>
   );
 }

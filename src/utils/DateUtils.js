@@ -9,7 +9,6 @@ export const isDateAfter = (date, date2) => {
 export const getTimeStart = (time) => {
   let timeStart = parseInt(time.slice(0, time.length - 3));
   let postFixTimeStart = time.slice(time.length - 3, time.length - 1);
-  console.log(postFixTimeStart);
   if (postFixTimeStart === "pm") {
     timeStart += 12;
   }

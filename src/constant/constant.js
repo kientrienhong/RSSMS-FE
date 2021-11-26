@@ -88,10 +88,10 @@ export const LIST_UNIT = [
 
 export const LIST_TIME = [
   { name: "8am - 10am", isAvailable: true },
-  { name: "10am - 12am", isAvailable: true },
-  { name: "12pm - 14pm", isAvailable: true },
-  { name: "14am - 16pm", isAvailable: true },
-  { name: "18am - 20am", isAvailable: true },
+  { name: "10am - 12pm", isAvailable: true },
+  { name: "12pm - 2pm", isAvailable: true },
+  { name: "2pm - 4pm", isAvailable: true },
+  { name: "4pm - 6pm", isAvailable: true },
 ];
 
 export const LIST_NOTE = [

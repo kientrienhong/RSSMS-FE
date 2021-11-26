@@ -139,6 +139,7 @@ function Shedule({ showLoading, hideLoading }) {
   };
 
   const editorWindowTemplate = (props) => {
+    console.log(props);
     return (
       <div className="custom_editor" style={{ zIndex: "1" }}>
         <h1>List order</h1>
@@ -158,12 +159,41 @@ function Shedule({ showLoading, hideLoading }) {
     let lastday = new Date(curr.setDate(last)).toUTCString();
   };
 
+  const handleFormatDate = (date, result, order, value) => {
+    let time = order[value].split("-");
+    let currentScheduleStartDateTime = new Date(
+      date.getTime() + getTimeStart(time[0]) * 3600000
+    );
+    console.log(currentScheduleStartDateTime);
+    let currentSheduleEndDateTime = new Date(
+      date.getTime() + getTimeEnd(time[1]) * 3600000
+    );
+    let currentSchedule = result.find((ele) => {
+      if (
+        ele.StartTime.toISOString() ===
+          currentScheduleStartDateTime.toISOString() &&
+        ele.EndTime.toISOString() === currentSheduleEndDateTime.toISOString()
+      ) {
+        return true;
+      }
+    });
+    if (currentSchedule) {
+      currentSchedule.ListOrder.push(order);
+    } else {
+      result.push({
+        Id: result.length,
+        StartTime: currentScheduleStartDateTime,
+        EndTime: currentSheduleEndDateTime,
+        ListOrder: [order],
+      });
+    }
+  };
+
   useEffect(() => {
     const getData = async (dateStart, dateEnd) => {
       try {
         showLoading();
         let response = await getOrder("", "", "", dateStart, dateEnd);
-        console.log(response);
         return response.data.data;
       } catch (e) {
         console.log(e.response);
@@ -189,6 +219,7 @@ function Shedule({ showLoading, hideLoading }) {
 
         response.forEach((e) => {
           let dateDelivery = new Date(e.deliveryDate);
+          let dateReturn = new Date(e.returnDate);
           if (e.deliveryTime === null) {
             return;
           }
@@ -196,37 +227,15 @@ function Shedule({ showLoading, hideLoading }) {
             isDateBefore(dateDelivery, lastDay) === true &&
             isDateAfter(dateDelivery, firstDay) === true
           ) {
-            let deliveryTime = e.deliveryTime.split("-");
-            let currentScheduleStartDateTime = new Date(
-              dateDelivery.getTime() + getTimeStart(deliveryTime[0]) * 3600000
-            );
-            let currentSheduleEndDateTime = new Date(
-              dateDelivery.getTime() + getTimeEnd(deliveryTime[1]) * 3600000
-            );
-            let currentSchedule = result.find((ele) => {
-              if (
-                ele.StartTime.toISOString() ===
-                  currentScheduleStartDateTime.toISOString() &&
-                ele.EndTime.toISOString() ===
-                  currentSheduleEndDateTime.toISOString()
-              ) {
-                return true;
-              }
-            });
-            if (currentSchedule) {
-              currentSchedule.ListOrder.push(e);
-            } else {
-              result.push({
-                Id: result.length,
-                StartTime: currentScheduleStartDateTime,
-                EndTime: currentSheduleEndDateTime,
-                Status: e.status,
-                ListOrder: [e],
-              });
-            }
+            handleFormatDate(dateDelivery, result, e, "deliveryTime");
+          } else if (
+            isDateBefore(dateReturn, lastDay) === true &&
+            isDateAfter(dateReturn, firstDay) === true
+          ) {
+            handleFormatDate(dateReturn, result, e, "returnTime");
           }
-          setListSchedule(result);
         });
+        setListSchedule(result);
       } catch (error) {
         console.log(error);
       } finally {

@@ -368,6 +368,7 @@ export const updateOrder = async (id, order) => {
       id: order.id,
       isUserDelivery: order.isUserDelivery,
       deliveryDate: order.deliveryDate,
+      returnTime: order.returnTime,
       deliveryTime: order.deliveryTime,
       returnDate: order.returnDate,
       deliveryAddress: order.deliveryAddress,

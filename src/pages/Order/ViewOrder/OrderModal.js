@@ -82,6 +82,7 @@ function OrderModal({
 }) {
   const [isCustomerDelivery, setIsCustomerDelivery] = useState();
   const [timeDelivery, setTimeDelivery] = useState();
+  const [timeReturn, setTimeReturn] = useState();
   const [duration, setDuration] = useState();
   const [dateDelivery, setDateDelivery] = useState();
   const [dateReturn, setDateReturn] = useState();
@@ -109,6 +110,10 @@ function OrderModal({
     setDateDelivery(currentOrder?.deliveryDate?.split("T")[0]);
     setTimeDelivery({
       name: currentOrder?.deliveryTime,
+      isAvailable: true,
+    });
+    setTimeReturn({
+      name: currentOrder?.returnTime,
       isAvailable: true,
     });
     let currentDuration;
@@ -252,6 +257,7 @@ function OrderModal({
         isUserDelivery: isCustomerDelivery,
         deliveryDate: new Date(dateDelivery).toISOString(),
         deliveryTime: timeDelivery.name,
+        returnTime: timeReturn.name,
         returnDate: new Date(dateReturn).toISOString(),
         deliveryAddress: data.deliveryAddress,
         addressReturn: data.returnAddress,
@@ -418,7 +424,31 @@ function OrderModal({
               </Typography>
             </Box>
           )}
-
+          {currentOrder?.typeOrder === 0 ? null : (
+            <Box>
+              <Grid
+                container
+                spacing={2}
+                sx={{
+                  width: "98%",
+                  marginBottom: "3%",
+                }}
+              >
+                {mapListTime(timeReturn, setTimeReturn)}
+              </Grid>
+              <FormControlLabel
+                value="isCustomerDelivery"
+                control={
+                  <Checkbox
+                    checked={isCustomerDelivery}
+                    onChange={handleChangeCheckBox}
+                  />
+                }
+                label="Customer delivery by themselves"
+                labelPlacement="Customer delivery by themselves"
+              />
+            </Box>
+          )}
           <Typography
             color="black"
             variant="h3"
