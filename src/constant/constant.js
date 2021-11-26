@@ -75,7 +75,7 @@ export const LIST_PRODUCT_MANAGE_TYPE = [
 export const LIST_STATUS = [
   { label: "Canceled", value: 0 },
   { label: "Booked", value: 1 },
-  { label: "Paid", value: 2 },
+  { label: "Assgined", value: 2 },
   { label: "Delivery", value: 3 },
   { label: "Stored", value: 4 },
   { label: "Expired", value: 5 },

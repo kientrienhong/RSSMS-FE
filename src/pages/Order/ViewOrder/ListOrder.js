@@ -29,6 +29,7 @@ import * as action from "../../../redux/action/action";
 import { getOrderById, cancelOrder } from "../../../apis/Apis";
 import CustomAreaInput from "../../../components/CustomAreaInput";
 import { ORDER_STATUS, ORDER_TYPE } from "../../../constant/constant";
+import AssignOrderModal from "./AssignOrderModal";
 function TablePaginationActions(props) {
   const theme = useTheme();
   const { count, page, rowsPerPage, onPageChange } = props;
@@ -163,13 +164,22 @@ function ListOrder({
   const [open, setOpen] = React.useState(false);
   const [currentId, setCurrentId] = React.useState(-1);
   const { handleSubmit, control } = useForm();
-
+  const [openAssign, setOpenAssign] = React.useState(false);
   const handleConfirmOpen = () => {
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleOpenAssign = () => {
+    setOpenAssign(true);
+  };
+
+  const handleCloseAssign = () => {
+    setOpenAssign(false);
+  };
+
   const handleDeleteOrder = async (currentId, reason) => {
     let response;
     try {
@@ -302,10 +312,6 @@ function ListOrder({
     );
   };
 
-  // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page - 1 > 0 ? Math.max(0, (1 + page) * rowsPerPage - listOrder.length) : 0;
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage + 1);
   };
@@ -320,6 +326,11 @@ function ListOrder({
       <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
         {buildModalCancelOrder()}
         {mapListTableHeader(listHeaderName)}
+        <AssignOrderModal
+          open={openAssign}
+          handleClose={handleCloseAssign}
+          currentId={currentId}
+        />
         <TableBody>
           {listOrder.map((row, index) => {
             let typeOrder = ORDER_TYPE[row.typeOrder];
@@ -378,15 +389,40 @@ function ListOrder({
                 </TableCell>
                 <TableCell style={{ color: "black" }}>
                   {row.status === 0 ? null : (
-                    <Button
-                      className={classes.button}
-                      onClick={() => {
-                        setCurrentId(row.id);
-                        handleConfirmOpen();
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "row",
                       }}
                     >
-                      Cancel
-                    </Button>
+                      {row.status === 1 ? (
+                        <Button
+                          style={{
+                            height: "45px",
+                            paddingLeft: "16px",
+                            paddingRight: "16px",
+                            marginRight: "4%",
+                          }}
+                          onClick={() => {
+                            setCurrentId(row.id);
+                            handleOpenAssign();
+                          }}
+                          color="primary"
+                          variant="contained"
+                        >
+                          Assign
+                        </Button>
+                      ) : null}
+                      <Button
+                        className={classes.button}
+                        onClick={() => {
+                          setCurrentId(row.id);
+                          handleConfirmOpen();
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                    </Box>
                   )}
                 </TableCell>
               </TableRow>

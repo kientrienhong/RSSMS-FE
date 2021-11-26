@@ -574,7 +574,7 @@ function OrderModal({
               justifyContent: "center",
             }}
           >
-            {currentOrder?.status === 1 ? (
+            {currentOrder?.status === 2 ? (
               <Button
                 style={{
                   height: "45px",
@@ -589,20 +589,22 @@ function OrderModal({
                 Store
               </Button>
             ) : null}
+            {currentOrder?.status !== 0 && currentOrder?.status !== 1 ? (
+              <Button
+                style={{
+                  height: "45px",
+                  paddingLeft: "16px",
+                  paddingRight: "16px",
+                  marginRight: "4%",
+                }}
+                color="success"
+                variant="contained"
+                type="submit"
+              >
+                Edit
+              </Button>
+            ) : null}
 
-            <Button
-              style={{
-                height: "45px",
-                paddingLeft: "16px",
-                paddingRight: "16px",
-                marginRight: "4%",
-              }}
-              color="success"
-              variant="contained"
-              type="submit"
-            >
-              Edit
-            </Button>
             <Button
               style={{
                 height: "45px",

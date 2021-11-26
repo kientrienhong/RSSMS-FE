@@ -6,9 +6,7 @@ import {
   TextField,
   Button,
   Modal,
-  FormControl,
   MenuItem,
-  Select,
   Typography,
 } from "@material-ui/core";
 import PropTypes from "prop-types";
@@ -163,10 +161,6 @@ function Storages(props) {
     setListShowStaffAssigned(listShowStaffAssignedTemp);
   };
 
-  useEffect(() => {
-    reset();
-  }, [open]);
-
   const onHandleDeleteStorage = async (id) => {
     let response;
     try {
@@ -243,6 +237,8 @@ function Storages(props) {
         }
       }
     };
+    reset();
+
     process();
   }, [open]);
 

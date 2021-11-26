@@ -51,7 +51,7 @@ function StoredOrderModal({
   changeIsLoadShelf,
   changeIsLoadStorage,
 }) {
-  const [selectedValue, setSelectedValue] = React.useState();
+  const [selectedValue, setSelectedValue] = React.useState("");
   const [error, setError] = React.useState();
   const navigate = useNavigate();
 
@@ -185,6 +185,10 @@ function StoredOrderModal({
   };
 
   const handlePlaceBox = () => {
+    if (selectedValue === "") {
+      setError("Please choose product to place");
+      return;
+    }
     if (selectedValue.toString() === currentBox.productId.toString()) {
       let productTemp = storedOrder.products.find(
         (e) => currentBox.productId === e.productId
