@@ -20,6 +20,7 @@ function LogIn(props) {
         setErrorMsg("Invalid username or password");
       } else {
         props.setUpUser(response.data);
+        console.log(response.data);
         localStorage.setItem("user", JSON.stringify(response.data));
         navigate("/app/account", { replace: true });
       }

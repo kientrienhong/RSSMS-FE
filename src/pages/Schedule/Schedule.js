@@ -111,7 +111,6 @@ function Shedule({ showLoading, hideLoading }) {
     try {
       showLoading();
       let response = await getOrder("", "", "", dateStart, dateEnd);
-      console.log(response);
     } catch (e) {
       console.log(e);
     } finally {
@@ -139,7 +138,6 @@ function Shedule({ showLoading, hideLoading }) {
   };
 
   const editorWindowTemplate = (props) => {
-    console.log(props);
     return (
       <div className="custom_editor" style={{ zIndex: "1" }}>
         <h1>List order</h1>
@@ -164,7 +162,6 @@ function Shedule({ showLoading, hideLoading }) {
     let currentScheduleStartDateTime = new Date(
       date.getTime() + getTimeStart(time[0]) * 3600000
     );
-    console.log(currentScheduleStartDateTime);
     let currentSheduleEndDateTime = new Date(
       date.getTime() + getTimeEnd(time[1]) * 3600000
     );
@@ -194,6 +191,8 @@ function Shedule({ showLoading, hideLoading }) {
       try {
         showLoading();
         let response = await getOrder("", "", "", dateStart, dateEnd);
+        console.log(response);
+
         return response.data.data;
       } catch (e) {
         console.log(e.response);
