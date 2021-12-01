@@ -1,3 +1,8 @@
+import { FaWarehouse, FaFileInvoiceDollar } from "react-icons/fa";
+import { VscTag } from "react-icons/vsc";
+import { GrSchedule } from "react-icons/gr";
+import { User as UserIcon, Users as UsersIcon } from "react-feather";
+
 import * as style from "./style";
 
 export const AREA_TYPE = 4;
@@ -8,7 +13,7 @@ export const ROLE_USER = {
   Manager: 2,
   Customer: 3,
   "Delivery Staff": 4,
-  "Office Staff": 5,
+  "Office staff": 5,
 };
 
 export const TYPE_STORAGE = {
@@ -102,4 +107,80 @@ export const LIST_NOTE = [
   { color: style.PRIMARY_SEMANTIC_ORANGE, name: "Expired soon" },
   { color: style.PRIMARY_SEMANTIC_GREEN, name: "Selected" },
   { color: style.SECOND_SEMANTIC_GREEN, name: "Placing" },
+];
+
+export const LIST_SIDE_BAR_ADMIN = [
+  {
+    href: "/app/account",
+    icon: UserIcon,
+    title: "Account",
+  },
+  {
+    href: "/app/users",
+    icon: UsersIcon,
+    title: "Users",
+  },
+  {
+    href: "/app/products",
+    icon: undefined,
+    title: "Product",
+    reactIcon: <VscTag />,
+  },
+  {
+    href: "/app/storages",
+    title: "Storages",
+    icon: undefined,
+    reactIcon: <FaWarehouse />,
+  },
+];
+
+export const LIST_SIDE_BAR_MANAGER = [
+  {
+    href: "/app/account",
+    icon: UserIcon,
+    title: "Account",
+  },
+  {
+    href: "/app/users",
+    icon: UsersIcon,
+    title: "Users",
+  },
+  {
+    href: "/app/storages",
+    title: "Storages",
+    icon: undefined,
+    reactIcon: <FaWarehouse />,
+  },
+  {
+    href: "/app/schedule",
+    title: "Schedule",
+    icon: undefined,
+    reactIcon: <GrSchedule />,
+  },
+  {
+    href: "/app/orders",
+    title: "Orders",
+    icon: undefined,
+    reactIcon: <FaFileInvoiceDollar />,
+  },
+];
+
+export const LIST_SIDE_BAR_OFFICE_STAFF = [
+  {
+    href: "/app/account",
+    icon: UserIcon,
+    title: "Account",
+  },
+  {
+    href: "/app/storages",
+    title: "Storages",
+    icon: undefined,
+    reactIcon: <FaWarehouse />,
+  },
+  {
+    href: "/app/orders",
+    title: "Orders",
+    icon: undefined,
+    reactIcon: <FaFileInvoiceDollar />,
+  },
 ];

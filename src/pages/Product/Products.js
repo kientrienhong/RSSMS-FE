@@ -9,7 +9,7 @@ import * as action from "../../redux/action/action";
 import { useForm } from "react-hook-form";
 
 import ConfirmModal from "../../components/ConfirmModal";
-function Products({ showLoading, hideLoading, showSnackbar }) {
+function Products({ showLoading, hideLoading, showSnackbar, userState }) {
   const [open, setOpen] = useState(false);
   const [openConfirm, setOpenConfirm] = useState(false);
   const { handleSubmit, control, reset, errors } = useForm();
@@ -44,7 +44,7 @@ function Products({ showLoading, hideLoading, showSnackbar }) {
   };
 
   const getData = async () => {
-    let listProductTemp = await getProduct();
+    let listProductTemp = await getProduct(undefined, userState.idToken);
     setListProduct(listProductTemp.data);
   };
 
@@ -63,7 +63,7 @@ function Products({ showLoading, hideLoading, showSnackbar }) {
   }, []);
 
   const handleDeleteProduct = async (id) => {
-    await deleteProduct(id);
+    await deleteProduct(id, userState.idToken);
     await getData();
     setCurrentProduct({
       images: [{ id: null, url: null }],
@@ -119,6 +119,10 @@ function Products({ showLoading, hideLoading, showSnackbar }) {
   );
 }
 
+const mapStateToProps = (state) => ({
+  userState: state.information.user,
+});
+
 const mapDispatchToProps = (dispatch) => {
   return {
     showLoading: () => dispatch(action.showLoader()),
@@ -127,4 +131,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(Products);
+export default connect(mapStateToProps, mapDispatchToProps)(Products);

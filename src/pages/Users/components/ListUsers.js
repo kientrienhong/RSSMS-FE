@@ -19,7 +19,7 @@ import { Button, TableHead } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import ConfirmModal from "../../../components/ConfirmModal";
 import { deleteUser } from "../../../apis/Apis";
-
+import { connect } from "react-redux";
 function TablePaginationActions(props) {
   const theme = useTheme();
   const { count, page, rowsPerPage, onPageChange } = props;
@@ -129,8 +129,7 @@ const useStyles = makeStyles({
     },
   },
 });
-
-export default function ListUsers({
+function ListUsers({
   reset,
   setUser,
   handleOpen,
@@ -140,6 +139,7 @@ export default function ListUsers({
   totalUser,
   searchName,
   getData,
+  userState,
 }) {
   const classes = useStyles();
 
@@ -155,7 +155,7 @@ export default function ListUsers({
   const handleDeleteUser = async (id) => {
     let response;
     try {
-      response = await deleteUser(id);
+      response = await deleteUser(id, userState.idToken);
       if (listUser.length === 1) {
         if (page !== 1) {
           setPage(page - 1);
@@ -252,12 +252,6 @@ export default function ListUsers({
               </TableRow>
             );
           })}
-
-          {/* {emptyRows > 0 && (
-            <TableRow style={{ height: 30 * emptyRows }}>
-              <TableCell colSpan={6} />
-            </TableRow>
-          )} */}
         </TableBody>
         <TableFooter>
           <TableRow>
@@ -283,3 +277,9 @@ export default function ListUsers({
     </TableContainer>
   );
 }
+
+const mapStateToProps = (state) => ({
+  userState: state.information.user,
+});
+
+export default connect(mapStateToProps, null)(ListUsers);

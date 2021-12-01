@@ -16,7 +16,7 @@ import { connect } from "react-redux";
 import * as action from "../../redux/action/action";
 import { getOrder } from "../../apis/Apis";
 import ProductButton from "./CreateOrder/components/ProductButton";
-function Order({ showLoading, hideLoading, storedOrder }) {
+function Order({ showLoading, hideLoading, storedOrder, userState }) {
   const navigate = useNavigate();
   const { handleSubmit, reset, control } = useForm();
 
@@ -41,7 +41,14 @@ function Order({ showLoading, hideLoading, storedOrder }) {
   const getData = async (id, page, size) => {
     try {
       showLoading();
-      let list = await getOrder(id, page, size);
+      let list = await getOrder(
+        id,
+        page,
+        size,
+        undefined,
+        undefined,
+        userState.idToken
+      );
       setListOrder(list.data.data);
       setTotalOrder(list.data.metadata.total);
     } catch (error) {
@@ -190,6 +197,7 @@ function Order({ showLoading, hideLoading, storedOrder }) {
 
 const mapStateToProps = (state) => ({
   storedOrder: state.order.storedOrder,
+  userState: state.information.user,
 });
 
 const mapDispatchToProps = (dispatch) => {

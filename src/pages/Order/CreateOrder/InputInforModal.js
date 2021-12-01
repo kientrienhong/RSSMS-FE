@@ -33,6 +33,7 @@ function InputInforModal({
   hideLoading,
   open,
   handleClose,
+  userState,
 }) {
   const navigate = useNavigate();
 
@@ -105,7 +106,7 @@ function InputInforModal({
           listProduct: listProduct,
         };
       }
-      await createOrder(orderTemp);
+      await createOrder(orderTemp, userState.idToken);
       navigate("/app/orders", { replace: true });
       showSnackbar("success", "Create order success");
     } catch (e) {
@@ -122,7 +123,7 @@ function InputInforModal({
   const onClickSearchUser = async () => {
     try {
       showLoading();
-      const userTemp = await findUserByPhone(phone);
+      const userTemp = await findUserByPhone(phone, userState.idToken);
       setUser(userTemp.data);
       setValue("email", userTemp.data.email);
       setValue("name", userTemp.data.name);
@@ -368,6 +369,7 @@ function InputInforModal({
 
 const mapStateToProps = (state) => ({
   order: state.order.order,
+  userState: state.information.user,
 });
 
 const mapDispatchToProps = (dispatch) => {

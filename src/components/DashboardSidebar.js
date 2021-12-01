@@ -9,50 +9,25 @@ import {
   List,
   Typography,
 } from "@material-ui/core";
-import { User as UserIcon, Users as UsersIcon } from "react-feather";
 import NavItem from "./NavItem";
 import { connect } from "react-redux";
-import { FaWarehouse, FaFileInvoiceDollar } from "react-icons/fa";
-import { VscTag } from "react-icons/vsc";
-import { GrSchedule } from "react-icons/gr";
-const items = [
-  {
-    href: "/app/account",
-    icon: UserIcon,
-    title: "Account",
-  },
-  {
-    href: "/app/users",
-    icon: UsersIcon,
-    title: "Users",
-  },
-  {
-    href: "/app/products",
-    icon: undefined,
-    title: "Product",
-    reactIcon: <VscTag />,
-  },
-  {
-    href: "/app/storages",
-    title: "Storages",
-    icon: undefined,
-    reactIcon: <FaWarehouse />,
-  },
-  {
-    href: "/app/schedule",
-    title: "Schedule",
-    icon: undefined,
-    reactIcon: <GrSchedule />,
-  },
-  {
-    href: "/app/orders",
-    title: "Orders",
-    icon: undefined,
-    reactIcon: <FaFileInvoiceDollar />,
-  },
-];
+import {
+  LIST_SIDE_BAR_ADMIN,
+  LIST_SIDE_BAR_MANAGER,
+  LIST_SIDE_BAR_OFFICE_STAFF,
+} from "../constant/constant";
 
 const DashboardSidebar = ({ onMobileClose, openMobile, user }) => {
+  let items = [];
+
+  if (user.roleName === "Admin") {
+    items = LIST_SIDE_BAR_ADMIN;
+  } else if (user.roleName === "Manager") {
+    items = LIST_SIDE_BAR_MANAGER;
+  } else if (user.roleName === "Office staff") {
+    items = LIST_SIDE_BAR_OFFICE_STAFF;
+  }
+
   const location = useLocation();
   useEffect(() => {
     if (openMobile && onMobileClose) {

@@ -96,6 +96,7 @@ function ConfirmModal({
     </Modal>
   );
 }
+
 const mapDispatchToProps = (dispatch) => {
   return {
     showLoading: () => dispatch(action.showLoader()),

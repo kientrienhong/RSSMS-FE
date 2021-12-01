@@ -25,7 +25,7 @@ const routes = [
             Component={Account}
             permission={[
               Object.keys(ROLE_USER)[0],
-              Object.keys(ROLE_USER)[2],
+              Object.keys(ROLE_USER)[1],
               Object.keys(ROLE_USER)[4],
             ]}
           >
@@ -38,7 +38,7 @@ const routes = [
         element: (
           <ProtectTemplate
             Component={Users}
-            permission={[Object.keys(ROLE_USER)[0], Object.keys(ROLE_USER)[2]]}
+            permission={[Object.keys(ROLE_USER)[0], Object.keys(ROLE_USER)[1]]}
           >
             <Users />
           </ProtectTemplate>
@@ -51,7 +51,7 @@ const routes = [
             Component={Storages}
             permission={[
               Object.keys(ROLE_USER)[0],
-              Object.keys(ROLE_USER)[2],
+              Object.keys(ROLE_USER)[1],
               Object.keys(ROLE_USER)[4],
             ]}
           >
@@ -64,11 +64,7 @@ const routes = [
         element: (
           <ProtectTemplate
             Component={Order}
-            permission={[
-              Object.keys(ROLE_USER)[0],
-              Object.keys(ROLE_USER)[2],
-              Object.keys(ROLE_USER)[4],
-            ]}
+            permission={[Object.keys(ROLE_USER)[1], Object.keys(ROLE_USER)[4]]}
           >
             <Order />
           </ProtectTemplate>
@@ -90,7 +86,7 @@ const routes = [
         element: (
           <ProtectTemplate
             Component={Schedule}
-            permission={[Object.keys(ROLE_USER)[0], Object.keys(ROLE_USER)[2]]}
+            permission={[Object.keys(ROLE_USER)[1]]}
           >
             <Schedule />
           </ProtectTemplate>
@@ -100,7 +96,14 @@ const routes = [
       {
         path: "storages/:storageId",
         element: (
-          <ProtectTemplate Component={StorageDetail}>
+          <ProtectTemplate
+            Component={StorageDetail}
+            permission={[
+              Object.keys(ROLE_USER)[0],
+              Object.keys(ROLE_USER)[1],
+              Object.keys(ROLE_USER)[4],
+            ]}
+          >
             <StorageDetail />
           </ProtectTemplate>
         ),
@@ -108,7 +111,14 @@ const routes = [
       {
         path: "storages/:storageId/areas/:areaId",
         element: (
-          <ProtectTemplate Component={AreaDetail}>
+          <ProtectTemplate
+            Component={AreaDetail}
+            permission={[
+              Object.keys(ROLE_USER)[0],
+              Object.keys(ROLE_USER)[1],
+              Object.keys(ROLE_USER)[4],
+            ]}
+          >
             <AreaDetail />
           </ProtectTemplate>
         ),
@@ -121,7 +131,17 @@ const routes = [
     children: [
       { element: <LogIn /> },
       { path: "404", element: <NotFound /> },
-      { path: "orders/makingOrder", element: <MakingOrder /> },
+      {
+        path: "orders/makingOrder",
+        element: (
+          <ProtectTemplate
+            Component={AreaDetail}
+            permission={[Object.keys(ROLE_USER)[1], Object.keys(ROLE_USER)[4]]}
+          >
+            <MakingOrder />
+          </ProtectTemplate>
+        ),
+      },
     ],
   },
 ];

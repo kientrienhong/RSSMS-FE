@@ -115,6 +115,7 @@ function Storages(props) {
     showSnackbar,
     storedOrder,
     isLoadingStorage,
+    userState,
   } = props;
   const [open, setOpen] = React.useState(false);
   const [searchName, setSearchName] = React.useState("");
@@ -164,13 +165,13 @@ function Storages(props) {
   const onHandleDeleteStorage = async (id) => {
     let response;
     try {
-      response = await deleteStorage(id);
+      response = await deleteStorage(id, userState.idToken);
       if (listStorages.length === 1) {
         if (page !== 1) {
           setPage(page - 1);
         }
       }
-      await getData(searchName, page, 4);
+      await getData(searchName, page, 4, userState.idToken);
     } catch (error) {
       console.log(error);
     }
@@ -182,7 +183,7 @@ function Storages(props) {
     const process = async () => {
       try {
         showLoading();
-        await getData(searchName, page, 4);
+        await getData(searchName, page, 4, userState.idToken);
       } catch (error) {
         console.log(error);
       } finally {
@@ -196,7 +197,7 @@ function Storages(props) {
     const searchNameCall = async () => {
       try {
         showLoading();
-        await getData(searchName, page, 4);
+        await getData(searchName, page, 4, userState.idToken);
       } catch (error) {
         console.log(error);
       } finally {
@@ -216,7 +217,13 @@ function Storages(props) {
       if (open === true) {
         try {
           showLoading();
-          let listUserNotAssigned = await getListUser("", 1, -1, 0);
+          let listUserNotAssigned = await getListUser(
+            "",
+            1,
+            -1,
+            userState.idToken,
+            0
+          );
           setListStaffUnAssigned(listUserNotAssigned.data.data);
           setListShowStaffUnAssigned(listUserNotAssigned.data.data);
         } catch (error) {
@@ -225,7 +232,13 @@ function Storages(props) {
           setListShowStaffUnAssigned([]);
         }
         try {
-          let listUserAssigned = await getListUser("", 1, -1, storage.id);
+          let listUserAssigned = await getListUser(
+            "",
+            1,
+            -1,
+            userState.idToken,
+            storage.id
+          );
           setListStaffAssigned(listUserAssigned.data.data);
           setListShowStaffAssigned(listUserAssigned.data.data);
         } catch (error) {
@@ -255,8 +268,13 @@ function Storages(props) {
   const onHandleAssignUser = async (listAssigned, listUnassigned, storage) => {
     try {
       showLoading();
-      await assignListStaffToStorage(listAssigned, listUnassigned, storage);
-      await getData(searchName, page, 4);
+      await assignListStaffToStorage(
+        listAssigned,
+        listUnassigned,
+        storage,
+        userState.idToken
+      );
+      await getData(searchName, page, 4, userState.idToken);
 
       hideLoading();
       showSnackbar("success", "Assign Success!");
@@ -304,7 +322,7 @@ function Storages(props) {
         return;
       }
 
-      const response = await createStorage(storageTemp);
+      const response = await createStorage(storageTemp, userState.idToken);
       if (response.status === 200) {
         let id = response.data.id;
         let urlFirebase;
@@ -317,11 +335,12 @@ function Storages(props) {
           let responseUpdate = await updateStorage(
             response.data,
             id,
-            urlFirebase
+            urlFirebase,
+            userState.idToken
           );
           if (responseUpdate.status === 200) {
             showSnackbar("success", "Create storage successful!");
-            await getData(searchName, page, 4);
+            await getData(searchName, page, 4, userState.idToken);
             handleClose();
             setError({});
           }
@@ -364,10 +383,15 @@ function Storages(props) {
         uploadTask.on("state_changed", console.log, console.error, async () => {
           urlFirebase = await ref.getDownloadURL();
 
-          responseUpdate = await updateStorage(storageTemp, id, urlFirebase);
+          responseUpdate = await updateStorage(
+            storageTemp,
+            id,
+            urlFirebase,
+            userState.idToken
+          );
           if (responseUpdate.status === 200) {
             showSnackbar("success", "Update storage successful!");
-            await getData(searchName, page, 4);
+            await getData(searchName, page, 4, userState.idToken);
             handleClose();
             hideLoading();
             setError({});
@@ -376,10 +400,15 @@ function Storages(props) {
           }
         });
       } else {
-        responseUpdate = await updateStorage(storageTemp, id, "");
+        responseUpdate = await updateStorage(
+          storageTemp,
+          id,
+          "",
+          userState.idToken
+        );
         if (responseUpdate.status === 200) {
           showSnackbar("success", "Update storage successful!");
-          await getData(searchName, page, 4);
+          await getData(searchName, page, 4, userState.idToken);
           handleClose();
           hideLoading();
           setError({});
@@ -451,7 +480,7 @@ function Storages(props) {
   const getData = async (name, page, size) => {
     try {
       showLoading();
-      let list = await getListStorage(name, page, size);
+      let list = await getListStorage(name, page, size, userState.idToken);
       setListStorages(list.data.data);
       setTotalPage(list.data.metadata.totalPage);
     } catch (e) {
@@ -486,7 +515,7 @@ function Storages(props) {
   useEffect(() => {
     const getData = async (name, page, size) => {
       try {
-        let list = await getListStorage(name, page, size);
+        let list = await getListStorage(name, page, size, userState.idToken);
         setListStorages(list.data.data);
         setTotalPage(list.data.metadata.totalPage);
       } catch (e) {}
@@ -495,7 +524,7 @@ function Storages(props) {
     const firstCall = async () => {
       try {
         showLoading();
-        await getData("", page, 4);
+        await getData("", page, 4, userState.idToken);
       } catch (error) {
         console.log(error);
         setListStorages([]);
@@ -915,6 +944,7 @@ function Storages(props) {
 const mapStateToProps = (state) => ({
   storedOrder: state.order.storedOrder,
   isLoadingStorage: state.order.isLoadingStorage,
+  userState: state.information.user,
 });
 
 const mapDispatchToProps = (dispatch) => {

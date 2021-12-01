@@ -1,23 +1,26 @@
 import axios from "axios";
 
-export const getListUser = async (name, page, size, storageId) => {
+export const getListUser = async (name, page, size, token, storageId) => {
   let listUser;
   if (storageId !== undefined) {
     listUser = await axios.get(
-      `https://localhost:44304/api/v1/users?storageId=${storageId}&Name=${name}&page=${page}&size=${size}`
+      `https://localhost:44304/api/v1/users?storageId=${storageId}&Name=${name}&page=${page}&size=${size}`,
+      { headers: { Authorization: `Bearer ${token}` } }
     );
   } else {
     listUser = await axios.get(
-      `https://localhost:44304/api/v1/users?Name=${name}&page=${page}&size=${size}`
+      `https://localhost:44304/api/v1/users?Name=${name}&page=${page}&size=${size}`,
+      { headers: { Authorization: `Bearer ${token}` } }
     );
   }
 
   return listUser;
 };
 
-export const findUserByPhone = async (phone) => {
+export const findUserByPhone = async (phone, token) => {
   let user = await axios.get(
-    `https://localhost:44304/api/v1/users/user/${phone}`
+    `https://localhost:44304/api/v1/users/user/${phone}`,
+    { headers: { Authorization: `Bearer ${token}` } }
   );
 
   return user;
@@ -48,34 +51,40 @@ export const changePassword = async (id, password, confirmPassword) => {
   return response;
 };
 
-export const createUser = async (user) => {
-  const response = await axios.post(`https://localhost:44304/api/v1/users`, {
-    name: user.name,
-    password: user.password,
-    email: user.email,
-    address: user.address,
-    phone: user.phone,
-    roleId: user.roleId,
-    storageId: null,
-    images: [
-      {
-        url: null,
-      },
-    ],
-  });
+export const createUser = async (user, token) => {
+  const response = await axios.post(
+    `https://localhost:44304/api/v1/users`,
 
-  return response;
-};
-
-export const deleteUser = async (id) => {
-  const response = await axios.delete(
-    `https://localhost:44304/api/v1/users/${id}`
+    {
+      name: user.name,
+      password: user.password,
+      email: user.email,
+      address: user.address,
+      phone: user.phone,
+      roleId: user.roleId,
+      storageId: null,
+      images: [
+        {
+          url: null,
+        },
+      ],
+    },
+    { headers: { Authorization: `Bearer ${token}` } }
   );
 
   return response;
 };
 
-export const updateUser = async (user, id, imageUrl) => {
+export const deleteUser = async (id, token) => {
+  const response = await axios.delete(
+    `https://localhost:44304/api/v1/users/${id}`,
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+
+  return response;
+};
+
+export const updateUser = async (user, id, imageUrl, token) => {
   let image;
   if (imageUrl === "") {
     if (user.images === undefined) {
@@ -101,47 +110,54 @@ export const updateUser = async (user, id, imageUrl) => {
           url: image,
         },
       ],
-    }
+    },
+    { headers: { Authorization: `Bearer ${token}` } }
   );
 
   return response;
 };
 
-export const getListStorage = async (name, page, size) => {
+export const getListStorage = async (name, page, size, token) => {
   const listStorage = await axios.get(
-    `https://localhost:44304/api/v1/storages?Name=${name}&page=${page}&size=${size}`
+    `https://localhost:44304/api/v1/storages?Name=${name}&page=${page}&size=${size}`,
+    { headers: { Authorization: `Bearer ${token}` } }
   );
 
   return listStorage;
 };
 
-export const getStorageDetail = async (id) => {
+export const getStorageDetail = async (id, token) => {
   const storage = await axios.get(
-    `https://localhost:44304/api/v1/storages/${id}`
+    `https://localhost:44304/api/v1/storages/${id}`,
+    { headers: { Authorization: `Bearer ${token}` } }
   );
 
   return storage;
 };
 
-export const createStorage = async (storage) => {
-  const response = await axios.post(`https://localhost:44304/api/v1/storages`, {
-    name: storage.name,
-    size: storage.size,
-    address: storage.address,
-    status: 1,
-    type: storage.type,
-    images: [
-      {
-        url: null,
-      },
-    ],
-    listStaff: [],
-  });
+export const createStorage = async (storage, token) => {
+  const response = await axios.post(
+    `https://localhost:44304/api/v1/storages`,
+    {
+      name: storage.name,
+      size: storage.size,
+      address: storage.address,
+      status: 1,
+      type: storage.type,
+      images: [
+        {
+          url: null,
+        },
+      ],
+      listStaff: [],
+    },
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
 
   return response;
 };
 
-export const updateStorage = async (storage, id, imageUrl) => {
+export const updateStorage = async (storage, id, imageUrl, token) => {
   let image;
   if (imageUrl === "") {
     if (storage.images === undefined) {
@@ -171,14 +187,16 @@ export const updateStorage = async (storage, id, imageUrl) => {
       ],
       usage: 0,
       type: storage.type,
-    }
+    },
+    { headers: { Authorization: `Bearer ${token}` } }
   );
 
   return response;
 };
-export const deleteStorage = async (id) => {
+export const deleteStorage = async (id, token) => {
   const response = await axios.delete(
-    `https://localhost:44304/api/v1/storages/${id}`
+    `https://localhost:44304/api/v1/storages/${id}`,
+    { headers: { Authorization: `Bearer ${token}` } }
   );
 
   return response;
@@ -187,7 +205,8 @@ export const deleteStorage = async (id) => {
 export const assignListStaffToStorage = async (
   listAssigned,
   listUnassigned,
-  storage
+  storage,
+  token
 ) => {
   listAssigned = listAssigned.map((e) => {
     return { userId: e.id, roleName: e.roleName };
@@ -203,85 +222,102 @@ export const assignListStaffToStorage = async (
       storageName: storage.name,
       userAssigned: listAssigned,
       userUnAssigned: listUnassigned,
-    }
+    },
+    { headers: { Authorization: `Bearer ${token}` } }
   );
 
   return response;
 };
 
-export const getArea = async (storageId) => {
+export const getArea = async (storageId, token) => {
   const response = await axios.get(
-    `https://localhost:44304/api/v1/areas?storageid=${storageId}&page=1&size=-1`
+    `https://localhost:44304/api/v1/areas?storageid=${storageId}&page=1&size=-1`,
+    { headers: { Authorization: `Bearer ${token}` } }
   );
 
   return response;
 };
 
-export const createArea = async (storageId, name, description) => {
-  const response = await axios.post("https://localhost:44304/api/v1/areas", {
-    name: name,
-    storageId: parseInt(storageId),
-    status: 1,
-    description: description,
-  });
+export const createArea = async (storageId, name, description, token) => {
+  const response = await axios.post(
+    "https://localhost:44304/api/v1/areas",
+    {
+      name: name,
+      storageId: parseInt(storageId),
+      status: 1,
+      description: description,
+    },
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
 
   return response;
 };
 
-export const deleteArea = async (id) => {
+export const deleteArea = async (id, token) => {
   const response = await axios.delete(
-    `https://localhost:44304/api/v1/areas/${id}`
+    `https://localhost:44304/api/v1/areas/${id}`,
+    { headers: { Authorization: `Bearer ${token}` } }
   );
 
   return response;
 };
 
-export const updateArea = async (id, name, description) => {
+export const updateArea = async (id, name, description, token) => {
+  console.log(token);
+  console.log(id);
+
   const response = await axios.put(
     `https://localhost:44304/api/v1/areas/${id}`,
     {
       id: id,
       name: name,
       description: description,
-    }
+    },
+    { headers: { Authorization: `Bearer ${token}` } }
   );
 
   return response;
 };
 
-export const getDetailArea = async (id) => {
+export const getDetailArea = async (id, token) => {
   const response = await axios.get(
-    `https://localhost:44304/api/v1/areas/${id}`
+    `https://localhost:44304/api/v1/areas/${id}`,
+    { headers: { Authorization: `Bearer ${token}` } }
   );
 
   return response;
 };
 
-export const getListShelves = async (name, page, size, areaId) => {
+export const getListShelves = async (name, page, size, areaId, token) => {
   let listShelves;
   listShelves = await axios.get(
-    `https://localhost:44304/api/v1/shelves?AreaId=${areaId}&Name=${name}&page=${page}&size=${size}`
+    `https://localhost:44304/api/v1/shelves?AreaId=${areaId}&Name=${name}&page=${page}&size=${size}`,
+    { headers: { Authorization: `Bearer ${token}` } }
   );
 
   return listShelves;
 };
 
-export const createShelf = async (shelf, areaId) => {
-  let listShelves = await axios.post(`https://localhost:44304/api/v1/shelves`, {
-    areaId: areaId,
-    type: shelf.type,
-    name: shelf.name,
-    note: shelf.note,
-    boxesInWidth: shelf.boxesInWidth,
-    boxesInHeight: shelf.boxesInHeight,
-    boxSize: -1,
-    productId: shelf.productId,
-  });
+export const createShelf = async (shelf, areaId, token) => {
+  let listShelves = await axios.post(
+    `https://localhost:44304/api/v1/shelves`,
+    {
+      areaId: areaId,
+      type: shelf.type,
+      name: shelf.name,
+      note: shelf.note,
+      boxesInWidth: shelf.boxesInWidth,
+      boxesInHeight: shelf.boxesInHeight,
+      boxSize: -1,
+      productId: shelf.productId,
+    },
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
 
   return listShelves;
 };
 
-export const updateShelf = async (id, shelf) => {
+export const updateShelf = async (id, shelf, token) => {
   let listShelves = await axios.put(
     `https://localhost:44304/api/v1/shelves/${id}`,
     {
@@ -293,7 +329,8 @@ export const updateShelf = async (id, shelf) => {
       boxesInHeight: shelf.boxesInHeight,
       boxSize: -1,
       productId: shelf.productId,
-    }
+    },
+    { headers: { Authorization: `Bearer ${token}` } }
   );
 
   return listShelves;
@@ -307,61 +344,69 @@ export const deleteShelf = async (id) => {
   return response;
 };
 
-export const createOrder = async (order) => {
-  const response = await axios.post(`https://localhost:44304/api/v1/orders`, {
-    customerId: order.customerId,
-    deliveryAddress: order.deliveryAddress,
-    addressReturn: order.addressReturn,
-    totalPrice: order.totalPrice,
-    typeOrder: order.typeOrder,
-    deliveryTime: order.deliveryTime,
-    isPaid: order.isPaid,
-    paymentMethod: order.paymentMethod,
-    isUserDelivery: order.isUserDelivery,
-    deliveryDate: order.deliveryDate,
-    duration: order.duration,
-    listProduct: order.listProduct,
-  });
+export const createOrder = async (order, token) => {
+  const response = await axios.post(
+    `https://localhost:44304/api/v1/orders`,
+    {
+      customerId: order.customerId,
+      deliveryAddress: order.deliveryAddress,
+      addressReturn: order.addressReturn,
+      totalPrice: order.totalPrice,
+      typeOrder: order.typeOrder,
+      deliveryTime: order.deliveryTime,
+      isPaid: order.isPaid,
+      paymentMethod: order.paymentMethod,
+      isUserDelivery: order.isUserDelivery,
+      deliveryDate: order.deliveryDate,
+      duration: order.duration,
+      listProduct: order.listProduct,
+    },
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
 
   return response;
 };
 
-export const getOrder = async (id, page, size, dateStart, dateEnd) => {
+export const getOrder = async (id, page, size, dateStart, dateEnd, token) => {
   let response;
-  if (dateStart && dateEnd) {
+  if (dateStart !== undefined && dateEnd !== undefined) {
     response = await axios.get(
-      `https://localhost:44304/api/v1/orders?dateFrom=${dateStart}&dateTo=${dateEnd}&page=1&size=-1`
+      `https://localhost:44304/api/v1/orders?dateFrom=${dateStart}&dateTo=${dateEnd}&page=1&size=-1`,
+      { headers: { Authorization: `Bearer ${token}` } }
     );
   } else {
     response = await axios.get(
-      `https://localhost:44304/api/v1/orders?Id=${id}&page=${page}&size=${size}`
+      `https://localhost:44304/api/v1/orders?Id=${id}&page=${page}&size=${size}`,
+      { headers: { Authorization: `Bearer ${token}` } }
     );
   }
 
   return response;
 };
 
-export const getOrderById = async (id) => {
+export const getOrderById = async (id, token) => {
   const response = await axios.get(
-    `https://localhost:44304/api/v1/orders/${id}`
+    `https://localhost:44304/api/v1/orders/${id}`,
+    { headers: { Authorization: `Bearer ${token}` } }
   );
 
   return response;
 };
 
-export const cancelOrder = async (id, reason) => {
+export const cancelOrder = async (id, reason, token) => {
   const response = await axios.put(
     `https://localhost:44304/api/v1/orders/cancel/${id}`,
     {
       id: id,
       rejectedReason: reason,
-    }
+    },
+    { headers: { Authorization: `Bearer ${token}` } }
   );
 
   return response;
 };
 
-export const updateOrder = async (id, order) => {
+export const updateOrder = async (id, order, token) => {
   const response = await axios.put(
     `https://localhost:44304/api/v1/orders/${id}`,
     {
@@ -375,33 +420,36 @@ export const updateOrder = async (id, order) => {
       addressReturn: order.addressReturn,
       status: order.status,
       isPaid: order.isPaid,
-    }
+    },
+    { headers: { Authorization: `Bearer ${token}` } }
   );
 
   return response;
 };
 
-export const placeBoxes = async (placingProducts) => {
+export const placeBoxes = async (placingProducts, token) => {
   const boxesId = placingProducts.boxes.map((e) => e.idBox);
   const response = await axios.post(
     `https://localhost:44304/api/v1/orderboxdetails`,
     {
       orderId: placingProducts.orderId,
       boxesId: boxesId,
-    }
+    },
+    { headers: { Authorization: `Bearer ${token}` } }
   );
 
   return response;
 };
 
-export const moveBoxApi = async (box) => {
+export const moveBoxApi = async (box, token) => {
   const response = await axios.put(
     `https://localhost:44304/api/v1/orderboxdetails`,
     {
       orderId: box.orderId,
       boxId: box.boxId,
       newBoxId: box.newBoxId,
-    }
+    },
+    { headers: { Authorization: `Bearer ${token}` } }
   );
 
   return response;
@@ -421,50 +469,45 @@ export const placeStorages = async (placingProducts) => {
   return response;
 };
 
-export const getProduct = async (type) => {
+export const getProduct = async (type, token) => {
   let response =
     type === undefined
-      ? await axios.get(`https://localhost:44304/api/v1/products`)
-      : await axios.get(`https://localhost:44304/api/v1/products?Type=${type}`);
+      ? await axios.get(`https://localhost:44304/api/v1/products`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+      : await axios.get(
+          `https://localhost:44304/api/v1/products?Type=${type}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
 
   return response;
 };
 
-export const createProduct = async (product) => {
-  console.log({
-    name: product.name,
-    price: product.price,
-    description: product.description,
-    type: product.type,
-    size: product.size,
-    unit: product.unit,
-    tooltip: product.tooltip,
-    images: [
-      {
-        url: null,
-      },
-    ],
-  });
+export const createProduct = async (product, token) => {
+  const response = await axios.post(
+    `https://localhost:44304/api/v1/products`,
+    {
+      name: product.name,
+      price: product.price,
+      description: product.description,
+      type: product.type,
+      size: product.size,
+      unit: product.unit,
+      tooltip: product.tooltip,
+      images: [
+        {
+          url: null,
+        },
+      ],
+    },
 
-  const response = await axios.post(`https://localhost:44304/api/v1/products`, {
-    name: product.name,
-    price: product.price,
-    description: product.description,
-    type: product.type,
-    size: product.size,
-    unit: product.unit,
-    tooltip: product.tooltip,
-    images: [
-      {
-        url: null,
-      },
-    ],
-  });
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
 
   return response;
 };
 
-export const updateProduct = async (product, id, imageUrl) => {
+export const updateProduct = async (product, id, imageUrl, token) => {
   let image;
   if (imageUrl === "") {
     if (product.images === undefined) {
@@ -475,22 +518,7 @@ export const updateProduct = async (product, id, imageUrl) => {
   } else {
     image = imageUrl;
   }
-  console.log({
-    id: id,
-    name: product.name,
-    price: product.price,
-    description: product.description,
-    type: product.type,
-    size: product.size,
-    unit: product.unit,
-    tooltip: product.tooltip,
-    images: [
-      {
-        id: product.images[0].id,
-        url: image,
-      },
-    ],
-  });
+
   const response = await axios.put(
     `https://localhost:44304/api/v1/products/${id}`,
     {
@@ -508,15 +536,17 @@ export const updateProduct = async (product, id, imageUrl) => {
           url: image,
         },
       ],
-    }
+    },
+    { headers: { Authorization: `Bearer ${token}` } }
   );
 
   return response;
 };
 
-export const deleteProduct = async (id) => {
+export const deleteProduct = async (id, token) => {
   const response = await axios.delete(
-    `https://localhost:44304/api/v1/products/${id}`
+    `https://localhost:44304/api/v1/products/${id}`,
+    { headers: { Authorization: `Bearer ${token}` } }
   );
 
   return response;

@@ -79,6 +79,7 @@ function OrderModal({
   page,
   searchId,
   storeOrder,
+  userState,
 }) {
   const [isCustomerDelivery, setIsCustomerDelivery] = useState();
   const [timeDelivery, setTimeDelivery] = useState();
@@ -265,8 +266,8 @@ function OrderModal({
         isPaid: isPaid,
       };
 
-      await updateOrder(orderTemp.id, orderTemp);
-      await getData(searchId, page, 8);
+      await updateOrder(orderTemp.id, orderTemp, userState.idToken);
+      await getData(searchId, page, 8, userState.idToken);
       handleClose();
       showSnackbar("success", "Update order success");
     } catch (error) {
@@ -623,6 +624,11 @@ function OrderModal({
     </Modal>
   );
 }
+
+const mapStateToProps = (state) => ({
+  userState: state.information.user,
+});
+
 const mapDispatchToProps = (dispatch) => {
   return {
     showLoading: () => dispatch(action.showLoader()),
@@ -631,4 +637,4 @@ const mapDispatchToProps = (dispatch) => {
     storeOrder: (order) => dispatch(action.storeOrder(order)),
   };
 };
-export default connect(null, mapDispatchToProps)(OrderModal);
+export default connect(mapStateToProps, mapDispatchToProps)(OrderModal);

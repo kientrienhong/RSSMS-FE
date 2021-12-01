@@ -43,6 +43,7 @@ function ProductModal({
   getData,
   handleSubmit,
   control,
+  userState,
 }) {
   const [unit, setUnit] = useState("");
   const [error, setError] = useState({});
@@ -106,7 +107,7 @@ function ProductModal({
         return;
       }
 
-      const response = await createProduct(productTemp);
+      const response = await createProduct(productTemp, userState.idToken);
       if (response.status === 200) {
         let id = response.data.id;
         let urlFirebase;
@@ -120,7 +121,8 @@ function ProductModal({
             let responseUpdate = await updateProduct(
               { ...response.data, size: data.size },
               id,
-              urlFirebase
+              urlFirebase,
+              userState.idToken
             );
             if (responseUpdate.status === 200) {
               showSnackbar("success", "Create product successful!");
@@ -170,7 +172,12 @@ function ProductModal({
           try {
             urlFirebase = await ref.getDownloadURL();
 
-            responseUpdate = await updateProduct(productTemp, id, urlFirebase);
+            responseUpdate = await updateProduct(
+              productTemp,
+              id,
+              urlFirebase,
+              userState.idToken
+            );
             if (responseUpdate.status === 200) {
               showSnackbar("success", "Update storage successful!");
               await getData();
@@ -482,6 +489,10 @@ function ProductModal({
   );
 }
 
+const mapStateToProps = (state) => ({
+  userState: state.information.user,
+});
+
 const mapDispatchToProps = (dispatch) => {
   return {
     showLoading: () => dispatch(action.showLoader()),
@@ -490,4 +501,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(ProductModal);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductModal);

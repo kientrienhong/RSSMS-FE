@@ -15,6 +15,7 @@ function AreaList({
   hideLoading,
   showSnackbar,
   storageId,
+  userState,
 }) {
   const { handleSubmit, control, reset } = useForm();
 
@@ -42,8 +43,13 @@ function AreaList({
   const addArea = async (name, description) => {
     try {
       showLoading();
-      await createArea(parseInt(storageId), name, description);
-      let listAreaTemp = await getArea(parseInt(storageId));
+      await createArea(
+        parseInt(storageId),
+        name,
+        description,
+        userState.idToken
+      );
+      let listAreaTemp = await getArea(parseInt(storageId), userState.idToken);
 
       setListArea(listAreaTemp.data.data);
       showSnackbar("success", "Create area success!");
@@ -58,8 +64,14 @@ function AreaList({
   const editArea = async (name, description) => {
     try {
       showLoading();
-      await updateArea(parseInt(currentArea.id), name, description);
-      let listAreaTemp = await getArea(parseInt(storageId));
+      await updateArea(
+        parseInt(currentArea.id),
+        name,
+        description,
+        userState.idToken
+      );
+
+      let listAreaTemp = await getArea(parseInt(storageId), userState.idToken);
       setListArea(listAreaTemp.data.data);
       showSnackbar("success", "Update area success!");
     } catch (error) {
@@ -105,8 +117,8 @@ function AreaList({
   const onHandleDeleteArea = async (id) => {
     try {
       showLoading();
-      await deleteArea(id);
-      let listAreaTemp = await getArea(storageId);
+      await deleteArea(id, userState.idToken);
+      let listAreaTemp = await getArea(storageId, userState.idToken);
       setListArea(listAreaTemp.data.data);
       showSnackbar("success", "Delete area success!");
     } catch (error) {
@@ -130,6 +142,8 @@ function AreaList({
         height: "68vh",
         padding: "2%",
         alignItems: "center",
+        overflow: "hidden",
+        overflowY: "scroll",
       }}
     >
       <ModalArea
@@ -188,6 +202,10 @@ function AreaList({
   );
 }
 
+const mapStateToProps = (state) => ({
+  userState: state.information.user,
+});
+
 const mapDispatchToProps = (dispatch) => {
   return {
     showLoading: () => dispatch(action.showLoader()),
@@ -196,4 +214,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(AreaList);
+export default connect(mapStateToProps, mapDispatchToProps)(AreaList);

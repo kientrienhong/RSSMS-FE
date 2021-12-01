@@ -157,6 +157,7 @@ function ListOrder({
   hideLoading,
   showLoading,
   showSnackbar,
+  userState,
 }) {
   const classes = useStyles();
 
@@ -188,8 +189,8 @@ function ListOrder({
           setPage(page - 1);
         }
       }
-      await cancelOrder(currentId, reason);
-      await getData(searchId, page, 8);
+      await cancelOrder(currentId, reason, userState.idToken);
+      await getData(searchId, page, 8, userState.idToken);
     } catch (error) {
       console.log(error);
     }
@@ -199,7 +200,7 @@ function ListOrder({
   const handleClickRow = async (row) => {
     try {
       showLoading();
-      let orderTemp = await getOrderById(row.id);
+      let orderTemp = await getOrderById(row.id, userState.idToken);
       setOrder(orderTemp.data);
       handleOpen(true);
     } catch (e) {
@@ -212,7 +213,7 @@ function ListOrder({
   const onSubmit = async (data) => {
     try {
       showLoading();
-      await handleDeleteOrder(currentId, data.reason);
+      await handleDeleteOrder(currentId, data.reason, userState.idToken);
       handleClose();
       showSnackbar("success", " Cancel order success!");
     } catch (error) {
@@ -453,6 +454,11 @@ function ListOrder({
     </TableContainer>
   );
 }
+
+const mapStateToProps = (state) => ({
+  userState: state.information.user,
+});
+
 const mapDispatchToProps = (dispatch) => {
   return {
     showLoading: () => dispatch(action.showLoader()),
@@ -460,4 +466,4 @@ const mapDispatchToProps = (dispatch) => {
     showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
   };
 };
-export default connect(null, mapDispatchToProps)(ListOrder);
+export default connect(mapStateToProps, mapDispatchToProps)(ListOrder);

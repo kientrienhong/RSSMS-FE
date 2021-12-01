@@ -20,6 +20,7 @@ function AssignOrderModal({
   hideLoading,
   showSnackbar,
   currentId,
+  userState,
 }) {
   const [listStorage, setListStorage] = useState([]);
   const styleIcon = {
@@ -44,7 +45,12 @@ function AssignOrderModal({
     const process = async () => {
       try {
         showLoading();
-        const listStorageTemp = await getListStorage("", 1, -1);
+        const listStorageTemp = await getListStorage(
+          "",
+          1,
+          -1,
+          userState.idToken
+        );
         setListStorage(listStorageTemp.data.data);
       } catch (error) {
         console.log(error);
@@ -209,6 +215,11 @@ function AssignOrderModal({
     </Modal>
   );
 }
+
+const mapStateToProps = (state) => ({
+  userState: state.information.user,
+});
+
 const mapDispatchToProps = (dispatch) => {
   return {
     showLoading: () => dispatch(action.showLoader()),
@@ -216,4 +227,4 @@ const mapDispatchToProps = (dispatch) => {
     showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
   };
 };
-export default connect(null, mapDispatchToProps)(AssignOrderModal);
+export default connect(mapStateToProps, mapDispatchToProps)(AssignOrderModal);

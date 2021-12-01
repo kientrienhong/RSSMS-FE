@@ -308,12 +308,12 @@ function Users(props) {
   let password = useRef({});
   password.current = watch("password", "");
 
-  const { showLoading, hideLoading, showSnackbar } = props;
+  const { showLoading, hideLoading, showSnackbar, userState } = props;
   inputFile = useRef(null);
   const getData = async (name, page, size) => {
     try {
       showLoading();
-      let list = await getListUser(name, page, size);
+      let list = await getListUser(name, page, size, userState.idToken);
       setListUser(list.data.data);
       setTotalUser(list.data.metadata.total);
     } catch (error) {
@@ -357,7 +357,12 @@ function Users(props) {
         const uploadTask = ref.put(user.avatarFile);
         uploadTask.on("state_changed", console.log, console.error, async () => {
           urlFirebase = await ref.getDownloadURL();
-          responseUpdate = await updateUser(userTemp, id, urlFirebase);
+          responseUpdate = await updateUser(
+            userTemp,
+            id,
+            urlFirebase,
+            userState.idToken
+          );
           if (responseUpdate.status === 200) {
             showSnackbar("success", "Update user successful!");
             await getData(searchName, page, 8);
@@ -368,7 +373,7 @@ function Users(props) {
           }
         });
       } else {
-        responseUpdate = await updateUser(userTemp, id, "");
+        responseUpdate = await updateUser(userTemp, id, "", userState.idToken);
         if (responseUpdate.status === 200) {
           showSnackbar("success", "Update user successful!");
           await getData(searchName, page, 8);
@@ -409,7 +414,7 @@ function Users(props) {
     try {
       showLoading();
 
-      const response = await createUser(userTemp);
+      const response = await createUser(userTemp, userState.idToken);
       if (response.status === 200) {
         let id = response.data.id;
         let urlFirebase;
@@ -419,7 +424,12 @@ function Users(props) {
         uploadTask = ref.put(user.avatarFile);
         uploadTask.on("state_changed", console.log, console.error, async () => {
           urlFirebase = await ref.getDownloadURL();
-          let responseUpdate = await updateUser(response.data, id, urlFirebase);
+          let responseUpdate = await updateUser(
+            response.data,
+            id,
+            urlFirebase,
+            userState.idToken
+          );
           if (responseUpdate.status === 200) {
             showSnackbar("success", "Create user successful!");
             await getData(searchName, page, 8);
@@ -573,6 +583,10 @@ function Users(props) {
     </Box>
   );
 }
+const mapStateToProps = (state) => ({
+  userState: state.information.user,
+});
+
 const mapDispatchToProps = (dispatch) => {
   return {
     showLoading: () => dispatch(action.showLoader()),
@@ -580,4 +594,4 @@ const mapDispatchToProps = (dispatch) => {
     showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
   };
 };
-export default connect(null, mapDispatchToProps)(Users);
+export default connect(mapStateToProps, mapDispatchToProps)(Users);

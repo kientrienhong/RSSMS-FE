@@ -50,6 +50,7 @@ function StoredOrderModal({
   emptyPlacedProduct,
   changeIsLoadShelf,
   changeIsLoadStorage,
+  userState,
 }) {
   const [selectedValue, setSelectedValue] = React.useState("");
   const [error, setError] = React.useState();
@@ -172,7 +173,7 @@ function StoredOrderModal({
     });
     try {
       showLoading();
-      await placeBoxes(placingProducts);
+      await placeBoxes(placingProducts, userState.idToken);
       showSnackbar("success", "Save placing success");
       emptyPlacedProduct();
       handleClose();
@@ -402,6 +403,7 @@ function StoredOrderModal({
 const mapStateToProps = (state) => ({
   currentBox: state.order.currentBox,
   placingProducts: state.order.placingProducts,
+  userState: state.information.user,
 });
 
 const mapDispatchToProps = (dispatch) => {

@@ -45,7 +45,8 @@ const listUnwieldy = [
 function AreaDetail(props) {
   const { storageId, areaId } = useParams();
   const [storage, setStorage] = useState({});
-  const { showLoading, hideLoading, storedOrder, isLoadingShelf } = props;
+  const { showLoading, hideLoading, storedOrder, isLoadingShelf, userState } =
+    props;
   const [open, setOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [currentShelf, setCurrentShelf] = useState({});
@@ -64,13 +65,16 @@ function AreaDetail(props) {
       showLoading();
       setIsEdit(isEdit);
       if (storage.type === TYPE_STORAGE["Self-Storage"]) {
-        const listSelfStorageTemp = await getProduct(SELF_STORAGE_TYPE);
+        const listSelfStorageTemp = await getProduct(
+          SELF_STORAGE_TYPE,
+          userState.idToken
+        );
         setListSelfStorage(
           listSelfStorageTemp.data[SELF_STORAGE_TYPE.toString()]
         );
       } else {
-        const listBoxexTemp = await getProduct(BOX_TYPE);
-        const listAreasTemp = await getProduct(AREA_TYPE);
+        const listBoxexTemp = await getProduct(BOX_TYPE, userState.idToken);
+        const listAreasTemp = await getProduct(AREA_TYPE, userState.idToken);
         setListBoxes(listBoxexTemp.data[BOX_TYPE.toString()]);
         setListAreas(listAreasTemp.data[AREA_TYPE.toString()]);
       }
@@ -97,7 +101,13 @@ function AreaDetail(props) {
   const getData = async (name, page) => {
     try {
       showLoading();
-      let response = await getListShelves(name, page, 6, parseInt(areaId));
+      let response = await getListShelves(
+        name,
+        page,
+        6,
+        parseInt(areaId),
+        userState.idToken
+      );
       let listShelves = response.data.data;
       listShelves = listShelves.map((e) => {
         return { ...e, boxSize: e.boxes[0].sizeType };
@@ -115,20 +125,25 @@ function AreaDetail(props) {
     const getData = async () => {
       try {
         showLoading();
-        let storageTemp = await getStorageDetail(parseInt(storageId));
+        let storageTemp = await getStorageDetail(
+          parseInt(storageId),
+          userState.idToken
+        );
         setStorage(storageTemp.data);
         let response = await getListShelves(
           searchName,
           page,
           6,
-          parseInt(areaId)
+          parseInt(areaId),
+          userState.idToken
         );
         let listShelves = response.data.data;
         listShelves = listShelves.map((e) => {
           return { ...e, boxSize: e.boxes[0].sizeType };
         });
 
-        let area = await getDetailArea(parseInt(areaId));
+        let area = await getDetailArea(parseInt(areaId), userState.idToken);
+        console.log(area);
         setCurrentArea(area.data);
         setTotalPage(response.data.metadata.totalPage);
         setListShelf(listShelves);
@@ -339,6 +354,7 @@ function AreaDetail(props) {
 const mapStateToProps = (state) => ({
   storedOrder: state.order.storedOrder,
   isLoadingShelf: state.order.isLoadingShelf,
+  userState: state.information.user,
 });
 
 const mapDispatchToProps = (dispatch) => {
