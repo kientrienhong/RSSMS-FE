@@ -25,7 +25,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile, user }) => {
   } else if (user.roleName === "Manager") {
     items = LIST_SIDE_BAR_MANAGER;
   } else if (user.roleName === "Office staff") {
-    items = LIST_SIDE_BAR_OFFICE_STAFF;
+    items = LIST_SIDE_BAR_OFFICE_STAFF(user.staffManageStorages[0].id);
   }
 
   const location = useLocation();

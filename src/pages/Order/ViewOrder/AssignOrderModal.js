@@ -10,7 +10,7 @@ import {
 } from "@material-ui/core";
 import { STYLE_MODAL } from "../../../constant/style";
 import { connect } from "react-redux";
-import { getListStorage } from "../../../apis/Apis";
+import { getListStorage, assignOrder } from "../../../apis/Apis";
 
 import * as action from "../../../redux/action/action";
 function AssignOrderModal({
@@ -21,6 +21,7 @@ function AssignOrderModal({
   showSnackbar,
   currentId,
   userState,
+  changeIsLoadOrder,
 }) {
   const [listStorage, setListStorage] = useState([]);
   const styleIcon = {
@@ -32,12 +33,28 @@ function AssignOrderModal({
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
   };
-  const handleAssignStorage = () => {
+  const handleAssignStorage = async () => {
     if (selectedValue === "") {
       setError("Please product to place");
       return;
     }
+
+    try {
+      showLoading();
+      await assignOrder(currentId, parseInt(selectedValue), userState.idToken);
+      showSnackbar("success", "Assign success");
+      changeIsLoadOrder();
+      handleClose();
+    } catch (e) {
+      console.log(e.response);
+    } finally {
+      hideLoading();
+    }
+
+    console.log(selectedValue);
+    console.log(currentId);
   };
+
   useEffect(() => {
     if (open === false) {
       return;
@@ -224,6 +241,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     showLoading: () => dispatch(action.showLoader()),
     hideLoading: () => dispatch(action.hideLoader()),
+    changeIsLoadOrder: () => dispatch(action.changeIsLoadOrder()),
     showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
   };
 };

@@ -119,6 +119,12 @@ export const changeIsLoadStorage = () => {
   };
 };
 
+export const changeIsLoadOrder = () => {
+  return {
+    type: ActionType.CHANGE_IS_LOAD_ORDER,
+  };
+};
+
 export const setUpMoveBox = (box) => {
   return {
     type: ActionType.SET_UP_MOVE_BOX,

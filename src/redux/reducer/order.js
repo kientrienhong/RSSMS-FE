@@ -16,6 +16,7 @@ const initialState = {
   },
   isLoadingShelf: false,
   isLoadingStorage: false,
+  isLoadingOrder: false,
   moveBox: undefined,
 };
 
@@ -68,6 +69,11 @@ const order = (state = initialState, action) => {
       return { ...state };
     }
 
+    case ActionType.CHANGE_IS_LOAD_ORDER: {
+      state.isLoadingOrder = !state.isLoadingOrder;
+      return { ...state };
+    }
+
     case ActionType.EMPTY_PRODUCT: {
       state.storedOrder = {
         orderId: -1,
@@ -89,8 +95,6 @@ const order = (state = initialState, action) => {
       let foundProduct = storedOrderTemp.products.find(
         (e) => e.productId.toString() === action.payload.idProduct
       );
-      console.log(state.currentBox.nameBox);
-
       foundProduct.amount--;
       storedOrderTemp.totalQuantity--;
       placingProductTemp.orderId = storedOrderTemp.orderId;

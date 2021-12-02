@@ -16,7 +16,13 @@ import { connect } from "react-redux";
 import * as action from "../../redux/action/action";
 import { getOrder } from "../../apis/Apis";
 import ProductButton from "./CreateOrder/components/ProductButton";
-function Order({ showLoading, hideLoading, storedOrder, userState }) {
+function Order({
+  isLoadingOrder,
+  showLoading,
+  hideLoading,
+  storedOrder,
+  userState,
+}) {
   const navigate = useNavigate();
   const { handleSubmit, reset, control } = useForm();
 
@@ -90,7 +96,7 @@ function Order({ showLoading, hideLoading, storedOrder, userState }) {
       }
     };
     process();
-  }, [page]);
+  }, [page, isLoadingOrder]);
 
   useEffect(() => {
     const firstCall = async () => {
@@ -197,6 +203,7 @@ function Order({ showLoading, hideLoading, storedOrder, userState }) {
 
 const mapStateToProps = (state) => ({
   storedOrder: state.order.storedOrder,
+  isLoadingOrder: state.order.isLoadingOrder,
   userState: state.information.user,
 });
 

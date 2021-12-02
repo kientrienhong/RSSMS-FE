@@ -44,7 +44,7 @@ export const PRODUCT_TYPE = {
 export const ORDER_STATUS = {
   0: "Canceled",
   1: "Booked",
-  2: "Paid",
+  2: "Assigned",
   3: "Delivery",
   4: "Stored",
   5: "Expired",
@@ -165,14 +165,14 @@ export const LIST_SIDE_BAR_MANAGER = [
   },
 ];
 
-export const LIST_SIDE_BAR_OFFICE_STAFF = [
+export const LIST_SIDE_BAR_OFFICE_STAFF = (idStorage) => [
   {
     href: "/app/account",
     icon: UserIcon,
     title: "Account",
   },
   {
-    href: "/app/storages",
+    href: `/app/storages/${idStorage}`,
     title: "Storages",
     icon: undefined,
     reactIcon: <FaWarehouse />,

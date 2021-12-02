@@ -263,9 +263,6 @@ export const deleteArea = async (id, token) => {
 };
 
 export const updateArea = async (id, name, description, token) => {
-  console.log(token);
-  console.log(id);
-
   const response = await axios.put(
     `https://localhost:44304/api/v1/areas/${id}`,
     {
@@ -455,15 +452,14 @@ export const moveBoxApi = async (box, token) => {
   return response;
 };
 
-export const placeStorages = async (placingProducts) => {
-  const storageIds = placingProducts.boxes.map((e) => e.idStorage);
-
+export const assignOrder = async (orderId, storageId, token) => {
   const response = await axios.post(
     `https://localhost:44304/api/v1/orderstoragedetails`,
     {
-      orderId: placingProducts.orderId,
-      storageIds: storageIds,
-    }
+      orderId: orderId,
+      storageId: storageId,
+    },
+    { headers: { Authorization: `Bearer ${token}` } }
   );
 
   return response;
