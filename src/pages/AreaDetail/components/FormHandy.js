@@ -38,6 +38,7 @@ function FormHandy({
   searchName,
   handleClose,
   listBoxes,
+  userState,
 }) {
   const { handleSubmit, control, reset } = useForm();
   const handleChangeSize = (event) => {
@@ -92,7 +93,7 @@ function FormHandy({
         boxSize: currentShelf.boxSize,
         productId: currentShelf.productId,
       };
-      await createShelf(shelf, parseInt(areaId));
+      await createShelf(shelf, parseInt(areaId), userState.idToken);
       await getData(searchName, page, 4);
       showSnackbar("success", "Create shelf success");
       setError({});
@@ -122,7 +123,7 @@ function FormHandy({
         boxSize: currentShelf.boxSize,
         productId: currentShelf.productId,
       };
-      await updateShelf(currentShelf.id, shelf);
+      await updateShelf(currentShelf.id, shelf, userState.idToken);
       await getData(searchName, page, 4);
       showSnackbar("success", "Update shelf success");
       handleClose();
@@ -307,6 +308,10 @@ function FormHandy({
   );
 }
 
+const mapStateToProps = (state) => ({
+  userState: state.information.user,
+});
+
 const mapDispatchToProps = (dispatch) => {
   return {
     showLoading: () => dispatch(action.showLoader()),
@@ -315,4 +320,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(FormHandy);
+export default connect(mapStateToProps, mapDispatchToProps)(FormHandy);

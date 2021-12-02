@@ -29,6 +29,7 @@ function AreaDetailView({
   isModifyShelf,
   currentBox,
   storageId,
+  userState,
 }) {
   const [openConfirm, setOpenConfirm] = useState(false);
   const [openModalDetail, setOpenModalDetail] = useState(false);
@@ -78,7 +79,7 @@ function AreaDetailView({
   };
 
   const handleDeleteShelf = async (id) => {
-    await deleteShelf(id);
+    await deleteShelf(id, userState.idToken);
     await getData(searchName, page, 6);
   };
 
@@ -93,7 +94,7 @@ function AreaDetailView({
   const handleOpenDetailBox = async () => {
     try {
       showLoading();
-      let order = await getOrderById(currentBox.orderId);
+      let order = await getOrderById(currentBox.orderId, userState.idToken);
       setOrderDetailBox(order.data);
       setOpenDetailBox(true);
     } catch (e) {
@@ -193,6 +194,7 @@ function AreaDetailView({
 }
 const mapStateToProps = (state) => ({
   currentBox: state.order.currentBox,
+  userState: state.information.user,
 });
 
 const mapDispatchToProps = (dispatch) => {

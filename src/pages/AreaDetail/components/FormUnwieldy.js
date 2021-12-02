@@ -30,6 +30,7 @@ function FormUnwieldy({
   searchName,
   handleClose,
   listAreas,
+  userState,
 }) {
   const { handleSubmit, control } = useForm();
   const handleChangeSize = (event) => {
@@ -76,7 +77,7 @@ function FormUnwieldy({
         boxSize: currentShelf.boxSize,
         productId: currentShelf.productId,
       };
-      await updateShelf(currentShelf.id, shelf);
+      await updateShelf(currentShelf.id, shelf, userState.idToken);
       await getData(searchName, page, 4);
       showSnackbar("success", "Update shelf success");
       handleClose();
@@ -104,7 +105,7 @@ function FormUnwieldy({
         boxSize: currentShelf.boxSize,
         productId: currentShelf.productId,
       };
-      await createShelf(shelf, parseInt(areaId));
+      await createShelf(shelf, parseInt(areaId), userState.idToken);
       await getData(searchName, page, 4);
       showSnackbar("success", "Create shelf success");
       handleClose();
@@ -233,6 +234,10 @@ function FormUnwieldy({
   );
 }
 
+const mapStateToProps = (state) => ({
+  userState: state.information.user,
+});
+
 const mapDispatchToProps = (dispatch) => {
   return {
     showLoading: () => dispatch(action.showLoader()),
@@ -241,4 +246,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(FormUnwieldy);
+export default connect(mapStateToProps, mapDispatchToProps)(FormUnwieldy);

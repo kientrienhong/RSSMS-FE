@@ -143,7 +143,6 @@ function AreaDetail(props) {
         });
 
         let area = await getDetailArea(parseInt(areaId), userState.idToken);
-        console.log(area);
         setCurrentArea(area.data);
         setTotalPage(response.data.metadata.totalPage);
         setListShelf(listShelves);
@@ -325,7 +324,7 @@ function AreaDetail(props) {
           isModifyShelf={isModifyShelf}
           storageId={storageId}
         />
-        <Box
+        {/* <Box
           sx={{
             margin: "2%",
             display: "flex",
@@ -345,7 +344,7 @@ function AreaDetail(props) {
             numberInRow={2}
             currentArea={currentArea}
           />
-        </Box>
+        </Box> */}
       </Box>
     </Box>
   );
