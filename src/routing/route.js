@@ -13,6 +13,7 @@ import Products from "../pages/Product/Products";
 import Schedule from "../pages/Schedule/Schedule";
 import ProtectTemplate from "../Template/ProtectTemplate";
 import { ROLE_USER } from "../constant/constant";
+import NotStorage from "../pages/NotStorage";
 const routes = [
   {
     path: "app",
@@ -123,6 +124,17 @@ const routes = [
           </ProtectTemplate>
         ),
       },
+      {
+        path: "not_storage",
+        element: (
+          <ProtectTemplate
+            Component={NotStorage}
+            permission={[Object.keys(ROLE_USER)[4]]}
+          >
+            <NotStorage />
+          </ProtectTemplate>
+        ),
+      },
       { path: "*", element: <Navigate to="/404" /> },
     ],
   },
@@ -135,7 +147,7 @@ const routes = [
         path: "orders/makingOrder",
         element: (
           <ProtectTemplate
-            Component={AreaDetail}
+            Component={MakingOrder}
             permission={[Object.keys(ROLE_USER)[1], Object.keys(ROLE_USER)[4]]}
           >
             <MakingOrder />

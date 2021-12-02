@@ -1,12 +1,14 @@
 import React from "react";
-
-export default function Order({ order, handleOpen }) {
+import { Box, Typography } from "@material-ui/core";
+import { ORDER_STATUS } from "../../../constant/constant";
+export default function Order({ order, handleOpen, setCurrentListSchedule }) {
   const dateStart = new Date(order.StartTime);
   const dateEnd = new Date(order.EndTime);
   const statusOrder = {
     0: "Delivery",
     1: "Complete",
   };
+
   const listStaff = ["/avatar.png", "/avatar2.png", "/avatar3.png"];
 
   const formatTime = (date) => {
@@ -27,42 +29,60 @@ export default function Order({ order, handleOpen }) {
     return h + ":" + m;
   };
 
-  const mapAvatar = (listStaff) => {
-    return listStaff.map((e, index) => (
-      <img
-        style={{
-          width: "24px",
-          height: "24px",
-          borderRadius: "12px",
-          marginLeft: index === 0 ? "0px" : "-8px",
-        }}
-        src={e}
-        alt={e}
-      />
-    ));
-  };
-
   return (
-    <div className="schedule__order" onClick={() => handleOpen()}>
-      <div className="schedule__order__header">
-        <p className="schedule__order__header__orderId">{order.orderId}</p>
-        <div className="schedule__order__header__avatar">
-          {mapAvatar(listStaff)}
-        </div>
-      </div>
-
-      <div className="schedule__order__footer">
+    <Box
+      sx={{
+        height: "100px",
+        background: "#eff3ff",
+        padding: "4%",
+      }}
+      onClick={() => {
+        setCurrentListSchedule(order);
+        handleOpen();
+      }}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          width: "100%",
+        }}
+      >
+        <Box
+          sx={{
+            width: "30%",
+            margin: "0",
+            fontSize: "17px",
+            textAlign: "left",
+          }}
+        >
+          <Typography color="black" variant="h2">
+            #{order?.order?.id}
+          </Typography>
+        </Box>
+      </Box>
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          marginTop: "20px",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
         <p className="schedule__order__title__time">{`${formatTime(
           dateStart
         )} - ${formatTime(dateEnd)}`}</p>
         <p
           className={`schedule__order__footer__status schedule__order__footer__status--${
-            statusOrder[order.Status]
+            ORDER_STATUS[order?.order?.status]
           }`}
         >
-          {statusOrder[order.Status]}
+          {ORDER_STATUS[order?.order?.status]}
         </p>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }

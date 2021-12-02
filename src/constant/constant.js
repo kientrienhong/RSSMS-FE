@@ -165,22 +165,27 @@ export const LIST_SIDE_BAR_MANAGER = [
   },
 ];
 
-export const LIST_SIDE_BAR_OFFICE_STAFF = (idStorage) => [
-  {
-    href: "/app/account",
-    icon: UserIcon,
-    title: "Account",
-  },
-  {
-    href: `/app/storages/${idStorage}`,
-    title: "Storages",
-    icon: undefined,
-    reactIcon: <FaWarehouse />,
-  },
-  {
-    href: "/app/orders",
-    title: "Orders",
-    icon: undefined,
-    reactIcon: <FaFileInvoiceDollar />,
-  },
-];
+export const LIST_SIDE_BAR_OFFICE_STAFF = (idStorage) => {
+  return [
+    {
+      href: "/app/account",
+      icon: UserIcon,
+      title: "Account",
+    },
+    {
+      href:
+        idStorage !== undefined
+          ? `/app/storages/${idStorage}`
+          : "/app/not_storage",
+      title: "Storages",
+      icon: undefined,
+      reactIcon: <FaWarehouse />,
+    },
+    {
+      href: "/app/orders",
+      title: "Orders",
+      icon: undefined,
+      reactIcon: <FaFileInvoiceDollar />,
+    },
+  ];
+};

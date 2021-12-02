@@ -19,7 +19,9 @@ export const getTimeEnd = (time) => {
   let timeEnd = parseInt(time.slice(0, time.length - 2));
   let postFixTimeEnd = time.slice(time.length - 2, time.length);
   if (postFixTimeEnd === "pm") {
-    timeEnd += 12;
+    if (!time.includes("12")) {
+      timeEnd += 12;
+    }
   }
   return timeEnd;
 };

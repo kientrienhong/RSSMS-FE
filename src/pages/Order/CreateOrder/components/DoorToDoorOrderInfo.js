@@ -14,6 +14,7 @@ import TagSelection from "./TagSelection";
 import { formatCurrency } from "../../../../utils/FormatCurrency";
 import { connect } from "react-redux";
 import * as action from "../../../../redux/action/action";
+import { LIST_TIME } from "../../../../constant/constant";
 function DoorToDoorOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
   const [timeDelivery, setTimeDelivery] = useState({});
 
@@ -263,16 +264,8 @@ function DoorToDoorOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
     );
   };
 
-  const listTime = [
-    { name: "8am - 10am", isAvailable: true },
-    { name: "10am - 12am", isAvailable: true },
-    { name: "12pm - 14pm", isAvailable: true },
-    { name: "14am - 16pm", isAvailable: true },
-    { name: "18am - 20am", isAvailable: true },
-  ];
-
   const mapListTime = (time, setTime) =>
-    listTime.map((e, index) => (
+    LIST_TIME.map((e, index) => (
       <Grid item xs={4} key={index}>
         <TagSelection
           tag={e}
