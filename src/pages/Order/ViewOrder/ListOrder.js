@@ -26,10 +26,11 @@ import { makeStyles } from "@material-ui/styles";
 import { useForm } from "react-hook-form";
 import { connect } from "react-redux";
 import * as action from "../../../redux/action/action";
-import { getOrderById, cancelOrder } from "../../../apis/Apis";
+import { getOrderById, cancelOrder, assignOrder } from "../../../apis/Apis";
 import CustomAreaInput from "../../../components/CustomAreaInput";
 import { ORDER_STATUS, ORDER_TYPE } from "../../../constant/constant";
 import AssignOrderModal from "./AssignOrderModal";
+import ConfirmModal from "../../../components/ConfirmModal";
 function TablePaginationActions(props) {
   const theme = useTheme();
   const { count, page, rowsPerPage, onPageChange } = props;
@@ -210,6 +211,16 @@ function ListOrder({
     }
   };
 
+  const handleAssignOrder = async (id) => {
+    await assignOrder(
+      id,
+      userState.staffManageStorages[0].storageId,
+      userState.idToken
+    );
+    handleClose();
+    await getData(searchId, page, 8, userState.idToken);
+  };
+
   const onSubmit = async (data) => {
     try {
       showLoading();
@@ -327,11 +338,25 @@ function ListOrder({
       <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
         {buildModalCancelOrder()}
         {mapListTableHeader(listHeaderName)}
-        <AssignOrderModal
-          open={openAssign}
-          handleClose={handleCloseAssign}
-          currentId={currentId}
-        />
+        {userState.roleName === "Manager" ? (
+          <AssignOrderModal
+            open={openAssign}
+            handleClose={handleCloseAssign}
+            currentId={currentId}
+          />
+        ) : (
+          <ConfirmModal
+            open={openAssign}
+            handleClose={handleCloseAssign}
+            onHandleYes={handleAssignOrder}
+            id={currentId}
+            showLoading={showLoading}
+            hideLoading={hideLoading}
+            showSnackbar={showSnackbar}
+            msg="Assign order success"
+          />
+        )}
+
         <TableBody>
           {listOrder.map((row, index) => {
             let typeOrder = ORDER_TYPE[row.typeOrder];

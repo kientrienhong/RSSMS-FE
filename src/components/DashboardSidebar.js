@@ -25,11 +25,10 @@ const DashboardSidebar = ({ onMobileClose, openMobile, user }) => {
   } else if (user.roleName === "Manager") {
     items = LIST_SIDE_BAR_MANAGER;
   } else if (user.roleName === "Office staff") {
-    console.log(user.staffManageStorages.length);
     if (user.staffManageStorages.length === 0) {
       items = LIST_SIDE_BAR_OFFICE_STAFF(undefined);
     } else {
-      items = LIST_SIDE_BAR_OFFICE_STAFF(user.staffManageStorages[0].id);
+      items = LIST_SIDE_BAR_OFFICE_STAFF(user.staffManageStorages[0].storageId);
     }
   }
 

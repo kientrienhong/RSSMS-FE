@@ -158,6 +158,20 @@ const order = (state = initialState, action) => {
       return { ...state };
     }
 
+    case ActionType.CANCEL_STORE_ORDER: {
+      state.storedOrder = {
+        orderId: -1,
+        products: [],
+        totalQuantity: 0,
+      };
+      state.placingProducts = {
+        typeOrder: -1,
+        orderId: -1,
+        boxes: [],
+      };
+      return { ...state };
+    }
+
     case ActionType.REMOVE_PLACING_STORAGE: {
       let placingProductTemp = { ...state.placingProducts };
       let storedOrderTemp = { ...state.storedOrder };

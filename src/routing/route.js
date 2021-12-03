@@ -39,7 +39,11 @@ const routes = [
         element: (
           <ProtectTemplate
             Component={Users}
-            permission={[Object.keys(ROLE_USER)[0], Object.keys(ROLE_USER)[1]]}
+            permission={[
+              Object.keys(ROLE_USER)[0],
+              Object.keys(ROLE_USER)[1],
+              Object.keys(ROLE_USER)[4],
+            ]}
           >
             <Users />
           </ProtectTemplate>

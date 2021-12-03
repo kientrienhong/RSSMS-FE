@@ -172,6 +172,11 @@ export const LIST_SIDE_BAR_OFFICE_STAFF = (idStorage) => {
       icon: UserIcon,
       title: "Account",
     },
+    // {
+    //   href: "/app/users",
+    //   icon: UsersIcon,
+    //   title: "Users",
+    // },
     {
       href:
         idStorage !== undefined

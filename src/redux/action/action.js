@@ -137,3 +137,9 @@ export const emptyMoveBox = () => {
     type: ActionType.EMPTY_MOVE_BOX,
   };
 };
+
+export const cancelStoreOrder = () => {
+  return {
+    type: ActionType.CANCEL_STORE_ORDER,
+  };
+};

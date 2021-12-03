@@ -103,7 +103,13 @@ function OrderModal({
   const handleStoreOrder = () => {
     storeOrder(currentOrder);
     showSnackbar("success", "Store order success");
-    navigate("/app/storages", { replace: true });
+    if (userState.roleName === "Office staff") {
+      navigate(`/app/storages/${userState.staffManageStorages[0].storageId}`, {
+        replace: true,
+      });
+    } else {
+      navigate("/app/storages", { replace: true });
+    }
     handleClose();
   };
 

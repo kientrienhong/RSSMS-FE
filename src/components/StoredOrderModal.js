@@ -51,6 +51,7 @@ function StoredOrderModal({
   changeIsLoadShelf,
   changeIsLoadStorage,
   userState,
+  cancelStoreOrder,
 }) {
   const [selectedValue, setSelectedValue] = React.useState("");
   const [error, setError] = React.useState();
@@ -359,6 +360,7 @@ function StoredOrderModal({
                 flexDirection: "column",
                 alignItems: "center",
                 width: "100%",
+                marginTop: "16px",
               }}
             >
               {error?.length > 0 ? (
@@ -384,12 +386,25 @@ function StoredOrderModal({
                     height: "45px",
                     paddingLeft: "16px",
                     paddingRight: "16px",
+                    marginRight: "16px",
                   }}
                   onClick={() => onHandleSubmit()}
                   color="success"
                   variant="contained"
                 >
                   Submit
+                </Button>
+                <Button
+                  style={{
+                    height: "45px",
+                    paddingLeft: "16px",
+                    paddingRight: "16px",
+                  }}
+                  onClick={() => cancelStoreOrder()}
+                  color="error"
+                  variant="outlined"
+                >
+                  Cancel storing order
                 </Button>
               </Box>
             </Box>
@@ -418,6 +433,7 @@ const mapDispatchToProps = (dispatch) => {
     emptyPlacedProduct: () => dispatch(action.emptyPlacedProduct()),
     changeIsLoadShelf: () => dispatch(action.changeIsLoadShelf()),
     removeStorage: () => dispatch(action.removeStorage()),
+    cancelStoreOrder: () => dispatch(action.cancelStoreOrder()),
     changeIsLoadStorage: () => dispatch(action.changeIsLoadStorage()),
   };
 };
