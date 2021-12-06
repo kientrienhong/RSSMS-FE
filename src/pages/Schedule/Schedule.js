@@ -8,7 +8,7 @@ import {
   ViewsDirective,
   Agenda,
 } from "@syncfusion/ej2-react-schedule";
-import { Grid } from "@material-ui/core";
+import { Grid, Box, Button, Typography, Modal } from "@material-ui/core";
 import Order from "./component/Order";
 import OrderAssignModal from "./component/OrderAssignModal";
 import { connect } from "react-redux";
@@ -22,11 +22,21 @@ import {
   getTimeEnd,
 } from "../../utils/DateUtils";
 import { ORDER_STATUS } from "../../constant/constant";
+import { STYLE_MODAL } from "../../constant/style";
+
+const styleModal = {
+  ...STYLE_MODAL,
+  width: "80%",
+};
+
 function Shedule({ showLoading, hideLoading, userState }) {
+  let scheduleObj;
   const [listShowStaffAssigned, setListShowStaffAssigned] = React.useState([]);
+  const [refresh, setRefresh] = React.useState(false);
   const [listShowStaffUnAssigned, setListShowStaffUnAssigned] = React.useState(
     []
   );
+  const [openListSchedule, setOpenListSchedule] = React.useState(false);
   const [listSchedule, setListSchedule] = React.useState([]);
   const [currentListSchedule, setCurrentListSchedule] = React.useState({});
 
@@ -41,6 +51,14 @@ function Shedule({ showLoading, hideLoading, userState }) {
   ]);
 
   const [open, setOpen] = useState(false);
+
+  const handleOpenListSchedule = () => {
+    setOpenListSchedule(true);
+  };
+
+  const handleCloseListSchedule = () => {
+    setOpenListSchedule(false);
+  };
 
   const handleOpen = () => {
     setOpen(true);
@@ -123,7 +141,7 @@ function Shedule({ showLoading, hideLoading, userState }) {
       let result = [];
       response?.data?.data
         ?.filter((e) => e.status !== 0)
-        .forEach((e) => {
+        ?.forEach((e) => {
           let dateDelivery = new Date(e.deliveryDate);
           let dateReturn = new Date(e.returnDate);
           if (
@@ -160,7 +178,13 @@ function Shedule({ showLoading, hideLoading, userState }) {
 
   const eventTemplate = (props) => {
     return (
-      <div id="schedule__order__outsite">
+      <div
+        id="schedule__order__outsite"
+        onClick={() => {
+          setCurrentListSchedule(props);
+          handleOpenListSchedule();
+        }}
+      >
         <p
           style={{
             display: "inline-block",
@@ -172,29 +196,47 @@ function Shedule({ showLoading, hideLoading, userState }) {
     );
   };
 
-  const editorWindowTemplate = (props) => {
-    if (currentListSchedule.Id !== props.Id) {
-      return (
-        <div className="custom_editor" style={{ zIndex: "1" }}>
-          <h1>List order</h1>
-          <Grid container spacing={2}>
-            {buildListOrder(props.ListOrder, props)}
-          </Grid>
-        </div>
-      );
-    } else {
-      return (
-        <div className="custom_editor" style={{ zIndex: "1" }}>
-          <h1>List order</h1>
-          <Grid container spacing={2}>
-            {buildListOrder(currentListSchedule.ListOrder, currentListSchedule)}
-          </Grid>
-        </div>
-      );
-    }
-  };
+  const buildModalListOrder = () => (
+    <Modal
+      open={openListSchedule}
+      onClose={handleCloseListSchedule}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <Box
+        sx={{
+          ...styleModal,
+          display: "flex",
+          justifyContent: "flex-start",
+          alignItems: "flex-start",
+          flexDirection: "column",
+        }}
+      >
+        <Typography
+          color="black"
+          variant="h2"
+          style={{
+            marginTop: "2%",
+            marginBottom: "2%",
+            textAlign: "left",
+          }}
+        >
+          List schedule
+        </Typography>
+        <Grid container spacing={2}>
+          {buildListOrder(currentListSchedule.ListOrder, currentListSchedule)}
+        </Grid>
+      </Box>
+    </Modal>
+  );
 
   const onNavigatingEvent = async (navigatingEventArgs) => {
+    if (
+      navigatingEventArgs.name !== "navigating" ||
+      navigatingEventArgs.previousDate === navigatingEventArgs.currentDate
+    ) {
+      return;
+    }
     let curr = new Date(navigatingEventArgs.currentDate);
     curr.setDate(curr.getDate() + 2);
     curr = curr.toISOString().split("T")[0]; // get current date
@@ -236,6 +278,10 @@ function Shedule({ showLoading, hideLoading, userState }) {
         ListOrder: [order],
       });
     }
+  };
+
+  const onPopupOpen = (args) => {
+    args.cancel = true;
   };
 
   useEffect(() => {
@@ -290,26 +336,28 @@ function Shedule({ showLoading, hideLoading, userState }) {
       }
     };
     firstCall();
-    setListShowStaffAssigned(listStaffAssigned);
     setListShowStaffUnAssigned(listStaffUnAssigned);
   }, []);
+  const todaySplited = new Date().toISOString().split("T")[0].split("-");
+  let stringToday = `${todaySplited[0]}/${todaySplited[1]}/${todaySplited[2]}`;
 
-  const onEventClick = (args) => {};
   return (
     <ScheduleComponent
       currentView="Week"
-      selectedDate={new Date()}
+      selectedDate={new Date(stringToday)}
+      ref={(schedule) => (scheduleObj = schedule)}
       eventSettings={{
         dataSource: listSchedule,
         template: eventTemplate.bind(this),
       }}
-      editorTemplate={editorWindowTemplate.bind(this)}
+      popupOpen={onPopupOpen.bind(this)}
       dragStart={onDragStart.bind(this)}
       navigating={onNavigatingEvent.bind(this)}
       allowResizing={false}
       showQuickInfo={false}
-      eventClick={onEventClick.bind(this)}
+      openEditor={false}
     >
+      {buildModalListOrder()}
       <OrderAssignModal
         handleClose={handleClose}
         open={open}
