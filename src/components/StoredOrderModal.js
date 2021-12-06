@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Modal, Grid, Radio, Typography, Button } from "@material-ui/core";
 import { connect } from "react-redux";
 import * as action from "../redux/action/action";
-import { placeBoxes, placeStorages } from "../apis/Apis";
+import { placeBoxes } from "../apis/Apis";
 import { useNavigate } from "react-router";
 import { STYLE_MODAL } from "../constant/style";
 const styleModal = STYLE_MODAL;

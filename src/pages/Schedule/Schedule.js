@@ -21,6 +21,7 @@ import {
   getTimeStart,
   getTimeEnd,
 } from "../../utils/DateUtils";
+import { ORDER_STATUS } from "../../constant/constant";
 function Shedule({ showLoading, hideLoading, userState }) {
   const [listShowStaffAssigned, setListShowStaffAssigned] = React.useState([]);
   const [listShowStaffUnAssigned, setListShowStaffUnAssigned] = React.useState(
@@ -108,17 +109,33 @@ function Shedule({ showLoading, hideLoading, userState }) {
     setListShowStaffUnAssigned(listShowStaffUnAssignedTemp);
   };
 
-  const getData = async (dateStart, dateEnd) => {
+  const getData = async (startOfWeek, endOfWeek) => {
     try {
       showLoading();
       let response = await getOrder(
         "",
         "",
         "",
-        dateStart,
-        dateEnd,
+        startOfWeek.toISOString().split("T")[0],
+        endOfWeek.toISOString().split("T")[0],
         userState.idToken
       );
+      let result = [];
+      response?.data?.data
+        ?.filter((e) => e.status !== 0)
+        .forEach((e) => {
+          let dateDelivery = new Date(e.deliveryDate);
+          let dateReturn = new Date(e.returnDate);
+          if (
+            isDateBefore(dateReturn, endOfWeek) === true &&
+            isDateAfter(dateReturn, startOfWeek) === true
+          ) {
+            handleFormatDate(dateReturn, result, e, "returnTime");
+          } else {
+            handleFormatDate(dateDelivery, result, e, "deliveryTime");
+          }
+        });
+      setListSchedule(result);
     } catch (e) {
       console.log(e);
     } finally {
@@ -177,18 +194,22 @@ function Shedule({ showLoading, hideLoading, userState }) {
     }
   };
 
-  const onNavigatingEvent = (navigatingEventArgs) => {
-    let curr = new Date(navigatingEventArgs.currentDate); // get current date
-    let first = curr.getDate() - curr.getDay() + 1; // First day is the day of the month - the day of the week
-    let last = first + 6; // last day is the first day + 6
-
-    let firstday = new Date(curr.setDate(first)).toUTCString();
-    let lastday = new Date(curr.setDate(last)).toUTCString();
+  const onNavigatingEvent = async (navigatingEventArgs) => {
+    let curr = new Date(navigatingEventArgs.currentDate);
+    curr.setDate(curr.getDate() + 2);
+    curr = curr.toISOString().split("T")[0]; // get current date
+    let dateSplit = curr.split("-");
+    let currentMoment = moment().set({
+      year: parseInt(dateSplit[0]),
+      month: parseInt(dateSplit[1]) - 1,
+      date: parseInt(dateSplit[2]),
+    });
+    let startOfWeek = currentMoment.startOf("week").toDate();
+    let endOfWeek = currentMoment.endOf("week").toDate();
+    await getData(startOfWeek, endOfWeek);
   };
-
   const handleFormatDate = (date, result, order, value) => {
     let time = order[value].split("-");
-
     let currentScheduleStartDateTime = new Date(
       date.getTime() + getTimeStart(time[0]) * 3600000
     );
@@ -229,7 +250,6 @@ function Shedule({ showLoading, hideLoading, userState }) {
           dateEnd,
           userState.idToken
         );
-
         return response.data.data;
       } catch (e) {
         console.log(e.response);
@@ -242,28 +262,26 @@ function Shedule({ showLoading, hideLoading, userState }) {
       try {
         let startOfWeek = moment().startOf("week").toDate();
         let endOfWeek = moment().endOf("week").toDate();
-
         showLoading();
         let response = await getData(
           startOfWeek.toISOString().split("T")[0],
           endOfWeek.toISOString().split("T")[0]
         );
         let result = [];
-        response?.forEach((e) => {
-          let dateDelivery = new Date(e.deliveryDate);
-          let dateReturn = new Date(e.returnDate);
-          if (
-            isDateBefore(dateDelivery, endOfWeek) === true &&
-            isDateAfter(dateDelivery, startOfWeek) === true
-          ) {
-            handleFormatDate(dateDelivery, result, e, "deliveryTime");
-          } else if (
-            isDateBefore(dateReturn, endOfWeek) === true &&
-            isDateAfter(dateReturn, startOfWeek) === true
-          ) {
-            handleFormatDate(dateReturn, result, e, "returnTime");
-          }
-        });
+        response
+          ?.filter((e) => e.status !== 0)
+          ?.forEach((e) => {
+            let dateDelivery = new Date(e.deliveryDate);
+            let dateReturn = new Date(e.returnDate);
+            if (
+              isDateBefore(dateReturn, endOfWeek) === true &&
+              isDateAfter(dateReturn, startOfWeek) === true
+            ) {
+              handleFormatDate(dateReturn, result, e, "returnTime");
+            } else {
+              handleFormatDate(dateDelivery, result, e, "deliveryTime");
+            }
+          });
         setListSchedule(result);
       } catch (error) {
         console.log(error);
