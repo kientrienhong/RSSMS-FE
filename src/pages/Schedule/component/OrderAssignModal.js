@@ -17,7 +17,6 @@ function OrderAssignModal({
   handleChangeSearchUnAssigned,
   listShowStaffAssigned,
   listShowStaffUnAssigned,
-  listStaffUnAssigned,
   listStaffAssigned,
   showSnackbar,
   showLoading,
@@ -44,14 +43,13 @@ function OrderAssignModal({
       dateEnd = dateEnd.split(" ").join("").toLowerCase();
       let deliveryTime = `${dateStart} - ${dateEnd}`;
       let userIds = listStaffAssigned.map((e) => e.id);
-      let response = await assignSchedule(
+      await assignSchedule(
         currentOrder.id,
         dateSchedule,
         deliveryTime,
         userIds,
         userState.idToken
       );
-
       handleClose();
       showSnackbar("success", "Assign delivery staff success");
     } catch (e) {

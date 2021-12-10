@@ -8,7 +8,9 @@ const mapListToGrid = (
   setCurrentId,
   handleConfirmOpen,
   setStorage,
-  handleOpen
+  handleOpen,
+  openAssignStaff,
+  handleOpenAssignStaff
 ) =>
   listStorage.map((e) => (
     <Grid item xs={5.94} key={e.id}>
@@ -18,6 +20,7 @@ const mapListToGrid = (
         handleConfirmOpen={handleConfirmOpen}
         setStorage={setStorage}
         handleOpen={handleOpen}
+        handleOpenAssignStaff={handleOpenAssignStaff}
       />
     </Grid>
   ));
@@ -28,6 +31,8 @@ export default function ListStorage({
   setListStorages,
   handleOpen,
   setStorage,
+  openAssignStaff,
+  handleOpenAssignStaff,
 }) {
   const [open, setOpen] = React.useState(false);
   const [currentId, setCurrentId] = React.useState(-1);
@@ -61,7 +66,9 @@ export default function ListStorage({
         setCurrentId,
         handleConfirmOpen,
         setStorage,
-        handleOpen
+        handleOpen,
+        openAssignStaff,
+        handleOpenAssignStaff
       )}
     </Grid>
   );

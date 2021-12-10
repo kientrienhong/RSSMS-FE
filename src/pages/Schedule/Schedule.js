@@ -30,9 +30,7 @@ const styleModal = {
 };
 
 function Shedule({ showLoading, hideLoading, userState }) {
-  let scheduleObj;
   const [listShowStaffAssigned, setListShowStaffAssigned] = React.useState([]);
-  const [refresh, setRefresh] = React.useState(false);
   const [listShowStaffUnAssigned, setListShowStaffUnAssigned] = React.useState(
     []
   );
@@ -307,9 +305,9 @@ function Shedule({ showLoading, hideLoading, userState }) {
           1,
           -1,
           userState.idToken,
-          0
-          // "Staff Delivery",
-          // currentOrder.id
+          0,
+          "Staff Delivery",
+          currentOrder.id
         );
         setListShowStaffUnAssigned(listUserNotAssigned.data.data);
         setListStaffUnAssigned(listUserNotAssigned.data.data);
@@ -403,7 +401,6 @@ function Shedule({ showLoading, hideLoading, userState }) {
     <ScheduleComponent
       currentView="Week"
       selectedDate={new Date(stringToday)}
-      ref={(schedule) => (scheduleObj = schedule)}
       eventSettings={{
         dataSource: listSchedule,
         template: eventTemplate.bind(this),

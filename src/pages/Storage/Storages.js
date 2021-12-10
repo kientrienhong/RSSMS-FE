@@ -9,12 +9,8 @@ import {
   MenuItem,
   Typography,
 } from "@material-ui/core";
-import PropTypes from "prop-types";
 import SearchIcon from "@mui/icons-material/Search";
 import ListStorage from "./components/ListStorage";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import TabPanel from "../../components/TabPanel";
 import { useForm } from "react-hook-form";
 import CustomSelect from "../../components/CustomSelect";
 import CustomInput from "../../components/CustomInput";
@@ -35,6 +31,7 @@ import Stack from "@mui/material/Stack";
 import ListStaff from "./components/ListStaff";
 import { TYPE_STORAGE } from "../../constant/constant";
 import { STYLE_MODAL } from "../../constant/style";
+import AssignStaffModal from "./components/AssignStaffModal";
 
 let inputFile;
 const styleModal = {
@@ -94,19 +91,6 @@ const buildInputFileImage = (storage) => {
   );
 };
 
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-};
-
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  };
-}
-
 function Storages(props) {
   inputFile = useRef(null);
   const {
@@ -123,6 +107,8 @@ function Storages(props) {
   const [listShowStaffUnAssigned, setListShowStaffUnAssigned] = React.useState(
     []
   );
+  const [openAssignStaff, setOpenAssignStaff] = React.useState(false);
+
   const {
     handleSubmit,
     reset,
@@ -133,7 +119,6 @@ function Storages(props) {
   const [listStorages, setListStorages] = React.useState([]);
   const [listStaffAssigned, setListStaffAssigned] = React.useState([]);
   const [listStaffUnAssigned, setListStaffUnAssigned] = React.useState([]);
-  const [tabIndex, setTabIndex] = React.useState(0);
   const [isEdit, setEdit] = React.useState(false);
   const [type, setType] = React.useState("");
   const [storage, setStorage] = React.useState({
@@ -143,6 +128,14 @@ function Storages(props) {
 
   const handleChange = async (event, value) => {
     setPage(value);
+  };
+
+  const handleCloseAssignStaff = () => {
+    setOpenAssignStaff(false);
+  };
+
+  const handleOpenAssignStaff = () => {
+    setOpenAssignStaff(true);
   };
 
   const handleChangeSearchUnAssigned = (event) => {
@@ -214,7 +207,7 @@ function Storages(props) {
 
   useEffect(() => {
     const process = async () => {
-      if (open === true) {
+      if (openAssignStaff === true) {
         try {
           showLoading();
           let listUserNotAssigned = await getListUser(
@@ -224,6 +217,7 @@ function Storages(props) {
             userState.idToken,
             0
           );
+          console.log(listUserNotAssigned);
           setListStaffUnAssigned(listUserNotAssigned.data.data);
           setListShowStaffUnAssigned(listUserNotAssigned.data.data);
         } catch (error) {
@@ -253,7 +247,7 @@ function Storages(props) {
     reset();
 
     process();
-  }, [open]);
+  }, [openAssignStaff]);
 
   const onHandleSearch = (e) => {
     setSearchName(e.target.value);
@@ -279,7 +273,7 @@ function Storages(props) {
       hideLoading();
       showSnackbar("success", "Assign Success!");
       setError({});
-      handleClose();
+      handleCloseAssignStaff();
     } catch (error) {
       console.log(error.response);
 
@@ -472,7 +466,6 @@ function Storages(props) {
   };
   const handleClose = () => {
     setOpen(false);
-    setTabIndex(0);
     setStorage({ avatarFile: undefined, images: [{ id: null, url: null }] });
     reset();
   };
@@ -488,10 +481,6 @@ function Storages(props) {
     } finally {
       hideLoading();
     }
-  };
-
-  const handleChangeTab = async (event, newtabIndex) => {
-    setTabIndex(newtabIndex);
   };
 
   const onChangeInputFile = (event) => {
@@ -756,113 +745,30 @@ function Storages(props) {
             flexDirection: "column",
           }}
         >
-          <Box sx={{ borderBottom: 1, border: "none", height: "10%" }}>
-            <Tabs
-              value={tabIndex}
-              onChange={handleChangeTab}
-              aria-label="basic tabs example"
-            >
-              <Tab label="Storage Information" {...a11yProps(0)} />
-              <Tab label="Staff list" {...a11yProps(1)} />
-            </Tabs>
-          </Box>
           <Box sx={{ height: "90%" }}>
-            <TabPanel
-              style={{ height: "100%", width: "100%" }}
-              value={tabIndex}
-              index={0}
+            <Box
+              sx={{
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                flexDirection: "row",
+              }}
             >
-              <Box
-                sx={{
-                  width: "100%",
-                  height: "100%",
-                  display: "flex",
-                  flexDirection: "row",
-                }}
-              >
-                {buildInputFileImage(storage)}
-                {buildInputForm(
-                  handleSubmit,
-                  onSubmit,
-                  storage,
-                  setStorage,
-                  control,
-                  isEdit,
-                  handleClose,
-                  handleChangeType,
-                  onChangeInputFile,
-                  errors,
-                  error
-                )}
-              </Box>
-            </TabPanel>
-            <TabPanel value={tabIndex} index={1}>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  width: "100%",
-                  marginTop: "3%",
-                }}
-              >
-                <ListStaff
-                  listStaff={listShowStaffAssigned}
-                  isAssigned={true}
-                  name="Staffs belong to this storage"
-                  addAssignStaff={addAssignStaff}
-                  removeAssignStaff={removeAssignStaff}
-                  onHandleSearch={handleChangeSearchAssigned}
-                />
-                <ListStaff
-                  listStaff={listShowStaffUnAssigned}
-                  isAssigned={false}
-                  name="Staffs are not assigned yet"
-                  addAssignStaff={addAssignStaff}
-                  removeAssignStaff={removeAssignStaff}
-                  onHandleSearch={handleChangeSearchUnAssigned}
-                />
-              </Box>
-              <p
-                style={{
-                  width: "100%",
-                  textAlign: "center",
-                  color: "red",
-                }}
-              >
-                {error?.assignStaff?.message ? error?.assignStaff?.message : ""}
-              </p>
-
-              <Box
-                sx={{
-                  width: "100%",
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  marginTop: "16px",
-                }}
-              >
-                <Button
-                  style={{
-                    height: "45px",
-                    paddingLeft: "16px",
-                    paddingRight: "16px",
-                    marginTop: "4%",
-                  }}
-                  color="primary"
-                  variant="contained"
-                  onClick={() =>
-                    onHandleAssignUser(
-                      listStaffAssigned,
-                      listStaffUnAssigned,
-                      storage
-                    )
-                  }
-                >
-                  Submit
-                </Button>
-              </Box>
-            </TabPanel>
+              {buildInputFileImage(storage)}
+              {buildInputForm(
+                handleSubmit,
+                onSubmit,
+                storage,
+                setStorage,
+                control,
+                isEdit,
+                handleClose,
+                handleChangeType,
+                onChangeInputFile,
+                errors,
+                error
+              )}
+            </Box>
           </Box>
         </Box>
       </Modal>
@@ -877,6 +783,21 @@ function Storages(props) {
         py: 3,
       }}
     >
+      <AssignStaffModal
+        openAssignStaff={openAssignStaff}
+        handleCloseAssignStaff={handleCloseAssignStaff}
+        listShowStaffAssigned={listShowStaffAssigned}
+        addAssignStaff={addAssignStaff}
+        removeAssignStaff={removeAssignStaff}
+        handleChangeSearchAssigned={handleChangeSearchAssigned}
+        listShowStaffUnAssigned={listShowStaffUnAssigned}
+        handleChangeSearchUnAssigned={handleChangeSearchUnAssigned}
+        error={error}
+        onHandleAssignUser={onHandleAssignUser}
+        listStaffAssigned={listStaffAssigned}
+        listStaffUnAssigned={listStaffUnAssigned}
+        storage={storage}
+      />
       {buildModal()}
       <Box
         sx={{
@@ -923,6 +844,8 @@ function Storages(props) {
         </Button>
       </Box>
       <ListStorage
+        openAssignStaff={openAssignStaff}
+        handleOpenAssignStaff={handleOpenAssignStaff}
         listStorages={listStorages}
         onHandleDeleteStorage={onHandleDeleteStorage}
         setListStorages={setListStorages}

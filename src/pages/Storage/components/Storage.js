@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Box, Typography, Button } from "@material-ui/core";
+import { Card, Box, Typography, Button, Grid } from "@material-ui/core";
 import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import * as action from "../../../redux/action/action";
@@ -23,6 +23,7 @@ function Storage({
   handleOpen,
   setUpCurrentStorage,
   showSnackbar,
+  handleOpenAssignStaff,
 }) {
   const navigate = useNavigate();
 
@@ -103,18 +104,6 @@ function Storage({
               {Object.keys(TYPE_STORAGE)[storage.type]}
             </Typography>
           </Box>
-          {storage.type === "Self-storage" ? (
-            <Box sx={styleBoxTypo}>
-              <Typography color="black" variant="h3" sx={{ marginRight: "2%" }}>
-                Remaining Time:
-              </Typography>
-              <Typography color="black" variant="body">
-                {storage.remainingTime}
-              </Typography>
-            </Box>
-          ) : (
-            <></>
-          )}
           <Box sx={styleBoxTypo}>
             <Typography color="black" variant="h3" sx={{ marginRight: "2%" }}>
               Manager:
@@ -124,72 +113,105 @@ function Storage({
             </Typography>
           </Box>
         </Box>
-        <Box sx={{ display: "flex", flexDirection: "row", marginTop: "2%" }}>
-          <Button
-            style={{
-              height: "45px",
-              paddingLeft: "16px",
-              paddingRight: "16px",
-              marginRight: "2%",
-            }}
-            color="primary"
-            variant="contained"
-            onClick={() => {
-              let sizes;
-              if (storage.size) {
-                sizes = storage.size.split("x");
-                storage.width = sizes[0]
-                  ?.trim()
-                  .substring(0, sizes[0]?.trim().length - 1);
-                storage.length = sizes[1]
-                  ?.trim()
-                  .substring(0, sizes[1]?.trim().length - 1);
-                storage.height = sizes[2]
-                  ?.trim()
-                  .substring(0, sizes[2]?.trim().length - 1);
-              }
-              setStorage({
-                ...storage,
-                width: storage.width,
-                length: storage.length,
-                height: storage.height,
-              });
+        <Grid container spacing={2}>
+          <Grid item xs={6}>
+            <Button
+              style={{
+                height: "45px",
+                paddingLeft: "16px",
+                paddingRight: "16px",
+                marginRight: "2%",
+                width: "100%",
+              }}
+              color="primary"
+              variant="contained"
+              onClick={() => {
+                let sizes;
+                if (storage.size) {
+                  sizes = storage.size.split("x");
+                  storage.width = sizes[0]
+                    ?.trim()
+                    .substring(0, sizes[0]?.trim().length - 1);
+                  storage.length = sizes[1]
+                    ?.trim()
+                    .substring(0, sizes[1]?.trim().length - 1);
+                  storage.height = sizes[2]
+                    ?.trim()
+                    .substring(0, sizes[2]?.trim().length - 1);
+                }
+                setStorage({
+                  ...storage,
+                  width: storage.width,
+                  length: storage.length,
+                  height: storage.height,
+                });
 
-              handleOpen(true);
-            }}
-          >
-            Edit
-          </Button>
-          <Button
-            style={{
-              height: "45px",
-              paddingLeft: "16px",
-              paddingRight: "16px",
-              marginRight: "2%",
-            }}
-            color="error"
-            variant="contained"
-            onClick={() => {
-              setCurrentId(storage.id);
-              handleConfirmOpen();
-            }}
-          >
-            Delete
-          </Button>
-          <Button
-            style={{
-              height: "45px",
-              width: "auto",
-            }}
-            color="success"
-            onClick={() =>
-              navigate("/app/storages/" + storage.id, { replace: false })
-            }
-            variant="contained"
-          >
-            See more
-          </Button>
-        </Box>
+                handleOpen(true);
+              }}
+            >
+              Edit
+            </Button>
+          </Grid>
+          <Grid item xs={6}>
+            <Button
+              style={{
+                height: "45px",
+                paddingLeft: "16px",
+                paddingRight: "16px",
+                marginRight: "2%",
+                width: "100%",
+              }}
+              color="error"
+              variant="contained"
+              onClick={() => {
+                setCurrentId(storage.id);
+                handleConfirmOpen();
+              }}
+            >
+              Delete
+            </Button>
+          </Grid>
+
+          <Grid item xs={6}>
+            <Button
+              style={{
+                height: "45px",
+                paddingLeft: "16px",
+                paddingRight: "16px",
+                marginRight: "2%",
+                width: "100%",
+                background: "#8099FF",
+              }}
+              variant="contained"
+              onClick={() => {
+                // setCurrentId(storage.id);
+                setStorage({
+                  ...storage,
+                });
+
+                handleOpenAssignStaff();
+              }}
+            >
+              Assign Staff
+            </Button>
+          </Grid>
+
+          <Grid item xs={6}>
+            <Button
+              style={{
+                height: "45px",
+                width: "100%",
+              }}
+              color="success"
+              onClick={() =>
+                navigate("/app/storages/" + storage.id, { replace: false })
+              }
+              variant="contained"
+            >
+              See more
+            </Button>
+          </Grid>
+        </Grid>
       </Box>
     </Card>
   );
