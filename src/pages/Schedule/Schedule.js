@@ -13,7 +13,7 @@ import Order from "./component/Order";
 import OrderAssignModal from "./component/OrderAssignModal";
 import { connect } from "react-redux";
 import * as action from "../../redux/action/action";
-import { getOrder } from "../../apis/Apis";
+import { getOrder, getListUser, getSchedule } from "../../apis/Apis";
 import moment from "moment";
 import {
   isDateBefore,
@@ -39,16 +39,10 @@ function Shedule({ showLoading, hideLoading, userState }) {
   const [openListSchedule, setOpenListSchedule] = React.useState(false);
   const [listSchedule, setListSchedule] = React.useState([]);
   const [currentListSchedule, setCurrentListSchedule] = React.useState({});
+  const [currentOrder, setCurrentOrder] = React.useState({});
+  const [listStaffAssigned, setListStaffAssigned] = React.useState([]);
 
-  const [listStaffAssigned, setListStaffAssigned] = React.useState([
-    { id: 1, name: "Giang Thanh Dinh" },
-    { id: 2, name: "Lam Nhut Phuc" },
-  ]);
-
-  const [listStaffUnAssigned, setListStaffUnAssigned] = React.useState([
-    { id: 3, name: "Nguyen Dang Khoa" },
-    { id: 4, name: "Tran The Dong Anh" },
-  ]);
+  const [listStaffUnAssigned, setListStaffUnAssigned] = React.useState([]);
 
   const [open, setOpen] = useState(false);
 
@@ -130,6 +124,12 @@ function Shedule({ showLoading, hideLoading, userState }) {
   const getData = async (startOfWeek, endOfWeek) => {
     try {
       showLoading();
+      let responseSchedule = await getSchedule(
+        startOfWeek.toISOString().split("T")[0],
+        endOfWeek.toISOString().split("T")[0],
+        userState.idToken
+      );
+
       let response = await getOrder(
         "",
         "",
@@ -153,6 +153,19 @@ function Shedule({ showLoading, hideLoading, userState }) {
             handleFormatDate(dateDelivery, result, e, "deliveryTime");
           }
         });
+      if (responseSchedule.data.data) {
+        responseSchedule.data.data.forEach((schedule) => {
+          result.forEach((e) => {
+            let index = e.ListOrder.findIndex(
+              (ele) => ele.id === schedule.orderId
+            );
+            e.ListOrder[index] = {
+              ...e.ListOrder[index],
+              listStaffDelivery: schedule.users,
+            };
+          });
+        });
+      }
       setListSchedule(result);
     } catch (e) {
       console.log(e);
@@ -172,6 +185,7 @@ function Shedule({ showLoading, hideLoading, userState }) {
           order={{ ...props, order: e }}
           setCurrentListSchedule={setCurrentListSchedule}
           handleOpen={handleOpen}
+          setCurrentOrder={setCurrentOrder}
         />
       </Grid>
     ));
@@ -285,6 +299,32 @@ function Shedule({ showLoading, hideLoading, userState }) {
   };
 
   useEffect(() => {
+    const loadUnassignStaff = async () => {
+      try {
+        showLoading();
+        let listUserNotAssigned = await getListUser(
+          "",
+          1,
+          -1,
+          userState.idToken,
+          0
+          // "Staff Delivery",
+          // currentOrder.id
+        );
+        setListShowStaffUnAssigned(listUserNotAssigned.data.data);
+        setListStaffUnAssigned(listUserNotAssigned.data.data);
+        setListStaffAssigned(currentOrder.listStaffDelivery ?? []);
+        setListShowStaffAssigned(currentOrder.listStaffDelivery ?? []);
+      } catch (e) {
+        console.log(e.response);
+      } finally {
+        hideLoading();
+      }
+    };
+    loadUnassignStaff();
+  }, [open]);
+
+  useEffect(() => {
     const getData = async (dateStart, dateEnd) => {
       try {
         showLoading();
@@ -304,6 +344,19 @@ function Shedule({ showLoading, hideLoading, userState }) {
       }
     };
 
+    const getScheduleEffect = async (dateStart, dateEnd) => {
+      try {
+        showLoading();
+        let response = await getSchedule(dateStart, dateEnd, userState.idToken);
+
+        return response.data.data;
+      } catch (e) {
+        console.log(e.response);
+      } finally {
+        hideLoading();
+      }
+    };
+
     const firstCall = async () => {
       try {
         let startOfWeek = moment().startOf("week").toDate();
@@ -313,6 +366,11 @@ function Shedule({ showLoading, hideLoading, userState }) {
           startOfWeek.toISOString().split("T")[0],
           endOfWeek.toISOString().split("T")[0]
         );
+        let responseSchedule = await getScheduleEffect(
+          startOfWeek.toISOString().split("T")[0],
+          endOfWeek.toISOString().split("T")[0]
+        );
+        console.log(responseSchedule);
         let result = [];
         response
           ?.filter((e) => e.status !== 0)
@@ -359,12 +417,16 @@ function Shedule({ showLoading, hideLoading, userState }) {
     >
       {buildModalListOrder()}
       <OrderAssignModal
+        currentOrder={currentOrder}
         handleClose={handleClose}
         open={open}
+        currentListSchedule={currentListSchedule}
         removeAssignStaff={removeAssignStaff}
         addAssignStaff={addAssignStaff}
         handleChangeSearchAssigned={handleChangeSearchAssigned}
         handleChangeSearchUnAssigned={handleChangeSearchUnAssigned}
+        listStaffAssigned={listStaffAssigned}
+        listStaffUnAssigned={listStaffUnAssigned}
         listShowStaffAssigned={listShowStaffAssigned}
         listShowStaffUnAssigned={listShowStaffUnAssigned}
       />

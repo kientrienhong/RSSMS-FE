@@ -1,6 +1,14 @@
 import axios from "axios";
 
-export const getListUser = async (name, page, size, token, storageId) => {
+export const getListUser = async (
+  name,
+  page,
+  size,
+  token,
+  storageId,
+  roleName,
+  orderId
+) => {
   let listUser;
   if (storageId !== undefined) {
     listUser = await axios.get(
@@ -378,6 +386,40 @@ export const getOrder = async (id, page, size, dateStart, dateEnd, token) => {
     );
   }
 
+  return response;
+};
+
+export const getSchedule = async (dateStart, dateEnd, token) => {
+  let response = await axios.get(
+    `https://localhost:44304/api/v1/schedules?DateFrom=${dateStart}&DateTo=${dateEnd}&page=1&size=-1`,
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+  return response;
+};
+
+export const assignSchedule = async (
+  orderId,
+  scheduleDay,
+  deliveryTime,
+  userIds,
+  token
+) => {
+  console.log({
+    orderId: orderId,
+    sheduleDay: scheduleDay,
+    deliveryTime: deliveryTime,
+    userIds: userIds,
+  });
+  let response = await axios.post(
+    `https://localhost:44304/api/v1/schedules`,
+    {
+      orderId: orderId,
+      sheduleDay: scheduleDay,
+      deliveryTime: deliveryTime,
+      userIds: userIds,
+    },
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
   return response;
 };
 

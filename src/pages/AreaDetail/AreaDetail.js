@@ -28,20 +28,7 @@ import SheflModal from "./components/SheflModal";
 import ProductButton from "../Order/CreateOrder/components/ProductButton";
 import { TYPE_STORAGE, TYPE_SHELF } from "../../constant/constant";
 import SelfStorageModal from "./components/SelfStorageModal";
-const listHandy = [
-  { name: "Bolo", usage: 100 },
-  { name: "Size S", usage: 100 },
-  { name: "Size M", usage: 100 },
-  { name: "Size L", usage: 100 },
-  { name: "Size XL", usage: 100 },
-];
 
-const listUnwieldy = [
-  { name: "0.5m2", usage: 100 },
-  { name: "1m2", usage: 100 },
-  { name: "2m2", usage: 100 },
-  { name: "3m2", usage: 100 },
-];
 function AreaDetail(props) {
   const { storageId, areaId } = useParams();
   const [storage, setStorage] = useState({});
@@ -129,6 +116,7 @@ function AreaDetail(props) {
           parseInt(storageId),
           userState.idToken
         );
+
         setStorage(storageTemp.data);
         let response = await getListShelves(
           searchName,

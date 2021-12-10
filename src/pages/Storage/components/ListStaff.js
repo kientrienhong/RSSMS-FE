@@ -32,7 +32,7 @@ export default function ListStaff({
     return (
       <Box
         sx={{
-          width: "350px",
+          width: "48%",
           display: "flex",
           flexDirection: "column",
           justifiedContent: "flex-start",
@@ -41,7 +41,7 @@ export default function ListStaff({
         <Typography
           color="black"
           variant="h2"
-          style={{ marginTop: "2%", textAlign: "left", marginLeft: "2.5%" }}
+          style={{ marginTop: "2%", textAlign: "left" }}
         >
           {name}({listStaff.length})
         </Typography>

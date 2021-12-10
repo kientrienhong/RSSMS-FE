@@ -3,6 +3,8 @@ import { STYLE_MODAL } from "../../../constant/style";
 import ListStaff from "../../Storage/components/ListStaff";
 import { Box, Modal, Button } from "@material-ui/core";
 import { connect } from "react-redux";
+import { assignSchedule } from "../../../apis/Apis";
+
 import * as action from "../../../redux/action/action";
 const styleModal = STYLE_MODAL;
 
@@ -15,8 +17,50 @@ function OrderAssignModal({
   handleChangeSearchUnAssigned,
   listShowStaffAssigned,
   listShowStaffUnAssigned,
+  listStaffUnAssigned,
+  listStaffAssigned,
   showSnackbar,
+  showLoading,
+  hideLoading,
+  currentOrder,
+  currentListSchedule,
+  userState,
 }) {
+  const assignOrder = async () => {
+    try {
+      showLoading();
+      let dateStart = new Date(currentListSchedule.StartTime);
+      let dateEnd = new Date(currentListSchedule.EndTime);
+      let dateSchedule = dateStart.toISOString().split("T")[0];
+      dateStart = dateStart.toLocaleString("en-US", {
+        hour: "numeric",
+        hour12: true,
+      });
+      dateEnd = dateEnd.toLocaleString("en-US", {
+        hour: "numeric",
+        hour12: true,
+      });
+      dateStart = dateStart.split(" ").join("").toLowerCase();
+      dateEnd = dateEnd.split(" ").join("").toLowerCase();
+      let deliveryTime = `${dateStart} - ${dateEnd}`;
+      let userIds = listStaffAssigned.map((e) => e.id);
+      let response = await assignSchedule(
+        currentOrder.id,
+        dateSchedule,
+        deliveryTime,
+        userIds,
+        userState.idToken
+      );
+
+      handleClose();
+      showSnackbar("success", "Assign delivery staff success");
+    } catch (e) {
+      console.log(e.response);
+    } finally {
+      hideLoading();
+    }
+  };
+
   return (
     <Modal
       open={open}
@@ -81,10 +125,7 @@ function OrderAssignModal({
               paddingRight: "16px",
               marginTop: "4%",
             }}
-            onClick={() => {
-              handleClose();
-              showSnackbar("success", "Assign delivery staff success");
-            }}
+            onClick={assignOrder}
             color="primary"
             variant="contained"
           >
@@ -96,6 +137,10 @@ function OrderAssignModal({
   );
 }
 
+const mapStateToProps = (state) => ({
+  userState: state.information.user,
+});
+
 const mapDispatchToProps = (dispatch) => {
   return {
     showLoading: () => dispatch(action.showLoader()),
@@ -104,4 +149,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(OrderAssignModal);
+export default connect(mapStateToProps, mapDispatchToProps)(OrderAssignModal);

@@ -1,15 +1,15 @@
 import React from "react";
 import { Box, Typography } from "@material-ui/core";
 import { ORDER_STATUS } from "../../../constant/constant";
-export default function Order({ order, handleOpen, setCurrentListSchedule }) {
+import CustomAvatar from "../../../components/CustomAvatar";
+export default function Order({
+  order,
+  handleOpen,
+  setCurrentListSchedule,
+  setCurrentOrder,
+}) {
   const dateStart = new Date(order.StartTime);
   const dateEnd = new Date(order.EndTime);
-  const statusOrder = {
-    0: "Delivery",
-    1: "Complete",
-  };
-
-  const listStaff = ["/avatar.png", "/avatar2.png", "/avatar3.png"];
 
   const formatTime = (date) => {
     let d = new Date(date);
@@ -29,6 +29,24 @@ export default function Order({ order, handleOpen, setCurrentListSchedule }) {
     return h + ":" + m;
   };
 
+  const buildListAvatar = () => {
+    if (order?.order?.listStaffDelivery) {
+      return order.order.listStaffDelivery.map((e, index) => (
+        // <CustomAvatar
+        //   style={{
+        //     width: "24px",
+        //     height: "24px",
+        //     borderRadius: "12px",
+        //     marginLeft: index === 0 ? "0px" : "-8px",
+        //   }}
+        //   url={e.images[0].url}
+        //   alt={e}
+        // />
+        <p>{e.name}</p>
+      ));
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -37,6 +55,7 @@ export default function Order({ order, handleOpen, setCurrentListSchedule }) {
         padding: "4%",
       }}
       onClick={() => {
+        setCurrentOrder(order.order);
         setCurrentListSchedule(order);
         handleOpen();
       }}
@@ -60,6 +79,13 @@ export default function Order({ order, handleOpen, setCurrentListSchedule }) {
           <Typography color="black" variant="h2">
             #{order?.order?.id}
           </Typography>
+        </Box>
+        <Box
+          sx={{
+            width: "70%",
+          }}
+        >
+          {buildListAvatar()}
         </Box>
       </Box>
       <Box

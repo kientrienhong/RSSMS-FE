@@ -39,7 +39,7 @@ import { STYLE_MODAL } from "../../constant/style";
 let inputFile;
 const styleModal = {
   ...STYLE_MODAL,
-  width: "50%",
+  width: "70%",
 };
 
 const styleBoxInput = {
@@ -65,7 +65,7 @@ const buildInputFileImage = (storage) => {
       sx={{
         marginTop: "16px",
         height: "400px",
-        width: "310px",
+        width: "50%",
         position: "relative",
         border: "solid 1px #000",
       }}
@@ -85,7 +85,7 @@ const buildInputFileImage = (storage) => {
         />
       ) : (
         <img
-          style={{ height: "400px", width: "310px" }}
+          style={{ height: "400px", width: "100%" }}
           src={storage.images[0].url}
           alt="avatar"
         />
@@ -550,7 +550,12 @@ function Storages(props) {
   ) => {
     const typeList = ["Self-Storage", "Door-to-door"];
     return (
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        style={{
+          marginLeft: "5%",
+        }}
+      >
         <input
           type="file"
           id="file"
@@ -595,7 +600,7 @@ function Storages(props) {
         <Typography
           color="black"
           variant="h2"
-          style={{ marginTop: "8%", marginLeft: "3%" }}
+          style={{ marginTop: "8%", marginLeft: "3%", marginBottom: "2%" }}
         >
           Storage Size Detail
         </Typography>
@@ -699,7 +704,7 @@ function Storages(props) {
         <Box
           sx={{
             width: "200px",
-            margin: "2% auto",
+            margin: "1% auto",
             display: "flex",
             marginTop: "6%",
             flexDirection: "row",
