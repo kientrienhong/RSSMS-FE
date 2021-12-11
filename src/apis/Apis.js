@@ -381,9 +381,6 @@ export const createOrder = async (order, token) => {
 };
 
 export const getOrder = async (id, page, size, dateStart, dateEnd, token) => {
-  console.log("----------------------------------");
-  console.log(dateStart);
-  console.log(dateEnd);
   let response;
   if (dateStart !== undefined && dateEnd !== undefined) {
     response = await axios.get(
@@ -401,9 +398,6 @@ export const getOrder = async (id, page, size, dateStart, dateEnd, token) => {
 };
 
 export const getSchedule = async (dateStart, dateEnd, token) => {
-  console.log("+++++++++++++++++++++++++");
-  console.log(dateStart);
-  console.log(dateEnd);
   let response = await axios.get(
     `https://localhost:44304/api/v1/schedules?DateFrom=${dateStart}&DateTo=${dateEnd}&page=1&size=-1`,
     { headers: { Authorization: `Bearer ${token}` } }
