@@ -10,16 +10,24 @@ export const getListUser = async (
   orderId
 ) => {
   let listUser;
+
   if (storageId !== undefined) {
     listUser = await axios.get(
       `https://localhost:44304/api/v1/users?storageId=${storageId}&Name=${name}&page=${page}&size=${size}`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
   } else {
-    listUser = await axios.get(
-      `https://localhost:44304/api/v1/users?Name=${name}&page=${page}&size=${size}`,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+    if (roleName !== undefined && orderId !== undefined) {
+      listUser = await axios.get(
+        `https://localhost:44304/api/v1/users?RoleName=${roleName}&orderId=${orderId}&page=${page}&size=${size}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+    } else {
+      listUser = await axios.get(
+        `https://localhost:44304/api/v1/users?Name=${name}&page=${page}&size=${size}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+    }
   }
 
   return listUser;
@@ -373,6 +381,9 @@ export const createOrder = async (order, token) => {
 };
 
 export const getOrder = async (id, page, size, dateStart, dateEnd, token) => {
+  console.log("----------------------------------");
+  console.log(dateStart);
+  console.log(dateEnd);
   let response;
   if (dateStart !== undefined && dateEnd !== undefined) {
     response = await axios.get(
@@ -390,6 +401,9 @@ export const getOrder = async (id, page, size, dateStart, dateEnd, token) => {
 };
 
 export const getSchedule = async (dateStart, dateEnd, token) => {
+  console.log("+++++++++++++++++++++++++");
+  console.log(dateStart);
+  console.log(dateEnd);
   let response = await axios.get(
     `https://localhost:44304/api/v1/schedules?DateFrom=${dateStart}&DateTo=${dateEnd}&page=1&size=-1`,
     { headers: { Authorization: `Bearer ${token}` } }

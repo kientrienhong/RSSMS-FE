@@ -39,6 +39,8 @@ function Shedule({ showLoading, hideLoading, userState }) {
   const [currentListSchedule, setCurrentListSchedule] = React.useState({});
   const [currentOrder, setCurrentOrder] = React.useState({});
   const [listStaffAssigned, setListStaffAssigned] = React.useState([]);
+  const [startOfWeek, setStartOfWeek] = React.useState();
+  const [endOfWeek, setEndOfWeek] = React.useState();
 
   const [listStaffUnAssigned, setListStaffUnAssigned] = React.useState([]);
 
@@ -122,11 +124,6 @@ function Shedule({ showLoading, hideLoading, userState }) {
   const getData = async (startOfWeek, endOfWeek) => {
     try {
       showLoading();
-      let responseSchedule = await getSchedule(
-        startOfWeek.toISOString().split("T")[0],
-        endOfWeek.toISOString().split("T")[0],
-        userState.idToken
-      );
 
       let response = await getOrder(
         "",
@@ -151,22 +148,34 @@ function Shedule({ showLoading, hideLoading, userState }) {
             handleFormatDate(dateDelivery, result, e, "deliveryTime");
           }
         });
-      if (responseSchedule.data.data) {
-        responseSchedule.data.data.forEach((schedule) => {
-          result.forEach((e) => {
-            let index = e.ListOrder.findIndex(
-              (ele) => ele.id === schedule.orderId
-            );
-            e.ListOrder[index] = {
-              ...e.ListOrder[index],
-              listStaffDelivery: schedule.users,
-            };
-          });
-        });
-      }
       setListSchedule(result);
+
+      try {
+        let responseSchedule = await getSchedule(
+          startOfWeek.toISOString().split("T")[0],
+          endOfWeek.toISOString().split("T")[0],
+          userState.idToken
+        );
+
+        if (responseSchedule.data.data) {
+          responseSchedule.data.data.forEach((schedule) => {
+            result.forEach((e) => {
+              let index = e.ListOrder.findIndex(
+                (ele) => ele.id === schedule.orderId
+              );
+              e.ListOrder[index] = {
+                ...e.ListOrder[index],
+                listStaffDelivery: schedule.users,
+              };
+            });
+          });
+          setListSchedule(result);
+        }
+      } catch (exception) {
+        console.log(exception.response);
+      }
     } catch (e) {
-      console.log(e);
+      console.log(e.response);
     } finally {
       hideLoading();
     }
@@ -243,14 +252,12 @@ function Shedule({ showLoading, hideLoading, userState }) {
   );
 
   const onNavigatingEvent = async (navigatingEventArgs) => {
-    if (
-      navigatingEventArgs.name !== "navigating" ||
-      navigatingEventArgs.previousDate === navigatingEventArgs.currentDate
-    ) {
-      return;
-    }
     let curr = new Date(navigatingEventArgs.currentDate);
-    curr.setDate(curr.getDate() + 2);
+    if (curr.getDate() === 6) {
+      curr.setDate(curr.getDate() - 2);
+    } else if (curr.getDate() === 0) {
+      curr.setDate(curr.getDate() + 2);
+    }
     curr = curr.toISOString().split("T")[0]; // get current date
     let dateSplit = curr.split("-");
     let currentMoment = moment().set({
@@ -258,9 +265,12 @@ function Shedule({ showLoading, hideLoading, userState }) {
       month: parseInt(dateSplit[1]) - 1,
       date: parseInt(dateSplit[2]),
     });
-    let startOfWeek = currentMoment.startOf("week").toDate();
-    let endOfWeek = currentMoment.endOf("week").toDate();
-    await getData(startOfWeek, endOfWeek);
+    let startOfWeekLocal = currentMoment.startOf("week").toDate();
+    let endOfWeekLocal = currentMoment.endOf("week").toDate();
+
+    setStartOfWeek(currentMoment.startOf("week").toDate());
+    setEndOfWeek(currentMoment.endOf("week").toDate());
+    await getData(startOfWeekLocal, endOfWeekLocal);
   };
   const handleFormatDate = (date, result, order, value) => {
     let time = order[value].split("-");
@@ -305,8 +315,8 @@ function Shedule({ showLoading, hideLoading, userState }) {
           1,
           -1,
           userState.idToken,
-          0,
-          "Staff Delivery",
+          undefined,
+          "Delivery Staff",
           currentOrder.id
         );
         setListShowStaffUnAssigned(listUserNotAssigned.data.data);
@@ -334,6 +344,7 @@ function Shedule({ showLoading, hideLoading, userState }) {
           dateEnd,
           userState.idToken
         );
+
         return response.data.data;
       } catch (e) {
         console.log(e.response);
@@ -360,16 +371,12 @@ function Shedule({ showLoading, hideLoading, userState }) {
         let startOfWeek = moment().startOf("week").toDate();
         let endOfWeek = moment().endOf("week").toDate();
         showLoading();
+        let result = [];
+
         let response = await getData(
           startOfWeek.toISOString().split("T")[0],
           endOfWeek.toISOString().split("T")[0]
         );
-        let responseSchedule = await getScheduleEffect(
-          startOfWeek.toISOString().split("T")[0],
-          endOfWeek.toISOString().split("T")[0]
-        );
-        console.log(responseSchedule);
-        let result = [];
         response
           ?.filter((e) => e.status !== 0)
           ?.forEach((e) => {
@@ -385,6 +392,31 @@ function Shedule({ showLoading, hideLoading, userState }) {
             }
           });
         setListSchedule(result);
+
+        try {
+          let responseSchedule = await getScheduleEffect(
+            startOfWeek.toISOString().split("T")[0],
+            endOfWeek.toISOString().split("T")[0],
+            userState.idToken
+          );
+
+          if (responseSchedule.data.data) {
+            responseSchedule.data.data.forEach((schedule) => {
+              result.forEach((e) => {
+                let index = e.ListOrder.findIndex(
+                  (ele) => ele.id === schedule.orderId
+                );
+                e.ListOrder[index] = {
+                  ...e.ListOrder[index],
+                  listStaffDelivery: schedule.users,
+                };
+              });
+            });
+            setListSchedule(result);
+          }
+        } catch (exception) {
+          console.log(exception.response);
+        }
       } catch (error) {
         console.log(error);
       } finally {
@@ -426,6 +458,9 @@ function Shedule({ showLoading, hideLoading, userState }) {
         listStaffUnAssigned={listStaffUnAssigned}
         listShowStaffAssigned={listShowStaffAssigned}
         listShowStaffUnAssigned={listShowStaffUnAssigned}
+        getData={getData}
+        startOfWeek={startOfWeek}
+        endOfWeek={endOfWeek}
       />
       <ViewsDirective>
         <ViewDirective option="Day"></ViewDirective>

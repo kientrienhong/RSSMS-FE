@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography } from "@material-ui/core";
+import { Avatar, Box, Typography } from "@material-ui/core";
 import { ORDER_STATUS } from "../../../constant/constant";
 import CustomAvatar from "../../../components/CustomAvatar";
 export default function Order({
@@ -32,17 +32,15 @@ export default function Order({
   const buildListAvatar = () => {
     if (order?.order?.listStaffDelivery) {
       return order.order.listStaffDelivery.map((e, index) => (
-        // <CustomAvatar
-        //   style={{
-        //     width: "24px",
-        //     height: "24px",
-        //     borderRadius: "12px",
-        //     marginLeft: index === 0 ? "0px" : "-8px",
-        //   }}
-        //   url={e.images[0].url}
-        //   alt={e}
-        // />
-        <p>{e.name}</p>
+        <Avatar
+          sx={{
+            width: 28,
+            height: 28,
+            marginLeft: index === 0 ? "0px" : "-8px",
+          }}
+          src={e?.images[0]?.url}
+          alt={e}
+        />
       ));
     }
   };
@@ -83,6 +81,9 @@ export default function Order({
         <Box
           sx={{
             width: "70%",
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "flex-end",
           }}
         >
           {buildListAvatar()}
