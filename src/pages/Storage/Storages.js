@@ -132,6 +132,8 @@ function Storages(props) {
 
   const handleCloseAssignStaff = () => {
     setOpenAssignStaff(false);
+    setStorage({ avatarFile: undefined, images: [{ id: null, url: null }] });
+    reset();
   };
 
   const handleOpenAssignStaff = () => {
@@ -242,6 +244,12 @@ function Storages(props) {
         } finally {
           hideLoading();
         }
+      } else {
+        setStorage({
+          avatarFile: undefined,
+          images: [{ id: null, url: null }],
+        });
+        reset();
       }
     };
     reset();

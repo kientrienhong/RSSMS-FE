@@ -24,6 +24,7 @@ function Storage({
   setUpCurrentStorage,
   showSnackbar,
   handleOpenAssignStaff,
+  userState,
 }) {
   const navigate = useNavigate();
 
@@ -152,25 +153,29 @@ function Storage({
               Edit
             </Button>
           </Grid>
-          <Grid item xs={6}>
-            <Button
-              style={{
-                height: "45px",
-                paddingLeft: "16px",
-                paddingRight: "16px",
-                marginRight: "2%",
-                width: "100%",
-              }}
-              color="error"
-              variant="contained"
-              onClick={() => {
-                setCurrentId(storage.id);
-                handleConfirmOpen();
-              }}
-            >
-              Delete
-            </Button>
-          </Grid>
+          {userState.roleName === "Manager" ? (
+            <></>
+          ) : (
+            <Grid item xs={6}>
+              <Button
+                style={{
+                  height: "45px",
+                  paddingLeft: "16px",
+                  paddingRight: "16px",
+                  marginRight: "2%",
+                  width: "100%",
+                }}
+                color="error"
+                variant="contained"
+                onClick={() => {
+                  setCurrentId(storage.id);
+                  handleConfirmOpen();
+                }}
+              >
+                Delete
+              </Button>
+            </Grid>
+          )}
 
           <Grid item xs={6}>
             <Button
@@ -218,6 +223,7 @@ function Storage({
 }
 const mapStateToProps = (state) => ({
   placingProducts: state.order.placingProducts,
+  userState: state.information.user,
 });
 
 const mapDispatchToProps = (dispatch) => {

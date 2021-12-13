@@ -24,6 +24,7 @@ function OrderAssignModal({
   currentOrder,
   currentListSchedule,
   userState,
+  setCurrentListSchedule,
   getData,
   startOfWeek,
   endOfWeek,
@@ -44,15 +45,22 @@ function OrderAssignModal({
       });
       dateStart = dateStart.split(" ").join("").toLowerCase();
       dateEnd = dateEnd.split(" ").join("").toLowerCase();
-      let deliveryTime = `${dateStart} - ${dateEnd}`;
-      let userIds = listStaffAssigned.map((e) => e.id);
-      await assignSchedule(
+      const deliveryTime = `${dateStart} - ${dateEnd}`;
+      const userIds = listStaffAssigned.map((e) => e.id);
+      const response = await assignSchedule(
         currentOrder.id,
         dateSchedule,
         deliveryTime,
         userIds,
         userState.idToken
       );
+      const currentListScheduleTemp = { ...currentListSchedule };
+      const indexFound = currentListScheduleTemp.ListOrder.findIndex(
+        (e) => e.id === currentOrder.id
+      );
+      currentListScheduleTemp.ListOrder[indexFound].listStaffDelivery =
+        response.data[0].users;
+      setCurrentListSchedule(currentListScheduleTemp);
       await getData(startOfWeek, endOfWeek);
       handleClose();
       showSnackbar("success", "Assign delivery staff success");
@@ -111,29 +119,33 @@ function OrderAssignModal({
             onHandleSearch={handleChangeSearchUnAssigned}
           />
         </Box>
-        <Box
-          sx={{
-            width: "100%",
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-            marginTop: "16px",
-          }}
-        >
-          <Button
-            style={{
-              height: "45px",
-              paddingLeft: "16px",
-              paddingRight: "16px",
-              marginTop: "4%",
+        {currentOrder.status === 2 ? (
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              marginTop: "16px",
             }}
-            onClick={assignOrder}
-            color="primary"
-            variant="contained"
           >
-            Submit
-          </Button>
-        </Box>
+            <Button
+              style={{
+                height: "45px",
+                paddingLeft: "16px",
+                paddingRight: "16px",
+                marginTop: "4%",
+              }}
+              onClick={assignOrder}
+              color="primary"
+              variant="contained"
+            >
+              Submit
+            </Button>
+          </Box>
+        ) : (
+          <></>
+        )}
       </Box>
     </Modal>
   );

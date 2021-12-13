@@ -380,13 +380,28 @@ export const createOrder = async (order, token) => {
   return response;
 };
 
-export const getOrder = async (id, page, size, dateStart, dateEnd, token) => {
+export const getOrder = async (
+  id,
+  page,
+  size,
+  dateStart,
+  dateEnd,
+  token,
+  listFilterOrder
+) => {
   let response;
   if (dateStart !== undefined && dateEnd !== undefined) {
-    response = await axios.get(
-      `https://localhost:44304/api/v1/orders?dateFrom=${dateStart}&dateTo=${dateEnd}&page=1&size=-1`,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+    if (listFilterOrder === undefined) {
+      response = await axios.get(
+        `https://localhost:44304/api/v1/orders?dateFrom=${dateStart}&dateTo=${dateEnd}&page=1&size=-1`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+    } else {
+      response = await axios.get(
+        `https://localhost:44304/api/v1/orders?${listFilterOrder}&dateFrom=${dateStart}&dateTo=${dateEnd}&page=1&size=-1`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+    }
   } else {
     response = await axios.get(
       `https://localhost:44304/api/v1/orders?Id=${id}&page=${page}&size=${size}`,

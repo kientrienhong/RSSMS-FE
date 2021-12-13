@@ -131,7 +131,8 @@ function Shedule({ showLoading, hideLoading, userState }) {
         "",
         startOfWeek.toISOString().split("T")[0],
         endOfWeek.toISOString().split("T")[0],
-        userState.idToken
+        userState.idToken,
+        "OrderStatuses=2&OrderStatuses=3&OrderStatuses=4"
       );
       let result = [];
       response?.data?.data
@@ -169,13 +170,14 @@ function Shedule({ showLoading, hideLoading, userState }) {
               };
             });
           });
+          console.log(result);
           setListSchedule(result);
         }
       } catch (exception) {
         console.log(exception.response);
       }
     } catch (e) {
-      console.log(e.response);
+      console.log(e);
     } finally {
       hideLoading();
     }
@@ -319,12 +321,25 @@ function Shedule({ showLoading, hideLoading, userState }) {
           "Delivery Staff",
           currentOrder.id
         );
-        setListShowStaffUnAssigned(listUserNotAssigned.data.data);
-        setListStaffUnAssigned(listUserNotAssigned.data.data);
+        setListShowStaffUnAssigned(
+          listUserNotAssigned.data.data.length === 0
+            ? []
+            : listUserNotAssigned.data.data
+        );
+        setListStaffUnAssigned(
+          listUserNotAssigned.data.data.length === 0
+            ? []
+            : listUserNotAssigned.data.data
+        );
         setListStaffAssigned(currentOrder.listStaffDelivery ?? []);
         setListShowStaffAssigned(currentOrder.listStaffDelivery ?? []);
       } catch (e) {
+        console.log(e);
         console.log(e.response);
+        setListShowStaffUnAssigned([]);
+        setListStaffUnAssigned([]);
+        setListStaffAssigned(currentOrder.listStaffDelivery ?? []);
+        setListShowStaffAssigned(currentOrder.listStaffDelivery ?? []);
       } finally {
         hideLoading();
       }
@@ -342,7 +357,8 @@ function Shedule({ showLoading, hideLoading, userState }) {
           "",
           dateStart,
           dateEnd,
-          userState.idToken
+          userState.idToken,
+          "OrderStatuses=2&OrderStatuses=3&OrderStatuses=4"
         );
 
         return response.data.data;
@@ -370,6 +386,8 @@ function Shedule({ showLoading, hideLoading, userState }) {
       try {
         let startOfWeek = moment().startOf("week").toDate();
         let endOfWeek = moment().endOf("week").toDate();
+        setStartOfWeek(startOfWeek);
+        setEndOfWeek(endOfWeek);
         showLoading();
         let result = [];
 
@@ -391,7 +409,6 @@ function Shedule({ showLoading, hideLoading, userState }) {
               handleFormatDate(dateDelivery, result, e, "deliveryTime");
             }
           });
-        setListSchedule(result);
 
         try {
           let responseSchedule = await getScheduleEffect(
@@ -412,11 +429,11 @@ function Shedule({ showLoading, hideLoading, userState }) {
                 };
               });
             });
-            setListSchedule(result);
           }
         } catch (exception) {
           console.log(exception.response);
         }
+        setListSchedule(result);
       } catch (error) {
         console.log(error);
       } finally {
@@ -461,6 +478,7 @@ function Shedule({ showLoading, hideLoading, userState }) {
         getData={getData}
         startOfWeek={startOfWeek}
         endOfWeek={endOfWeek}
+        setCurrentListSchedule={setCurrentListSchedule}
       />
       <ViewsDirective>
         <ViewDirective option="Day"></ViewDirective>
