@@ -69,9 +69,28 @@ export default function RowStaff({
         <Box
           sx={{
             width: "40%",
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
           }}
         >
-          <p color="primary">{staff.name}</p>
+          <p
+            color="primary"
+            style={{
+              marginRight: "8px",
+            }}
+          >
+            {staff.name}
+          </p>
+          <img
+            src="/img/info.png"
+            alt="edit"
+            style={{
+              cursor: "pointer",
+              width: "18px",
+              height: "18px",
+            }}
+          />
         </Box>
       </HtmlTooltip>
       <Box
