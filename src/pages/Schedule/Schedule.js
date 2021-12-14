@@ -306,6 +306,12 @@ function Shedule({ showLoading, hideLoading, userState }) {
       return;
     }
 
+    if (value === "returnTime") {
+      order = { ...order, isDelivery: false };
+    } else {
+      order = { ...order, isDelivery: true };
+    }
+
     let time = order[value].split("-");
     let currentScheduleStartDateTime = new Date(
       date.getTime() + getTimeStart(time[0]) * 3600000

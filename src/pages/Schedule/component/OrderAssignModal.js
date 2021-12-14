@@ -1,7 +1,7 @@
 import React from "react";
 import { STYLE_MODAL } from "../../../constant/style";
 import ListStaff from "../../Storage/components/ListStaff";
-import { Box, Modal, Button } from "@material-ui/core";
+import { Box, Modal, Button, Typography } from "@material-ui/core";
 import { connect } from "react-redux";
 import { assignSchedule } from "../../../apis/Apis";
 
@@ -71,6 +71,32 @@ function OrderAssignModal({
     }
   };
 
+  const buildInfoValue = (title, value) => {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          width: "100%",
+          margin: 0,
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Typography color="black" variant="h3">
+          {title}
+        </Typography>
+        <p
+          style={{
+            textAlign: "right",
+          }}
+        >
+          {value}
+        </p>
+      </Box>
+    );
+  };
+
   return (
     <Modal
       open={open}
@@ -78,11 +104,10 @@ function OrderAssignModal({
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
       style={{
-        zIndex: "99999999999 !important",
-
-        width: "70%",
+        height: "50%",
+        width: "86%",
       }}
-      sx={{ left: "16%", zIndex: "99999999999 !important" }}
+      sx={{ left: "7%", top: "25%", zIndex: "9999999 !important" }}
     >
       <Box
         sx={{
@@ -97,9 +122,42 @@ function OrderAssignModal({
           sx={{
             display: "flex",
             flexDirection: "row",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              width: "48%",
+              marginRight: "2%",
+            }}
+          >
+            {buildInfoValue("Order Id: ", `#${currentOrder?.id}`)}
+            {buildInfoValue("Customer name: ", currentOrder?.customerName)}
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              width: "48%",
+            }}
+          >
+            {buildInfoValue("Customer phone: ", currentOrder?.customerPhone)}
+            {currentOrder.isDelivery === true
+              ? buildInfoValue(
+                  "Delivery return: ",
+                  currentOrder?.addressDelivery
+                )
+              : buildInfoValue("Address return: ", currentOrder?.addressReturn)}
+          </Box>
+        </Box>
+
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
             justifyContent: "space-between",
             width: "100%",
-            marginTop: "3%",
           }}
         >
           <ListStaff

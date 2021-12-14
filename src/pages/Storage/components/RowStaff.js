@@ -10,6 +10,7 @@ const HtmlTooltip = styled(({ className, ...props }) => (
     backgroundColor: "#f5f5f9",
     color: "rgba(0, 0, 0, 0.87)",
     maxWidth: 220,
+    zIndex: "99999999999999999999 !important",
     fontSize: theme.typography.pxToRem(12),
     border: "1px solid #dadde9",
   },
@@ -23,7 +24,6 @@ export default function RowStaff({
 }) {
   const style = {
     marginLeft: "16px",
-    cursor: "pointer",
   };
 
   return (

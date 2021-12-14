@@ -117,11 +117,8 @@ function OrderAssignTimeModal({
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
       style={{
-        zIndex: "99999999999 !important",
-
         width: "40%",
       }}
-      sx={{ left: "30%", zIndex: "99999999999 !important" }}
     >
       <Box
         sx={{
