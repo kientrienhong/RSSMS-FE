@@ -1,7 +1,6 @@
 import React from "react";
 import { Avatar, Box, Typography } from "@material-ui/core";
 import { ORDER_STATUS } from "../../../constant/constant";
-import CustomAvatar from "../../../components/CustomAvatar";
 export default function Order({
   order,
   handleOpen,

@@ -131,6 +131,7 @@
 }
 
 .schedule__order__footer__status {
+  text-align: right;
   width: 30%;
   font-size: 17px !important;
   font-weight: bold;

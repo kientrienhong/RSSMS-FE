@@ -8,9 +8,12 @@ import {
   ViewsDirective,
   Agenda,
 } from "@syncfusion/ej2-react-schedule";
-import { Grid, Box, Button, Typography, Modal } from "@material-ui/core";
+import { Grid, Box, Typography, Modal } from "@material-ui/core";
 import Order from "./component/Order";
 import OrderAssignModal from "./component/OrderAssignModal";
+import OrderAssignTimeModal from "./component/OrderAssignTimeModal";
+
+import OrderReturnDate from "./component/OrderReturnDate";
 import { connect } from "react-redux";
 import * as action from "../../redux/action/action";
 import { getOrder, getListUser, getSchedule } from "../../apis/Apis";
@@ -21,7 +24,6 @@ import {
   getTimeStart,
   getTimeEnd,
 } from "../../utils/DateUtils";
-import { ORDER_STATUS } from "../../constant/constant";
 import { STYLE_MODAL } from "../../constant/style";
 
 const styleModal = {
@@ -34,6 +36,8 @@ function Shedule({ showLoading, hideLoading, userState }) {
   const [listShowStaffUnAssigned, setListShowStaffUnAssigned] = React.useState(
     []
   );
+  const [currentOrderNotAssignReturnTime, setCurrentOrderNotAssignReturnTime] =
+    React.useState();
   const [openListSchedule, setOpenListSchedule] = React.useState(false);
   const [listSchedule, setListSchedule] = React.useState([]);
   const [currentListSchedule, setCurrentListSchedule] = React.useState({});
@@ -41,10 +45,19 @@ function Shedule({ showLoading, hideLoading, userState }) {
   const [listStaffAssigned, setListStaffAssigned] = React.useState([]);
   const [startOfWeek, setStartOfWeek] = React.useState();
   const [endOfWeek, setEndOfWeek] = React.useState();
-
+  const [listOrderNotAssignedReturnTime, setListOrderNotAssignedReturnTime] =
+    React.useState([]);
   const [listStaffUnAssigned, setListStaffUnAssigned] = React.useState([]);
-
+  const [openAssignTime, setOpenAssignTime] = React.useState(false);
   const [open, setOpen] = useState(false);
+
+  const handleOpenAssignTime = () => {
+    setOpenAssignTime(true);
+  };
+
+  const handleCloseAssignTime = () => {
+    setOpenAssignTime(false);
+  };
 
   const handleOpenListSchedule = () => {
     setOpenListSchedule(true);
@@ -253,6 +266,16 @@ function Shedule({ showLoading, hideLoading, userState }) {
     </Modal>
   );
 
+  const buildModalNotAssignReturnTime = (listOrder) => {
+    return listOrder.map((e) => (
+      <OrderReturnDate
+        order={e}
+        setCurrentOrderNotAssignReturnTime={setCurrentOrderNotAssignReturnTime}
+        handleOpenAssignTime={handleOpenAssignTime}
+      />
+    ));
+  };
+
   const onNavigatingEvent = async (navigatingEventArgs) => {
     let curr = new Date(navigatingEventArgs.currentDate);
     if (curr.getDate() === 6) {
@@ -274,7 +297,15 @@ function Shedule({ showLoading, hideLoading, userState }) {
     setEndOfWeek(currentMoment.endOf("week").toDate());
     await getData(startOfWeekLocal, endOfWeekLocal);
   };
+
   const handleFormatDate = (date, result, order, value) => {
+    if (value === "returnTime" && order[value] === null) {
+      let listOrderNotAssignedTemp = [...listOrderNotAssignedReturnTime];
+      listOrderNotAssignedTemp.push(order);
+      setListOrderNotAssignedReturnTime(listOrderNotAssignedTemp);
+      return;
+    }
+
     let time = order[value].split("-");
     let currentScheduleStartDateTime = new Date(
       date.getTime() + getTimeStart(time[0]) * 3600000
@@ -447,46 +478,83 @@ function Shedule({ showLoading, hideLoading, userState }) {
   let stringToday = `${todaySplited[0]}/${todaySplited[1]}/${todaySplited[2]}`;
 
   return (
-    <ScheduleComponent
-      currentView="Week"
-      selectedDate={new Date(stringToday)}
-      eventSettings={{
-        dataSource: listSchedule,
-        template: eventTemplate.bind(this),
-      }}
-      popupOpen={onPopupOpen.bind(this)}
-      dragStart={onDragStart.bind(this)}
-      navigating={onNavigatingEvent.bind(this)}
-      allowResizing={false}
-      showQuickInfo={false}
-      openEditor={false}
-    >
-      {buildModalListOrder()}
-      <OrderAssignModal
-        currentOrder={currentOrder}
-        handleClose={handleClose}
-        open={open}
-        currentListSchedule={currentListSchedule}
-        removeAssignStaff={removeAssignStaff}
-        addAssignStaff={addAssignStaff}
-        handleChangeSearchAssigned={handleChangeSearchAssigned}
-        handleChangeSearchUnAssigned={handleChangeSearchUnAssigned}
-        listStaffAssigned={listStaffAssigned}
-        listStaffUnAssigned={listStaffUnAssigned}
-        listShowStaffAssigned={listShowStaffAssigned}
-        listShowStaffUnAssigned={listShowStaffUnAssigned}
+    <Box>
+      {listOrderNotAssignedReturnTime.length > 0 ? (
+        <Box sx={{ marginBottom: "4%" }}>
+          <Typography
+            color="black"
+            variant="h2"
+            style={{
+              marginTop: "2%",
+              marginBottom: "2%",
+              textAlign: "left",
+            }}
+          >
+            List order need to be confirmed return time
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+            }}
+          >
+            {buildModalNotAssignReturnTime(listOrderNotAssignedReturnTime)}
+          </Box>
+        </Box>
+      ) : (
+        <></>
+      )}
+      <OrderAssignTimeModal
+        open={openAssignTime}
+        handleClose={handleCloseAssignTime}
+        order={currentOrderNotAssignReturnTime}
         getData={getData}
         startOfWeek={startOfWeek}
         endOfWeek={endOfWeek}
-        setCurrentListSchedule={setCurrentListSchedule}
+        listOrderNotAssignedReturnTime={listOrderNotAssignedReturnTime}
+        setListOrderNotAssignedReturnTime={setListOrderNotAssignedReturnTime}
       />
-      <ViewsDirective>
-        <ViewDirective option="Day"></ViewDirective>
-        <ViewDirective option="Week"></ViewDirective>
-        <ViewDirective option="Agenda"></ViewDirective>
-      </ViewsDirective>
-      <Inject services={[Day, Week, Agenda]} />
-    </ScheduleComponent>
+      <ScheduleComponent
+        currentView="Week"
+        selectedDate={new Date(stringToday)}
+        eventSettings={{
+          dataSource: listSchedule,
+          template: eventTemplate.bind(this),
+        }}
+        popupOpen={onPopupOpen.bind(this)}
+        dragStart={onDragStart.bind(this)}
+        navigating={onNavigatingEvent.bind(this)}
+        allowResizing={false}
+        showQuickInfo={false}
+        openEditor={false}
+      >
+        {buildModalListOrder()}
+        <OrderAssignModal
+          currentOrder={currentOrder}
+          handleClose={handleClose}
+          open={open}
+          currentListSchedule={currentListSchedule}
+          removeAssignStaff={removeAssignStaff}
+          addAssignStaff={addAssignStaff}
+          handleChangeSearchAssigned={handleChangeSearchAssigned}
+          handleChangeSearchUnAssigned={handleChangeSearchUnAssigned}
+          listStaffAssigned={listStaffAssigned}
+          listStaffUnAssigned={listStaffUnAssigned}
+          listShowStaffAssigned={listShowStaffAssigned}
+          listShowStaffUnAssigned={listShowStaffUnAssigned}
+          getData={getData}
+          startOfWeek={startOfWeek}
+          endOfWeek={endOfWeek}
+          setCurrentListSchedule={setCurrentListSchedule}
+        />
+        <ViewsDirective>
+          <ViewDirective option="Day"></ViewDirective>
+          <ViewDirective option="Week"></ViewDirective>
+          <ViewDirective option="Agenda"></ViewDirective>
+        </ViewsDirective>
+        <Inject services={[Day, Week, Agenda]} />
+      </ScheduleComponent>
+    </Box>
   );
 }
 
