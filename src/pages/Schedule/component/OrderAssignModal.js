@@ -116,8 +116,31 @@ function OrderAssignModal({
           justifyContent: "flex-start",
           flexDirection: "column",
           width: "80%",
+          height: "90vh",
         }}
       >
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          <Typography color="black" variant="h2" sx={{ marginRight: "4%" }}>
+            Order information
+          </Typography>
+          <Button
+            style={{
+              height: "45px",
+              width: "20%",
+            }}
+            color="success"
+            variant="contained"
+          >
+            See detail orders
+          </Button>
+        </Box>
+
         <Box
           sx={{
             display: "flex",
@@ -184,7 +207,6 @@ function OrderAssignModal({
               display: "flex",
               flexDirection: "row",
               justifyContent: "center",
-              marginTop: "16px",
             }}
           >
             <Button
@@ -192,7 +214,7 @@ function OrderAssignModal({
                 height: "45px",
                 paddingLeft: "16px",
                 paddingRight: "16px",
-                marginTop: "4%",
+                marginTop: "8px",
               }}
               onClick={assignOrder}
               color="primary"

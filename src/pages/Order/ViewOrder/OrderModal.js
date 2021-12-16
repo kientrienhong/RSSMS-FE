@@ -213,6 +213,7 @@ function OrderModal({
         />
       </Grid>
     ));
+    
   const buildInformation = (title, value) => {
     return (
       <Box

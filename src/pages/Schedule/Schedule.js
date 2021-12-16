@@ -299,6 +299,8 @@ function Shedule({ showLoading, hideLoading, userState }) {
   };
 
   const handleFormatDate = (date, result, order, value) => {
+    console.log(order);
+
     if (value === "returnTime" && order[value] === null) {
       let listOrderNotAssignedTemp = [...listOrderNotAssignedReturnTime];
       listOrderNotAssignedTemp.push(order);
@@ -510,6 +512,7 @@ function Shedule({ showLoading, hideLoading, userState }) {
       ) : (
         <></>
       )}
+
       <OrderAssignTimeModal
         open={openAssignTime}
         handleClose={handleCloseAssignTime}

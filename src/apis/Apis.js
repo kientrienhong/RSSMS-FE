@@ -42,12 +42,13 @@ export const findUserByPhone = async (phone, token) => {
   return user;
 };
 
-export const login = async (email, password) => {
+export const login = async (email, password, tokenFirebase) => {
   const response = await axios.post(
     "https://localhost:44304/api/v1/users/login",
     {
       email: email,
       password: password,
+      deviceToken: tokenFirebase,
     }
   );
 

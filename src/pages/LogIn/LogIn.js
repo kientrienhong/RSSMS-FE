@@ -14,7 +14,8 @@ function LogIn(props) {
   const submitLogin = async () => {
     props.showLoading();
     try {
-      const response = await login(input.email, input.password);
+      let token = localStorage.getItem("tokenFirebase");
+      const response = await login(input.email, input.password, token);
       if (response.code === 404) {
         setValid(false);
         setErrorMsg("Invalid username or password");

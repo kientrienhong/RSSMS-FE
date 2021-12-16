@@ -10,12 +10,12 @@
 @import "../node_modules/@syncfusion/ej2-react-schedule/styles/material.css";
 @import "../node_modules/@syncfusion/ej2-react-buttons/styles/material.css";
 
-.schedule__order__header__orderId {
-  margin: 0;
-}
-
 .MuiTooltip-popper {
   z-index: 9999999 !important;
+}
+
+.schedule__order__header__orderId {
+  margin: 0;
 }
 
 .e-appointment {
@@ -148,38 +148,4 @@
 
 .schedule__order__footer__status--Complete {
   color: #00993c;
-}
-#_dialog_wrapper {
-  width: 80% !important;
-  left: 7% !important;
-}
-
-.custom_editor__assign_section {
-  display: flex;
-  width: 100%;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.custom_editor__assign_section__assigned {
-  display: flex;
-  flex-direction: column;
-  width: 45%;
-}
-
-.custom_editor__assign_section__assigned__list {
-  display: flex;
-  flex-direction: column;
-  border-style: solid;
-  border-width: 1px;
-  border-color: black;
-  height: 300px;
-}
-
-.e-dlg-header {
-  display: none !important;
-}
-
-.e-footer-content {
-  display: none !important;
 }
