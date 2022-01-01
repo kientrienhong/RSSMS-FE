@@ -108,7 +108,7 @@ function InputInforModal({
       }
       await createOrder(orderTemp, userState.idToken);
       navigate("/app/orders", { replace: true });
-      showSnackbar("success", "Create order success");
+      // showSnackbar("success", "Create order success");
     } catch (e) {
       console.log(e.response);
     } finally {

@@ -219,7 +219,6 @@ function Storages(props) {
             userState.idToken,
             0
           );
-          console.log(listUserNotAssigned);
           setListStaffUnAssigned(listUserNotAssigned.data.data);
           setListShowStaffUnAssigned(listUserNotAssigned.data.data);
         } catch (error) {

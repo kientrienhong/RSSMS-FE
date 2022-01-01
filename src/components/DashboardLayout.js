@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { styled } from "@material-ui/core/styles";
-import { Snackbar, Alert } from "@material-ui/core";
+import { Snackbar, Alert, Box, Divider, Typography } from "@material-ui/core";
 import DashboardNavbar from "./DashboardNavbar";
 import DashboardSidebar from "./DashboardSidebar";
 import LoadingPage from "../pages/Loading/LoadingPage";
@@ -40,6 +40,37 @@ const DashboardLayoutContent = styled("div")({
 
 const DashboardLayout = (props) => {
   const [isMobileNavOpen, setMobileNavOpen] = useState(false);
+  const [openNotification, setOpenNotification] = useState(false);
+  const handleOpenNotification = () => {
+    setOpenNotification(true);
+  };
+
+  const mapListNotifcation = () => {
+    if (props.notifcations.length === 0) {
+      return (
+        <Typography color="black" variant="h2" style={{ margin: "4%" }}>
+          No notifcations yets!
+        </Typography>
+      );
+    }
+
+    return props.notifcations.map((e) => {
+      return (
+        <Box
+          sx={{
+            width: "100%",
+          }}
+        >
+          <p>{e.description}</p>
+          <Divider />
+        </Box>
+      );
+    });
+  };
+
+  const handleCloseNotification = () => {
+    setOpenNotification(false);
+  };
 
   const {
     storedOrder,
@@ -71,11 +102,31 @@ const DashboardLayout = (props) => {
         isView={isViewStoredModal}
       />
       <LoadingPage />
-      <DashboardNavbar onMobileNavOpen={() => setMobileNavOpen(true)} />
+      <DashboardNavbar
+        onMobileNavOpen={() => setMobileNavOpen(true)}
+        openNotification={openNotification}
+        handleOpenNotification={handleOpenNotification}
+        handleCloseNotification={handleCloseNotification}
+      />
       <DashboardSidebar
         onMobileClose={() => setMobileNavOpen(false)}
         openMobile={isMobileNavOpen}
       />
+      <Box
+        sx={{
+          display: openNotification === true ? "" : "none",
+          position: "absolute",
+          top: "9%",
+          right: 70,
+          height: "50%",
+          overflowY: "scroll",
+          width: "30%",
+          backgroundColor: "#FFF",
+          zIndex: "9999999 !important",
+        }}
+      >
+        {mapListNotifcation()}
+      </Box>
       <DashboardLayoutWrapper>
         <DashboardLayoutContainer>
           <DashboardLayoutContent>
@@ -94,6 +145,7 @@ const mapStateToProps = (state) => ({
   isOpenStoredModal: state.application.isOpenStoredModal,
   isViewStoredModal: state.application.isViewStoredModal,
   storedOrder: state.order.storedOrder,
+  notifcations: state.information.notifcations,
 });
 
 const mapDispatchToProps = (dispatch) => {

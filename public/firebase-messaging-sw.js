@@ -1,23 +1,5 @@
-// importScripts('https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js');
-// importScripts('https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js');
-
-// // Initialize the Firebase app in the service worker by passing in
-// // your app's Firebase config object.
-// // https://firebase.google.com/docs/web/setup#config-object
-// firebase.initializeApp({
-//   apiKey: 'api-key',
-//   authDomain: 'project-id.firebaseapp.com',
-//   databaseURL: 'https://project-id.firebaseio.com',
-//   projectId: 'project-id',
-//   storageBucket: 'project-id.appspot.com',
-//   messagingSenderId: 'sender-id',
-//   appId: 'app-id',
-//   measurementId: 'G-measurement-id',
-// });
-
-// // Retrieve an instance of Firebase Messaging so that it can handle background
-// // messages.
-// const messaging = firebase.messaging();
+importScripts("https://www.gstatic.com/firebasejs/8.2.0/firebase-app.js");
+importScripts("https://www.gstatic.com/firebasejs/8.2.0/firebase-messaging.js");
 
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker
@@ -29,6 +11,33 @@ if ("serviceWorker" in navigator) {
       console.log("Service worker registration failed, error:", err);
     });
 }
+
+var firebaseConfig = {
+  apiKey: "AIzaSyCbxMnxwCfJgCJtvaBeRdvvZ3y1Ucuyv2s",
+  authDomain: "rssms-5fcc8.firebaseapp.com",
+  projectId: "rssms-5fcc8",
+  storageBucket: "rssms-5fcc8.appspot.com",
+  messagingSenderId: "752405040481",
+  appId: "1:752405040481:web:c11a764577b3b05c864920",
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+const messaging = firebase.messaging();
+messaging.onBackgroundMessage(function (payload) {
+  console.log("Received background message ", payload);
+  const notificationTitle = payload.notification.title;
+  const notificationOptions = {
+    body: payload.notification.body,
+    icon: "/logo192.png",
+  };
+  return self.registration.showNotification(
+    notificationTitle,
+    notificationOptions
+  );
+});
+
+// const messaging = firebase.messaging();
 
 // messaging.onBackgroundMessage((payload) => {
 //   console.log(

@@ -143,3 +143,17 @@ export const cancelStoreOrder = () => {
     type: ActionType.CANCEL_STORE_ORDER,
   };
 };
+
+export const setUpNotification = (notifcation) => {
+  return {
+    type: ActionType.SET_UP_NOTIFCATIONS,
+    payload: notifcation,
+  };
+};
+
+export const addNotification = (notifcation) => {
+  return {
+    type: ActionType.ADD_NOTIFCATIONS,
+    payload: notifcation,
+  };
+};

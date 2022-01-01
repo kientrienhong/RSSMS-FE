@@ -359,6 +359,7 @@ export const deleteShelf = async (id) => {
 };
 
 export const createOrder = async (order, token) => {
+  console.log("dasdhasjkdhsakjhd");
   const response = await axios.post(
     `https://localhost:44304/api/v1/orders`,
     {
@@ -608,6 +609,15 @@ export const updateProduct = async (product, id, imageUrl, token) => {
 export const deleteProduct = async (id, token) => {
   const response = await axios.delete(
     `https://localhost:44304/api/v1/products/${id}`,
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+
+  return response;
+};
+
+export const getNotifcations = async (id, token) => {
+  const response = await axios.get(
+    `https://localhost:44304/api/v1/notifications?userId=${id}&page=1&size=-1`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
 

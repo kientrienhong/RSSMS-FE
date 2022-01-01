@@ -17,7 +17,13 @@ import InputIcon from "@material-ui/icons/Input";
 import Logo from "./Logo";
 import { useNavigate } from "react-router";
 import { STYLE_MODAL } from "../constant/style";
-const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
+const DashboardNavbar = ({
+  onMobileNavOpen,
+  handleCloseNotification,
+  handleOpenNotification,
+  openNotification,
+  ...rest
+}) => {
   const [notifications] = useState([]);
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
@@ -40,7 +46,10 @@ const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
       elevation={0}
       {...rest}
       color="inherit"
-      style={{ borderBottom: "1px solid rgba(0, 0, 0, 0.12)" }}
+      style={{
+        borderBottom: "1px solid rgba(0, 0, 0, 0.12)",
+        overflow: "visible",
+      }}
     >
       <Modal
         open={open}
@@ -112,6 +121,7 @@ const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
           </Box>
         </Box>
       </Modal>
+
       <Toolbar>
         <Logo />
         <Box sx={{ flexGrow: 1 }} />
@@ -123,7 +133,15 @@ const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
               color="primary"
               variant="dot"
             >
-              <NotificationsIcon />
+              <NotificationsIcon
+                onClick={() => {
+                  if (openNotification === true) {
+                    handleCloseNotification();
+                  } else {
+                    handleOpenNotification();
+                  }
+                }}
+              />
             </Badge>
           </IconButton>
           <IconButton color="primary" size="large" onClick={handleOpen}>
