@@ -67,7 +67,33 @@ function UpdateInformation({
       const uploadTask = ref.put(imageFile.file);
       uploadTask.on("state_changed", console.log, console.error, async () => {
         urlFirebase = await ref.getDownloadURL();
-        responseUpdate = await updateUser(userTemp, id, urlFirebase);
+        responseUpdate = await updateUser(
+          userTemp,
+          id,
+          urlFirebase,
+          user.idToken
+        );
+        if (responseUpdate.status === 200) {
+          try {
+            showSnackbar("success", "Update user successful!");
+            setUpUser({
+              ...user,
+              address: data.address,
+              name: data.name,
+              phone: data.phone,
+              images: responseUpdate.data.images,
+            });
+            hideLoading();
+          } catch (error) {
+            hideLoading();
+          }
+        } else {
+          hideLoading();
+        }
+      });
+    } else {
+      try {
+        responseUpdate = await updateUser(userTemp, id, "", user.idToken);
         if (responseUpdate.status === 200) {
           showSnackbar("success", "Update user successful!");
           setUpUser({
@@ -81,20 +107,7 @@ function UpdateInformation({
         } else {
           hideLoading();
         }
-      });
-    } else {
-      responseUpdate = await updateUser(userTemp, id, "");
-      if (responseUpdate.status === 200) {
-        showSnackbar("success", "Update user successful!");
-        setUpUser({
-          ...user,
-          address: data.address,
-          name: data.name,
-          phone: data.phone,
-          images: responseUpdate.data.images,
-        });
-        hideLoading();
-      } else {
+      } catch (error) {
         hideLoading();
       }
     }

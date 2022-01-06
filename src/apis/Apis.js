@@ -55,14 +55,22 @@ export const login = async (email, password, tokenFirebase) => {
   return response;
 };
 
-export const changePassword = async (id, password, confirmPassword) => {
+export const changePassword = async (
+  id,
+  oldPassword,
+  password,
+  confirmPassword,
+  token
+) => {
   const response = await axios.post(
     "https://localhost:44304/api/v1/users/changepassword",
     {
       id: id,
+      oldPassword: oldPassword,
       password: password,
       confirmPassword: confirmPassword,
-    }
+    },
+    { headers: { Authorization: `Bearer ${token}` } }
   );
 
   return response;
@@ -359,7 +367,6 @@ export const deleteShelf = async (id) => {
 };
 
 export const createOrder = async (order, token) => {
-  console.log("dasdhasjkdhsakjhd");
   const response = await axios.post(
     `https://localhost:44304/api/v1/orders`,
     {

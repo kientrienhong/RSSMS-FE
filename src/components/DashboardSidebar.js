@@ -64,7 +64,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile, user }) => {
             width: 64,
             height: 64,
           }}
-          to="/webapp/account"
+          to="/app/account"
         />
         <Typography color="textPrimary" variant="h5">
           {user.name}

@@ -5,7 +5,13 @@ import { useForm } from "react-hook-form";
 import CustomInput from "../../components/CustomInput";
 import { Box, Button } from "@material-ui/core";
 import { changePassword } from "../../apis/Apis";
-function ChangePassword({ showLoading, hideLoading, showSnackbar, userId }) {
+function ChangePassword({
+  showLoading,
+  hideLoading,
+  showSnackbar,
+  userId,
+  userState,
+}) {
   const { handleSubmit, control, watch } = useForm();
   const password = useRef({});
   password.current = watch("password", "");
@@ -23,10 +29,17 @@ function ChangePassword({ showLoading, hideLoading, showSnackbar, userId }) {
   const onSubmit = async (data) => {
     try {
       showLoading();
-      await changePassword(userId, data.password, data.confirmPassword);
+      await changePassword(
+        userId,
+        data.oldPassword,
+        data.password,
+        data.confirmPassword,
+        userState.idToken
+      );
       showSnackbar("success", "Change password successful!");
     } catch (e) {
       console.log(e);
+      console.log(e.response);
     } finally {
       hideLoading();
     }
@@ -42,6 +55,19 @@ function ChangePassword({ showLoading, hideLoading, showSnackbar, userId }) {
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box sx={{ ...styleBoxInput, marginTop: "2%" }}>
+          <CustomInput
+            control={control}
+            rules={{
+              required: "Old password required",
+            }}
+            styles={{ width: "300px" }}
+            name="oldPassword"
+            label="Old Password"
+            disabled={false}
+            type="password"
+            userInfo={""}
+            inlineStyle={styleInput}
+          />
           <CustomInput
             control={control}
             rules={{
@@ -97,6 +123,10 @@ function ChangePassword({ showLoading, hideLoading, showSnackbar, userId }) {
   );
 }
 
+const mapStateToProps = (state) => ({
+  userState: state.information.user,
+});
+
 const mapDispatchToProps = (dispatch) => {
   return {
     showLoading: () => dispatch(action.showLoader()),
@@ -105,4 +135,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(ChangePassword);
+export default connect(mapStateToProps, mapDispatchToProps)(ChangePassword);
