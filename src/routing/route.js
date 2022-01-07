@@ -14,6 +14,7 @@ import Schedule from "../pages/Schedule/Schedule";
 import ProtectTemplate from "../Template/ProtectTemplate";
 import { ROLE_USER } from "../constant/constant";
 import NotStorage from "../pages/NotStorage";
+import NewSchedule from "../pages/NewSchedule/NewSchedule";
 const routes = [
   {
     path: "app",
@@ -90,10 +91,10 @@ const routes = [
         path: "schedule",
         element: (
           <ProtectTemplate
-            Component={Schedule}
+            Component={NewSchedule}
             permission={[Object.keys(ROLE_USER)[1]]}
           >
-            <Schedule />
+            <NewSchedule />
           </ProtectTemplate>
         ),
       },
