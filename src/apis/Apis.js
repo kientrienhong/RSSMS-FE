@@ -86,6 +86,8 @@ export const createUser = async (user, token) => {
       email: user.email,
       address: user.address,
       phone: user.phone,
+      gender: user.gender,
+      birthdate: new Date(user.birthdate).toISOString(),
       roleId: user.roleId,
       storageId: null,
       images: [

@@ -106,6 +106,8 @@ const handleClickRow = (row, setUser, handleOpen, reset) => {
   const user = {
     id: row.id,
     name: row.name,
+    gender: row.gender,
+    birthdate: row.birthdate,
     email: row.email,
     avatar: row.avatar,
     phone: row.phone,
