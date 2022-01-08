@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import LoadingPage from "../Loading/LoadingPage";
 import * as action from "../../redux/action/action";
-import { login } from "../../apis/Apis";
+import { login, getNotifcations } from "../../apis/Apis";
 function LogIn(props) {
   const [isValid, setValid] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -14,13 +14,22 @@ function LogIn(props) {
   const submitLogin = async () => {
     props.showLoading();
     try {
-      const response = await login(input.email, input.password);
+      let token = localStorage.getItem("tokenFirebase");
+      const response = await login(input.email, input.password, token);
       if (response.code === 404) {
         setValid(false);
         setErrorMsg("Invalid username or password");
       } else {
+        try {
+          let responseNotifcation = await getNotifcations(
+            response.data.userId,
+            response.data.idToken
+          );
+          props.setUpNotification(responseNotifcation.data.data);
+        } catch (e) {
+          props.setUpNotification([]);
+        }
         props.setUpUser(response.data);
-        console.log(response.data);
         localStorage.setItem("user", JSON.stringify(response.data));
         navigate("/app/account", { replace: true });
       }
@@ -135,6 +144,8 @@ const mapDispatchToProps = (dispatch) => {
     showLoading: () => dispatch(action.showLoader()),
     hideLoading: () => dispatch(action.hideLoader()),
     setUpUser: (user) => dispatch(action.setUpUser(user)),
+    setUpNotification: (listNotifications) =>
+      dispatch(action.setUpNotification(listNotifications)),
   };
 };
 

@@ -8,6 +8,8 @@ import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import rootReducer from "./redux/reducer/rootReducer";
 import thunk from "redux-thunk";
+import { PopupProvider } from "react-custom-popup";
+
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const saveState = (state) => {
@@ -51,7 +53,9 @@ store.subscribe(() => {
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
-      <App />
+      <PopupProvider>
+        <App />
+      </PopupProvider>
     </BrowserRouter>
   </Provider>,
   document.getElementById("root")

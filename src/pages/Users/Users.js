@@ -9,7 +9,13 @@ import {
   Modal,
   Typography,
   MenuItem,
+  FormControl,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
 } from "@material-ui/core";
+import { MALE, FEMALE, OTHER_GENDER } from "../../constant/constant";
+
 import SearchIcon from "@mui/icons-material/Search";
 import ListUsers from "./components/ListUsers";
 import CustomAvatar from "../../components/CustomAvatar";
@@ -25,13 +31,13 @@ import CustomSelect from "../../components/CustomSelect";
 let inputFile;
 const styleModal = {
   ...STYLE_MODAL,
-  width: "40%",
+  width: "60%",
   height: "auto",
 };
 
 const styleBoxInput = {
   display: "flex",
-  justifyContent: "center",
+  justifyContent: "flex-start",
   flexDirection: "row",
   alignItems: "flex-start",
   height: "40px",
@@ -76,7 +82,9 @@ const buildModal = (
   isEdit,
   password,
   errors,
-  error
+  error,
+  gender,
+  handleChangeGender
 ) => {
   return (
     <Modal
@@ -131,15 +139,13 @@ const buildModal = (
               rules={{
                 required: "Email required",
               }}
-              styles={{ width: "540px" }}
+              styles={{ width: "240px" }}
               name="email"
               label="Email"
               disabled={isEdit}
               userInfo={user.email}
               inlineStyle={styleInput}
             />
-          </Box>
-          <Box sx={{ ...styleBoxInput }}>
             <CustomInput
               control={control}
               rules={{ required: "Name required" }}
@@ -165,43 +171,193 @@ const buildModal = (
               inlineStyle={styleInput}
             />
           </Box>
-          <Box sx={{ ...styleBoxInput }}>
+          <Box sx={{ ...styleBoxInput, alignItems: "center" }}>
             <CustomInput
               control={control}
               rules={{ required: "Address required" }}
-              styles={{ width: "540px" }}
+              styles={{ width: "370px" }}
               name="address"
               label="Address"
               userInfo={user.address}
               inlineStyle={styleInput}
             />
-          </Box>
-          {isEdit === true ? null : (
-            <Box sx={{ ...styleBoxInput }}>
-              <CustomInput
-                control={control}
-                rules={{ required: "Password required" }}
-                styles={{ width: "240px" }}
-                name="password"
-                label="Password"
-                userInfo={user.password}
-                type="password"
-                inlineStyle={styleInput}
-              />
-              <CustomInput
-                control={control}
-                rules={{
-                  required: "Confirm password required",
-                  validate: (value) =>
-                    value === password.current || "The passwords do not match",
+            <Box
+              sx={{
+                marginLeft: "4%",
+                width: "370px",
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <p
+                style={{
+                  marginLeft: "2.5%",
+                  marginTop: "5%",
+                  marginBottom: "0",
                 }}
-                styles={{ width: "240px" }}
-                name="confirmPassword"
-                label="Confirm Password"
-                userInfo={user.password}
-                type="password"
-                inlineStyle={styleInput}
-              />
+              >
+                Gender
+              </p>
+              <FormControl
+                component="fieldset"
+                sx={{
+                  marginLeft: "2.5%",
+                }}
+              >
+                <RadioGroup
+                  row
+                  aria-label="gender"
+                  name="row-radio-buttons-group"
+                  onChange={handleChangeGender}
+                  value={gender}
+                >
+                  <FormControlLabel
+                    value={MALE}
+                    control={<Radio />}
+                    label="Male"
+                  />
+                  <FormControlLabel
+                    value={FEMALE}
+                    control={<Radio />}
+                    label="Female"
+                  />
+                  <FormControlLabel
+                    value={OTHER_GENDER}
+                    control={<Radio />}
+                    label="Other"
+                  />
+                </RadioGroup>
+              </FormControl>
+            </Box>
+          </Box>
+          {isEdit === true ? (
+            <Box
+              sx={{
+                ...styleBoxInput,
+                alignItems: "center",
+                marginLeft: "2%",
+                marginTop: "7%",
+              }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  width: "240px",
+                  height: "120px",
+                  justifyContent: "flex-end",
+                  flexDirection: "column",
+                }}
+              >
+                <p
+                  style={{
+                    marginLeft: "2.5%",
+                    marginTop: "5%",
+                  }}
+                >
+                  Birthday
+                </p>
+                <CustomInput
+                  control={control}
+                  rules={{
+                    required: "Birthday required",
+                  }}
+                  styles={{ width: "240px" }}
+                  name="birthdate"
+                  type="date"
+                  userInfo={
+                    user?.birthdate?.split("T") === undefined
+                      ? ""
+                      : user?.birthdate?.split("T")[0]
+                  }
+                  inlineStyle={styleInput}
+                />
+              </Box>
+            </Box>
+          ) : (
+            <Box
+              sx={{
+                ...styleBoxInput,
+                alignItems: "center",
+                marginLeft: "2%",
+                marginTop: "7%",
+              }}
+            >
+              <Box
+                sx={{
+                  height: "120px",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "flex-end",
+                }}
+              >
+                <CustomInput
+                  control={control}
+                  rules={{ required: "Password required" }}
+                  styles={{ width: "280px" }}
+                  name="password"
+                  label="Password"
+                  userInfo={user.password}
+                  type="password"
+                  inlineStyle={styleInput}
+                />
+              </Box>
+              <Box
+                sx={{
+                  height: "120px",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "flex-end",
+                }}
+              >
+                <CustomInput
+                  control={control}
+                  rules={{
+                    required: "Confirm password required",
+                    validate: (value) =>
+                      value === password.current ||
+                      "The passwords do not match",
+                  }}
+                  styles={{ width: "280px" }}
+                  name="confirmPassword"
+                  label="Confirm Password"
+                  userInfo={user.password}
+                  type="password"
+                  inlineStyle={styleInput}
+                />
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  width: "240px",
+                  height: "120px",
+                  justifyContent: "flex-end",
+                  flexDirection: "column",
+                }}
+              >
+                <p
+                  style={{
+                    marginLeft: "2.5%",
+                    marginTop: "5%",
+                  }}
+                >
+                  Birthday
+                </p>
+                <CustomInput
+                  control={control}
+                  rules={{
+                    required: "Birthday required",
+                  }}
+                  styles={{ width: "240px" }}
+                  name="birthdate"
+                  type="date"
+                  userInfo={
+                    user?.birthdate?.split("T") === undefined
+                      ? ""
+                      : user?.birthdate?.split("T")[0]
+                  }
+                  inlineStyle={styleInput}
+                />
+              </Box>
             </Box>
           )}
 
@@ -298,6 +454,7 @@ function Users(props) {
   const [totalUser, setTotalUser] = React.useState(0);
   const [open, setOpen] = React.useState(false);
   const [error, setError] = React.useState({});
+
   const {
     handleSubmit,
     reset,
@@ -309,6 +466,10 @@ function Users(props) {
   password.current = watch("password", "");
 
   const { showLoading, hideLoading, showSnackbar, userState } = props;
+
+  const handleChangeGender = (event) => {
+    setGender(parseInt(event.target.value));
+  };
   inputFile = useRef(null);
   const getData = async (name, page, size) => {
     try {
@@ -337,6 +498,8 @@ function Users(props) {
       name: data.name,
       email: data.email,
       address: data.address,
+      birthdate: data.birthdate,
+      gender: gender,
       phone: data.phone,
       roleId: roleName,
       images: [
@@ -407,6 +570,8 @@ function Users(props) {
       password: data.password,
       email: data.email,
       address: data.address,
+      gender: gender,
+      birthdate: data.birthdate,
       phone: data.phone,
       roleId: roleName,
       avatarLink: null,
@@ -416,7 +581,7 @@ function Users(props) {
 
       const response = await createUser(userTemp, userState.idToken);
       if (response.status === 200) {
-        let id = response.data.id;
+        let id = response.data.userId;
         let urlFirebase;
         let name = `user/${id}/avatar.png`;
         const ref = storageFirebase.ref(name);
@@ -493,6 +658,8 @@ function Users(props) {
   const [listUser, setListUser] = React.useState([]);
   const [isEdit, setEdit] = React.useState(false);
   const [user, setUser] = React.useState({ images: [{ id: null, url: null }] });
+  const [gender, setGender] = React.useState(user.gender ?? MALE);
+
   const handleOpen = (isEdit) => {
     setOpen(true);
     setEdit(isEdit);
@@ -521,7 +688,9 @@ function Users(props) {
         isEdit,
         password,
         errors,
-        error
+        error,
+        gender,
+        handleChangeGender
       )}
       <Box
         sx={{

@@ -42,26 +42,35 @@ export const findUserByPhone = async (phone, token) => {
   return user;
 };
 
-export const login = async (email, password) => {
+export const login = async (email, password, tokenFirebase) => {
   const response = await axios.post(
     "https://localhost:44304/api/v1/users/login",
     {
       email: email,
       password: password,
+      deviceToken: tokenFirebase,
     }
   );
 
   return response;
 };
 
-export const changePassword = async (id, password, confirmPassword) => {
+export const changePassword = async (
+  id,
+  oldPassword,
+  password,
+  confirmPassword,
+  token
+) => {
   const response = await axios.post(
     "https://localhost:44304/api/v1/users/changepassword",
     {
       id: id,
+      oldPassword: oldPassword,
       password: password,
       confirmPassword: confirmPassword,
-    }
+    },
+    { headers: { Authorization: `Bearer ${token}` } }
   );
 
   return response;
@@ -77,6 +86,8 @@ export const createUser = async (user, token) => {
       email: user.email,
       address: user.address,
       phone: user.phone,
+      gender: user.gender,
+      birthdate: new Date(user.birthdate).toISOString(),
       roleId: user.roleId,
       storageId: null,
       images: [
@@ -119,6 +130,8 @@ export const updateUser = async (user, id, imageUrl, token) => {
       name: user.name,
       address: user.address,
       phone: user.phone,
+      gender: user.gender,
+      birthdate: new Date(user.birthdate).toISOString(),
       storageId: user.storageId,
       images: [
         {
@@ -607,6 +620,15 @@ export const updateProduct = async (product, id, imageUrl, token) => {
 export const deleteProduct = async (id, token) => {
   const response = await axios.delete(
     `https://localhost:44304/api/v1/products/${id}`,
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+
+  return response;
+};
+
+export const getNotifcations = async (id, token) => {
+  const response = await axios.get(
+    `https://localhost:44304/api/v1/notifications?userId=${id}&page=1&size=-1`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
 

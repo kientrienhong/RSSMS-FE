@@ -111,12 +111,17 @@ const listHeaderName = [
   "Action",
 ];
 
-const mapListTableHeader = (listHeader) => (
+const mapListTableHeader = (listHeader, userState) => (
   <TableHead>
     <TableRow sx={{ color: "black" }}>
-      {listHeader.map((e) => (
-        <TableCell>{e}</TableCell>
-      ))}
+      {listHeader.map((e) => {
+        if (userState.roleName === "Admin") {
+          if (e === "Action") {
+            return;
+          }
+        }
+        return <TableCell>{e}</TableCell>;
+      })}
     </TableRow>
   </TableHead>
 );
@@ -337,7 +342,7 @@ function ListOrder({
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
         {buildModalCancelOrder()}
-        {mapListTableHeader(listHeaderName)}
+        {mapListTableHeader(listHeaderName, userState)}
         {userState.roleName === "Manager" ? (
           <AssignOrderModal
             open={openAssign}
@@ -413,44 +418,48 @@ function ListOrder({
                 >
                   {status}
                 </TableCell>
-                <TableCell style={{ color: "black" }}>
-                  {row.status === 0 ? null : (
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "row",
-                      }}
-                    >
-                      {row.status === 1 ? (
-                        <Button
-                          style={{
-                            height: "45px",
-                            paddingLeft: "16px",
-                            paddingRight: "16px",
-                            marginRight: "4%",
-                          }}
-                          onClick={() => {
-                            setCurrentId(row.id);
-                            handleOpenAssign();
-                          }}
-                          color="primary"
-                          variant="contained"
-                        >
-                          Assign
-                        </Button>
-                      ) : null}
-                      <Button
-                        className={classes.button}
-                        onClick={() => {
-                          setCurrentId(row.id);
-                          handleConfirmOpen();
+                {userState.roleName !== "Admin" ? (
+                  <TableCell style={{ color: "black" }}>
+                    {row.status === 0 ? null : (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "row",
                         }}
                       >
-                        Cancel
-                      </Button>
-                    </Box>
-                  )}
-                </TableCell>
+                        {row.status === 1 ? (
+                          <Button
+                            style={{
+                              height: "45px",
+                              paddingLeft: "16px",
+                              paddingRight: "16px",
+                              marginRight: "4%",
+                            }}
+                            onClick={() => {
+                              setCurrentId(row.id);
+                              handleOpenAssign();
+                            }}
+                            color="primary"
+                            variant="contained"
+                          >
+                            Assign
+                          </Button>
+                        ) : null}
+                        <Button
+                          className={classes.button}
+                          onClick={() => {
+                            setCurrentId(row.id);
+                            handleConfirmOpen();
+                          }}
+                        >
+                          Cancel
+                        </Button>
+                      </Box>
+                    )}
+                  </TableCell>
+                ) : (
+                  <></>
+                )}
               </TableRow>
             );
           })}

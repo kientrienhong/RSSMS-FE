@@ -131,6 +131,7 @@ function AreaDetail(props) {
         });
 
         let area = await getDetailArea(parseInt(areaId), userState.idToken);
+        console.log(area);
         setCurrentArea(area.data);
         setTotalPage(response.data.metadata.totalPage);
         setListShelf(listShelves);
