@@ -46,6 +46,9 @@ function AreaDetail(props) {
   const [isModifyShelf, setIsModifyShelf] = useState(false);
   const [listBoxes, setListBoxes] = useState([]);
   const [listAreas, setListAreas] = useState([]);
+  const [listHandy, setListHandy] = useState([]);
+  const [listUnwieldy, setListUnwieldy] = useState([]);
+
   const [listSelfStorage, setListSelfStorage] = useState([]);
   const handleOpen = async (isEdit) => {
     try {
@@ -85,6 +88,24 @@ function AreaDetail(props) {
     setIsModifyShelf(false);
   };
 
+  const filterUsage = (area) => {
+    let listBox = [];
+
+    let listArea = area?.boxUsage?.filter((e) => {
+      if (e.productType === BOX_TYPE) {
+        listBox.push(e);
+      }
+
+      return e.productType === AREA_TYPE;
+    });
+
+    console.log(listBox);
+    console.log(listArea);
+
+    setListHandy(listArea);
+    setListUnwieldy(listBox);
+  };
+
   const getData = async (name, page) => {
     try {
       showLoading();
@@ -99,6 +120,9 @@ function AreaDetail(props) {
       listShelves = listShelves.map((e) => {
         return { ...e, boxSize: e.boxes[0].sizeType };
       });
+      let area = await getDetailArea(parseInt(areaId), userState.idToken);
+      filterUsage(area.data);
+      setCurrentArea(area.data);
       setTotalPage(response.data.metadata.totalPage);
       setListShelf(listShelves);
     } catch (e) {
@@ -131,8 +155,9 @@ function AreaDetail(props) {
         });
 
         let area = await getDetailArea(parseInt(areaId), userState.idToken);
-        console.log(area);
+        filterUsage(area);
         setCurrentArea(area.data);
+
         setTotalPage(response.data.metadata.totalPage);
         setListShelf(listShelves);
       } catch (e) {
@@ -313,7 +338,7 @@ function AreaDetail(props) {
           isModifyShelf={isModifyShelf}
           storageId={storageId}
         />
-        {/* <Box
+        <Box
           sx={{
             margin: "2%",
             display: "flex",
@@ -333,7 +358,7 @@ function AreaDetail(props) {
             numberInRow={2}
             currentArea={currentArea}
           />
-        </Box> */}
+        </Box>
       </Box>
     </Box>
   );

@@ -4,13 +4,10 @@ import CircularProgressWithLabel from "./CircularProgressWithLabel";
 
 export default function AreaUsage({ list, name, numberInRow, currentArea }) {
   const mapListToView = () => {
-    if (Object.keys(currentArea).length > 0) {
-      return list.map((e, index) => {
-        let finalIndex = name === "Handy Usage" ? 0 : 5;
-        return buildProductUsage(e.name, e.usage, finalIndex + index);
-      });
-    }
-    return null;
+    return list?.map((e, index) => {
+      let finalIndex = name === "Handy Usage" ? 0 : 5;
+      return buildProductUsage(e.sizeType, e.usage, finalIndex + index);
+    });
   };
 
   const buildProductUsage = (name, usage, index) => {
@@ -18,7 +15,7 @@ export default function AreaUsage({ list, name, numberInRow, currentArea }) {
       <Grid item xs={12 / numberInRow} key={index}>
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           <CircularProgressWithLabel
-            value={currentArea.boxUsage[index].usage}
+            value={usage}
             width="80px"
             height="80px"
             sx={{
@@ -35,7 +32,8 @@ export default function AreaUsage({ list, name, numberInRow, currentArea }) {
     <Card
       sx={{
         width: "100%",
-        height: "auto",
+        height: "37%",
+        overflowY: "scroll",
         display: "flex",
         flexDirection: "column",
         marginRight: "3%",
