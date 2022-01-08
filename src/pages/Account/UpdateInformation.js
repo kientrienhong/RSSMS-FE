@@ -251,7 +251,11 @@ function UpdateInformation({
               name="birthdate"
               type="date"
               label="Birthday"
-              userInfo={user.birthdate.split("T")[0]}
+              userInfo={
+                user?.birthdate?.split("T") === undefined
+                  ? ""
+                  : user?.birthdate?.split("T")[0]
+              }
               inlineStyle={styleInput}
             />
           </Box>

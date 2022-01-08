@@ -210,17 +210,16 @@ function Storages(props) {
   useEffect(() => {
     const process = async () => {
       if (openAssignStaff === true) {
+        let listUserNotAssigned = [];
         try {
           showLoading();
-          let listUserNotAssigned = await getListUser(
+          listUserNotAssigned = await getListUser(
             "",
             1,
             -1,
             userState.idToken,
             0
           );
-          setListStaffUnAssigned(listUserNotAssigned.data.data);
-          setListShowStaffUnAssigned(listUserNotAssigned.data.data);
         } catch (error) {
           console.log(error);
           setListStaffUnAssigned([]);
@@ -234,8 +233,18 @@ function Storages(props) {
             userState.idToken,
             storage.id
           );
+          let managerFound = listUserAssigned.data.data.find(
+            (e) => e.roleName === "Manager"
+          );
+          console.log(managerFound);
+          let newListUserUnAssign = listUserNotAssigned.data.data.filter(
+            (e) => e.id !== managerFound.id
+          );
+
           setListStaffAssigned(listUserAssigned.data.data);
           setListShowStaffAssigned(listUserAssigned.data.data);
+          setListStaffUnAssigned(newListUserUnAssign);
+          setListShowStaffUnAssigned(newListUserUnAssign);
         } catch (error) {
           console.log(error);
           setListStaffAssigned([]);
