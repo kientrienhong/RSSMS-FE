@@ -159,26 +159,34 @@ function Order({
             ),
           }}
         />
-        <ProductButton
-          imgUrl={"/img/product.png"}
-          quantity={storedOrder?.totalQuantity}
-          isView={true}
-        />
-        <Button
-          style={{
-            height: "45px",
-            paddingLeft: "16px",
-            paddingRight: "16px",
-            marginLeft: "2%",
-          }}
-          color="primary"
-          variant="contained"
-          onClick={(e) => {
-            navigate("/orders/makingOrder");
-          }}
-        >
-          Create order
-        </Button>
+        {userState.roleName !== "Admin" ? (
+          <ProductButton
+            imgUrl={"/img/product.png"}
+            quantity={storedOrder?.totalQuantity}
+            isView={true}
+          />
+        ) : (
+          <></>
+        )}
+        {userState.roleName !== "Admin" ? (
+          <Button
+            style={{
+              height: "45px",
+              paddingLeft: "16px",
+              paddingRight: "16px",
+              marginLeft: "2%",
+            }}
+            color="primary"
+            variant="contained"
+            onClick={(e) => {
+              navigate("/orders/makingOrder");
+            }}
+          >
+            Create order
+          </Button>
+        ) : (
+          <></>
+        )}
       </Box>
       <Card
         variant="outlined"

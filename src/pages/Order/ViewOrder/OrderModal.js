@@ -26,9 +26,9 @@ import {
 } from "../../../constant/constant";
 const styleModal = {
   position: "absolute",
-  top: "0%",
-  right: "0",
-  width: "40%",
+  top: "1%",
+  right: "10%",
+  width: "80%",
   height: "92vh",
   overflow: "hidden",
   overflowY: "scroll",
@@ -213,7 +213,7 @@ function OrderModal({
         />
       </Grid>
     ));
-    
+
   const buildInformation = (title, value) => {
     return (
       <Box

@@ -136,6 +136,12 @@ export const LIST_SIDE_BAR_ADMIN = [
     icon: undefined,
     reactIcon: <FaWarehouse />,
   },
+  {
+    href: "/app/orders",
+    icon: undefined,
+    title: "Orders",
+    reactIcon: <FaFileInvoiceDollar />,
+  },
 ];
 
 export const LIST_SIDE_BAR_MANAGER = [
