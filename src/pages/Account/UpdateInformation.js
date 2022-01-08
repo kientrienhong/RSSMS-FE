@@ -1,5 +1,13 @@
 import React, { useState, useRef } from "react";
-import { Box, Button } from "@material-ui/core";
+import {
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+} from "@material-ui/core";
 import CustomAvatar from "../../components/CustomAvatar";
 import { connect } from "react-redux";
 import * as action from "../../redux/action/action";
@@ -7,6 +15,7 @@ import { useForm } from "react-hook-form";
 import CustomInput from "../../components/CustomInput";
 import { storageFirebase } from "../../firebase/firebase";
 import { updateUser } from "../../apis/Apis";
+import { MALE, FEMALE, OTHER_GENDER } from "../../constant/constant";
 function UpdateInformation({
   user,
   setUpUser,
@@ -16,6 +25,12 @@ function UpdateInformation({
 }) {
   const [imageFile, setImageFile] = useState({});
   const { handleSubmit, control } = useForm();
+  const [value, setValue] = React.useState(user.gender);
+
+  const handleChange = (event) => {
+    setValue(parseInt(event.target.value));
+  };
+
   let imageUrl;
   const styleBoxInput = {
     display: "flex",
@@ -49,6 +64,8 @@ function UpdateInformation({
       email: data.email,
       address: data.address,
       phone: data.phone,
+      gender: value,
+      birthdate: data.birthdate,
       roleId: roleId,
       images: [
         {
@@ -80,6 +97,8 @@ function UpdateInformation({
               ...user,
               address: data.address,
               name: data.name,
+              gender: value,
+              birthdate: data.birthdate,
               phone: data.phone,
               images: responseUpdate.data.images,
             });
@@ -99,6 +118,8 @@ function UpdateInformation({
           setUpUser({
             ...user,
             address: data.address,
+            gender: value,
+            birthdate: data.birthdate,
             name: data.name,
             phone: data.phone,
             images: responseUpdate.data.images,
@@ -220,7 +241,49 @@ function UpdateInformation({
               inlineStyle={styleInput}
             />
           </Box>
-          <Box sx={{ ...styleBoxInput }}>
+          <Box sx={{ ...styleBoxInput, justifyContent: "flex-start" }}>
+            <CustomInput
+              control={control}
+              rules={{
+                required: "Birthday required",
+              }}
+              styles={{ width: "240px" }}
+              name="birthdate"
+              type="date"
+              label="Birthday"
+              userInfo={user.birthdate.split("T")[0]}
+              inlineStyle={styleInput}
+            />
+          </Box>
+
+          <p style={{ marginLeft: "2.5%", marginTop: "5%" }}>Gender</p>
+          <FormControl
+            component="fieldset"
+            sx={{
+              marginLeft: "2.5%",
+            }}
+          >
+            <RadioGroup
+              row
+              aria-label="gender"
+              name="row-radio-buttons-group"
+              onChange={handleChange}
+              value={value}
+            >
+              <FormControlLabel value={MALE} control={<Radio />} label="Male" />
+              <FormControlLabel
+                value={FEMALE}
+                control={<Radio />}
+                label="Female"
+              />
+              <FormControlLabel
+                value={OTHER_GENDER}
+                control={<Radio />}
+                label="Other"
+              />
+            </RadioGroup>
+          </FormControl>
+          <Box sx={{ ...styleBoxInput, marginTop: "3%" }}>
             <CustomInput
               control={control}
               rules={{ required: "Address required" }}

@@ -29,7 +29,6 @@ function LogIn(props) {
         } catch (e) {
           props.setUpNotification([]);
         }
-
         props.setUpUser(response.data);
         localStorage.setItem("user", JSON.stringify(response.data));
         navigate("/app/account", { replace: true });

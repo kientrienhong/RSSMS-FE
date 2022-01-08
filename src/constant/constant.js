@@ -8,6 +8,10 @@ import * as style from "./style";
 export const AREA_TYPE = 4;
 export const BOX_TYPE = 2;
 export const SELF_STORAGE_TYPE = 0;
+
+export const MALE = 0;
+export const FEMALE = 1;
+export const OTHER_GENDER = 2;
 export const ROLE_USER = {
   Admin: 1,
   Manager: 2,

@@ -128,6 +128,8 @@ export const updateUser = async (user, id, imageUrl, token) => {
       name: user.name,
       address: user.address,
       phone: user.phone,
+      gender: user.gender,
+      birthdate: new Date(user.birthdate).toISOString(),
       storageId: user.storageId,
       images: [
         {
