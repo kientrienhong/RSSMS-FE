@@ -18,6 +18,7 @@ function ConfirmModal({
   hideLoading,
   showSnackbar,
   msg,
+  msgError,
 }) {
   return (
     <Modal
@@ -64,11 +65,12 @@ function ConfirmModal({
             onClick={async () => {
               try {
                 showLoading();
-                await onHandleYes(id);
+                let response = await onHandleYes(id);
                 handleClose();
                 showSnackbar("success", msg);
               } catch (error) {
                 console.log(error);
+                showSnackbar("error", msgError);
               } finally {
                 hideLoading();
               }

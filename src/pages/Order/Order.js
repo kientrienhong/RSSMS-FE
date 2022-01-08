@@ -131,6 +131,7 @@ function Order({
         getData={getData}
         page={page}
         searchId={searchId}
+        isView={userState.roleName === "Admin"}
       />
 
       <Box
