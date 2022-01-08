@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Divider, Typography } from "@material-ui/core";
-import { formatCurrency } from "../../../../utils/FormatCurrency";
+import { formatCurrency } from "../utils/FormatCurrency";
 
 export default function OrderDetail({ choosenProduct, duration }) {
   const buildTotalPrice = () => {

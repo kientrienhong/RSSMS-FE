@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import SearchIcon from "@mui/icons-material/Search";
 import { useNavigate } from "react-router";
-import OrderModal from "./ViewOrder/OrderModal";
+import OrderModal from "../../components/OrderModal";
 import ListOrder from "./ViewOrder/ListOrder";
 import { useForm } from "react-hook-form";
 import { connect } from "react-redux";
