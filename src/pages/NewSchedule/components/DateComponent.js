@@ -6,6 +6,8 @@ export default function DateComponent({
   currentIndex,
   index,
   setCurrentIndexDate,
+  setListScheduleCurrentDate,
+  listScheduleWholeWeek,
 }) {
   let color = currentIndex === index ? "primary" : "black";
   let splitedDateSchedule = dateSchedule.toString().split(" ");
@@ -13,6 +15,9 @@ export default function DateComponent({
     <Box
       onClick={() => {
         setCurrentIndexDate(index);
+        setListScheduleCurrentDate(
+          listScheduleWholeWeek[Object.keys(listScheduleWholeWeek)[index]]
+        );
       }}
       sx={{
         display: "flex",

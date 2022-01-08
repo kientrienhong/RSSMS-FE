@@ -3,9 +3,11 @@ import { connect } from "react-redux";
 import * as action from "../../redux/action/action";
 import { Grid, Box, Typography, Modal } from "@material-ui/core";
 import moment from "moment";
+import { useForm } from "react-hook-form";
 import ListDateComponent from "./components/ListDateComponent";
 import ListItemSidebar from "./components/ListItemSidebar";
 import { LIST_TIME } from "../../constant/constant";
+import OrderModal from "../../components/OrderModal";
 import {
   getTimeEnd,
   getTimeStart,
@@ -19,7 +21,11 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
   const [listDateAWeek, setListDateAWeek] = useState([]);
   const [currentIndexDate, setCurrentIndexDate] = useState(-1);
   const [currentIndexGroup, setCurrentIndexGroup] = useState(0);
-  // const [listOrder,]
+  const [listSelectedOrder, setListSelectedOrder] = useState([]);
+  const [currentOrder, setCurrentOrder] = useState({});
+  const [open, setOpen] = useState(false);
+  const { handleSubmit, control, watch } = useForm();
+
   const [listOrderNotAssignedReturnTime, setListOrderNotAssignedReturnTime] =
     React.useState([]);
   const [listScheduleWholeWeek, setListScheduleWholeWeek] = useState([]);
@@ -29,6 +35,14 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
     result.setDate(result.getDate() + days);
     return result;
   }
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const handleFormatDate = (date, result, order, value) => {
     if (value === "returnTime" && order[value] === null) {
@@ -112,7 +126,6 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
           }
         });
       setListScheduleWholeWeek(result);
-      console.log(result[Object.keys(result)[currentIndexDateLocal]]);
       setListScheduleCurrentDate(
         result[Object.keys(result)[currentIndexDateLocal]]
       );
@@ -223,8 +236,17 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
         py: 3,
       }}
     >
+      <OrderModal
+        open={open}
+        handleClose={handleClose}
+        currentOrder={currentOrder}
+        control={control}
+        isView={true}
+      />
       <ListDateComponent
+        listScheduleWholeWeek={listScheduleWholeWeek}
         currentIndex={currentIndexDate}
+        setListScheduleCurrentDate={setListScheduleCurrentDate}
         listDateAWeek={listDateAWeek}
         setCurrentIndexDate={setCurrentIndexDate}
       />
@@ -269,7 +291,11 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
         }}
       >
         <ListItemSidebar listTime={LIST_TIME} />
-        <ScheduleArea listGroup={listScheduleCurrentDate} />
+        <ScheduleArea
+          listGroup={listScheduleCurrentDate}
+          setCurrentOrder={setCurrentOrder}
+          handleOpen={handleOpen}
+        />
       </Box>
     </Box>
   );

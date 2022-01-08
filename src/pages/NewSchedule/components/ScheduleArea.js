@@ -1,15 +1,24 @@
 import React from "react";
 import { Grid, Box, Typography } from "@material-ui/core";
 import Schedule from "./Schedule";
-export default function ScheduleArea({ listGroup }) {
-  console.log(listGroup);
-
+export default function ScheduleArea({
+  listGroup,
+  setCurrentOrder,
+  handleOpen,
+}) {
   const mapListSchedule = (mapListSchedule) =>
-    mapListSchedule?.map((e, index) => <Schedule schedule={e} key={index} />);
+    mapListSchedule?.map((e, index) => (
+      <Schedule
+        schedule={e}
+        key={index}
+        setCurrentOrder={setCurrentOrder}
+        handleOpen={handleOpen}
+      />
+    ));
 
   const mapListGroup = (listGroup) => {
     let listComponent = [];
-    for (const entry of listGroup.entries()) {
+    for (const entry of listGroup?.entries()) {
       if (entry[1]?.length === 0) {
         listComponent.push(
           <Box

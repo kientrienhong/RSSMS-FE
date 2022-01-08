@@ -76,6 +76,7 @@ function OrderModal({
   searchId,
   storeOrder,
   userState,
+  isView,
 }) {
   const [timeDelivery, setTimeDelivery] = useState();
   const [timeReturn, setTimeReturn] = useState();
@@ -90,18 +91,30 @@ function OrderModal({
   const navigate = useNavigate();
 
   const handleChangePaymentMethod = (e) => {
+    if (isView === true) {
+      return;
+    }
     setPaymentMethod(parseInt(e.target.value));
   };
   const handleChangeCheckBox = (event) => {
+    if (isView === true) {
+      return;
+    }
     setIsCustomerDelivery(event.target.checked);
     setTimeDelivery({});
   };
 
   const handleChangeCheckBoxIsPaid = (event) => {
+    if (isView === true) {
+      return;
+    }
     setIsPaid(event.target.checked);
   };
 
   const handleChangeCheckBoxCustomerReturn = (event) => {
+    if (isView === true) {
+      return;
+    }
     setIsCustomerReturn(event.target.checked);
     setTimeReturn({});
   };
@@ -164,6 +177,9 @@ function OrderModal({
   };
 
   const handleChangeDeliveryDate = (e) => {
+    if (isView === true) {
+      return;
+    }
     setDateDelivery(e.target.value);
     if (dateDelivery !== undefined || dateReturn !== undefined) {
       let parseDateReturn = new Date(dateReturn);
@@ -176,6 +192,9 @@ function OrderModal({
 
   const handleOnClickMinus = (event) => {
     event.preventDefault();
+    if (isView === true) {
+      return;
+    }
 
     if (duration > 0) {
       let newDuration = duration - 1;
@@ -189,6 +208,9 @@ function OrderModal({
 
   const handleOnClickPlus = (event) => {
     event.preventDefault();
+    if (isView === true) {
+      return;
+    }
 
     let newDuration = duration + 1;
     setDuration(newDuration);
@@ -247,7 +269,7 @@ function OrderModal({
       accessory: [],
     };
 
-    currentOrder?.orderDetails.forEach((e) => {
+    currentOrder?.orderDetails?.forEach((e) => {
       let type = PRODUCT_TYPE[e.productType];
       result[type].push({
         name: e.productName,
@@ -260,6 +282,10 @@ function OrderModal({
   };
 
   const handleChangeStatus = (e) => {
+    if (isView) {
+      return;
+    }
+
     setStatusOrder(parseInt(e.target.value));
   };
 
@@ -309,7 +335,9 @@ function OrderModal({
         }}
       >
         <form
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={
+            handleSubmit === undefined ? () => {} : handleSubmit(onSubmit)
+          }
           style={{
             width: "100%",
             display: "flex",
@@ -423,7 +451,7 @@ function OrderModal({
               styles={{ width: "300px" }}
               name="deliveryAddress"
               label="Delivery Address"
-              disabled={false}
+              disabled={isView}
               userInfo={currentOrder?.deliveryAddress}
               inlineStyle={{}}
             />
@@ -440,7 +468,7 @@ function OrderModal({
               styles={{ width: "300px", display: "block" }}
               name="returnAddress"
               label="Return Address"
-              disabled={false}
+              disabled={isView}
               userInfo={currentOrder?.addressReturn}
               inlineStyle={{}}
             />
@@ -467,6 +495,7 @@ function OrderModal({
             <TextField
               id="date"
               type="date"
+              disabled={isView}
               defaultValue={dateDelivery}
               onChange={handleChangeDeliveryDate}
               sx={{ width: 220, marginBottom: "16px" }}
@@ -681,31 +710,38 @@ function OrderModal({
               choosenProduct={formatToChosenProduct()}
               duration={duration}
             />
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                width: "100%",
-                justifyContent: "center",
-              }}
-            >
-              {currentOrder?.status === 2 ? (
+            {isView === true ? (
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                }}
+              >
                 <Button
                   style={{
                     height: "45px",
+                    width: "30%",
                     paddingLeft: "16px",
                     paddingRight: "16px",
-                    marginRight: "4%",
                   }}
-                  color="primary"
-                  variant="contained"
-                  onClick={() => handleStoreOrder()}
+                  color="error"
+                  onClick={() => handleClose()}
+                  variant="outlined"
                 >
-                  Store
+                  Cancel
                 </Button>
-              ) : null}
-              {currentOrder?.status !== 0 && currentOrder?.status !== 1 ? (
-                userState.roleName !== "Admin" ? (
+              </Box>
+            ) : (
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  width: "100%",
+                  justifyContent: "center",
+                }}
+              >
+                {currentOrder?.status === 2 ? (
                   <Button
                     style={{
                       height: "45px",
@@ -713,28 +749,45 @@ function OrderModal({
                       paddingRight: "16px",
                       marginRight: "4%",
                     }}
-                    color="success"
+                    color="primary"
                     variant="contained"
-                    type="submit"
+                    onClick={() => handleStoreOrder()}
                   >
-                    Edit
+                    Store
                   </Button>
-                ) : null
-              ) : null}
+                ) : null}
+                {currentOrder?.status !== 0 && currentOrder?.status !== 1 ? (
+                  userState.roleName !== "Admin" ? (
+                    <Button
+                      style={{
+                        height: "45px",
+                        paddingLeft: "16px",
+                        paddingRight: "16px",
+                        marginRight: "4%",
+                      }}
+                      color="success"
+                      variant="contained"
+                      type="submit"
+                    >
+                      Edit
+                    </Button>
+                  ) : null
+                ) : null}
 
-              <Button
-                style={{
-                  height: "45px",
-                  paddingLeft: "16px",
-                  paddingRight: "16px",
-                }}
-                color="error"
-                onClick={() => handleClose()}
-                variant="outlined"
-              >
-                Cancel
-              </Button>
-            </Box>
+                <Button
+                  style={{
+                    height: "45px",
+                    paddingLeft: "16px",
+                    paddingRight: "16px",
+                  }}
+                  color="error"
+                  onClick={() => handleClose()}
+                  variant="outlined"
+                >
+                  Cancel
+                </Button>
+              </Box>
+            )}
           </Box>
         </form>
       </Box>

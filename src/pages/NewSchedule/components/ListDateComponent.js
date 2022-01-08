@@ -3,8 +3,10 @@ import { Box } from "@material-ui/core";
 import DateComponent from "./DateComponent";
 export default function ListDateComponent({
   listDateAWeek,
+  listScheduleWholeWeek,
   currentIndex,
   setCurrentIndexDate,
+  setListScheduleCurrentDate,
 }) {
   const mapListDate = () =>
     listDateAWeek.map((e, i) => (
@@ -12,7 +14,9 @@ export default function ListDateComponent({
         dateSchedule={e}
         currentIndex={currentIndex}
         index={i}
+        setListScheduleCurrentDate={setListScheduleCurrentDate}
         setCurrentIndexDate={setCurrentIndexDate}
+        listScheduleWholeWeek={listScheduleWholeWeek}
       />
     ));
 

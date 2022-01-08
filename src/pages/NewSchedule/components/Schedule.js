@@ -1,7 +1,7 @@
 import React from "react";
 import { Grid, Box, Typography, Modal, Checkbox } from "@material-ui/core";
 
-export default function Schedule({ schedule }) {
+export default function Schedule({ schedule, setCurrentOrder, handleOpen }) {
   return (
     <Box
       sx={{
@@ -31,7 +31,7 @@ export default function Schedule({ schedule }) {
           Order: #{schedule.id}
         </p>
         <p style={{ display: "inline-block", margin: "0 0 11% 0" }}>
-          Sugard Storage
+          {schedule.storageName}
         </p>
       </Box>
       <Box
@@ -43,7 +43,19 @@ export default function Schedule({ schedule }) {
           alignItems: "end !important",
         }}
       >
-        <img src="/img/info.png" alt="info" height={24} width={24} />
+        <img
+          onClick={() => {
+            setCurrentOrder(schedule);
+            handleOpen();
+          }}
+          src="/img/info.png"
+          alt="info"
+          height={24}
+          width={24}
+          style={{
+            cursor: "pointer",
+          }}
+        />
         <Checkbox
           //   checked={checked}
           //   onChange={handleChange}
