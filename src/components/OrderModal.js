@@ -274,6 +274,7 @@ function OrderModal({
         returnTime: timeReturn.name,
         returnDate: new Date(dateReturn).toISOString(),
         deliveryAddress: data.deliveryAddress,
+        paymentMethod: paymentMethod,
         addressReturn: data.returnAddress,
         status: statusOrder,
         isPaid: isPaid,
@@ -619,7 +620,7 @@ function OrderModal({
               variant="h3"
               sx={{ marginBottom: "2%", marginTop: "4%" }}
             >
-              Payment
+              Payment method
             </Typography>
             <Box>
               <FormControl component="fieldset">
@@ -631,15 +632,10 @@ function OrderModal({
                   <FormControlLabel
                     value={0}
                     control={<Radio />}
-                    label="Not paid yet"
-                  />
-                  <FormControlLabel
-                    value={2}
-                    control={<Radio />}
                     label="Pay on cash"
                   />
                   <FormControlLabel
-                    value={3}
+                    value={1}
                     control={<Radio />}
                     label="Transfer money"
                   />

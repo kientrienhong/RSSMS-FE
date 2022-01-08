@@ -486,6 +486,7 @@ export const updateOrder = async (id, order, token) => {
     `https://localhost:44304/api/v1/orders/${id}`,
     {
       id: order.id,
+      paymentMethod: order.paymentMethod,
       isUserDelivery: order.isUserDelivery,
       deliveryDate: order.deliveryDate,
       returnTime: order.returnTime,
