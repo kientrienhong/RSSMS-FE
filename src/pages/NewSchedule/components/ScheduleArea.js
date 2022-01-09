@@ -5,6 +5,8 @@ export default function ScheduleArea({
   listGroup,
   setCurrentOrder,
   handleOpen,
+  onChangeCheckBox,
+  listSelectedOrder,
 }) {
   const mapListSchedule = (mapListSchedule) =>
     mapListSchedule?.map((e, index) => (
@@ -13,6 +15,8 @@ export default function ScheduleArea({
         key={index}
         setCurrentOrder={setCurrentOrder}
         handleOpen={handleOpen}
+        onChangeCheckBox={onChangeCheckBox}
+        listSelectedOrder={listSelectedOrder}
       />
     ));
 
@@ -62,7 +66,7 @@ export default function ScheduleArea({
         marginLeft: "1%",
       }}
     >
-      {mapListGroup(listGroup)}
+      {mapListGroup(listGroup?.listSchedule)}
     </Box>
   );
 }

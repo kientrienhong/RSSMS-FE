@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import * as action from "../../redux/action/action";
-import { Grid, Box, Typography, Modal } from "@material-ui/core";
+import { Box, Typography, Button, Badge } from "@material-ui/core";
 import moment from "moment";
 import { useForm } from "react-hook-form";
 import ListDateComponent from "./components/ListDateComponent";
@@ -14,9 +14,10 @@ import {
   isDateAfter,
   isDateBefore,
 } from "../../utils/DateUtils";
-import { getOrder, getSchedule } from "../../apis/Apis";
+import { getOrder } from "../../apis/Apis";
 import ScheduleArea from "./components/ScheduleArea";
-
+import ListUnassignOrderModal from "./components/ListUnassignOrderModal";
+import OrderAssignTimeModal from "./components/OrderAssignTimeModal";
 function NewSchedule({ showLoading, hideLoading, userState }) {
   const [listDateAWeek, setListDateAWeek] = useState([]);
   const [currentIndexDate, setCurrentIndexDate] = useState(-1);
@@ -24,7 +25,11 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
   const [listSelectedOrder, setListSelectedOrder] = useState([]);
   const [currentOrder, setCurrentOrder] = useState({});
   const [open, setOpen] = useState(false);
+  const [openAssignTime, setOpenAssignTime] = useState(false);
   const { handleSubmit, control, watch } = useForm();
+  const [startOfWeek, setStartOfWeek] = React.useState();
+  const [endOfWeek, setEndOfWeek] = React.useState();
+  const [openAssignReturnTime, setOpenAssignReturnTime] = useState(false);
 
   const [listOrderNotAssignedReturnTime, setListOrderNotAssignedReturnTime] =
     React.useState([]);
@@ -36,12 +41,52 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
     return result;
   }
 
+  const handleOpenAssignTime = () => {
+    setOpenAssignTime(true);
+  };
+
+  const handleCloseAssignTime = () => {
+    setOpenAssignTime(false);
+  };
+
+  const handleOpenAssignReturnTime = () => {
+    setOpenAssignReturnTime(true);
+  };
+
+  const handleCloseAssignReturnTime = () => {
+    setOpenAssignReturnTime(false);
+  };
+
   const handleOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const onChangeCheckBox = (schedule) => {
+    let listSelectedOrderTemp = [...listSelectedOrder];
+    let timeString = schedule.isDelivery ? "deliveryTime" : "returnTime";
+    let indexFound = listSelectedOrderTemp.findIndex((e) => {
+      let timeStringElement = e.isDelivery ? "deliveryTime" : "returnTime";
+
+      if (e[timeStringElement] === schedule[timeString]) {
+        if (schedule.id === e.id) {
+          schedule = { ...schedule, isSelected: false };
+          return true;
+        }
+      }
+    });
+
+    if (indexFound !== -1) {
+      listSelectedOrderTemp.splice(indexFound, 1);
+    } else {
+      schedule = { ...schedule, isSelected: true };
+      listSelectedOrderTemp.push(schedule);
+    }
+
+    setListSelectedOrder(listSelectedOrderTemp);
   };
 
   const handleFormatDate = (date, result, order, value) => {
@@ -57,6 +102,7 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
     } else {
       order = { ...order, isDelivery: true };
     }
+    order = { ...order, isSelected: false };
     // if (Object.keys(result).length > 0) {
     let currentDate = Object.keys(result)?.find((e) => {
       if (e === date.toLocaleDateString("en-US")) {
@@ -65,7 +111,7 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
     });
     // }
     // if (currentDate) {
-    result[currentDate].get(order[value]).push(order);
+    result[currentDate].listSchedule.get(order[value]).push(order);
     // } else {
     // let listTime = {};
 
@@ -93,7 +139,8 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
         let listTime = new Map();
 
         LIST_TIME.forEach((e) => listTime.set(e["name"], []));
-        result[dateStr] = listTime;
+        result[dateStr] = {};
+        result[dateStr].listSchedule = listTime;
         if (dateStr === currStr) {
           setCurrentIndexDate(i);
           currentIndexDateLocal = i;
@@ -179,15 +226,15 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
           month: parseInt(dateSplit[1]) - 1,
           date: parseInt(dateSplit[2]),
         });
-        let startOfWeek = currentMoment.startOf("week").toDate();
-        let endOfWeek = currentMoment.endOf("week").toDate();
+        let startOfWeekLocal = currentMoment.startOf("week").toDate();
+        let endOfWeekLocal = currentMoment.endOf("week").toDate();
 
-        // setStartOfWeek(startOfWeek);
-        // setEndOfWeek(endOfWeek);
+        setStartOfWeek(startOfWeekLocal);
+        setEndOfWeek(endOfWeekLocal);
 
         showLoading();
 
-        let result = await getData(startOfWeek, endOfWeek);
+        let result = await getData(startOfWeekLocal, endOfWeekLocal);
 
         // let currentListDateAWeek = listDateAWeekTemp[currentIndexDateLocal];
 
@@ -232,10 +279,27 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
         backgroundColor: "background.default",
         height: "100vh",
         overflowX: "scroll",
-        overflowY: "hidden",
         py: 3,
       }}
     >
+      <ListUnassignOrderModal
+        open={openAssignReturnTime}
+        listUnassignOrder={listOrderNotAssignedReturnTime}
+        handleClose={handleCloseAssignReturnTime}
+        setCurrentOrder={setCurrentOrder}
+        handleOpenDetailOrder={handleOpen}
+        handleOpenAssignTime={handleOpenAssignTime}
+      />
+      <OrderAssignTimeModal
+        getData={getData}
+        order={currentOrder}
+        startOfWeek={startOfWeek}
+        listOrderNotAssignedReturnTime={listOrderNotAssignedReturnTime}
+        setListOrderNotAssignedReturnTime={setListOrderNotAssignedReturnTime}
+        endOfWeek={endOfWeek}
+        open={openAssignTime}
+        handleClose={handleCloseAssignTime}
+      />
       <OrderModal
         open={open}
         handleClose={handleClose}
@@ -256,8 +320,30 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
           display: "flex",
           width: "90%",
           justifyContent: "right",
+          alignItems: "center",
         }}
       >
+        <Badge
+          color="error"
+          badgeContent={listOrderNotAssignedReturnTime.length}
+        >
+          <Button
+            style={{
+              height: "45px",
+              paddingLeft: "16px",
+              paddingRight: "16px",
+            }}
+            onClick={async () => {
+              handleOpenAssignReturnTime();
+            }}
+            color="primary"
+            variant="contained"
+            type="submit"
+          >
+            Unassign return time order
+          </Button>
+        </Badge>
+
         <Typography
           onClick={() => {
             setCurrentIndexGroup(0);
@@ -265,6 +351,7 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
           style={{
             cursor: "pointer",
             marginRight: "2%",
+            marginLeft: "3%",
           }}
           color={currentIndexGroup === 0 ? "primary" : "black"}
           variant="h2"
@@ -295,6 +382,8 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
           listGroup={listScheduleCurrentDate}
           setCurrentOrder={setCurrentOrder}
           handleOpen={handleOpen}
+          onChangeCheckBox={onChangeCheckBox}
+          listSelectedOrder={listSelectedOrder}
         />
       </Box>
     </Box>

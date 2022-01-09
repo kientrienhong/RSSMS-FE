@@ -1,7 +1,23 @@
 import React from "react";
-import { Grid, Box, Typography, Modal, Checkbox } from "@material-ui/core";
+import { Box, Checkbox, Button } from "@material-ui/core";
 
-export default function Schedule({ schedule, setCurrentOrder, handleOpen }) {
+export default function Schedule({
+  schedule,
+  setCurrentOrder,
+  handleOpen,
+  onChangeCheckBox,
+  listSelectedOrder,
+  handleOpenAssignTime,
+}) {
+  let timeString = schedule.isDelivery ? "deliveryTime" : "returnTime";
+  let indexFound = listSelectedOrder?.findIndex((e) => {
+    let timeStringElement = e.isDelivery ? "deliveryTime" : "returnTime";
+
+    if (e[timeStringElement] === schedule[timeString] && schedule.id !== e.id) {
+      return true;
+    }
+  });
+
   return (
     <Box
       sx={{
@@ -15,7 +31,7 @@ export default function Schedule({ schedule, setCurrentOrder, handleOpen }) {
         height: "150px",
         width: "225px",
         marginRight: "3%",
-        padding: "1%",
+        padding: "8px",
         borderRadius: "4px",
       }}
     >
@@ -56,12 +72,32 @@ export default function Schedule({ schedule, setCurrentOrder, handleOpen }) {
             cursor: "pointer",
           }}
         />
-        <Checkbox
-          //   checked={checked}
-          //   onChange={handleChange}
-          color="primary"
-          inputProps={{ "aria-label": "controlled" }}
-        />
+        {onChangeCheckBox !== undefined ? (
+          <Checkbox
+            disabled={indexFound !== -1}
+            onChange={(val) => onChangeCheckBox(schedule)}
+            color="primary"
+            inputProps={{ "aria-label": "controlled" }}
+          />
+        ) : (
+          <Button
+            style={{
+              height: "45px",
+              paddingLeft: "16px",
+              paddingRight: "16px",
+            }}
+            onClick={async () => {
+              setCurrentOrder(schedule);
+
+              handleOpenAssignTime();
+            }}
+            color="primary"
+            variant="contained"
+            type="submit"
+          >
+            Assign
+          </Button>
+        )}
       </Box>
     </Box>
   );
