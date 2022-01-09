@@ -393,7 +393,7 @@ const buildModal = (
                 >
                   <MenuItem value={"Customer"}>Customer</MenuItem>
                   <MenuItem value={"Manager"}>Manager</MenuItem>
-                  <MenuItem value={"Office Staff"}>Office Staff</MenuItem>
+                  <MenuItem value={"Office staff"}>Office Staff</MenuItem>
                   <MenuItem value={"Delivery Staff"}>Delivery Staff</MenuItem>
                 </CustomSelect>
               </Box>

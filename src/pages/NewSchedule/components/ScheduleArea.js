@@ -18,6 +18,9 @@ export default function ScheduleArea({
 
   const mapListGroup = (listGroup) => {
     let listComponent = [];
+    if (listGroup === undefined) {
+      return [];
+    }
     for (const entry of listGroup?.entries()) {
       if (entry[1]?.length === 0) {
         listComponent.push(

@@ -236,7 +236,6 @@ function Storages(props) {
           let managerFound = listUserAssigned.data.data.find(
             (e) => e.roleName === "Manager"
           );
-          console.log(managerFound);
           let newListUserUnAssign = listUserNotAssigned.data.data.filter(
             (e) => e.id !== managerFound.id
           );
@@ -249,6 +248,8 @@ function Storages(props) {
           console.log(error);
           setListStaffAssigned([]);
           setListShowStaffAssigned([]);
+          setListStaffUnAssigned(listUserNotAssigned.data.data);
+          setListShowStaffUnAssigned(listUserNotAssigned.data.data);
         } finally {
           hideLoading();
         }
