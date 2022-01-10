@@ -362,9 +362,10 @@ export const updateShelf = async (id, shelf, token) => {
   return listShelves;
 };
 
-export const deleteShelf = async (id) => {
+export const deleteShelf = async (id, token) => {
   const response = await axios.delete(
-    `https://localhost:44304/api/v1/shelves/${id}`
+    `https://localhost:44304/api/v1/shelves/${id}`,
+    { headers: { Authorization: `Bearer ${token}` } }
   );
 
   return response;

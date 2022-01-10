@@ -122,10 +122,7 @@ function AreaList({
       setListArea(listAreaTemp.data.data);
       showSnackbar("success", "Delete area success!");
     } catch (error) {
-      console.log(error.message);
-      if (error.message === "Request failed with status code 404") {
-        setListArea([]);
-      }
+      throw error;
     } finally {
       hideLoading();
       handleClose();

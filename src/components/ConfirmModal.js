@@ -18,7 +18,6 @@ function ConfirmModal({
   hideLoading,
   showSnackbar,
   msg,
-  msgError,
 }) {
   return (
     <Modal
@@ -69,8 +68,8 @@ function ConfirmModal({
                 handleClose();
                 showSnackbar("success", msg);
               } catch (error) {
-                console.log(error);
-                showSnackbar("error", msgError);
+                console.log(error?.response);
+                showSnackbar("error", error?.response?.data?.error?.message);
               } finally {
                 hideLoading();
               }

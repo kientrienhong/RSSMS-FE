@@ -168,7 +168,7 @@ function Storages(props) {
       }
       await getData(searchName, page, 4, userState.idToken);
     } catch (error) {
-      console.log(error);
+      throw error;
     }
 
     return response;

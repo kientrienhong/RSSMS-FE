@@ -79,8 +79,12 @@ function AreaDetailView({
   };
 
   const handleDeleteShelf = async (id) => {
-    await deleteShelf(id, userState.idToken);
-    await getData(searchName, page, 6);
+    try {
+      await deleteShelf(id, userState.idToken);
+      await getData(searchName, page, 6);
+    } catch (error) {
+      throw error;
+    }
   };
 
   const handleOpenModalDetail = () => {
