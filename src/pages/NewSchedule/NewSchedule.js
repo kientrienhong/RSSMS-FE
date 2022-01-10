@@ -8,16 +8,12 @@ import ListDateComponent from "./components/ListDateComponent";
 import ListItemSidebar from "./components/ListItemSidebar";
 import { LIST_TIME } from "../../constant/constant";
 import OrderModal from "../../components/OrderModal";
-import {
-  getTimeEnd,
-  getTimeStart,
-  isDateAfter,
-  isDateBefore,
-} from "../../utils/DateUtils";
+import { isDateAfter, isDateBefore } from "../../utils/DateUtils";
 import { getOrder } from "../../apis/Apis";
 import ScheduleArea from "./components/ScheduleArea";
 import ListUnassignOrderModal from "./components/ListUnassignOrderModal";
 import OrderAssignTimeModal from "./components/OrderAssignTimeModal";
+import OrderAssignModal from "./components/OrderAssignModal";
 function NewSchedule({ showLoading, hideLoading, userState }) {
   const [listDateAWeek, setListDateAWeek] = useState([]);
   const [currentIndexDate, setCurrentIndexDate] = useState(-1);
@@ -25,6 +21,7 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
   const [listSelectedOrder, setListSelectedOrder] = useState([]);
   const [currentOrder, setCurrentOrder] = useState({});
   const [open, setOpen] = useState(false);
+  const [openAssignStaff, setOpenAssignStaff] = useState(false);
   const [openAssignTime, setOpenAssignTime] = useState(false);
   const { handleSubmit, control, watch } = useForm();
   const [startOfWeek, setStartOfWeek] = React.useState();
@@ -40,6 +37,14 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
     result.setDate(result.getDate() + days);
     return result;
   }
+
+  const handleOpenAssignStaff = () => {
+    setOpenAssignStaff(true);
+  };
+
+  const handleCloseAssignStaff = () => {
+    setOpenAssignStaff(false);
+  };
 
   const handleOpenAssignTime = () => {
     setOpenAssignTime(true);
@@ -112,6 +117,7 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
     // }
     // if (currentDate) {
     result[currentDate].listSchedule.get(order[value]).push(order);
+    result[currentDate].amountNotAssignStaff += 1;
     // } else {
     // let listTime = {};
 
@@ -141,6 +147,7 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
         LIST_TIME.forEach((e) => listTime.set(e["name"], []));
         result[dateStr] = {};
         result[dateStr].listSchedule = listTime;
+        result[dateStr].amountNotAssignStaff = 0;
         if (dateStr === currStr) {
           setCurrentIndexDate(i);
           currentIndexDateLocal = i;
@@ -282,6 +289,14 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
         py: 3,
       }}
     >
+      <OrderAssignModal
+        open={openAssignStaff}
+        handleClose={handleCloseAssignStaff}
+        removeAssignStaff={() => {}}
+        addAssignStaff={() => {}}
+        handleChangeSearchAssigned={() => {}}
+        handleChangeSearchUnAssigned={() => {}}
+      />
       <ListUnassignOrderModal
         open={openAssignReturnTime}
         listUnassignOrder={listOrderNotAssignedReturnTime}
@@ -336,13 +351,31 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
             onClick={async () => {
               handleOpenAssignReturnTime();
             }}
-            color="primary"
+            color="success"
             variant="contained"
             type="submit"
           >
             Unassign return time order
           </Button>
         </Badge>
+
+        <Button
+          style={{
+            height: "45px",
+            paddingLeft: "16px",
+            marginLeft: "2%",
+            paddingRight: "16px",
+          }}
+          onClick={async () => {
+            // handleOpenAssignReturnTime();
+            handleOpenAssignStaff();
+          }}
+          color="primary"
+          variant="contained"
+          type="submit"
+        >
+          Assign Delivery Staff
+        </Button>
 
         <Typography
           onClick={() => {
