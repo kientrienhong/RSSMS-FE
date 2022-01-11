@@ -142,7 +142,6 @@ const order = (state = initialState, action) => {
     }
 
     case ActionType.SET_UP_MOVE_BOX: {
-      console.log(action.payload);
       state.moveBox = {
         orderId: action.payload.orderId,
         boxId: action.payload.id,
@@ -206,7 +205,6 @@ const order = (state = initialState, action) => {
     case ActionType.PLACING_STORAGE: {
       let placingProductTemp = { ...state.placingProducts };
       let storedOrderTemp = { ...state.storedOrder };
-      console.log(action.payload);
       let foundProduct = storedOrderTemp.products.find((e) => {
         return e.productId.toString() === action.payload.idProduct;
       });

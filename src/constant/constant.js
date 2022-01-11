@@ -67,6 +67,11 @@ export const BOX_SIZE = {
   4: "XL",
 };
 
+export const TYPE_SCHEDULE = [
+  { name: "Delivery order", color: style.SECOND_BLUE },
+  { name: "Return order", color: style.PRIMARY_BLUE },
+];
+
 export const AREA_SIZE = {
   0: "0.5m2",
   1: "1m2",

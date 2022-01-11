@@ -236,9 +236,14 @@ function Storages(props) {
           let managerFound = listUserAssigned.data.data.find(
             (e) => e.roleName === "Manager"
           );
-          let newListUserUnAssign = listUserNotAssigned.data.data.filter(
-            (e) => e.id !== managerFound.id
-          );
+          let newListUserUnAssign;
+          if (listUserNotAssigned?.data) {
+            newListUserUnAssign = listUserNotAssigned?.data?.data?.filter(
+              (e) => e.id !== managerFound.id
+            );
+          } else {
+            newListUserUnAssign = [];
+          }
 
           setListStaffAssigned(listUserAssigned.data.data);
           setListShowStaffAssigned(listUserAssigned.data.data);

@@ -99,9 +99,6 @@ function AreaDetail(props) {
       return e.productType === AREA_TYPE;
     });
 
-    console.log(listBox);
-    console.log(listArea);
-
     setListHandy(listArea);
     setListUnwieldy(listBox);
   };

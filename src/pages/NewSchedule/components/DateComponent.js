@@ -8,6 +8,7 @@ export default function DateComponent({
   setCurrentIndexDate,
   setListScheduleCurrentDate,
   listScheduleWholeWeek,
+  setListSelectedOrder,
 }) {
   let color = currentIndex === index ? "primary" : "black";
   let splitedDateSchedule = dateSchedule.toString().split(" ");
@@ -16,11 +17,12 @@ export default function DateComponent({
       color="error"
       badgeContent={
         listScheduleWholeWeek[Object.keys(listScheduleWholeWeek)[index]]
-          .amountNotAssignStaff
+          ?.amountNotAssignStaff
       }
     >
       <Box
         onClick={() => {
+          setListSelectedOrder([]);
           setCurrentIndexDate(index);
           setListScheduleCurrentDate(
             listScheduleWholeWeek[Object.keys(listScheduleWholeWeek)[index]]

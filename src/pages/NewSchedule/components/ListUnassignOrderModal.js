@@ -21,15 +21,15 @@ export default function ListUnassignOrderModal({
 }) {
   const buildListOrder = () => {
     return listUnassignOrder.map((e, index) => (
-      <Grid item sx={4}>
-        <Schedule
-          schedule={e}
-          key={index}
-          setCurrentOrder={setCurrentOrder}
-          handleOpen={handleOpenDetailOrder}
-          handleOpenAssignTime={handleOpenAssignTime}
-        />
-      </Grid>
+      // <Grid item sx={2} >
+      <Schedule
+        schedule={e}
+        key={index}
+        setCurrentOrder={setCurrentOrder}
+        handleOpen={handleOpenDetailOrder}
+        handleOpenAssignTime={handleOpenAssignTime}
+      />
+      // </Grid>
     ));
   };
 
@@ -72,9 +72,15 @@ export default function ListUnassignOrderModal({
             overflowY: "scroll",
           }}
         >
-          <Grid container spacing={2}>
-            {buildListOrder()}
-          </Grid>
+          {/* <Grid
+            container
+            spacing={1}
+            sx={{
+              width: "100%",
+            }}
+          > */}
+          {buildListOrder()}
+          {/* </Grid> */}
         </Box>
 
         <Box

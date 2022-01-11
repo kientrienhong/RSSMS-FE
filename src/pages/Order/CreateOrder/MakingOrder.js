@@ -11,7 +11,7 @@ import { connect } from "react-redux";
 import * as action from "../../../redux/action/action";
 import { getProduct } from "../../../apis/Apis";
 import LoadingPage from "../../../pages/Loading/LoadingPage";
-function MakingOrder({ showLoading, hideLoading, showSnackbar }) {
+function MakingOrder({ showLoading, hideLoading, showSnackbar, userState }) {
   const [listStorages, setListStorages] = useState([]);
 
   const [listAccessory, setListAccessory] = useState([]);
@@ -35,7 +35,7 @@ function MakingOrder({ showLoading, hideLoading, showSnackbar }) {
   });
 
   const getData = async () => {
-    let listProductTemp = await getProduct();
+    let listProductTemp = await getProduct(undefined, userState.idToken);
     let listStoragesTemp = setResetQuantity(listProductTemp.data[0], "product");
     let listAccessoryTemp = setResetQuantity(
       listProductTemp.data[1],
@@ -228,6 +228,10 @@ function MakingOrder({ showLoading, hideLoading, showSnackbar }) {
   );
 }
 
+const mapStateToProps = (state) => ({
+  userState: state.information.user,
+});
+
 const mapDispatchToProps = (dispatch) => {
   return {
     showLoading: () => dispatch(action.showLoader()),
@@ -236,4 +240,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(MakingOrder);
+export default connect(mapStateToProps, mapDispatchToProps)(MakingOrder);

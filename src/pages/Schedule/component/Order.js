@@ -53,7 +53,6 @@ export default function Order({
       }}
       onClick={() => {
         setCurrentOrder(order.order);
-        console.log(order);
         setCurrentListSchedule(order);
         handleOpen();
       }}

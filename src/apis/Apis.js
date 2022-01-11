@@ -6,20 +6,25 @@ export const getListUser = async (
   size,
   token,
   storageId,
-  roleName,
-  orderId
+  scheduleDay,
+  scheduleTime,
+  roleName
 ) => {
   let listUser;
 
-  if (storageId !== undefined) {
+  if (
+    storageId !== undefined &&
+    scheduleDay === undefined &&
+    scheduleTime === undefined
+  ) {
     listUser = await axios.get(
       `https://localhost:44304/api/v1/users?storageId=${storageId}&Name=${name}&page=${page}&size=${size}`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
   } else {
-    if (roleName !== undefined && orderId !== undefined) {
+    if (scheduleDay !== undefined && scheduleTime !== undefined) {
       listUser = await axios.get(
-        `https://localhost:44304/api/v1/users?RoleName=${roleName}&orderId=${orderId}&page=${page}&size=${size}`,
+        `https://localhost:44304/api/v1/users?SheduleDay=${scheduleDay}&${scheduleTime}&page=${page}&size=${size}&RoleName=${roleName}&storageId=${storageId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
     } else {
@@ -435,24 +440,16 @@ export const getSchedule = async (dateStart, dateEnd, token) => {
 };
 
 export const assignSchedule = async (
-  orderId,
   scheduleDay,
-  deliveryTime,
+  listOrder,
   userIds,
   token
 ) => {
-  console.log({
-    orderId: orderId,
-    sheduleDay: scheduleDay,
-    deliveryTime: deliveryTime,
-    userIds: userIds,
-  });
   let response = await axios.post(
     `https://localhost:44304/api/v1/schedules`,
     {
-      orderId: orderId,
       sheduleDay: scheduleDay,
-      deliveryTime: deliveryTime,
+      schedules: listOrder,
       userIds: userIds,
     },
     { headers: { Authorization: `Bearer ${token}` } }

@@ -6,15 +6,22 @@ import moment from "moment";
 import { useForm } from "react-hook-form";
 import ListDateComponent from "./components/ListDateComponent";
 import ListItemSidebar from "./components/ListItemSidebar";
-import { LIST_TIME } from "../../constant/constant";
+import { LIST_TIME, TYPE_SCHEDULE } from "../../constant/constant";
 import OrderModal from "../../components/OrderModal";
 import { isDateAfter, isDateBefore } from "../../utils/DateUtils";
-import { getOrder } from "../../apis/Apis";
+import { getOrder, getListUser, getSchedule } from "../../apis/Apis";
 import ScheduleArea from "./components/ScheduleArea";
 import ListUnassignOrderModal from "./components/ListUnassignOrderModal";
 import OrderAssignTimeModal from "./components/OrderAssignTimeModal";
 import OrderAssignModal from "./components/OrderAssignModal";
 function NewSchedule({ showLoading, hideLoading, userState }) {
+  const [listShowStaffAssigned, setListShowStaffAssigned] = React.useState([]);
+  const [listShowStaffUnAssigned, setListShowStaffUnAssigned] = React.useState(
+    []
+  );
+  const [listStaffAssigned, setListStaffAssigned] = React.useState([]);
+  const [listStaffUnAssigned, setListStaffUnAssigned] = React.useState([]);
+
   const [listDateAWeek, setListDateAWeek] = useState([]);
   const [currentIndexDate, setCurrentIndexDate] = useState(-1);
   const [currentIndexGroup, setCurrentIndexGroup] = useState(0);
@@ -127,6 +134,30 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
     // }
   };
 
+  const mapListNote = () =>
+    TYPE_SCHEDULE.map((e) => (
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          marginLeft: "4px",
+        }}
+      >
+        <Box
+          sx={{
+            width: "24px",
+            height: "24px",
+            marginRight: "8px",
+            backgroundColor: e.color,
+          }}
+        ></Box>
+        <Typography color="black" variant="h2">
+          {e.name}
+        </Typography>
+      </Box>
+    ));
+
   const getData = async (startOfWeek, endOfWeek) => {
     try {
       showLoading();
@@ -179,42 +210,216 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
             handleFormatDate(dateDelivery, result, e, "deliveryTime");
           }
         });
-      setListScheduleWholeWeek(result);
-      setListScheduleCurrentDate(
-        result[Object.keys(result)[currentIndexDateLocal]]
-      );
-      return result;
-      // try {
-      //   let responseSchedule = await getSchedule(
-      //     startOfWeek.toISOString().split("T")[0],
-      //     endOfWeek.toISOString().split("T")[0],
-      //     userState.idToken
-      //   );
 
-      //   if (responseSchedule.data.data) {
-      //     responseSchedule.data.data.forEach((schedule) => {
-      //       result.forEach((e) => {
-      //         let index = e.ListOrder.findIndex(
-      //           (ele) => ele.id === schedule.orderId
-      //         );
-      //         e.ListOrder[index] = {
-      //           ...e.ListOrder[index],
-      //           listStaffDelivery: schedule.users,
-      //         };
-      //       });
-      //     });
-      //     console.log(result);
-      //     setListSchedule(result);
-      //   }
-      // } catch (exception) {
-      //   console.log(exception.response);
-      // }
+      // return result;
+      try {
+        let responseSchedule = await getSchedule(
+          startOfWeek.toISOString().split("T")[0],
+          endOfWeek.toISOString().split("T")[0],
+          userState.idToken
+        );
+
+        if (responseSchedule.data.data) {
+          responseSchedule.data.data.forEach((schedule) => {
+            Object.keys(result).forEach((resultKey) => {
+              for (const entry of result[resultKey].listSchedule?.entries()) {
+                if (entry[1]?.length > 0) {
+                  console.log(result[resultKey].listSchedule.get(entry[0]));
+                  let index = entry[1].findIndex(
+                    (order) => order.id === schedule.orderId
+                  );
+                  if (index !== -1) {
+                    result[resultKey].listSchedule.get(entry[0])[index] = {
+                      ...result[resultKey].listSchedule.get(entry[0])[index],
+                      listStaffDelivery: schedule.users,
+                    };
+                    result[resultKey].amountNotAssignStaff -= 1;
+                  }
+                }
+              }
+            });
+
+            // result.forEach((e) => {
+            //   let index = e.ListOrder.findIndex(
+            //     (ele) => ele.id === schedule.orderId
+            //   );
+            //   e.ListOrder[index] = {
+            //     ...e.ListOrder[index],
+            //     listStaffDelivery: schedule.users,
+            //   };
+            // });
+          });
+          // setListSchedule(result);
+          console.log(result);
+          setListScheduleWholeWeek(result);
+          setListScheduleCurrentDate(
+            result[Object.keys(result)[currentIndexDateLocal]]
+          );
+        }
+      } catch (exception) {
+        console.log(exception.response);
+        setListScheduleWholeWeek(result);
+        setListScheduleCurrentDate(
+          result[Object.keys(result)[currentIndexDateLocal]]
+        );
+      }
     } catch (e) {
       console.log(e);
     } finally {
       hideLoading();
     }
   };
+
+  const handleChangeSearchUnAssigned = (event) => {
+    let listStaffUnAssignedTemp = [...listStaffUnAssigned];
+    listStaffUnAssignedTemp = listStaffUnAssignedTemp.filter((e) =>
+      e.name.includes(event.target.value)
+    );
+    setListShowStaffUnAssigned(listStaffUnAssignedTemp);
+  };
+
+  const handleChangeSearchAssigned = (event) => {
+    let listShowStaffAssignedTemp = [...listStaffAssigned];
+    listShowStaffAssignedTemp = listShowStaffAssignedTemp.filter((e) =>
+      e.name.includes(event.target.value)
+    );
+
+    setListShowStaffAssigned(listShowStaffAssignedTemp);
+  };
+
+  const addAssignStaff = (staff) => {
+    let listShowStaffAssignedTemp = [...listShowStaffAssigned];
+    let listShowStaffUnAssignedTemp = [...listShowStaffUnAssigned];
+
+    let listStaffAssignedTemp = [...listStaffAssigned];
+    let listStaffUnAssignedTemp = [...listStaffUnAssigned];
+
+    listStaffAssignedTemp.push(staff);
+    listStaffUnAssignedTemp = listStaffUnAssignedTemp.filter(
+      (e) => e.id !== staff.id
+    );
+    listShowStaffAssignedTemp.push(staff);
+    listShowStaffUnAssignedTemp = listShowStaffUnAssignedTemp.filter(
+      (e) => e.id !== staff.id
+    );
+    setListStaffAssigned(listStaffAssignedTemp);
+    setListStaffUnAssigned(listStaffUnAssignedTemp);
+    setListShowStaffAssigned(listShowStaffAssignedTemp);
+    setListShowStaffUnAssigned(listShowStaffUnAssignedTemp);
+  };
+
+  const removeAssignStaff = (staff) => {
+    let listShowStaffAssignedTemp = [...listShowStaffAssigned];
+    let listShowStaffUnAssignedTemp = [...listShowStaffUnAssigned];
+
+    let listStaffAssignedTemp = [...listStaffAssigned];
+    let listStaffUnAssignedTemp = [...listStaffUnAssigned];
+
+    listStaffUnAssignedTemp.push(staff);
+    listStaffAssignedTemp = listStaffAssignedTemp.filter(
+      (e) => e.id !== staff.id
+    );
+    listShowStaffUnAssignedTemp.push(staff);
+    listShowStaffAssignedTemp = listShowStaffAssignedTemp.filter(
+      (e) => e.id !== staff.id
+    );
+    setListStaffAssigned(listStaffAssignedTemp);
+    setListStaffUnAssigned(listStaffUnAssignedTemp);
+    setListShowStaffAssigned(listShowStaffAssignedTemp);
+    setListShowStaffUnAssigned(listShowStaffUnAssignedTemp);
+  };
+
+  useEffect(() => {
+    const process = async () => {
+      if (openAssignStaff === true) {
+        let listSelectedTime = listSelectedOrder?.map((e) => {
+          if (e.isDelivery) {
+            return e["deliveryTime"];
+          } else {
+            return e["returnTime"];
+          }
+        });
+
+        listSelectedTime = listSelectedTime.join("&DeliveryTimes=");
+        let storageId;
+
+        if (listSelectedOrder?.length > 0) {
+          storageId = listSelectedOrder[0].storageId;
+        }
+        try {
+          showLoading();
+          let listUserNotAssigned = await getListUser(
+            "",
+            1,
+            -1,
+            userState.idToken,
+            storageId,
+            listDateAWeek[currentIndexDate].toISOString(),
+            `&DeliveryTimes=${listSelectedTime}`,
+            "Delivery Staff"
+          );
+          setListShowStaffUnAssigned(
+            listUserNotAssigned.data.data.length === 0
+              ? []
+              : listUserNotAssigned.data.data
+          );
+          setListStaffUnAssigned(
+            listUserNotAssigned.data.data.length === 0
+              ? []
+              : listUserNotAssigned.data.data
+          );
+          setListStaffAssigned(currentOrder.listStaffDelivery ?? []);
+          setListShowStaffAssigned(currentOrder.listStaffDelivery ?? []);
+        } catch (e) {
+          console.log(e);
+          console.log(e.response);
+          setListShowStaffUnAssigned([]);
+          setListStaffUnAssigned([]);
+          setListStaffAssigned(currentOrder.listStaffDelivery ?? []);
+          setListShowStaffAssigned(currentOrder.listStaffDelivery ?? []);
+        } finally {
+          hideLoading();
+        }
+      }
+      //   const loadUnassignStaff = async () => {
+      // try {
+      //   showLoading();
+      //   let listUserNotAssigned = await getListUser(
+      //     "",
+      //     1,
+      //     -1,
+      //     userState.idToken,
+      //     undefined,
+      //     "Delivery Staff",
+      //     currentOrder.id
+      //   );
+      //   setListShowStaffUnAssigned(
+      //     listUserNotAssigned.data.data.length === 0
+      //       ? []
+      //       : listUserNotAssigned.data.data
+      //   );
+      //   setListStaffUnAssigned(
+      //     listUserNotAssigned.data.data.length === 0
+      //       ? []
+      //       : listUserNotAssigned.data.data
+      //   );
+      //   setListStaffAssigned(currentOrder.listStaffDelivery ?? []);
+      //   setListShowStaffAssigned(currentOrder.listStaffDelivery ?? []);
+      // } catch (e) {
+      //   console.log(e);
+      //   console.log(e.response);
+      //   setListShowStaffUnAssigned([]);
+      //   setListStaffUnAssigned([]);
+      //   setListStaffAssigned(currentOrder.listStaffDelivery ?? []);
+      //   setListShowStaffAssigned(currentOrder.listStaffDelivery ?? []);
+      // } finally {
+      //   hideLoading();
+      // }
+      //   };
+      //   loadUnassignStaff();
+    };
+    process();
+  }, [openAssignStaff]);
 
   useEffect(() => {
     const firstCall = async () => {
@@ -292,10 +497,19 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
       <OrderAssignModal
         open={openAssignStaff}
         handleClose={handleCloseAssignStaff}
-        removeAssignStaff={() => {}}
-        addAssignStaff={() => {}}
-        handleChangeSearchAssigned={() => {}}
-        handleChangeSearchUnAssigned={() => {}}
+        removeAssignStaff={removeAssignStaff}
+        addAssignStaff={addAssignStaff}
+        listShowStaffAssigned={listShowStaffAssigned}
+        listShowStaffUnAssigned={listShowStaffUnAssigned}
+        listStaffUnAssigned={listStaffUnAssigned}
+        listStaffAssigned={listStaffAssigned}
+        startOfWeek={startOfWeek}
+        endOfWeek={endOfWeek}
+        getData={getData}
+        currentScheduleDay={listDateAWeek[currentIndexDate]?.toISOString()}
+        listSelectedOrder={listSelectedOrder}
+        handleChangeSearchAssigned={handleChangeSearchAssigned}
+        handleChangeSearchUnAssigned={handleChangeSearchUnAssigned}
       />
       <ListUnassignOrderModal
         open={openAssignReturnTime}
@@ -323,6 +537,7 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
         isView={true}
       />
       <ListDateComponent
+        setListSelectedOrder={setListSelectedOrder}
         listScheduleWholeWeek={listScheduleWholeWeek}
         currentIndex={currentIndexDate}
         setListScheduleCurrentDate={setListScheduleCurrentDate}
@@ -338,6 +553,15 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
           alignItems: "center",
         }}
       >
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            marginRight: "2%",
+          }}
+        >
+          {mapListNote()}
+        </Box>
         <Badge
           color="error"
           badgeContent={listOrderNotAssignedReturnTime.length}

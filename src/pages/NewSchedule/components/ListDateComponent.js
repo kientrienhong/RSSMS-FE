@@ -7,11 +7,13 @@ export default function ListDateComponent({
   currentIndex,
   setCurrentIndexDate,
   setListScheduleCurrentDate,
+  setListSelectedOrder,
 }) {
   const mapListDate = () =>
     listDateAWeek.map((e, i) => (
       <DateComponent
         dateSchedule={e}
+        setListSelectedOrder={setListSelectedOrder}
         currentIndex={currentIndex}
         index={i}
         setListScheduleCurrentDate={setListScheduleCurrentDate}

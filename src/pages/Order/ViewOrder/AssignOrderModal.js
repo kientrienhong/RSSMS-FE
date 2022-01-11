@@ -50,9 +50,6 @@ function AssignOrderModal({
     } finally {
       hideLoading();
     }
-
-    console.log(selectedValue);
-    console.log(currentId);
   };
 
   useEffect(() => {
