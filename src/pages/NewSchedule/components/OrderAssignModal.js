@@ -26,22 +26,24 @@ function OrderAssignModal({
   startOfWeek,
   endOfWeek,
   listSelectedOrder,
-  currentScheduleDay,
 }) {
   const assignOrder = async () => {
     try {
       showLoading();
       const userIds = listStaffAssigned.map((e) => e.id);
-
+      let currentSchedule;
       let listSelectedTime = listSelectedOrder?.map((e) => {
         if (e.isDelivery) {
+          currentSchedule = e.deliveryDate;
           return { deliveryTime: e["deliveryTime"], orderIds: e["id"] };
         } else {
+          currentSchedule = e.returnDate;
+
           return { deliveryTime: e["returnTime"], orderIds: e["id"] };
         }
       });
       const response = await assignSchedule(
-        currentScheduleDay,
+        currentSchedule,
         listSelectedTime,
         userIds,
         userState.idToken

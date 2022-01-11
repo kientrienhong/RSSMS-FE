@@ -224,7 +224,6 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
             Object.keys(result).forEach((resultKey) => {
               for (const entry of result[resultKey].listSchedule?.entries()) {
                 if (entry[1]?.length > 0) {
-                  console.log(result[resultKey].listSchedule.get(entry[0]));
                   let index = entry[1].findIndex(
                     (order) => order.id === schedule.orderId
                   );
@@ -250,7 +249,6 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
             // });
           });
           // setListSchedule(result);
-          console.log(result);
           setListScheduleWholeWeek(result);
           setListScheduleCurrentDate(
             result[Object.keys(result)[currentIndexDateLocal]]
@@ -506,7 +504,6 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
         startOfWeek={startOfWeek}
         endOfWeek={endOfWeek}
         getData={getData}
-        currentScheduleDay={listDateAWeek[currentIndexDate]?.toISOString()}
         listSelectedOrder={listSelectedOrder}
         handleChangeSearchAssigned={handleChangeSearchAssigned}
         handleChangeSearchUnAssigned={handleChangeSearchUnAssigned}
