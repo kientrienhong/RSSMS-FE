@@ -67,6 +67,7 @@ function InputInforModal({
             price: e.price,
             type: e.typeInt,
             amount: e.quantity,
+            note: e.note,
           });
         });
       });

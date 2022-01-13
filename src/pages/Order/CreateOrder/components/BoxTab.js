@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Typography, Grid } from "@material-ui/core";
 import Item from "./Item";
+import ItemNote from "./ItemNote";
 
 export default function BoxTab({
   listBoxes,
@@ -12,10 +13,33 @@ export default function BoxTab({
   setListAccessory,
   choosenProduct,
 }) {
+  const mapLitsItemNote = (listData, setListData) => {
+    return listData?.map((e, index) => (
+      <Grid item xs={4} key={index}>
+        <ItemNote
+          product={e}
+          image={e?.images}
+          unit={e.unit}
+          type={e.type}
+          price={e.price}
+          id={e.id}
+          typeInt={e.typeInt}
+          quantity={e.quantity}
+          name={e.name}
+          setList={setListData}
+          list={listData}
+          setChoosenProduct={setChoosenProduct}
+          choosenProduct={choosenProduct}
+        />
+      </Grid>
+    ));
+  };
+
   const mapListItemsToGrid = (listData, setListData) => {
     return listData?.map((e, index) => (
       <Grid item xs={4} key={index}>
         <Item
+          product={e}
           image={e?.images}
           unit={e.unit}
           type={e.type}
@@ -60,7 +84,7 @@ export default function BoxTab({
           marginBottom: "3%",
         }}
       >
-        {mapListItemsToGrid(listBoxes, setListBoxes)}
+        {mapLitsItemNote(listBoxes, setListBoxes)}
       </Grid>
       <Typography
         sx={{

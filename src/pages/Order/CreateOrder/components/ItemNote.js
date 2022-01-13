@@ -1,7 +1,6 @@
 import React from "react";
-import { Box, Typography, Card } from "@material-ui/core";
+import { Box, Typography, Card, TextField } from "@material-ui/core";
 import { formatCurrency } from "../../../../utils/FormatCurrency";
-
 const styleButtonPlus = {
   width: "26px",
   height: "26px",
@@ -31,7 +30,7 @@ const styleInput = {
   width: "50%",
 };
 
-export default function Item({
+export default function ItemNote({
   image,
   unit,
   name,
@@ -44,8 +43,47 @@ export default function Item({
   setChoosenProduct,
   type,
   typeInt,
-  product,
 }) {
+  let currentIndexProduct = list.findIndex((e) => e.id === id);
+
+  const mapCustomInput = () => {
+    let result = [];
+
+    for (let i = 0; i < list[currentIndexProduct].quantity; i++) {
+      let choosenProductTemp = { ...choosenProduct };
+      let currentProductInChooseProduct = choosenProductTemp["product"].find(
+        (ele) => ele.idOfList === `${id}-${i + 1}`
+      );
+
+      result.push(
+        <TextField
+          sx={{
+            marginBottom: "8px",
+          }}
+          disabled={false}
+          multiline
+          rows={2}
+          label="Please description items"
+          rowsMax={4}
+          variant="outlined"
+          value={currentProductInChooseProduct.note}
+          onChange={(event) => {
+            currentProductInChooseProduct.note = event.target.value;
+            setChoosenProduct(choosenProductTemp);
+          }}
+          type={type}
+          error={!!currentProductInChooseProduct.error}
+          helperText={
+            currentProductInChooseProduct.error
+              ? currentProductInChooseProduct.error.message
+              : null
+          }
+        />
+      );
+    }
+    return result;
+  };
+
   const handleOnClickMinus = () => {
     if (quantity > 0) {
       let quantityTemp = --quantity;
@@ -56,14 +94,13 @@ export default function Item({
 
       let choosenProductTemp = { ...choosenProduct };
 
-      let indexProduct = choosenProductTemp[type].findIndex(
-        (e) => e.name === name
+      let indexFoundChoosenProduct = choosenProductTemp[type].findIndex(
+        (e) => e.idOfList === `${id}-${quantity + 1}`
       );
-      if (choosenProductTemp[type][indexProduct].quantity === 1) {
-        choosenProductTemp[type].splice(indexProduct, 1);
-      } else {
-        --choosenProductTemp[type][indexProduct].quantity;
+      if (indexFoundChoosenProduct !== -1) {
+        choosenProductTemp[type].splice(indexFoundChoosenProduct, 1);
       }
+
       setChoosenProduct(choosenProductTemp);
     }
   };
@@ -76,21 +113,17 @@ export default function Item({
     setList(listTemp);
 
     let choosenProductTemp = { ...choosenProduct };
-    let indexProduct = choosenProductTemp[type].findIndex(
-      (e) => e.name === name
-    );
-    if (indexProduct === -1) {
-      choosenProductTemp[type].push({
-        name: name,
-        quantity: 1,
-        price: price,
-        type: type,
-        id: id,
-        typeInt: typeInt,
-      });
-    } else {
-      ++choosenProductTemp[type][indexProduct].quantity;
-    }
+
+    choosenProductTemp[type].push({
+      name: name,
+      quantity: 1,
+      price: price,
+      type: type,
+      id: id,
+      typeInt: typeInt,
+      note: "",
+      idOfList: id + "-" + quantityTemp,
+    });
     setChoosenProduct(choosenProductTemp);
   };
 
@@ -137,6 +170,7 @@ export default function Item({
           +
         </button>
       </Box>
+      {mapCustomInput()}
     </Card>
   );
 }
