@@ -164,6 +164,7 @@ function ListOrder({
   showLoading,
   showSnackbar,
   userState,
+  currentOrder,
 }) {
   const classes = useStyles();
 
@@ -208,7 +209,6 @@ function ListOrder({
       showLoading();
       let orderTemp = await getOrderById(row.id, userState.idToken);
       setOrder(orderTemp.data);
-      handleOpen(true);
     } catch (e) {
       console.log(e.response);
     } finally {
@@ -348,6 +348,7 @@ function ListOrder({
             open={openAssign}
             handleClose={handleCloseAssign}
             currentId={currentId}
+            currentOrder={currentOrder}
           />
         ) : (
           <ConfirmModal
@@ -373,37 +374,61 @@ function ListOrder({
                   component="th"
                   scope="row"
                   style={{ color: "black" }}
-                  onClick={(e) => handleClickRow(row)}
+                  onClick={(e) => {
+                    handleOpen(true);
+
+                    handleClickRow(row);
+                  }}
                 >
                   {row.id}
                 </TableCell>
                 <TableCell
                   style={{ color: "black" }}
-                  onClick={(e) => handleClickRow(row)}
+                  onClick={(e) => {
+                    handleOpen(true);
+
+                    handleClickRow(row);
+                  }}
                 >
                   {row.customerName}
                 </TableCell>
                 <TableCell
                   style={{ color: "black" }}
-                  onClick={(e) => handleClickRow(row)}
+                  onClick={(e) => {
+                    handleOpen(true);
+
+                    handleClickRow(row);
+                  }}
                 >
                   {row.customerPhone}
                 </TableCell>
                 <TableCell
                   style={{ color: "black" }}
-                  onClick={(e) => handleClickRow(row)}
+                  onClick={(e) => {
+                    handleOpen(true);
+
+                    handleClickRow(row);
+                  }}
                 >
                   {row.deliveryAddress}
                 </TableCell>
                 <TableCell
                   style={{ color: "black" }}
-                  onClick={(e) => handleClickRow(row)}
+                  onClick={(e) => {
+                    handleOpen(true);
+
+                    handleClickRow(row);
+                  }}
                 >
                   {typeOrder}
                 </TableCell>
                 <TableCell
                   style={{ color: "black" }}
-                  onClick={(e) => handleClickRow(row)}
+                  onClick={(e) => {
+                    handleOpen(true);
+
+                    handleClickRow(row);
+                  }}
                 >
                   <FormControlLabel
                     value="isPaid"
@@ -414,7 +439,11 @@ function ListOrder({
                 </TableCell>
                 <TableCell
                   style={{ color: "black" }}
-                  onClick={(e) => handleClickRow(row)}
+                  onClick={(e) => {
+                    handleOpen(true);
+
+                    handleClickRow(row);
+                  }}
                 >
                   {status}
                 </TableCell>
@@ -437,6 +466,7 @@ function ListOrder({
                             }}
                             onClick={() => {
                               setCurrentId(row.id);
+                              handleClickRow(row);
                               handleOpenAssign();
                             }}
                             color="primary"

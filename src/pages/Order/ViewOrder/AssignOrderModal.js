@@ -22,6 +22,7 @@ function AssignOrderModal({
   currentId,
   userState,
   changeIsLoadOrder,
+  currentOrder,
 }) {
   const [listStorage, setListStorage] = useState([]);
   const styleIcon = {
@@ -36,6 +37,13 @@ function AssignOrderModal({
   const handleAssignStorage = async () => {
     if (selectedValue === "") {
       setError("Please product to place");
+      return;
+    }
+
+    let storage = listStorage.find((e) => e.id == selectedValue);
+
+    if (storage.type !== currentOrder.typeOrder) {
+      setError("Please place right storage");
       return;
     }
 

@@ -92,9 +92,9 @@ const order = (state = initialState, action) => {
       let placingProductTemp = { ...state.placingProducts };
       let storedOrderTemp = { ...state.storedOrder };
 
-      let foundProduct = storedOrderTemp.products.find(
-        (e) => e.productId.toString() === action.payload.idProduct
-      );
+      let foundProduct = storedOrderTemp.products.find((e) => {
+        return e.id.toString() == action.payload.idOrderDetail;
+      });
       foundProduct.amount--;
       storedOrderTemp.totalQuantity--;
       placingProductTemp.orderId = storedOrderTemp.orderId;

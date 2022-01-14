@@ -197,7 +197,7 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
         "OrderStatuses=2&OrderStatuses=3&OrderStatuses=4"
       );
       response?.data?.data
-        ?.filter((e) => e.status !== 0)
+        ?.filter((e) => e.status !== 0 && e.typeOrder !== 0)
         ?.forEach((e) => {
           let dateDelivery = new Date(e.deliveryDate);
           let dateReturn = new Date(e.returnDate);

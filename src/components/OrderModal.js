@@ -89,7 +89,6 @@ function OrderModal({
   const [isCustomerReturn, setIsCustomerReturn] = useState();
   const [paymentMethod, setPaymentMethod] = useState(0);
   const navigate = useNavigate();
-
   const handleChangePaymentMethod = (e) => {
     if (isView === true) {
       return;

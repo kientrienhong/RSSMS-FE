@@ -48,6 +48,7 @@ function AreaDetail(props) {
   const [listAreas, setListAreas] = useState([]);
   const [listHandy, setListHandy] = useState([]);
   const [listUnwieldy, setListUnwieldy] = useState([]);
+  const [listStorage, setListStorage] = useState([]);
 
   const [listSelfStorage, setListSelfStorage] = useState([]);
   const handleOpen = async (isEdit) => {
@@ -91,16 +92,21 @@ function AreaDetail(props) {
   const filterUsage = (area) => {
     let listBox = [];
 
-    let listArea = area?.boxUsage?.filter((e) => {
-      if (e.productType === BOX_TYPE) {
-        listBox.push(e);
-      }
+    if (storage.type === 0) {
+      let listArea = area?.boxUsage?.filter((e) => {
+        if (e.productType === BOX_TYPE) {
+          listBox.push(e);
+        }
 
-      return e.productType === AREA_TYPE;
-    });
+        return e.productType === AREA_TYPE;
+      });
 
-    setListHandy(listArea);
-    setListUnwieldy(listBox);
+      setListHandy(listArea);
+      setListUnwieldy(listBox);
+    } else {
+      let listStorageTemp = area?.boxUsage;
+      setListStorage(listStorageTemp);
+    }
   };
 
   const getData = async (name, page) => {
@@ -118,6 +124,7 @@ function AreaDetail(props) {
         return { ...e, boxSize: e.boxes[0].sizeType };
       });
       let area = await getDetailArea(parseInt(areaId), userState.idToken);
+      console.log(area.data);
       filterUsage(area.data);
       setCurrentArea(area.data);
       setTotalPage(response.data.metadata.totalPage);
@@ -335,27 +342,45 @@ function AreaDetail(props) {
           isModifyShelf={isModifyShelf}
           storageId={storageId}
         />
-        <Box
-          sx={{
-            margin: "2%",
-            display: "flex",
-            flexDirection: "column",
-            width: "30%",
-          }}
-        >
-          <AreaUsage
-            list={listHandy}
-            name={"Handy Usage"}
-            numberInRow={3}
-            currentArea={currentArea}
-          />
-          <AreaUsage
-            list={listUnwieldy}
-            name={"Unwieldy Usage"}
-            numberInRow={2}
-            currentArea={currentArea}
-          />
-        </Box>
+        {storage.type === 1 ? (
+          <Box
+            sx={{
+              margin: "2%",
+              display: "flex",
+              flexDirection: "column",
+              width: "30%",
+            }}
+          >
+            <AreaUsage
+              list={listHandy}
+              name={"Handy Usage"}
+              numberInRow={3}
+              currentArea={currentArea}
+            />
+            <AreaUsage
+              list={listUnwieldy}
+              name={"Unwieldy Usage"}
+              numberInRow={2}
+              currentArea={currentArea}
+            />
+          </Box>
+        ) : (
+          <Box
+            sx={{
+              margin: "2%",
+              display: "flex",
+              flexDirection: "column",
+              width: "30%",
+            }}
+          >
+            <AreaUsage
+              list={listStorage}
+              name={"Storages"}
+              numberInRow={3}
+              currentArea={currentArea}
+            />
+          </Box>
+        )}
       </Box>
     </Box>
   );

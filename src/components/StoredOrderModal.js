@@ -19,22 +19,6 @@ const style = {
   cursor: "pointer",
 };
 
-const mapping = {
-  1: "Storage 2m2",
-  2: "Storage 4m2",
-  3: "Storage 8m2",
-  4: "Storage 16m2",
-  11: "Bolo",
-  12: "Size S",
-  13: "Size M",
-  14: "Size L",
-  16: "Size XL",
-  18: "Area 0.5m2",
-  19: "Area 1m2",
-  20: "Area 2m2",
-  21: "Area 3m2",
-};
-
 function StoredOrderModal({
   storedOrder,
   open,
@@ -64,7 +48,7 @@ function StoredOrderModal({
     return storedOrder?.products?.map((e) => {
       let eventTemp = {
         target: {
-          value: e.productId.toString(),
+          value: e.id.toString(),
         },
       };
 
@@ -78,11 +62,11 @@ function StoredOrderModal({
             alignItems: "center",
             marginBottom: "8%",
           }}
-          key={e.productId}
+          key={e.id}
         >
           <Radio
-            value={e.productId}
-            checked={selectedValue === e.productId.toString()}
+            value={e.id}
+            checked={selectedValue === e.id.toString()}
             name="radio-buttons"
             onChange={handleChange}
             inputProps={{ "aria-label": "B" }}
@@ -187,21 +171,30 @@ function StoredOrderModal({
   };
 
   const handlePlaceBox = () => {
+    console.log(currentBox);
+
     if (selectedValue === "") {
       setError("Please choose product to place");
       return;
     }
-    if (selectedValue.toString() === currentBox.productId.toString()) {
-      let productTemp = storedOrder.products.find(
-        (e) => currentBox.productId === e.productId
-      );
-      if (productTemp?.amount === 0) {
+
+    // if (selectedValue.toString() === )
+    console.log(storedOrder?.products);
+    console.log(selectedValue);
+    let foundOrderDetail = storedOrder?.products?.find(
+      (e) => e.id.toString() === selectedValue
+    );
+    if (
+      foundOrderDetail.productId.toString() === currentBox.productId.toString()
+    ) {
+      if (foundOrderDetail?.amount === 0) {
         setError("There is no product to place");
         return;
       }
       placeProductToShelf({
-        idProduct: selectedValue,
-        nameProduct: mapping[selectedValue],
+        idOrderDetail: foundOrderDetail.id,
+        idProduct: foundOrderDetail.productId,
+        nameProduct: foundOrderDetail.productName,
       });
       setError("");
       showSnackbar("success", "Place product success");

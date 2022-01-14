@@ -205,6 +205,7 @@ function Order({
           reset={reset}
           setListOrder={setListOrder}
           setPage={setPage}
+          currentOrder={currentOrder}
         />
       </Card>
     </Box>

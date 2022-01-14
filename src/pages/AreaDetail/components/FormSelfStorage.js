@@ -28,6 +28,7 @@ function FormSelfStorage({
   searchName,
   handleClose,
   listSelfStorage,
+  userState,
 }) {
   const { handleSubmit, control } = useForm();
   const [error, setError] = useState({});
@@ -73,7 +74,7 @@ function FormSelfStorage({
         boxSize: currentShelf.boxSize,
         productId: currentShelf.productId,
       };
-      await updateShelf(currentShelf.id, shelf);
+      await updateShelf(currentShelf.id, shelf, userState.idToken);
       await getData(searchName, page, 4);
       showSnackbar("success", "Update storage success");
       handleClose();
@@ -103,7 +104,7 @@ function FormSelfStorage({
         boxSize: currentShelf.boxSize,
         productId: currentShelf.productId,
       };
-      await createShelf(shelf, parseInt(areaId));
+      await createShelf(shelf, parseInt(areaId), userState.idToken);
       await getData(searchName, page, 4);
       showSnackbar("success", "Create storage success");
       handleClose();
@@ -232,6 +233,10 @@ function FormSelfStorage({
   );
 }
 
+const mapStateToProps = (state) => ({
+  userState: state.information.user,
+});
+
 const mapDispatchToProps = (dispatch) => {
   return {
     showLoading: () => dispatch(action.showLoader()),
@@ -240,4 +245,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(FormSelfStorage);
+export default connect(mapStateToProps, mapDispatchToProps)(FormSelfStorage);
