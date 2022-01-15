@@ -1,9 +1,9 @@
 import React, { useRef } from "react";
 import { connect } from "react-redux";
 import * as action from "../../redux/action/action";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import CustomInput from "../../components/CustomInput";
-import { Box, Button } from "@material-ui/core";
+import { Box, Button, TextField } from "@material-ui/core";
 import { changePassword } from "../../apis/Apis";
 function ChangePassword({
   showLoading,
@@ -12,7 +12,7 @@ function ChangePassword({
   userId,
   userState,
 }) {
-  const { handleSubmit, control, watch } = useForm();
+  const { register, handleSubmit, control, watch } = useForm();
   const password = useRef({});
   password.current = watch("password", "");
   const styleBoxInput = {
@@ -68,25 +68,39 @@ function ChangePassword({
             userInfo={""}
             inlineStyle={styleInput}
           />
-          <CustomInput
+          <Controller
+            name="password"
             control={control}
             rules={{
               required: "Password required",
             }}
-            styles={{ width: "300px" }}
-            name="password"
-            label="Password"
-            disabled={false}
-            type="password"
-            userInfo={""}
-            inlineStyle={styleInput}
+            render={({ field: { onChange, value }, fieldState: { error } }) => {
+              return (
+                <TextField
+                  label="Password"
+                  variant="outlined"
+                  inputRef={password}
+                  value={value}
+                  style={styleInput}
+                  inputProps={{ style: { width: "300px" } }}
+                  onChange={onChange}
+                  type="password"
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                />
+              );
+            }}
           />
           <CustomInput
             control={control}
             rules={{
               required: "Confirm password required",
-              validate: (value) =>
-                value === password.current || "The passwords do not match",
+              validate: (value) => {
+                console.log(password.current);
+                return (
+                  value === password.current || "The passwords do not match"
+                );
+              },
             }}
             styles={{ width: "300px" }}
             name="confirmPassword"

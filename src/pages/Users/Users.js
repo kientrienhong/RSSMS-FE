@@ -22,7 +22,7 @@ import CustomAvatar from "../../components/CustomAvatar";
 import { getListUser, createUser, updateUser } from "../../apis/Apis";
 import { connect } from "react-redux";
 import * as action from "../../redux/action/action";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import CustomInput from "../../components/CustomInput";
 import { storageFirebase } from "../../firebase/firebase";
 import { ROLE_USER } from "../../constant/constant";
@@ -290,15 +290,32 @@ const buildModal = (
                   justifyContent: "flex-end",
                 }}
               >
-                <CustomInput
-                  control={control}
-                  rules={{ required: "Password required" }}
-                  styles={{ width: "280px" }}
+                <Controller
                   name="password"
-                  label="Password"
-                  userInfo={user.password}
-                  type="password"
-                  inlineStyle={styleInput}
+                  control={control}
+                  defaultValue={user.password}
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => {
+                    return (
+                      <TextField
+                        label="Password"
+                        variant="outlined"
+                        inputRef={password}
+                        value={value}
+                        style={styleInput}
+                        inputProps={{ width: "280px" }}
+                        onChange={onChange}
+                        error={!!error}
+                        helperText={error ? error.message : null}
+                        type="password"
+                      />
+                    );
+                  }}
+                  rules={{
+                    required: "Password required",
+                  }}
                 />
               </Box>
               <Box
