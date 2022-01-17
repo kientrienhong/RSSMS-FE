@@ -251,7 +251,7 @@ function UpdateInformation({
               rules={{
                 required: "Phone required",
                 pattern: {
-                  value: /[0-9]{10}/,
+                  value: /^[0-9]{10}$/,
                   message: "Invalid phone number",
                 },
               }}

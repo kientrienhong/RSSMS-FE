@@ -56,17 +56,26 @@ const handleOnclickAvatar = () => {
   inputFile.current.click();
 };
 
-const onChangeInputFile = (event, setUser, user) => {
-  setUser({
-    ...user,
-    images: [
-      {
-        id: user?.images[0]?.id,
-        url: URL.createObjectURL(event.target.files[0]),
-      },
-    ],
-    avatarFile: event.target.files[0],
-  });
+const onChangeInputFile = (event, setUser, user, setError) => {
+  if (
+    event.target.files[0].name.includes(".png") ||
+    event.target.files[0].name.includes(".jpg") ||
+    event.target.files[0].name.includes(".jpeg")
+  ) {
+    setUser({
+      ...user,
+      images: [
+        {
+          id: user?.images[0]?.id,
+          url: URL.createObjectURL(event.target.files[0]),
+        },
+      ],
+      avatarFile: event.target.files[0],
+    });
+    setError();
+  } else {
+    setError({ message: "Please choose image file!" });
+  }
 };
 
 const styleInput = { marginRight: "2.5%", marginLeft: "2.5%" };
@@ -84,7 +93,8 @@ const buildModal = (
   errors,
   error,
   gender,
-  handleChangeGender
+  handleChangeGender,
+  setError
 ) => {
   return (
     <Modal
@@ -108,7 +118,7 @@ const buildModal = (
             id="file"
             name="fileImage"
             ref={inputFile}
-            onChange={(e) => onChangeInputFile(e, setUser, user)}
+            onChange={(e) => onChangeInputFile(e, setUser, user, setError)}
             style={{ display: "none" }}
           />
           <Box
@@ -160,7 +170,7 @@ const buildModal = (
               rules={{
                 required: "Phone required",
                 pattern: {
-                  value: /[0-9]{10}/,
+                  value: /^[0-9]{10}$/,
                   message: "Invalid phone number",
                 },
               }}
@@ -330,9 +340,12 @@ const buildModal = (
                   control={control}
                   rules={{
                     required: "Confirm password required",
-                    validate: (value) =>
-                      value === password.current ||
-                      "The passwords do not match",
+                    validate: (value) => {
+                      return (
+                        value === password.current ||
+                        "The passwords do not match"
+                      );
+                    },
                   }}
                   styles={{ width: "280px" }}
                   name="confirmPassword"
@@ -510,6 +523,19 @@ function Users(props) {
   };
 
   const onHandleUpdateUser = async (data) => {
+    let dob = new Date(data.birthdate);
+    let currentYear = new Date();
+    if (dob > currentYear) {
+      setError({ message: "Please enter date of birth before today" });
+    } else if (currentYear.getFullYear() - dob.getFullYear() < 18) {
+      setError({
+        message: "\nPlease enter date of birth more than 18 years old",
+      });
+    }
+
+    if (error.length > 0) {
+      return;
+    }
     let roleName = ROLE_USER[data.roleName];
     let userTemp = {
       name: data.name,
@@ -574,13 +600,24 @@ function Users(props) {
           message: error.response.message,
         });
       }
-      console.log(error);
-
       hideLoading();
     }
   };
 
   const onHandleCreateUser = async (data) => {
+    let dob = new Date(data.birthdate);
+    let currentYear = new Date();
+    if (dob > currentYear) {
+      setError({ message: "Please enter date of birth before today" });
+    } else if (currentYear.getFullYear() - dob.getFullYear() < 18) {
+      setError({
+        message: "\nPlease enter date of birth more than 18 years old",
+      });
+    }
+
+    if (error.length > 0) {
+      return;
+    }
     let roleName = ROLE_USER[data.roleName];
     let userTemp = {
       name: data.name,
@@ -623,7 +660,6 @@ function Users(props) {
         });
       }
     } catch (error) {
-      console.log(error.response);
       if (error.response.data.error.message === "Email is existed") {
         setError({
           message: "Email is existed",
@@ -707,7 +743,8 @@ function Users(props) {
         errors,
         error,
         gender,
-        handleChangeGender
+        handleChangeGender,
+        setError
       )}
       <Box
         sx={{
