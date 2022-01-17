@@ -460,7 +460,6 @@ export const assignSchedule = async (
   userIds,
   token
 ) => {
-  console.log(scheduleDay);
   let response = await axios.post(
     `https://localhost:44304/api/v1/schedules`,
     {

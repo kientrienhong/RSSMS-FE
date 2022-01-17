@@ -621,7 +621,7 @@ function Storages(props) {
             rules={{
               required: "Width required",
               pattern: {
-                value: /^\d+$/,
+                value: /^[1-9]+[0-9]*$/,
                 message: "Invalid width",
               },
             }}
@@ -636,7 +636,7 @@ function Storages(props) {
             rules={{
               required: "Length required",
               pattern: {
-                value: /^\d+$/,
+                value: /^[1-9]+[0-9]*$/,
                 message: "Invalid length",
               },
             }}
@@ -651,7 +651,7 @@ function Storages(props) {
             rules={{
               required: "Height required",
               pattern: {
-                value: /^\d+$/,
+                value: /^[1-9]+[0-9]*$/,
                 message: "Invalid height",
               },
             }}

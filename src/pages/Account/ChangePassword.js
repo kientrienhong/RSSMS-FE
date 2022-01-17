@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { connect } from "react-redux";
 import * as action from "../../redux/action/action";
 import { Controller, useForm } from "react-hook-form";
@@ -13,6 +13,7 @@ function ChangePassword({
   userState,
 }) {
   const { register, handleSubmit, control, watch } = useForm();
+  const [error, setError] = useState("");
   const password = useRef({});
   password.current = watch("password", "");
   const styleBoxInput = {
@@ -38,8 +39,9 @@ function ChangePassword({
       );
       showSnackbar("success", "Change password successful!");
     } catch (e) {
-      console.log(e);
-      console.log(e.response);
+      if (e?.response?.data?.error?.message) {
+        setError(e?.response?.data?.error?.message);
+      }
     } finally {
       hideLoading();
     }
@@ -110,6 +112,11 @@ function ChangePassword({
             inlineStyle={styleInput}
           />
         </Box>
+        {error?.length > 0 ? (
+          <p style={{ color: "red", textAlign: "center", marginTop: "36px" }}>
+            {error}
+          </p>
+        ) : null}
         <Box
           sx={{
             display: "flex",

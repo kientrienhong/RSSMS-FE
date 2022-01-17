@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Box,
   Button,
@@ -26,7 +26,7 @@ function UpdateInformation({
   const [imageFile, setImageFile] = useState({});
   const { handleSubmit, control } = useForm();
   const [value, setValue] = React.useState(user.gender);
-
+  const [error, setError] = React.useState("");
   const handleChange = (event) => {
     setValue(parseInt(event.target.value));
   };
@@ -45,6 +45,18 @@ function UpdateInformation({
   const styleInput = { marginRight: "2.5%", marginLeft: "2.5%" };
 
   const onSubmit = async (data) => {
+    let dob = new Date(data.birthdate);
+    let currentYear = new Date();
+    if (dob > currentYear) {
+      setError("\nPlease enter date of birth before today");
+    } else if (currentYear.getFullYear() - dob.getFullYear() < 18) {
+      setError("\nPlease enter date of birth more than 18 years old");
+    }
+
+    if (error.length > 0) {
+      return;
+    }
+
     let roleId;
 
     if (user.roleName === "Delivery Staff") {
@@ -141,10 +153,19 @@ function UpdateInformation({
   };
 
   const onChangeInputFile = (event) => {
-    setImageFile({
-      url: URL.createObjectURL(event.target.files[0]),
-      file: event.target.files[0],
-    });
+    if (
+      event.target.files[0].name.includes(".png") ||
+      event.target.files[0].name.includes(".jpg") ||
+      event.target.files[0].name.includes(".jpeg")
+    ) {
+      setImageFile({
+        url: URL.createObjectURL(event.target.files[0]),
+        file: event.target.files[0],
+      });
+      setError("");
+    } else {
+      setError("Please choose image file!");
+    }
   };
 
   if (imageFile?.url === undefined) {
@@ -298,6 +319,12 @@ function UpdateInformation({
               inlineStyle={styleInput}
             />
           </Box>
+          {error?.length > 0 ? (
+            <p style={{ color: "red", textAlign: "center", marginTop: "36px" }}>
+              {error}
+            </p>
+          ) : null}
+
           <Box
             sx={{
               display: "flex",
