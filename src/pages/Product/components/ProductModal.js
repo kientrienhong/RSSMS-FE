@@ -17,6 +17,7 @@ import { connect } from "react-redux";
 import * as action from "../../../redux/action/action";
 import { storageFirebase } from "../../../firebase/firebase";
 import { createProduct, updateProduct } from "../../../apis/Apis";
+import { getBase64 } from "../../../utils/convertImage";
 const styleBoxInput = {
   display: "flex",
   justifyContent: "center",
@@ -106,36 +107,27 @@ function ProductModal({
 
         return;
       }
-
+      let base64 = await getBase64(currentProduct.avatarFile);
+      productTemp = {
+        ...productTemp,
+        images: [
+          {
+            file: base64.split(",")[1],
+          },
+        ],
+      };
       const response = await createProduct(productTemp, userState.idToken);
       if (response.status === 200) {
-        let id = response.data.id;
-        let urlFirebase;
-        let name = `products/${id}/avatar.png`;
-
-        const ref = storageFirebase.ref(name);
-        const uploadTask = ref.put(currentProduct.avatarFile);
-        uploadTask.on("state_changed", console.log, console.error, async () => {
-          urlFirebase = await ref.getDownloadURL();
-          try {
-            let responseUpdate = await updateProduct(
-              { ...response.data, size: data.size },
-              id,
-              urlFirebase,
-              userState.idToken
-            );
-            if (responseUpdate.status === 200) {
-              showSnackbar("success", "Create product successful!");
-              await getData();
-              handleClose();
-              setError({});
-            }
-          } catch (e) {
-            console.log(e.response);
-          } finally {
-            hideLoading();
-          }
-        });
+        try {
+          showSnackbar("success", "Create product successful!");
+          await getData();
+          handleClose();
+          setError({});
+        } catch (e) {
+          console.log(e.response);
+        } finally {
+          hideLoading();
+        }
       }
     } catch (error) {
       console.log(error.response);
@@ -164,45 +156,38 @@ function ProductModal({
       let id = currentProduct.id;
       let responseUpdate;
       if (currentProduct.avatarFile !== undefined) {
-        let urlFirebase;
-        let name = `products/${id}/avatar.png`;
-        const ref = storageFirebase.ref(name);
-        const uploadTask = ref.put(currentProduct.avatarFile);
-        uploadTask.on("state_changed", console.log, console.error, async () => {
-          try {
-            urlFirebase = await ref.getDownloadURL();
-
-            responseUpdate = await updateProduct(
-              productTemp,
-              id,
-              urlFirebase,
-              userState.idToken
-            );
-            if (responseUpdate.status === 200) {
-              showSnackbar("success", "Update storage successful!");
-              await getData();
-              handleClose();
-              hideLoading();
-            } else {
-              hideLoading();
-            }
-          } catch (e) {
-            console.log(e.response);
+        let base64 = await getBase64(currentProduct.avatarFile);
+        try {
+          responseUpdate = await updateProduct(
+            productTemp,
+            id,
+            base64.split(",")[1],
+            userState.idToken
+          );
+          if (responseUpdate.status === 200) {
+            showSnackbar("success", "Update storage successful!");
+            await getData();
+            handleClose();
           }
-        });
+        } catch (e) {
+          console.log(e.response);
+        }
       } else {
-        responseUpdate = await updateProduct(productTemp, id, "");
+        responseUpdate = await updateProduct(
+          productTemp,
+          id,
+          "",
+          userState.idToken
+        );
         if (responseUpdate.status === 200) {
           showSnackbar("success", "Update storage successful!");
           await getData();
           handleClose();
-          hideLoading();
-        } else {
-          hideLoading();
         }
       }
     } catch (error) {
       console.log(error.response);
+    } finally {
       hideLoading();
     }
   };

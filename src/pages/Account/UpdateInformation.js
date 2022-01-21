@@ -16,6 +16,7 @@ import CustomInput from "../../components/CustomInput";
 import { storageFirebase } from "../../firebase/firebase";
 import { updateUser } from "../../apis/Apis";
 import { MALE, FEMALE, OTHER_GENDER } from "../../constant/constant";
+import { getBase64 } from "../../utils/convertImage";
 function UpdateInformation({
   user,
   setUpUser,
@@ -90,38 +91,62 @@ function UpdateInformation({
     let id = user.userId;
     showLoading();
     if (imageFile.url) {
-      let urlFirebase;
-      let name = `user/${id}/avatar.png`;
-      const ref = storageFirebase.ref(name);
-      const uploadTask = ref.put(imageFile.file);
-      uploadTask.on("state_changed", console.log, console.error, async () => {
-        urlFirebase = await ref.getDownloadURL();
+      try {
+        let base64 = await getBase64(imageFile.file);
         responseUpdate = await updateUser(
           userTemp,
           id,
-          urlFirebase,
+          base64.split(",")[1],
           user.idToken
         );
-        if (responseUpdate.status === 200) {
-          try {
-            showSnackbar("success", "Update user successful!");
-            setUpUser({
-              ...user,
-              address: data.address,
-              name: data.name,
-              gender: value,
-              birthdate: data.birthdate,
-              phone: data.phone,
-              images: responseUpdate.data.images,
-            });
-            hideLoading();
-          } catch (error) {
-            hideLoading();
-          }
-        } else {
-          hideLoading();
-        }
-      });
+
+        setUpUser({
+          ...user,
+          address: data.address,
+          name: data.name,
+          gender: value,
+          birthdate: data.birthdate,
+          phone: data.phone,
+          images: responseUpdate.data.images,
+        });
+        hideLoading();
+      } catch (error) {
+        console.log(error.response);
+        hideLoading();
+      }
+
+      // let urlFirebase;
+      // let name = `user/${id}/avatar.png`;
+      // const ref = storageFirebase.ref(name);
+      // const uploadTask = ref.put(imageFile.file);
+      // uploadTask.on("state_changed", console.log, console.error, async () => {
+      //   urlFirebase = await ref.getDownloadURL();
+      // responseUpdate = await updateUser(
+      //   userTemp,
+      //   id,
+      //   urlFirebase,
+      //   user.idToken
+      // );
+      //   if (responseUpdate.status === 200) {
+      //     try {
+      //       showSnackbar("success", "Update user successful!");
+      // setUpUser({
+      //   ...user,
+      //   address: data.address,
+      //   name: data.name,
+      //   gender: value,
+      //   birthdate: data.birthdate,
+      //   phone: data.phone,
+      //   images: responseUpdate.data.images,
+      // });
+      //       hideLoading();
+      //     } catch (error) {
+      //       hideLoading();
+      //     }
+      //   } else {
+      //     hideLoading();
+      //   }
+      // });
     } else {
       try {
         responseUpdate = await updateUser(userTemp, id, "", user.idToken);

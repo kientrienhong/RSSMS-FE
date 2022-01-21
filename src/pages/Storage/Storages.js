@@ -32,7 +32,7 @@ import ListStaff from "./components/ListStaff";
 import { TYPE_STORAGE } from "../../constant/constant";
 import { STYLE_MODAL } from "../../constant/style";
 import AssignStaffModal from "./components/AssignStaffModal";
-
+import { getBase64 } from "../../utils/convertImage";
 let inputFile;
 const styleModal = {
   ...STYLE_MODAL,
@@ -337,31 +337,25 @@ function Storages(props) {
 
         return;
       }
+      let base64 = await getBase64(storage.avatarFile);
 
+      storageTemp = {
+        ...storageTemp,
+        images: [
+          {
+            file: base64.split(",")[1],
+          },
+        ],
+      };
       const response = await createStorage(storageTemp, userState.idToken);
       if (response.status === 200) {
-        let id = response.data.id;
-        let urlFirebase;
-        let name = `storages/${id}/avatar.png`;
-
-        const ref = storageFirebase.ref(name);
-        const uploadTask = ref.put(storage.avatarFile);
-        uploadTask.on("state_changed", console.log, console.error, async () => {
-          urlFirebase = await ref.getDownloadURL();
-          let responseUpdate = await updateStorage(
-            response.data,
-            id,
-            urlFirebase,
-            userState.idToken
-          );
-          if (responseUpdate.status === 200) {
-            showSnackbar("success", "Create storage successful!");
-            await getData(searchName, page, 4, userState.idToken);
-            handleClose();
-            setError({});
-          }
-          hideLoading();
-        });
+        if (response.status === 200) {
+          showSnackbar("success", "Create storage successful!");
+          await getData(searchName, page, 4, userState.idToken);
+          handleClose();
+          setError({});
+        }
+        hideLoading();
       }
     } catch (error) {
       console.log(error);
@@ -392,29 +386,37 @@ function Storages(props) {
       let id = storage.id;
       let responseUpdate;
       if (storage.avatarFile !== undefined) {
-        let urlFirebase;
-        let name = `storages/${id}/avatar.png`;
-        const ref = storageFirebase.ref(name);
-        const uploadTask = ref.put(storage.avatarFile);
-        uploadTask.on("state_changed", console.log, console.error, async () => {
-          urlFirebase = await ref.getDownloadURL();
+        let base64 = await getBase64(storage.avatarFile);
+        responseUpdate = await updateStorage(
+          storageTemp,
+          id,
+          base64.split(",")[1],
+          userState.idToken
+        );
+        if (responseUpdate.status === 200) {
+          showSnackbar("success", "Update storage successful!");
+          await getData(searchName, page, 4, userState.idToken);
+          handleClose();
+          hideLoading();
+          setError({});
+        } else {
+          hideLoading();
+        }
+        // let urlFirebase;
+        // let name = `storages/${id}/avatar.png`;
+        // const ref = storageFirebase.ref(name);
+        // const uploadTask = ref.put(storage.avatarFile);
+        // uploadTask.on("state_changed", console.log, console.error, async () => {
+        //   urlFirebase = await ref.getDownloadURL();
 
-          responseUpdate = await updateStorage(
-            storageTemp,
-            id,
-            urlFirebase,
-            userState.idToken
-          );
-          if (responseUpdate.status === 200) {
-            showSnackbar("success", "Update storage successful!");
-            await getData(searchName, page, 4, userState.idToken);
-            handleClose();
-            hideLoading();
-            setError({});
-          } else {
-            hideLoading();
-          }
-        });
+        // responseUpdate = await updateStorage(
+        //   storageTemp,
+        //   id,
+        //   urlFirebase,
+        //   userState.idToken
+        // );
+
+        // });
       } else {
         responseUpdate = await updateStorage(
           storageTemp,

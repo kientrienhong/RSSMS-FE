@@ -28,6 +28,7 @@ import { storageFirebase } from "../../firebase/firebase";
 import { ROLE_USER } from "../../constant/constant";
 import { STYLE_MODAL } from "../../constant/style";
 import CustomSelect from "../../components/CustomSelect";
+import { getBase64 } from "../../utils/convertImage";
 let inputFile;
 const styleModal = {
   ...STYLE_MODAL,
@@ -435,7 +436,7 @@ const buildModal = (
               color: "red",
             }}
           >
-            {error.message ? error.message : ""}
+            {error?.message ? error?.message : ""}
           </p>
           <Box
             sx={{
@@ -533,7 +534,7 @@ function Users(props) {
       });
     }
 
-    if (error.length > 0) {
+    if (error?.length > 0) {
       return;
     }
     let roleName = ROLE_USER[data.roleName];
@@ -557,27 +558,22 @@ function Users(props) {
       let id = user.id;
       let responseUpdate;
       if (user.avatarFile !== undefined) {
-        let urlFirebase;
-        let name = `user/${id}/avatar.png`;
-        const ref = storageFirebase.ref(name);
-        const uploadTask = ref.put(user.avatarFile);
-        uploadTask.on("state_changed", console.log, console.error, async () => {
-          urlFirebase = await ref.getDownloadURL();
-          responseUpdate = await updateUser(
-            userTemp,
-            id,
-            urlFirebase,
-            userState.idToken
-          );
-          if (responseUpdate.status === 200) {
-            showSnackbar("success", "Update user successful!");
-            await getData(searchName, page, 8);
-            handleClose();
-            hideLoading();
-          } else {
-            hideLoading();
-          }
-        });
+        let base64 = await getBase64(user.avatarFile);
+
+        responseUpdate = await updateUser(
+          userTemp,
+          id,
+          base64.split(",")[1],
+          userState.idToken
+        );
+        if (responseUpdate.status === 200) {
+          showSnackbar("success", "Update user successful!");
+          await getData(searchName, page, 8);
+          handleClose();
+          hideLoading();
+        } else {
+          hideLoading();
+        }
       } else {
         responseUpdate = await updateUser(userTemp, id, "", userState.idToken);
         if (responseUpdate.status === 200) {
@@ -591,15 +587,20 @@ function Users(props) {
         }
       }
     } catch (error) {
-      if (error.response.message === "Email is existed") {
-        setError({
-          message: "Email is existed",
-        });
+      if (error.response) {
+        if (error.response.message === "Email is existed") {
+          setError({
+            message: "Email is existed",
+          });
+        } else {
+          setError({
+            message: error.response.message,
+          });
+        }
       } else {
-        setError({
-          message: error.response.message,
-        });
+        console.log(error);
       }
+
       hideLoading();
     }
   };
@@ -615,8 +616,15 @@ function Users(props) {
       });
     }
 
-    if (error.length > 0) {
+    if (error?.length > 0) {
       return;
+    }
+    let avatarLinkObject = null;
+    if (user.avatarFile) {
+      let base64 = await getBase64(user.avatarFile);
+      avatarLinkObject = {
+        file: base64.split(",")[1],
+      };
     }
     let roleName = ROLE_USER[data.roleName];
     let userTemp = {
@@ -628,47 +636,35 @@ function Users(props) {
       birthdate: data.birthdate,
       phone: data.phone,
       roleId: roleName,
-      avatarLink: null,
+      avatarLink: avatarLinkObject,
     };
     try {
       showLoading();
 
       const response = await createUser(userTemp, userState.idToken);
       if (response.status === 200) {
-        let id = response.data.userId;
-        let urlFirebase;
-        let name = `user/${id}/avatar.png`;
-        const ref = storageFirebase.ref(name);
-        let uploadTask;
-        uploadTask = ref.put(user.avatarFile);
-        uploadTask.on("state_changed", console.log, console.error, async () => {
-          urlFirebase = await ref.getDownloadURL();
-          let responseUpdate = await updateUser(
-            response.data,
-            id,
-            urlFirebase,
-            userState.idToken
-          );
-          if (responseUpdate.status === 200) {
-            showSnackbar("success", "Create user successful!");
-            await getData(searchName, page, 8);
+        showSnackbar("success", "Create user successful!");
+        await getData(searchName, page, 8);
 
-            handleClose();
-            hideLoading();
-            setError({});
-          }
-        });
+        handleClose();
+        hideLoading();
+        setError({});
       }
     } catch (error) {
-      if (error.response.data.error.message === "Email is existed") {
-        setError({
-          message: "Email is existed",
-        });
+      if (error.response) {
+        if (error.response.data.error.message === "Email is existed") {
+          setError({
+            message: "Email is existed",
+          });
+        } else {
+          setError({
+            message: error.response.data.error.message,
+          });
+        }
       } else {
-        setError({
-          message: error.response.data.error.message,
-        });
+        console.log(error);
       }
+
       hideLoading();
     }
   };

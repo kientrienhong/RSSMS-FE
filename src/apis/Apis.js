@@ -97,7 +97,7 @@ export const createUser = async (user, token) => {
       storageId: null,
       images: [
         {
-          url: null,
+          file: user?.avatarLink === null ? null : user?.avatarLink.file,
         },
       ],
     },
@@ -117,20 +117,9 @@ export const deleteUser = async (id, token) => {
 };
 
 export const updateUser = async (user, id, imageUrl, token) => {
-  let image;
+  let object;
   if (imageUrl === "") {
-    if (user.images === undefined) {
-      image = null;
-    } else {
-      image = user.images[0].url;
-    }
-  } else {
-    image = imageUrl;
-  }
-
-  const response = await axios.put(
-    `https://localhost:44304/api/v1/users/${id}`,
-    {
+    object = {
       id: id,
       name: user.name,
       address: user.address,
@@ -141,10 +130,32 @@ export const updateUser = async (user, id, imageUrl, token) => {
       images: [
         {
           id: user.images[0].id,
-          url: image,
+          url: user.images[0].url,
+          file: "",
         },
       ],
-    },
+    };
+  } else {
+    object = {
+      id: id,
+      name: user.name,
+      address: user.address,
+      phone: user.phone,
+      gender: user.gender,
+      birthdate: new Date(user.birthdate).toISOString(),
+      storageId: user.storageId,
+      images: [
+        {
+          id: user.images[0].id,
+          file: imageUrl,
+        },
+      ],
+    };
+  }
+
+  const response = await axios.put(
+    `https://localhost:44304/api/v1/users/${id}`,
+    object,
     { headers: { Authorization: `Bearer ${token}` } }
   );
 
@@ -180,7 +191,7 @@ export const createStorage = async (storage, token) => {
       type: storage.type,
       images: [
         {
-          url: null,
+          file: storage.images[0].file,
         },
       ],
       listStaff: [],
@@ -192,20 +203,9 @@ export const createStorage = async (storage, token) => {
 };
 
 export const updateStorage = async (storage, id, imageUrl, token) => {
-  let image;
+  let object;
   if (imageUrl === "") {
-    if (storage.images === undefined) {
-      image = null;
-    } else {
-      image = storage.images[0].url;
-    }
-  } else {
-    image = imageUrl;
-  }
-
-  const response = await axios.put(
-    `https://localhost:44304/api/v1/storages/${id}`,
-    {
+    object = {
       id: id,
       name: storage.name,
       managerId: null,
@@ -216,12 +216,36 @@ export const updateStorage = async (storage, id, imageUrl, token) => {
       images: [
         {
           id: storage.images[0].id,
-          url: image,
+          url: storage.images[0].url,
         },
       ],
       usage: 0,
       type: storage.type,
-    },
+    };
+  } else {
+    console.log("dasjkhdaskjhdkjahsd");
+    object = {
+      id: id,
+      name: storage.name,
+      managerId: null,
+      status: 1,
+      address: storage.address,
+      size: storage.size,
+      storageId: null,
+      images: [
+        {
+          id: storage.images[0].id,
+          file: imageUrl,
+        },
+      ],
+      usage: 0,
+      type: storage.type,
+    };
+  }
+  console.log(imageUrl);
+  const response = await axios.put(
+    `https://localhost:44304/api/v1/storages/${id}`,
+    object,
     { headers: { Authorization: `Bearer ${token}` } }
   );
 
@@ -584,7 +608,7 @@ export const createProduct = async (product, token) => {
       tooltip: product.tooltip,
       images: [
         {
-          url: null,
+          file: product.images[0].file,
         },
       ],
     },
@@ -596,20 +620,9 @@ export const createProduct = async (product, token) => {
 };
 
 export const updateProduct = async (product, id, imageUrl, token) => {
-  let image;
+  let object;
   if (imageUrl === "") {
-    if (product.images === undefined) {
-      image = null;
-    } else {
-      image = product.images[0].url;
-    }
-  } else {
-    image = imageUrl;
-  }
-
-  const response = await axios.put(
-    `https://localhost:44304/api/v1/products/${id}`,
-    {
+    object = {
       id: id,
       name: product.name,
       price: product.price,
@@ -621,13 +634,34 @@ export const updateProduct = async (product, id, imageUrl, token) => {
       images: [
         {
           id: product.images[0].id,
-          url: image,
+          url: product.images[0].url,
         },
       ],
-    },
+    };
+  } else {
+    object = {
+      id: id,
+      name: product.name,
+      price: product.price,
+      description: product.description,
+      type: product.type,
+      size: product.size,
+      unit: product.unit,
+      tooltip: product.tooltip,
+      images: [
+        {
+          id: product.images[0].id,
+          file: imageUrl,
+        },
+      ],
+    };
+  }
+  console.log(object);
+  const response = await axios.put(
+    `https://localhost:44304/api/v1/products/${id}`,
+    object,
     { headers: { Authorization: `Bearer ${token}` } }
   );
-
   return response;
 };
 
