@@ -15,6 +15,7 @@ import ProtectTemplate from "../Template/ProtectTemplate";
 import { ROLE_USER } from "../constant/constant";
 import NotStorage from "../pages/NotStorage";
 import NewSchedule from "../pages/NewSchedule/NewSchedule";
+import StaffRequest from "../pages/Staff_Request/StaffRequest";
 const routes = [
   {
     path: "app",
@@ -102,7 +103,17 @@ const routes = [
           </ProtectTemplate>
         ),
       },
-
+      {
+        path: "staff_request",
+        element: (
+          <ProtectTemplate
+            Component={StaffRequest}
+            permission={[Object.keys(ROLE_USER)[1]]}
+          >
+            <StaffRequest />
+          </ProtectTemplate>
+        ),
+      },
       {
         path: "storages/:storageId",
         element: (

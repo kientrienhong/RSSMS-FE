@@ -15,7 +15,7 @@ import {
   LIST_SIDE_BAR_ADMIN,
   LIST_SIDE_BAR_MANAGER,
   LIST_SIDE_BAR_OFFICE_STAFF,
-} from "../constant/constant";
+} from "../constant/route";
 
 const DashboardSidebar = ({ onMobileClose, openMobile, user }) => {
   let items = [];

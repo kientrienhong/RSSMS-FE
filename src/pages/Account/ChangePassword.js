@@ -12,8 +12,9 @@ function ChangePassword({
   userId,
   userState,
 }) {
-  const { register, handleSubmit, control, watch } = useForm();
+  const { register, handleSubmit, control, watch, reset } = useForm();
   const [error, setError] = useState("");
+  const [errorPassword, setErrorPassword] = useState({});
   const password = useRef({});
   password.current = watch("password", "");
   const styleBoxInput = {
@@ -98,6 +99,8 @@ function ChangePassword({
             rules={{
               required: "Confirm password required",
               validate: (value) => {
+                console.log(value);
+                console.log(password.current);
                 return (
                   value === password.current || "The passwords do not match"
                 );
