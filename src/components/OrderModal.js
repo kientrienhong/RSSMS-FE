@@ -229,6 +229,43 @@ function OrderModal({
     }
   };
 
+  const buildPosition = () => {
+    return currentOrder.orderBoxDetails.map((e) => (
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          width: "100%",
+        }}
+      >
+        <Box
+          sx={{
+            width: "20%",
+          }}
+        >
+          <Typography color="black" variant="h4" style={{ margin: "4%" }}>
+            {e.sizeType}
+          </Typography>
+        </Box>
+        <Box
+          sx={{
+            width: "80%",
+          }}
+        >
+          <Typography
+            color="black"
+            variant="h4"
+            style={{ margin: "4%", textAlign: "right" }}
+          >
+            {e.areaName} / {e.shelfName}
+          </Typography>
+        </Box>
+      </Box>
+    ));
+  };
+
   const mapListTime = (time, setTime, setIsCutomer) =>
     LIST_TIME.map((e, index) => (
       <Grid item xs={4} key={index}>
@@ -709,6 +746,37 @@ function OrderModal({
               choosenProduct={formatToChosenProduct()}
               duration={duration}
             />
+            <Typography color="black" variant="h2">
+              Order Position
+            </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                width: "100%",
+              }}
+            >
+              <Typography
+                color="black"
+                variant="h2"
+                sx={{ marginBottom: "4%", marginTop: "4%", width: "20%" }}
+              >
+                Name product
+              </Typography>
+              <Typography
+                color="black"
+                variant="h2"
+                sx={{
+                  marginBottom: "4%",
+                  marginTop: "4%",
+                  textAlign: "right",
+                  width: "80%",
+                }}
+              >
+                Position
+              </Typography>
+            </Box>
+            {buildPosition()}
             {isView === true ? (
               <Box
                 sx={{
