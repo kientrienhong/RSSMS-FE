@@ -109,6 +109,7 @@ const order = (state = initialState, action) => {
         storageId: state.currentBox.storageId,
         idBox: state.currentBox.id,
         nameProduct: action.payload.nameProduct,
+        idOrderDetail: action.payload.idOrderDetail,
       });
       return {
         ...state,

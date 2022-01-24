@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import * as action from "../../redux/action/action";
 import ConfirmModal from "../../components/ConfirmModal";
 import { createArea, deleteArea, updateArea, getArea } from "../../apis/Apis";
+import { TYPE_AREA } from "../../constant/constant";
 
 function AreaList({
   listArea,
@@ -17,7 +18,12 @@ function AreaList({
   storageId,
   userState,
 }) {
-  const { handleSubmit, control, reset } = useForm();
+  const {
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors },
+  } = useForm();
 
   const mapListToview = (
     setCurrentArea,
@@ -40,13 +46,14 @@ function AreaList({
       );
     });
 
-  const addArea = async (name, description) => {
+  const addArea = async (name, description, type) => {
     try {
       showLoading();
       await createArea(
         parseInt(storageId),
         name,
         description,
+        type === "Self-Storage" ? 0 : 1,
         userState.idToken
       );
       let listAreaTemp = await getArea(parseInt(storageId), userState.idToken);
@@ -61,13 +68,14 @@ function AreaList({
     }
   };
 
-  const editArea = async (name, description) => {
+  const editArea = async (name, description, type) => {
     try {
       showLoading();
       await updateArea(
         parseInt(currentArea.id),
         name,
         description,
+        type === "Self-Storage" ? 0 : 1,
         userState.idToken
       );
 
@@ -97,9 +105,9 @@ function AreaList({
 
   const onSubmit = (data) => {
     if (isEdit === false) {
-      addArea(data.name, data.description);
+      addArea(data.name, data.description, data.type);
     } else {
-      editArea(data.name, data.description);
+      editArea(data.name, data.description, data.type);
     }
   };
 
@@ -151,6 +159,7 @@ function AreaList({
         control={control}
         onSubmit={onSubmit}
         isEdit={isEdit}
+        errors={errors}
       />
       <ConfirmModal
         open={openConfirm}

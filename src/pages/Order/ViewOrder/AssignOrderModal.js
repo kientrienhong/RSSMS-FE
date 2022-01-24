@@ -36,17 +36,9 @@ function AssignOrderModal({
   };
   const handleAssignStorage = async () => {
     if (selectedValue === "") {
-      setError("Please product to place");
+      setError("Please storage to assign");
       return;
     }
-
-    let storage = listStorage.find((e) => e.id == selectedValue);
-
-    if (storage.type !== currentOrder.typeOrder) {
-      setError("Please place right storage");
-      return;
-    }
-
     try {
       showLoading();
       await assignOrder(currentId, parseInt(selectedValue), userState.idToken);

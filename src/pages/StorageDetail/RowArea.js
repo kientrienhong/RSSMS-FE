@@ -2,6 +2,8 @@ import React from "react";
 import { Box, Typography } from "@material-ui/core";
 import { styled } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
+import { TYPE_AREA } from "../../constant/constant";
+
 export default function RowArea({
   area,
   setCurrentArea,
@@ -25,6 +27,15 @@ export default function RowArea({
       <Box sx={{ width: "80%", display: "flex", flexDirection: "column" }}>
         <Typography color="black" variant="h3">
           {area.name}
+          <Typography
+            color="black"
+            variant="body"
+            sx={{
+              marginLeft: "1%",
+            }}
+          >
+            ({Object.keys(TYPE_AREA)[area.type]})
+          </Typography>
         </Typography>
         <p>{area.description}</p>
       </Box>

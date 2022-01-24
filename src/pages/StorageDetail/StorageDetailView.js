@@ -73,7 +73,6 @@ export default function StorageDetailView({ storage }) {
       {buildInfoRow("Name", storage.name)}
       {buildInfoRow("Size", storage.size)}
       {buildInfoRow("Address", storage.address)}
-      {buildInfoRow("Type", listType[storage.type])}
       {buildInfoRow(
         "Manager",
         storage.managerName === undefined ? "Not yet" : storage.managerName

@@ -188,7 +188,6 @@ export const createStorage = async (storage, token) => {
       size: storage.size,
       address: storage.address,
       status: 1,
-      type: storage.type,
       images: [
         {
           file: storage.images[0].file,
@@ -220,10 +219,8 @@ export const updateStorage = async (storage, id, imageUrl, token) => {
         },
       ],
       usage: 0,
-      type: storage.type,
     };
   } else {
-    console.log("dasjkhdaskjhdkjahsd");
     object = {
       id: id,
       name: storage.name,
@@ -239,10 +236,8 @@ export const updateStorage = async (storage, id, imageUrl, token) => {
         },
       ],
       usage: 0,
-      type: storage.type,
     };
   }
-  console.log(imageUrl);
   const response = await axios.put(
     `https://localhost:44304/api/v1/storages/${id}`,
     object,
@@ -296,13 +291,14 @@ export const getArea = async (storageId, token) => {
   return response;
 };
 
-export const createArea = async (storageId, name, description, token) => {
+export const createArea = async (storageId, name, description, type, token) => {
   const response = await axios.post(
     "https://localhost:44304/api/v1/areas",
     {
       name: name,
       storageId: parseInt(storageId),
       status: 1,
+      type: type,
       description: description,
     },
     { headers: { Authorization: `Bearer ${token}` } }
@@ -320,12 +316,13 @@ export const deleteArea = async (id, token) => {
   return response;
 };
 
-export const updateArea = async (id, name, description, token) => {
+export const updateArea = async (id, name, description, type, token) => {
   const response = await axios.put(
     `https://localhost:44304/api/v1/areas/${id}`,
     {
       id: id,
       name: name,
+      type: type,
       description: description,
     },
     { headers: { Authorization: `Bearer ${token}` } }
@@ -541,12 +538,18 @@ export const updateOrder = async (id, order, token) => {
 };
 
 export const placeBoxes = async (placingProducts, token) => {
-  const boxesId = placingProducts.boxes.map((e) => e.idBox);
+  const boxesId = placingProducts.boxes.map((e) => {
+    return {
+      boxId: e.idBox,
+      orderDetailId: e.idOrderDetail,
+    };
+  });
+
   const response = await axios.post(
-    `https://localhost:44304/api/v1/orderboxdetails`,
+    `https://localhost:44304/api/v1/box-order-details`,
     {
       orderId: placingProducts.orderId,
-      boxesId: boxesId,
+      boxes: boxesId,
     },
     { headers: { Authorization: `Bearer ${token}` } }
   );

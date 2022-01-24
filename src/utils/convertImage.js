@@ -14,6 +14,5 @@ export const getBase64 = (file) => {
       baseURL = reader.result;
       resolve(baseURL);
     };
-    console.log(fileInfo);
   });
 };

@@ -15,6 +15,11 @@ export const ROLE_USER = {
   "Office staff": 5,
 };
 
+export const TYPE_AREA = {
+  "Self-Storage": 0,
+  "Door-to-door": 1,
+};
+
 export const TYPE_STORAGE = {
   "Self-Storage": 0,
   "Door-to-door": 1,

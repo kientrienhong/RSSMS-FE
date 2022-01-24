@@ -26,7 +26,7 @@ import AreaDetailView from "./components/AreaDetailView";
 import AreaUsage from "./components/AreaUsage";
 import SheflModal from "./components/SheflModal";
 import ProductButton from "../Order/CreateOrder/components/ProductButton";
-import { TYPE_STORAGE, TYPE_SHELF } from "../../constant/constant";
+import { TYPE_AREA, TYPE_SHELF } from "../../constant/constant";
 import SelfStorageModal from "./components/SelfStorageModal";
 
 function AreaDetail(props) {
@@ -55,7 +55,7 @@ function AreaDetail(props) {
     try {
       showLoading();
       setIsEdit(isEdit);
-      if (storage.type === TYPE_STORAGE["Self-Storage"]) {
+      if (currentArea.type === TYPE_AREA["Self-Storage"]) {
         const listSelfStorageTemp = await getProduct(
           SELF_STORAGE_TYPE,
           userState.idToken
@@ -92,7 +92,7 @@ function AreaDetail(props) {
   const filterUsage = (area) => {
     let listBox = [];
 
-    if (storage.type === 0) {
+    if (currentArea.type === 1) {
       let listArea = area?.boxUsage?.filter((e) => {
         if (e.productType === BOX_TYPE) {
           listBox.push(e);
@@ -124,7 +124,6 @@ function AreaDetail(props) {
         return { ...e, boxSize: e.boxes[0].sizeType };
       });
       let area = await getDetailArea(parseInt(areaId), userState.idToken);
-      console.log(area.data);
       filterUsage(area.data);
       setCurrentArea(area.data);
       setTotalPage(response.data.metadata.totalPage);
@@ -225,7 +224,7 @@ function AreaDetail(props) {
         py: 3,
       }}
     >
-      {storage.type === TYPE_STORAGE["Self-Storage"] ? (
+      {currentArea.type === TYPE_AREA["Self-Storage"] ? (
         <SelfStorageModal
           currentShelf={currentShelf}
           open={open}
@@ -304,7 +303,7 @@ function AreaDetail(props) {
             setIsEdit(false);
             setIsHandy(true);
             handleOpen(false);
-            storage.type === TYPE_STORAGE["Self-Storage"]
+            currentArea.type === TYPE_AREA["Self-Storage"]
               ? setCurrentShelf({
                   ...currentShelf,
                   boxesInWidth: 1,
@@ -315,7 +314,7 @@ function AreaDetail(props) {
               : setCurrentShelf({});
           }}
         >
-          {storage.type === TYPE_STORAGE["Self-Storage"]
+          {currentArea.type === TYPE_AREA["Self-Storage"]
             ? "Create storage"
             : "Create shelf"}
         </Button>
@@ -342,7 +341,7 @@ function AreaDetail(props) {
           isModifyShelf={isModifyShelf}
           storageId={storageId}
         />
-        {storage.type === 1 ? (
+        {currentArea.type === 1 ? (
           <Box
             sx={{
               margin: "2%",

@@ -12,7 +12,6 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import ListStorage from "./components/ListStorage";
 import { useForm } from "react-hook-form";
-import CustomSelect from "../../components/CustomSelect";
 import CustomInput from "../../components/CustomInput";
 import ProductButton from "../Order/CreateOrder/components/ProductButton";
 import {
@@ -29,7 +28,6 @@ import { storageFirebase } from "../../firebase/firebase";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import ListStaff from "./components/ListStaff";
-import { TYPE_STORAGE } from "../../constant/constant";
 import { STYLE_MODAL } from "../../constant/style";
 import AssignStaffModal from "./components/AssignStaffModal";
 import { getBase64 } from "../../utils/convertImage";
@@ -310,7 +308,6 @@ function Storages(props) {
   };
 
   const onHandleCreateStorage = async (data) => {
-    let type = TYPE_STORAGE[data.type];
     let size = `${data.width}m x ${data.length}m x ${data.height}m`;
 
     let storageTemp = {
@@ -318,7 +315,6 @@ function Storages(props) {
       size: size,
       address: data.address,
       status: 1,
-      type: type,
       images: [
         {
           url: null,
@@ -364,7 +360,6 @@ function Storages(props) {
   };
 
   const onHandleUpdateUser = async (data) => {
-    let type = TYPE_STORAGE[data.type];
     let size = `${data.width}m x ${data.length}m x ${data.height}m`;
 
     let storageTemp = {
@@ -372,7 +367,6 @@ function Storages(props) {
       size: size,
       address: data.address,
       status: 1,
-      type: type,
       images: [
         {
           id: storage?.images[0]?.id,
@@ -520,11 +514,6 @@ function Storages(props) {
     });
   };
 
-  const handleChangeType = (event) => {
-    let tempType = TYPE_STORAGE[event.target.value];
-    setType(event.target.value);
-    setStorage({ ...storage, type: tempType });
-  };
   useEffect(() => {
     const getData = async (name, page, size) => {
       try {
@@ -556,12 +545,10 @@ function Storages(props) {
     control,
     isEdit,
     handleClose,
-    handleChangeType,
     onChangeInputFile,
     errors,
     error
   ) => {
-    const typeList = ["Self-Storage", "Door-to-door"];
     return (
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -665,47 +652,6 @@ function Storages(props) {
           />
         </Box>
 
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            marginTop: "10%",
-            alignItems: "center",
-            marginLeft: "1%",
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "flex-start",
-              marginRight: "4%",
-            }}
-          >
-            <Typography
-              color="black"
-              variant="h2"
-              style={{
-                marginTop: "1%",
-                marginLeft: "6%",
-                width: "100%",
-                marginBottom: "16px",
-              }}
-            >
-              Storage type
-            </Typography>
-            <CustomSelect
-              name="type"
-              control={control}
-              errors={errors}
-              errorMsg={"Required type"}
-              defaultValue={typeList[storage.type] || ""}
-            >
-              <MenuItem value={"Self-Storage"}>Self-Storage</MenuItem>
-              <MenuItem value={"Door-to-door"}>Door-to-door</MenuItem>
-            </CustomSelect>
-          </Box>
-        </Box>
         <p
           style={{
             textAlign: "center",
@@ -719,7 +665,7 @@ function Storages(props) {
             width: "200px",
             margin: "1% auto",
             display: "flex",
-            marginTop: "6%",
+            marginTop: "16%",
             flexDirection: "row",
             justifyContent: "space-between",
           }}
@@ -787,7 +733,6 @@ function Storages(props) {
                 control,
                 isEdit,
                 handleClose,
-                handleChangeType,
                 onChangeInputFile,
                 errors,
                 error

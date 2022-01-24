@@ -171,16 +171,11 @@ function StoredOrderModal({
   };
 
   const handlePlaceBox = () => {
-    console.log(currentBox);
-
     if (selectedValue === "") {
       setError("Please choose product to place");
       return;
     }
 
-    // if (selectedValue.toString() === )
-    console.log(storedOrder?.products);
-    console.log(selectedValue);
     let foundOrderDetail = storedOrder?.products?.find(
       (e) => e.id.toString() === selectedValue
     );

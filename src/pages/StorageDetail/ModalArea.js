@@ -1,8 +1,10 @@
 import React from "react";
-import { Box, Typography, Button, Modal } from "@material-ui/core";
+import { MenuItem, Box, Typography, Button, Modal } from "@material-ui/core";
 import CustomInput from "../../components/CustomInput";
 import CustomAreaInput from "../../components/CustomAreaInput";
 import { STYLE_MODAL } from "../../constant/style";
+import CustomSelect from "../../components/CustomSelect";
+
 export default function ModalArea({
   open,
   handleClose,
@@ -11,6 +13,7 @@ export default function ModalArea({
   control,
   onSubmit,
   isEdit,
+  errors,
 }) {
   const styleInput = { marginRight: "2.5%" };
 
@@ -18,6 +21,7 @@ export default function ModalArea({
     ...STYLE_MODAL,
     width: "auto",
   };
+  const typeList = ["Self-Storage", "Door-to-door"];
 
   return (
     <Modal
@@ -61,6 +65,45 @@ export default function ModalArea({
               userInfo={currentArea.description}
               inlineStyle={styleInput}
             />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "flex-start",
+                marginRight: "4%",
+              }}
+            >
+              <Typography
+                color="black"
+                variant="h2"
+                style={{
+                  marginTop: "1%",
+                  marginLeft: "6%",
+                  width: "100%",
+                  marginBottom: "16px",
+                }}
+              >
+                Area type
+              </Typography>
+              <CustomSelect
+                name="type"
+                control={control}
+                errors={errors}
+                errorMsg={"Required type"}
+                defaultValue={typeList[currentArea.type] || ""}
+              >
+                <MenuItem value={"Self-Storage"}>Self-Storage</MenuItem>
+                <MenuItem value={"Door-to-door"}>Door-to-door</MenuItem>
+              </CustomSelect>
+            </Box>
           </Box>
           <Box
             sx={{

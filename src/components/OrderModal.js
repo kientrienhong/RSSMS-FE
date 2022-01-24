@@ -230,7 +230,7 @@ function OrderModal({
   };
 
   const buildPosition = () => {
-    return currentOrder.orderBoxDetails.map((e) => (
+    return currentOrder?.orderBoxDetails?.map((e) => (
       <Box
         sx={{
           display: "flex",

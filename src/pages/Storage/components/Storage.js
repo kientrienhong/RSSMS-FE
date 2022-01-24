@@ -3,7 +3,6 @@ import { Card, Box, Typography, Button, Grid } from "@material-ui/core";
 import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import * as action from "../../../redux/action/action";
-import { TYPE_STORAGE } from "../../../constant/constant";
 const styleIcon = {
   marginRight: "2%",
   marginTop: "2%",
@@ -58,7 +57,7 @@ function Storage({
       >
         <Box
           sx={{
-            marinTop: "2%",
+            marinTop: "4%",
           }}
         >
           <Box
@@ -81,6 +80,7 @@ function Storage({
               display: "flex",
               flexDirection: "row",
               alignItems: "flex-end",
+              marginTop: "2%",
             }}
           >
             <img src="/img/location.png" alt="location" style={styleIcon} />
@@ -91,21 +91,14 @@ function Storage({
               display: "flex",
               flexDirection: "row",
               alignItems: "flex-end",
+              marginTop: "2%",
             }}
           >
             <img src="/img/size.png" alt="size" style={styleIcon} />
             {storage.size}
           </Box>
 
-          <Box sx={styleBoxTypo}>
-            <Typography color="black" variant="h3" sx={{ marginRight: "2%" }}>
-              Type:
-            </Typography>
-            <Typography color="black" variant="body">
-              {Object.keys(TYPE_STORAGE)[storage.type]}
-            </Typography>
-          </Box>
-          <Box sx={styleBoxTypo}>
+          <Box sx={{ ...styleBoxTypo, marginTop: "2%" }}>
             <Typography color="black" variant="h3" sx={{ marginRight: "2%" }}>
               Manager:
             </Typography>
