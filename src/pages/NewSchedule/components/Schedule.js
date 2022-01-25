@@ -23,6 +23,35 @@ export default function Schedule({
     }
   });
 
+  let foundSameListStaff = 0;
+  if (listSelectedOrder.length > 0) {
+    listSelectedOrder[0]?.listStaffDelivery?.forEach((e) => {
+      if (schedule?.listStaffDelivery) {
+        schedule.listStaffDelivery.forEach((ele) => {
+          if (e.id === ele.id) {
+            foundSameListStaff++;
+            return;
+          }
+        });
+      }
+    });
+  }
+
+  let isSameListStaff = false;
+  if (listSelectedOrder.length > 0) {
+    if (listSelectedOrder[0]?.listStaffDelivery) {
+      if (
+        listSelectedOrder[0]?.listStaffDelivery.length === foundSameListStaff
+      ) {
+        isSameListStaff = true;
+      }
+    } else {
+      if (!schedule.listStaffDelivery) {
+        isSameListStaff = true;
+      }
+    }
+  }
+
   const buildListAvatar = () => {
     if (schedule?.listStaffDelivery) {
       return schedule.listStaffDelivery.map((e, index) => (
@@ -130,10 +159,10 @@ export default function Schedule({
             <Checkbox
               disabled={
                 indexFound !== -1 ||
-                schedule.listStaffDelivery?.length > 0 ||
-                (!foundSameStorage && listSelectedOrder.length > 0)
+                (!foundSameStorage && listSelectedOrder.length > 0) ||
+                (listSelectedOrder.length > 0 && !isSameListStaff)
               }
-              onChange={(val) => onChangeCheckBox(schedule)}
+              onChange={(val) => onChangeCheckBox(schedule, val.target.checked)}
               color="success"
               inputProps={{ "aria-label": "controlled" }}
             />

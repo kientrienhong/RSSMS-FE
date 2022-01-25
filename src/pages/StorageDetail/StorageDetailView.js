@@ -1,7 +1,6 @@
 import React from "react";
 import { Box, Typography, Card } from "@material-ui/core";
 export default function StorageDetailView({ storage }) {
-  const listType = ["Self-Storage", "Door-to-door"];
   const buildInfoRow = (title, info) => {
     return (
       <Box

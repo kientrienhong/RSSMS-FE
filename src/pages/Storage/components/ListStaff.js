@@ -17,7 +17,7 @@ export default function ListStaff({
   onHandleSearch,
 }) {
   const mapListToView = (listStaff, isAssigned) => {
-    return listStaff.map((e) => (
+    return listStaff?.map((e) => (
       <RowStaff
         key={e.id}
         isAssigned={isAssigned}
@@ -43,7 +43,7 @@ export default function ListStaff({
           variant="h2"
           style={{ marginTop: "2%", textAlign: "left" }}
         >
-          {name}({listStaff.length})
+          {name}({listStaff?.length})
         </Typography>
         <Box
           sx={{

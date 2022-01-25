@@ -77,7 +77,7 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
     setOpen(false);
   };
 
-  const onChangeCheckBox = (schedule) => {
+  const onChangeCheckBox = (schedule, value) => {
     let listSelectedOrderTemp = [...listSelectedOrder];
     let timeString = schedule.isDelivery ? "deliveryTime" : "returnTime";
     let indexFound = listSelectedOrderTemp.findIndex((e) => {
@@ -90,15 +90,19 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
         }
       }
     });
-
-    if (indexFound !== -1) {
-      listSelectedOrderTemp.splice(indexFound, 1);
+    if (value) {
+      if (indexFound === -1) {
+        schedule = { ...schedule, isSelected: true };
+        listSelectedOrderTemp.push(schedule);
+      }
+      setListSelectedOrder(listSelectedOrderTemp);
     } else {
-      schedule = { ...schedule, isSelected: true };
-      listSelectedOrderTemp.push(schedule);
-    }
+      if (indexFound !== -1) {
+        listSelectedOrderTemp.splice(indexFound, 1);
+      }
 
-    setListSelectedOrder(listSelectedOrderTemp);
+      setListSelectedOrder(listSelectedOrderTemp);
+    }
   };
 
   const handleFormatDate = (date, result, order, value) => {
@@ -211,7 +215,6 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
           }
         });
 
-      // return result;
       try {
         let responseSchedule = await getSchedule(
           startOfWeek.toISOString().split("T")[0],
@@ -237,18 +240,7 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
                 }
               }
             });
-
-            // result.forEach((e) => {
-            //   let index = e.ListOrder.findIndex(
-            //     (ele) => ele.id === schedule.orderId
-            //   );
-            //   e.ListOrder[index] = {
-            //     ...e.ListOrder[index],
-            //     listStaffDelivery: schedule.users,
-            //   };
-            // });
           });
-          // setListSchedule(result);
           setListScheduleWholeWeek(result);
           setListScheduleCurrentDate(
             result[Object.keys(result)[currentIndexDateLocal]]
@@ -366,15 +358,19 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
               ? []
               : listUserNotAssigned.data.data
           );
-          setListStaffAssigned(currentOrder.listStaffDelivery ?? []);
-          setListShowStaffAssigned(currentOrder.listStaffDelivery ?? []);
+          setListStaffAssigned(listSelectedOrder[0]?.listStaffDelivery ?? []);
+          setListShowStaffAssigned(
+            listSelectedOrder[0]?.listStaffDelivery ?? []
+          );
         } catch (e) {
           console.log(e);
           console.log(e.response);
           setListShowStaffUnAssigned([]);
           setListStaffUnAssigned([]);
-          setListStaffAssigned(currentOrder.listStaffDelivery ?? []);
-          setListShowStaffAssigned(currentOrder.listStaffDelivery ?? []);
+          setListStaffAssigned(listSelectedOrder[0]?.listStaffDelivery ?? []);
+          setListShowStaffAssigned(
+            listSelectedOrder[0]?.listStaffDelivery ?? []
+          );
         } finally {
           hideLoading();
         }
@@ -597,33 +593,6 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
         >
           Assign Delivery Staff
         </Button>
-
-        <Typography
-          onClick={() => {
-            setCurrentIndexGroup(0);
-          }}
-          style={{
-            cursor: "pointer",
-            marginRight: "2%",
-            marginLeft: "3%",
-          }}
-          color={currentIndexGroup === 0 ? "primary" : "black"}
-          variant="h2"
-        >
-          Group by time
-        </Typography>
-        <Typography
-          onClick={() => {
-            setCurrentIndexGroup(1);
-          }}
-          style={{
-            cursor: "pointer",
-          }}
-          color={currentIndexGroup === 1 ? "primary" : "black"}
-          variant="h2"
-        >
-          Group by staff
-        </Typography>
       </Box>
       <Box
         sx={{
