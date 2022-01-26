@@ -365,7 +365,7 @@ function ListOrder({
         )}
 
         <TableBody>
-          {listOrder.map((row, index) => {
+          {listOrder?.map((row, index) => {
             let typeOrder = ORDER_TYPE[row.typeOrder];
             let status = ORDER_STATUS[row.status];
 

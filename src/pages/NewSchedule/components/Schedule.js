@@ -13,11 +13,9 @@ export default function Schedule({
 
   let indexFound = listSelectedOrder?.findIndex((e) => {
     let timeStringElement = e.isDelivery ? "deliveryTime" : "returnTime";
-
     if (e.storageId === schedule.storageId) {
       foundSameStorage = true;
     }
-
     if (e[timeStringElement] === schedule[timeString] && schedule.id !== e.id) {
       return true;
     }
@@ -72,7 +70,12 @@ export default function Schedule({
   return (
     <Box
       sx={{
-        backgroundColor: schedule.isDelivery ? "#99E5FE" : "#04BFFE",
+        backgroundColor:
+          schedule.status === 6
+            ? "#FF615F"
+            : schedule.isDelivery
+            ? "#99E5FE"
+            : "#04BFFE",
         boxShadow: 16,
         display: "flex",
         boxSizing: "border-box",
@@ -91,7 +94,6 @@ export default function Schedule({
           width: "100%",
           display: "flex",
           flexDirection: "row",
-          // height: "100%",
           justifyContent: "space-between",
         }}
       >
@@ -114,7 +116,6 @@ export default function Schedule({
           width: "100%",
           display: "flex",
           flexDirection: "row",
-          // height: "100%",
           justifyContent: "space-between",
           alignItems: "center !important",
         }}

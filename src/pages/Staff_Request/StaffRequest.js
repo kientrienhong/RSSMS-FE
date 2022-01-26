@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   IconButton,
@@ -14,7 +14,7 @@ import ListRequest from "./component/ListRequest";
 import { useForm } from "react-hook-form";
 import * as action from "../../redux/action/action";
 import { connect } from "react-redux";
-
+import { getStaffRequest } from "../../apis/Apis";
 function StaffRequest({ showLoading, hideLoading, showSnackbar, userState }) {
   const [listRequest, setListRequest] = useState([]);
   const [totalRequest, setTotalRequest] = useState(0);
@@ -34,7 +34,14 @@ function StaffRequest({ showLoading, hideLoading, showSnackbar, userState }) {
   const getData = async (name, page, size) => {
     try {
       showLoading();
-      //   let list = await getListUser(name, page, size, userState.idToken);
+      const list = await getStaffRequest(
+        name,
+        page,
+        size,
+        0,
+        userState.idToken
+      );
+      console.log(list.data.data);
       // setListRequest(list.data.data);
       // setTotalRequest(list.data.metadata.total);
     } catch (error) {
@@ -43,6 +50,20 @@ function StaffRequest({ showLoading, hideLoading, showSnackbar, userState }) {
       hideLoading();
     }
   };
+
+  useEffect(() => {
+    const firstCall = async () => {
+      try {
+        showLoading();
+        await getData("", page, 8);
+        hideLoading();
+      } catch (error) {
+        console.log(error);
+        hideLoading();
+      }
+    };
+    firstCall();
+  }, []);
 
   return (
     <Box

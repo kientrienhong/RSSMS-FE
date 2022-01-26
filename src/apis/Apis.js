@@ -685,3 +685,12 @@ export const getNotifcations = async (id, token) => {
 
   return response;
 };
+
+export const getStaffRequest = async (name, page, size, type, token) => {
+  const response = await axios.get(
+    `https://localhost:44304/api/v1/requests?page=${page}&size=${size}`,
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+
+  return response;
+};
