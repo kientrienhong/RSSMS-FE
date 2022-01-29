@@ -27,6 +27,7 @@ messaging
   })
   .then((currentToken) => {
     if (currentToken) {
+      console.log(currentToken);
       localStorage.setItem("tokenFirebase", currentToken);
     } else {
       console.log(

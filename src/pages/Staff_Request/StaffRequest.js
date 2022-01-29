@@ -21,7 +21,7 @@ function StaffRequest({ showLoading, hideLoading, showSnackbar, userState }) {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState({});
   const [request, setRequest] = useState({});
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
 
   const handleOpen = () => {
     setOpen(true);
@@ -41,9 +41,9 @@ function StaffRequest({ showLoading, hideLoading, showSnackbar, userState }) {
         0,
         userState.idToken
       );
-      console.log(list.data.data);
-      // setListRequest(list.data.data);
-      // setTotalRequest(list.data.metadata.total);
+      console.log(list);
+      setListRequest(list.data.data);
+      setTotalRequest(list.data.metadata.total);
     } catch (error) {
       console.log(error.response);
     } finally {

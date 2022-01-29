@@ -89,19 +89,12 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-const listHeaderName = [
-  "Id",
-  "Name",
-  "Phone",
-  "Storage",
-  "Schedule Date",
-  "Action",
-];
+const listHeaderName = ["Id", "Name", "Phone", "Schedule Date", "Action"];
 
 const mapListTableHeader = (listHeader) => (
   <TableHead>
     <TableRow sx={{ color: "black" }}>
-      {listHeader.map((e) => (
+      {listHeader?.map((e) => (
         <TableCell>{e}</TableCell>
       ))}
     </TableRow>
@@ -200,7 +193,7 @@ function ListRequest({
         />
         {mapListTableHeader(listHeaderName)}
         <TableBody>
-          {listRequest.map((row, index) => {
+          {listRequest?.map((row, index) => {
             return (
               <TableRow key={row.id}>
                 <TableCell
@@ -209,26 +202,21 @@ function ListRequest({
                   style={{ color: "black" }}
                   onClick={(e) => handleClickRow(row, setRequest, handleOpen)}
                 >
-                  {row.name}
+                  {row.id}
                 </TableCell>
                 <TableCell
                   style={{ color: "black" }}
                   onClick={(e) => handleClickRow(row, setRequest, handleOpen)}
                 >
-                  {row.email}
+                  {row.deliveryStaffName}
                 </TableCell>
                 <TableCell
                   style={{ color: "black" }}
                   onClick={(e) => handleClickRow(row, setRequest, handleOpen)}
                 >
-                  {row.phone}
+                  {row.deliveryStaffPhone}
                 </TableCell>
-                <TableCell
-                  style={{ color: "black" }}
-                  onClick={(e) => handleClickRow(row, setRequest, handleOpen)}
-                >
-                  {row?.staffManageStorages[0]?.storageName}
-                </TableCell>
+
                 <TableCell
                   style={{ color: "black" }}
                   onClick={(e) => handleClickRow(row, setRequest, handleOpen)}

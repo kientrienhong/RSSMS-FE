@@ -70,6 +70,7 @@ export const BOX_SIZE = {
 export const TYPE_SCHEDULE = [
   { name: "Delivery order", color: style.SECOND_BLUE },
   { name: "Return order", color: style.PRIMARY_BLUE },
+  { name: "Canceled delivery order", color: style.PRIMARY_SEMANTIC_RED },
 ];
 
 export const AREA_SIZE = {
