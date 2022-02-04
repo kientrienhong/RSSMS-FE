@@ -15,9 +15,9 @@ import CustomAreaInput from "../../../components/CustomAreaInput";
 import { LIST_UNIT } from "../../../constant/constant";
 import { connect } from "react-redux";
 import * as action from "../../../redux/action/action";
-import { storageFirebase } from "../../../firebase/firebase";
 import { createProduct, updateProduct } from "../../../apis/Apis";
 import { getBase64 } from "../../../utils/convertImage";
+import CustomSelect from "../../../components/CustomSelect";
 const styleBoxInput = {
   display: "flex",
   justifyContent: "center",
@@ -29,7 +29,6 @@ const styleBoxInput = {
   marginBottom: "4%",
 };
 const styleInput = { marginRight: "5%" };
-let unitTemp;
 
 function ProductModal({
   open,
@@ -45,6 +44,7 @@ function ProductModal({
   handleSubmit,
   control,
   userState,
+  errors,
 }) {
   const [unit, setUnit] = useState("");
   const [error, setError] = useState({});
@@ -53,14 +53,6 @@ function ProductModal({
   const inputFile = useRef(null);
   const handleOnclickImage = () => {
     inputFile.current.click();
-  };
-
-  const validation = () => {
-    if (unit === undefined) {
-      return false;
-    }
-
-    return true;
   };
 
   useEffect(() => {
@@ -72,22 +64,13 @@ function ProductModal({
   }, [open]);
 
   const onHandleCreateProduct = async (data) => {
-    if (validation() === false) {
-      setError({
-        unit: {
-          msg: "*Required",
-        },
-      });
-      return;
-    }
-
     let productTemp = {
       name: data.name,
       price: parseInt(data.price),
       description: data.description,
       type: typeProduct,
       size: data.size,
-      unit: unitTemp,
+      unit: data.unit,
       tooltip: data.tooltip,
       images: [
         {
@@ -142,7 +125,7 @@ function ProductModal({
       description: data.description,
       type: typeProduct,
       size: data.size,
-      unit: unit,
+      unit: data.unit,
       tooltip: data.tooltip,
       images: [
         {
@@ -201,16 +184,25 @@ function ProductModal({
   };
 
   const onChangeInputFile = (event) => {
-    setCurrentProduct({
-      ...currentProduct,
-      images: [
-        {
-          id: currentProduct?.images[0]?.id,
-          url: URL.createObjectURL(event.target.files[0]),
-        },
-      ],
-      avatarFile: event.target.files[0],
-    });
+    if (
+      event.target.files[0].name.includes(".png") ||
+      event.target.files[0].name.includes(".jpg") ||
+      event.target.files[0].name.includes(".jpeg")
+    ) {
+      setCurrentProduct({
+        ...currentProduct,
+        images: [
+          {
+            id: currentProduct?.images[0]?.id,
+            url: URL.createObjectURL(event.target.files[0]),
+          },
+        ],
+        avatarFile: event.target.files[0],
+      });
+      setError();
+    } else {
+      setError({ avatarFile: { message: "Please choose image file!" } });
+    }
   };
 
   const buildInputFileImage = () => {
@@ -247,12 +239,6 @@ function ProductModal({
         )}
       </Box>
     );
-  };
-
-  const handleChangeUnit = (event) => {
-    setUnit(event.target.value);
-    setError({ ...error, unit: undefined });
-    unitTemp = event.target.value;
   };
 
   return (
@@ -405,23 +391,36 @@ function ProductModal({
                   <Typography
                     color="black"
                     variant="h2"
-                    style={{ marginTop: "1%", marginLeft: "5%" }}
+                    style={{
+                      marginTop: "1%",
+                      marginLeft: "5%",
+                      marginBottom: "3%",
+                    }}
                   >
                     Unit
                   </Typography>
-
-                  <FormControl
+                  <CustomSelect
+                    label="Type"
+                    name="unit"
+                    control={control}
+                    errors={errors}
+                    defaultValue={unit}
+                    errorMsg={"Required unit"}
+                  >
+                    {buildDropDown(LIST_UNIT)}
+                  </CustomSelect>
+                  {/* <FormControl
                     sx={{ m: 1, minWidth: 120, color: "black" }}
                     name="sizeStorage"
                     error={error?.unit}
+                    control={control}
+                    errorMsg={"Required unit"}
                   >
-                    <Select value={unit} onChange={handleChangeUnit}>
-                      {buildDropDown(LIST_UNIT)}
-                    </Select>
+                    <Select value={unit} onChange={handleChangeUnit}></Select>
                     <FormHelperText error={error?.unit}>
                       {error?.unit ? error?.unit?.msg : ""}
                     </FormHelperText>
-                  </FormControl>
+                  </FormControl> */}
                 </Box>
               </Box>
               <p

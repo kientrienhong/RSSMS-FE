@@ -176,7 +176,7 @@ const buildModal = (
               rules={{
                 required: "Phone required",
                 pattern: {
-                  value: /^[0-9]{10}$/,
+                  value: /^[0][0-9]{9}$/,
                   message: "Invalid phone number",
                 },
               }}
@@ -424,6 +424,7 @@ const buildModal = (
                 <CustomSelect
                   label="Type"
                   name="roleName"
+                  defaultValue={user?.roleName}
                   control={control}
                   errors={errors}
                   errorMsg={"Required role"}

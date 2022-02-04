@@ -12,7 +12,12 @@ import ConfirmModal from "../../components/ConfirmModal";
 function Products({ showLoading, hideLoading, showSnackbar, userState }) {
   const [open, setOpen] = useState(false);
   const [openConfirm, setOpenConfirm] = useState(false);
-  const { handleSubmit, control, reset, errors } = useForm();
+  const {
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors },
+  } = useForm();
 
   const [isEdit, setIsEdit] = useState(false);
   const [typeProduct, setTypeProduct] = useState(-1);

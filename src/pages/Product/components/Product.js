@@ -8,7 +8,6 @@ export default function Product({
   handleOpen,
   handleOpenConfirm,
 }) {
-  console.log(product);
   const handleOnClickEdit = () => {
     setCurrentProduct(product);
     handleOpen(true, index);
