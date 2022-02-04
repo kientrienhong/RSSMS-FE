@@ -502,16 +502,24 @@ function Storages(props) {
   };
 
   const onChangeInputFile = (event) => {
-    setStorage({
-      ...storage,
-      images: [
-        {
-          id: storage?.images[0]?.id,
-          url: URL.createObjectURL(event.target.files[0]),
-        },
-      ],
-      avatarFile: event.target.files[0],
-    });
+    if (
+      event.target.files[0].name.includes(".png") ||
+      event.target.files[0].name.includes(".jpg") ||
+      event.target.files[0].name.includes(".jpeg")
+    ) {
+      setStorage({
+        ...storage,
+        images: [
+          {
+            id: storage?.images[0]?.id,
+            url: URL.createObjectURL(event.target.files[0]),
+          },
+        ],
+        avatarFile: event.target.files[0],
+      });
+    } else {
+      setError({ avatarFile: { message: "Please choose image storage!" } });
+    }
   };
 
   useEffect(() => {
@@ -554,6 +562,7 @@ function Storages(props) {
         onSubmit={handleSubmit(onSubmit)}
         style={{
           marginLeft: "5%",
+          boxSizing: "border-box",
         }}
       >
         <input
@@ -604,13 +613,13 @@ function Storages(props) {
         >
           Storage Size Detail
         </Typography>
-        <Box sx={{ ...styleBoxInput, marginTop: "2%" }}>
+        <Box sx={{ ...styleBoxInput, marginTop: "5%" }}>
           <CustomInput
             control={control}
             rules={{
               required: "Width required",
               pattern: {
-                value: /^[1-9]+[0-9]*$/,
+                value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
                 message: "Invalid width",
               },
             }}
@@ -625,7 +634,7 @@ function Storages(props) {
             rules={{
               required: "Length required",
               pattern: {
-                value: /^[1-9]+[0-9]*$/,
+                value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
                 message: "Invalid length",
               },
             }}
@@ -640,7 +649,7 @@ function Storages(props) {
             rules={{
               required: "Height required",
               pattern: {
-                value: /^[1-9]+[0-9]*$/,
+                value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
                 message: "Invalid height",
               },
             }}
@@ -656,6 +665,7 @@ function Storages(props) {
           style={{
             textAlign: "center",
             color: "red",
+            marginTop: "10%",
           }}
         >
           {error?.avatarFile?.message ? error?.avatarFile?.message : ""}
@@ -665,7 +675,7 @@ function Storages(props) {
             width: "200px",
             margin: "1% auto",
             display: "flex",
-            marginTop: "16%",
+            marginTop: "10%",
             flexDirection: "row",
             justifyContent: "space-between",
           }}

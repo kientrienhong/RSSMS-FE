@@ -38,7 +38,7 @@ function Storage({
       }}
     >
       <img
-        src={storage.images[0].url}
+        src={storage?.images[0]?.url}
         alt="test"
         width="48%"
         height="96%"
