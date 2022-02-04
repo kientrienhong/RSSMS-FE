@@ -41,7 +41,7 @@ function StaffRequest({ showLoading, hideLoading, showSnackbar, userState }) {
         0,
         userState.idToken
       );
-      console.log(list);
+      console.log(list.data.data);
       setListRequest(list.data.data);
       setTotalRequest(list.data.metadata.total);
     } catch (error) {

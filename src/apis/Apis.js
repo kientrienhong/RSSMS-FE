@@ -398,21 +398,6 @@ export const deleteShelf = async (id, token) => {
 };
 
 export const createOrder = async (order, token) => {
-  console.log({
-    customerId: order.customerId,
-    deliveryAddress: order.deliveryAddress,
-    addressReturn: order.addressReturn,
-    totalPrice: order.totalPrice,
-    typeOrder: order.typeOrder,
-    deliveryTime: order.deliveryTime,
-    isPaid: order.isPaid,
-    paymentMethod: order.paymentMethod,
-    isUserDelivery: order.isUserDelivery,
-    deliveryDate: order.deliveryDate,
-    duration: order.duration,
-    listProduct: order.listProduct,
-  });
-
   const response = await axios.post(
     `https://localhost:44304/api/v1/orders`,
     {
@@ -659,7 +644,6 @@ export const updateProduct = async (product, id, imageUrl, token) => {
       ],
     };
   }
-  console.log(object);
   const response = await axios.put(
     `https://localhost:44304/api/v1/products/${id}`,
     object,

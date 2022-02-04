@@ -99,10 +99,9 @@ function ChangePassword({
             rules={{
               required: "Confirm password required",
               validate: (value) => {
-                console.log(value);
-                console.log(password.current);
                 return (
-                  value === password.current || "The passwords do not match"
+                  value === (password.current.value ?? password.current) ||
+                  "The passwords do not match"
                 );
               },
             }}

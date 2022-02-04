@@ -149,6 +149,11 @@ const buildModal = (
               control={control}
               rules={{
                 required: "Email required",
+                pattern: {
+                  value:
+                    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                  message: "Invalid email",
+                },
               }}
               styles={{ width: "240px" }}
               name="email"
@@ -304,7 +309,6 @@ const buildModal = (
                 <Controller
                   name="password"
                   control={control}
-                  defaultValue={user.password}
                   render={({
                     field: { onChange, value },
                     fieldState: { error },
@@ -318,6 +322,7 @@ const buildModal = (
                         style={styleInput}
                         inputProps={{ width: "280px" }}
                         onChange={onChange}
+                        userInfo={""}
                         error={!!error}
                         helperText={error ? error.message : null}
                         type="password"
@@ -343,7 +348,8 @@ const buildModal = (
                     required: "Confirm password required",
                     validate: (value) => {
                       return (
-                        value === password.current ||
+                        value ===
+                          (password.current.value ?? password.current) ||
                         "The passwords do not match"
                       );
                     },
@@ -351,9 +357,9 @@ const buildModal = (
                   styles={{ width: "280px" }}
                   name="confirmPassword"
                   label="Confirm Password"
-                  userInfo={user.password}
                   type="password"
                   inlineStyle={styleInput}
+                  userInfo={""}
                 />
               </Box>
               <Box
@@ -509,7 +515,13 @@ function Users(props) {
       setListUser(list.data.data);
       setTotalUser(list.data.metadata.total);
     } catch (error) {
-      console.log(error.response);
+      console.log(error?.response);
+      if (error?.response) {
+        if (error?.response?.data?.error?.code === 404) {
+          setListUser([]);
+          setTotalUser(0);
+        }
+      }
     } finally {
       hideLoading();
     }
@@ -528,13 +540,15 @@ function Users(props) {
     let currentYear = new Date();
     if (dob > currentYear) {
       setError({ message: "Please enter date of birth before today" });
+      return;
     } else if (currentYear.getFullYear() - dob.getFullYear() < 18) {
       setError({
         message: "\nPlease enter date of birth more than 18 years old",
       });
+      return;
     }
 
-    if (error?.length > 0) {
+    if (error?.message?.length > 0) {
       return;
     }
     let roleName = ROLE_USER[data.roleName];
@@ -610,15 +624,18 @@ function Users(props) {
     let currentYear = new Date();
     if (dob > currentYear) {
       setError({ message: "Please enter date of birth before today" });
+      return;
     } else if (currentYear.getFullYear() - dob.getFullYear() < 18) {
       setError({
         message: "\nPlease enter date of birth more than 18 years old",
       });
-    }
-
-    if (error?.length > 0) {
       return;
     }
+
+    if (error?.message?.length > 0) {
+      return;
+    }
+
     let avatarLinkObject = null;
     if (user.avatarFile) {
       let base64 = await getBase64(user.avatarFile);
@@ -786,18 +803,31 @@ function Users(props) {
         color="#FFF"
         sx={{ marginLeft: "2%", marginRight: "2%" }}
       >
-        <ListUsers
-          handleOpen={handleOpen}
-          setUser={setUser}
-          listUser={listUser}
-          getData={getData}
-          reset={reset}
-          searchName={searchName}
-          setListUser={setListUser}
-          page={page}
-          setPage={setPage}
-          totalUser={totalUser}
-        />
+        {listUser.length > 0 ? (
+          <ListUsers
+            handleOpen={handleOpen}
+            setUser={setUser}
+            listUser={listUser}
+            getData={getData}
+            reset={reset}
+            searchName={searchName}
+            setListUser={setListUser}
+            page={page}
+            setPage={setPage}
+            totalUser={totalUser}
+          />
+        ) : (
+          <Typography
+            color="black"
+            variant="h5"
+            style={{
+              textAlign: "center",
+              margin: "2% 0",
+            }}
+          >
+            User not found
+          </Typography>
+        )}
       </Card>
     </Box>
   );

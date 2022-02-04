@@ -432,6 +432,7 @@ function Shedule({ showLoading, hideLoading, userState }) {
           startOfWeek.toISOString().split("T")[0],
           endOfWeek.toISOString().split("T")[0]
         );
+        console.log(response.data);
         response
           ?.filter((e) => e.status !== 0)
           ?.forEach((e) => {
