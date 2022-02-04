@@ -69,7 +69,7 @@ function ProductModal({
       price: parseInt(data.price),
       description: data.description,
       type: typeProduct,
-      size: data.size,
+      size: `${data.width}m x ${data.length}m x ${data.height}m`,
       unit: data.unit,
       tooltip: data.tooltip,
       images: [
@@ -124,7 +124,7 @@ function ProductModal({
       price: parseInt(data.price),
       description: data.description,
       type: typeProduct,
-      size: data.size,
+      size: `${data.width}m x ${data.length}m x ${data.height}m`,
       unit: data.unit,
       tooltip: data.tooltip,
       images: [
@@ -293,7 +293,7 @@ function ProductModal({
                 <CustomInput
                   control={control}
                   rules={{ required: "Name is required" }}
-                  styles={{ width: "400px" }}
+                  styles={{ width: "475px" }}
                   name="name"
                   label="Name"
                   userInfo={currentProduct?.name}
@@ -301,39 +301,72 @@ function ProductModal({
                 />
               </Box>
               <Box
-                sx={{
-                  ...styleBoxInput,
-                  marginTop: "3%",
-                  justifyContent: "flex-start",
-                }}
+                sx={{ ...styleBoxInput, marginTop: "5%", marginLeft: "-2%" }}
               >
                 <CustomInput
                   control={control}
-                  rules={{ required: "Size is required" }}
-                  styles={{ width: "400px" }}
-                  name="size"
-                  label="Size"
-                  userInfo={currentProduct?.size}
-                  inlineStyle={{ ...styleInput }}
+                  rules={{
+                    required: "Width required",
+                    pattern: {
+                      value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
+                      message: "Invalid width",
+                    },
+                  }}
+                  styles={{ width: "120px" }}
+                  name="width"
+                  label="Width (m)"
+                  // userInfo={storage.width}
+                  inlineStyle={styleInput}
+                />
+                <CustomInput
+                  control={control}
+                  rules={{
+                    required: "Length required",
+                    pattern: {
+                      value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
+                      message: "Invalid length",
+                    },
+                  }}
+                  styles={{ width: "120px" }}
+                  name="length"
+                  label="Length (m)"
+                  // userInfo={storage.length}
+                  inlineStyle={styleInput}
+                />
+                <CustomInput
+                  control={control}
+                  rules={{
+                    required: "Height required",
+                    pattern: {
+                      value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
+                      message: "Invalid height",
+                    },
+                  }}
+                  styles={{ width: "120px" }}
+                  name="height"
+                  label="Height (m)"
+                  // userInfo={storage.height}
+                  inlineStyle={styleInput}
                 />
               </Box>
+
               <CustomAreaInput
                 control={control}
                 rules={{ required: "Description is required" }}
-                styles={{ width: "480px" }}
+                styles={{ width: "500px" }}
                 name="description"
                 label="Description"
                 userInfo={currentProduct?.description}
-                inlineStyle={{ ...styleInput, marginTop: "4%", width: "480px" }}
+                inlineStyle={{ ...styleInput, marginTop: "4%", width: "500px" }}
               />
               <CustomAreaInput
                 control={control}
                 rules={{ required: "Tooltip is required" }}
-                styles={{ width: "480px" }}
+                styles={{ width: "500px" }}
                 name="tooltip"
                 label="Tooltip"
                 userInfo={currentProduct?.tooltip}
-                inlineStyle={{ ...styleInput, marginTop: "4%", width: "480px" }}
+                inlineStyle={{ ...styleInput, marginTop: "4%", width: "500px" }}
               />
               <Box
                 sx={{
@@ -369,8 +402,8 @@ function ProductModal({
                       required: "Price is required",
 
                       pattern: {
-                        value: /[^a-zA-Z]+/,
-                        message: "Invalid phone number",
+                        value: /^\+?([1-9]\d{4,14})$/,
+                        message: "Invalid price",
                       },
                     }}
                     styles={{ width: "240px" }}
@@ -385,7 +418,7 @@ function ProductModal({
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "flex-start",
-                    width: "50%",
+                    width: "40%",
                   }}
                 >
                   <Typography
