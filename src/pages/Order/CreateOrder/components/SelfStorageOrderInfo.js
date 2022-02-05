@@ -440,10 +440,17 @@ function SelfStorageOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
             totalPrice: totalPrice(),
           });
           let errorTemp = {};
+          console.log(dateStart < new Date().toISOString().split("T")[0]);
           if (!dateStart) {
             errorTemp = {
               dateStart: {
                 message: "Required Date Start",
+              },
+            };
+          } else if (dateStart < new Date().toISOString().split("T")[0]) {
+            errorTemp = {
+              dateStart: {
+                message: "Please choose date after today!",
               },
             };
           }
@@ -460,6 +467,7 @@ function SelfStorageOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
           }
 
           if (Object.keys(errorTemp).length === 0) {
+            setError();
             onHandleOpen();
           } else {
             setError(errorTemp);

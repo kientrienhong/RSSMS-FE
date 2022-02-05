@@ -55,7 +55,8 @@ export default function SelfStorageMainTab({
         spacing={2}
         sx={{
           width: "98%",
-          height: "630px",
+          height: "auto",
+          marginBottom: "2%",
         }}
       >
         {mapListStoragesToGrid(listStorages, setListStorages)}

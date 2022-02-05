@@ -131,7 +131,13 @@ function InputInforModal({
       setValue("phone", userTemp.data.phone);
       setValue("deliveryAddress", userTemp.data.address);
     } catch (error) {
-      console.log(error);
+      console.log(error?.response);
+      console.log(error?.response?.data?.error?.code);
+      if (error?.response?.data?.error?.code === 404) {
+        showSnackbar("error", "Not found user");
+      } else if (error?.response?.data?.error?.code === 400) {
+        showSnackbar("error", "Please enter and search phone number");
+      }
     } finally {
       hideLoading();
     }
@@ -211,6 +217,7 @@ function InputInforModal({
               label={user?.name ? "" : "Name"}
               userInfo={user?.name}
               inlineStyle={styleInput}
+              disabled={true}
             />
 
             <CustomInput
@@ -223,6 +230,7 @@ function InputInforModal({
               label={user?.email ? "" : "Email"}
               userInfo={user?.email}
               inlineStyle={styleInput}
+              disabled={true}
             />
             <CustomInput
               control={control}
@@ -233,6 +241,7 @@ function InputInforModal({
               name="phone"
               label={user?.phone ? "" : "Phone"}
               inlineStyle={styleInput}
+              disabled={true}
             />
           </Box>
           {order.type === 0 ? null : (

@@ -47,6 +47,7 @@ function ProductModal({
   errors,
 }) {
   const [unit, setUnit] = useState("");
+  const [sizeArray, setSizeArray] = useState();
   const [error, setError] = useState({});
   const buildDropDown = (listSizeStorage) =>
     listSizeStorage.map((e) => <MenuItem value={e.value}>{e.label}</MenuItem>);
@@ -54,13 +55,16 @@ function ProductModal({
   const handleOnclickImage = () => {
     inputFile.current.click();
   };
-
   useEffect(() => {
     setUnit(currentProduct.unit);
+    setSizeArray(currentProduct?.size?.split(" x "));
   }, [currentProduct]);
 
   useEffect(() => {
     setError({});
+    if (open === false) {
+      setSizeArray();
+    }
   }, [open]);
 
   const onHandleCreateProduct = async (data) => {
@@ -240,7 +244,6 @@ function ProductModal({
       </Box>
     );
   };
-
   return (
     <Modal
       open={open}
@@ -315,7 +318,9 @@ function ProductModal({
                   styles={{ width: "120px" }}
                   name="width"
                   label="Width (m)"
-                  // userInfo={storage.width}
+                  userInfo={
+                    sizeArray?.length === 3 ? sizeArray[0].slice(0, -1) : ""
+                  }
                   inlineStyle={styleInput}
                 />
                 <CustomInput
@@ -330,7 +335,9 @@ function ProductModal({
                   styles={{ width: "120px" }}
                   name="length"
                   label="Length (m)"
-                  // userInfo={storage.length}
+                  userInfo={
+                    sizeArray?.length === 3 ? sizeArray[1].slice(0, -1) : ""
+                  }
                   inlineStyle={styleInput}
                 />
                 <CustomInput
@@ -345,7 +352,9 @@ function ProductModal({
                   styles={{ width: "120px" }}
                   name="height"
                   label="Height (m)"
-                  // userInfo={storage.height}
+                  userInfo={
+                    sizeArray?.length === 3 ? sizeArray[2].slice(0, -1) : ""
+                  }
                   inlineStyle={styleInput}
                 />
               </Box>

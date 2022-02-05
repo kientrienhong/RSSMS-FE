@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box } from "@material-ui/core";
+import { Alert, Box, Snackbar } from "@material-ui/core";
 import { BsBoxSeam } from "react-icons/bs";
 import { FaWarehouse } from "react-icons/fa";
 import SelfStorageMainTab from "./SelfStorageMainTab";
@@ -11,7 +11,16 @@ import { connect } from "react-redux";
 import * as action from "../../../redux/action/action";
 import { getProduct } from "../../../apis/Apis";
 import LoadingPage from "../../../pages/Loading/LoadingPage";
-function MakingOrder({ showLoading, hideLoading, showSnackbar, userState }) {
+function MakingOrder({
+  showLoading,
+  hideLoading,
+  showSnackbar,
+  userState,
+  snackbar,
+  typeSnackbar,
+  msgSnackbar,
+  closeSnackbar,
+}) {
   const [listStorages, setListStorages] = useState([]);
 
   const [listAccessory, setListAccessory] = useState([]);
@@ -134,7 +143,23 @@ function MakingOrder({ showLoading, hideLoading, showSnackbar, userState }) {
       }}
     >
       <LoadingPage />
-
+      <Snackbar
+        sx={{
+          zIndex: 9999999999,
+        }}
+        open={snackbar}
+        autoHideDuration={3000}
+        onClose={closeSnackbar}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={closeSnackbar}
+          severity={typeSnackbar}
+          sx={{ width: "100%" }}
+        >
+          {msgSnackbar}
+        </Alert>
+      </Snackbar>
       <Box
         sx={{
           width: "10%",
@@ -230,6 +255,9 @@ function MakingOrder({ showLoading, hideLoading, showSnackbar, userState }) {
 
 const mapStateToProps = (state) => ({
   userState: state.information.user,
+  snackbar: state.application.snackbar,
+  typeSnackbar: state.application.typeSnackbar,
+  msgSnackbar: state.application.msgSnackbar,
 });
 
 const mapDispatchToProps = (dispatch) => {
@@ -237,6 +265,7 @@ const mapDispatchToProps = (dispatch) => {
     showLoading: () => dispatch(action.showLoader()),
     hideLoading: () => dispatch(action.hideLoader()),
     showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
+    closeSnackbar: () => dispatch(action.hideSnackbar()),
   };
 };
 

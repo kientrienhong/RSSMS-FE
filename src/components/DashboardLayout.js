@@ -83,7 +83,7 @@ const DashboardLayout = (props) => {
     <DashboardLayoutRoot>
       <Snackbar
         open={props.snackbar}
-        autoHideDuration={2000}
+        autoHideDuration={3000}
         onClose={props.closeSnackbar}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
