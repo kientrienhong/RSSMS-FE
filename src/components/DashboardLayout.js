@@ -8,6 +8,7 @@ import LoadingPage from "../pages/Loading/LoadingPage";
 import { connect } from "react-redux";
 import * as action from "../redux/action/action";
 import StoredOrderModal from "./StoredOrderModal";
+import moment from "moment";
 
 const DashboardLayoutRoot = styled("div")(({ theme }) => ({
   backgroundColor: theme.palette.background.default,
@@ -61,7 +62,59 @@ const DashboardLayout = (props) => {
             width: "100%",
           }}
         >
-          <p>{e.description}</p>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              padding: "8px",
+            }}
+          >
+            <Box
+              sx={{
+                backgroundColor: "#04BFFE",
+                width: "36px",
+                height: "36px",
+                borderRadius: "18px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <img
+                src="/img/newInvoice.png"
+                alt="newInvoice"
+                width="24"
+                height="24"
+              />
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                width: "80%",
+                justifyContent: "space-between",
+                marginLeft: "5%",
+              }}
+            >
+              <p
+                style={{
+                  marginBottom: "1px",
+                  width: "70%",
+                }}
+              >
+                {e.description}
+              </p>
+              <p
+                style={{
+                  color: "#AAA",
+                  textAlign: "right",
+                }}
+              >
+                {moment(e.createDate, "YYYYMMDD").fromNow()}
+              </p>
+            </Box>
+          </Box>
           <Divider />
         </Box>
       );
