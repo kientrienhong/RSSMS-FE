@@ -151,6 +151,12 @@ export const setUpNotification = (notifcation) => {
   };
 };
 
+export const setUpIsReadNoti = () => {
+  return {
+    type: ActionType.SET_UP_IS_READ_NOTI,
+  };
+};
+
 export const addNotification = (notifcation) => {
   return {
     type: ActionType.ADD_NOTIFCATIONS,

@@ -70,6 +70,7 @@ const DashboardLayout = (props) => {
 
   const handleCloseNotification = () => {
     setOpenNotification(false);
+    props.setUpIsReadNoti();
   };
 
   const {
@@ -152,6 +153,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     closeSnackbar: () => dispatch(action.hideSnackbar()),
     closeStoredOrderModal: () => dispatch(action.closeStoredOrderModal()),
+    setUpIsReadNoti: () => dispatch(action.setUpIsReadNoti()),
   };
 };
 

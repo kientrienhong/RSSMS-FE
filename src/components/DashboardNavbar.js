@@ -17,11 +17,14 @@ import InputIcon from "@material-ui/icons/Input";
 import Logo from "./Logo";
 import { useNavigate } from "react-router";
 import { STYLE_MODAL } from "../constant/style";
+import { connect } from "react-redux";
+import * as action from "../apis/Apis";
 const DashboardNavbar = ({
   onMobileNavOpen,
   handleCloseNotification,
   handleOpenNotification,
   openNotification,
+  unReadNoti,
   ...rest
 }) => {
   const [notifications] = useState([]);
@@ -128,11 +131,7 @@ const DashboardNavbar = ({
 
         <Hidden xlDown>
           <IconButton color="primary" size="large">
-            <Badge
-              badgeContent={notifications.length}
-              color="primary"
-              variant="dot"
-            >
+            <Badge badgeContent={unReadNoti.length} color="error">
               <NotificationsIcon
                 onClick={() => {
                   if (openNotification === true) {
@@ -158,8 +157,17 @@ const DashboardNavbar = ({
   );
 };
 
+const mapStateToProps = (state) => ({
+  notifcations: state.information.notifcations,
+  unReadNoti: state.information.unReadNoti,
+});
+
+const mapDispatchToProps = (dispatch) => {
+  return {};
+};
+
 DashboardNavbar.propTypes = {
   onMobileNavOpen: PropTypes.func,
 };
 
-export default DashboardNavbar;
+export default connect(mapStateToProps, mapDispatchToProps)(DashboardNavbar);
