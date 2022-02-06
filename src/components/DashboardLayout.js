@@ -9,7 +9,7 @@ import { connect } from "react-redux";
 import * as action from "../redux/action/action";
 import StoredOrderModal from "./StoredOrderModal";
 import moment from "moment";
-
+import { updateNotification } from "../apis/Apis";
 const DashboardLayoutRoot = styled("div")(({ theme }) => ({
   backgroundColor: theme.palette.background.default,
   display: "flex",
@@ -47,15 +47,15 @@ const DashboardLayout = (props) => {
   };
 
   const mapListNotifcation = () => {
-    if (props.notifcations.length === 0) {
+    if (props.notifications.length === 0) {
       return (
         <Typography color="black" variant="h2" style={{ margin: "4%" }}>
-          No notifcations yets!
+          No notifications yets!
         </Typography>
       );
     }
 
-    return props.notifcations.map((e) => {
+    return props.notifications.map((e) => {
       return (
         <Box
           sx={{
@@ -95,12 +95,13 @@ const DashboardLayout = (props) => {
                 width: "80%",
                 justifyContent: "space-between",
                 marginLeft: "5%",
+                alignItems: "center",
               }}
             >
               <p
                 style={{
                   marginBottom: "1px",
-                  width: "70%",
+                  width: "50%",
                 }}
               >
                 {e.description}
@@ -113,6 +114,18 @@ const DashboardLayout = (props) => {
               >
                 {moment(e.createDate, "YYYYMMDD").fromNow()}
               </p>
+              {e.isRead === false ? (
+                <Box
+                  sx={{
+                    width: "14px",
+                    height: "14px",
+                    borderRadius: "7px",
+                    backgroundColor: "#04BFFE",
+                  }}
+                ></Box>
+              ) : (
+                <Box></Box>
+              )}
             </Box>
           </Box>
           <Divider />
@@ -123,7 +136,18 @@ const DashboardLayout = (props) => {
 
   const handleCloseNotification = () => {
     setOpenNotification(false);
-    props.setUpIsReadNoti();
+    if (props.unReadNoti.length > 0) {
+      updateNotification(
+        props.unReadNoti.map((e) => e.id),
+        props.userState.idToken
+      );
+      let newNotification = [...props.notifications].map((e) => {
+        return { ...e, isRead: true };
+      });
+      props.setUpNotification(newNotification);
+
+      props.setUpIsReadNoti();
+    }
   };
 
   const {
@@ -199,7 +223,9 @@ const mapStateToProps = (state) => ({
   isOpenStoredModal: state.application.isOpenStoredModal,
   isViewStoredModal: state.application.isViewStoredModal,
   storedOrder: state.order.storedOrder,
-  notifcations: state.information.notifcations,
+  notifications: state.information.notifications,
+  unReadNoti: state.information.unReadNoti,
+  userState: state.information.user,
 });
 
 const mapDispatchToProps = (dispatch) => {
@@ -207,6 +233,8 @@ const mapDispatchToProps = (dispatch) => {
     closeSnackbar: () => dispatch(action.hideSnackbar()),
     closeStoredOrderModal: () => dispatch(action.closeStoredOrderModal()),
     setUpIsReadNoti: () => dispatch(action.setUpIsReadNoti()),
+    setUpNotification: (notifcation) =>
+      dispatch(action.setUpNotification(notifcation)),
   };
 };
 

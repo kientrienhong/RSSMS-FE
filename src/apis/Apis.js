@@ -678,3 +678,15 @@ export const getStaffRequest = async (name, page, size, type, token) => {
 
   return response;
 };
+
+export const updateNotification = async (listNotification, token) => {
+  const response = await axios.put(
+    `https://localhost:44304/api/v1/notifications`,
+    {
+      ids: listNotification,
+    },
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+
+  return response;
+};

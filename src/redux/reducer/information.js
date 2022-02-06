@@ -2,7 +2,7 @@ import * as ActionType from "./../constants/ActionType";
 
 const initialState = {
   user: {},
-  notifcations: [],
+  notifications: [],
   unReadNoti: [],
 };
 
@@ -13,8 +13,8 @@ const information = (state = initialState, action) => {
       return { ...state };
     }
 
-    case ActionType.SET_UP_NOTIFCATIONS: {
-      state.notifcations = action.payload;
+    case ActionType.SET_UP_NOTIFICATIONS: {
+      state.notifications = action.payload;
       state.unReadNoti = action.payload.filter((e) => e.isRead === false);
       return { ...state };
     }
@@ -24,10 +24,10 @@ const information = (state = initialState, action) => {
       return { ...state };
     }
 
-    case ActionType.ADD_NOTIFCATIONS: {
-      let notifcationsTemp = [...state.notifcations];
-      notifcationsTemp.push(action.payload);
-      return { ...state, notifcations: notifcationsTemp };
+    case ActionType.ADD_NOTIFICATIONS: {
+      let notificationsTemp = [...state.notifications];
+      notificationsTemp.push(action.payload);
+      return { ...state, notifications: notificationsTemp };
     }
 
     default: {

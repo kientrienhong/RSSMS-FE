@@ -158,7 +158,7 @@ const DashboardNavbar = ({
 };
 
 const mapStateToProps = (state) => ({
-  notifcations: state.information.notifcations,
+  notifications: state.information.notifications,
   unReadNoti: state.information.unReadNoti,
 });
 

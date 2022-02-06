@@ -146,7 +146,7 @@ export const cancelStoreOrder = () => {
 
 export const setUpNotification = (notifcation) => {
   return {
-    type: ActionType.SET_UP_NOTIFCATIONS,
+    type: ActionType.SET_UP_NOTIFICATIONS,
     payload: notifcation,
   };
 };
@@ -159,7 +159,7 @@ export const setUpIsReadNoti = () => {
 
 export const addNotification = (notifcation) => {
   return {
-    type: ActionType.ADD_NOTIFCATIONS,
+    type: ActionType.ADD_NOTIFICATIONS,
     payload: notifcation,
   };
 };
