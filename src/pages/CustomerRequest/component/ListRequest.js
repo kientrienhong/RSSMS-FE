@@ -225,13 +225,17 @@ function ListRequest({
                 </TableCell>
                 <TableCell style={{ color: "black" }}>
                   <Button
-                    className={classes.button}
-                    onClick={() => {
-                      setCurrentId(row.id);
-                      handleConfirmOpen();
+                    style={{
+                      height: "45px",
+                      paddingLeft: "16px",
+                      paddingRight: "16px",
+                      marginRight: "4%",
                     }}
+                    color="success"
+                    variant="contained"
+                    type="submit"
                   >
-                    Accept
+                    Go to schedule
                   </Button>
                   {/* <Button
                     className={classes.button}

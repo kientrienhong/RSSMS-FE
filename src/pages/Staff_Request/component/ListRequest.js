@@ -89,7 +89,14 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-const listHeaderName = ["Id", "Name", "Phone", "Schedule Date", "Action"];
+const listHeaderName = [
+  "Id",
+  "Name",
+  "Phone",
+  "Schedule Date",
+  "Note",
+  "Action",
+];
 
 const mapListTableHeader = (listHeader) => (
   <TableHead>
@@ -199,39 +206,48 @@ function ListRequest({
                 <TableCell
                   component="th"
                   scope="row"
-                  style={{ color: "black" }}
+                  style={{ color: "black", width: "5%" }}
                   onClick={(e) => handleClickRow(row, setRequest, handleOpen)}
                 >
                   {row.id}
                 </TableCell>
                 <TableCell
-                  style={{ color: "black" }}
+                  style={{ color: "black", width: "10%" }}
                   onClick={(e) => handleClickRow(row, setRequest, handleOpen)}
                 >
                   {row.deliveryStaffName}
                 </TableCell>
                 <TableCell
-                  style={{ color: "black" }}
+                  style={{ color: "black", width: "10%" }}
                   onClick={(e) => handleClickRow(row, setRequest, handleOpen)}
                 >
                   {row.deliveryStaffPhone}
                 </TableCell>
-
                 <TableCell
                   style={{ color: "black" }}
                   onClick={(e) => handleClickRow(row, setRequest, handleOpen)}
                 >
                   {row.roleName}
                 </TableCell>
+                <TableCell
+                  style={{ color: "black", width: "45%" }}
+                  onClick={(e) => handleClickRow(row, setRequest, handleOpen)}
+                >
+                  {row.note}
+                </TableCell>
                 <TableCell style={{ color: "black" }}>
                   <Button
-                    className={classes.button}
-                    onClick={() => {
-                      setCurrentId(row.id);
-                      handleConfirmOpen();
+                    style={{
+                      height: "45px",
+                      paddingLeft: "16px",
+                      paddingRight: "16px",
+                      marginRight: "4%",
                     }}
+                    color="success"
+                    variant="contained"
+                    type="submit"
                   >
-                    Accept
+                    Go to schedule
                   </Button>
                   {/* <Button
                     className={classes.button}
