@@ -48,8 +48,11 @@ function OrderAssignModal({
         userIds,
         userState.idToken
       );
-
-      await getData(startOfWeek, endOfWeek, currentSchedule);
+      await getData(
+        startOfWeek,
+        endOfWeek,
+        new Date(currentSchedule).toISOString()
+      );
       handleClose();
       showSnackbar("success", "Assign delivery staff success");
     } catch (e) {

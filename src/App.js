@@ -13,11 +13,23 @@ function App(props) {
 
   const content = useRoutes(route);
   messaging.onMessage((payload) => {
+    console.log(payload);
     if (!payload?.notification) {
       return;
     }
     props.changeIsLoadOrder();
-    props.addNotification({ description: payload.notification.body });
+    console.log({
+      createdDate: new Date().toISOString(),
+      id: payload.data.NotiId,
+      description: payload.notification.body,
+      isRead: false,
+    });
+    props.addNotification({
+      createdDate: new Date().toISOString(),
+      id: parseInt(payload.data.NotiId),
+      description: payload.notification.body,
+      isRead: false,
+    });
     showToast({
       text: payload.notification.body,
       type: DialogType.INFO,

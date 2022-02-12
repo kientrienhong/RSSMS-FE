@@ -94,7 +94,18 @@ const routes = [
         ),
       },
       {
-        path: "schedule",
+        path: "schedule/",
+        element: (
+          <ProtectTemplate
+            Component={NewSchedule}
+            permission={[Object.keys(ROLE_USER)[1]]}
+          >
+            <NewSchedule />
+          </ProtectTemplate>
+        ),
+      },
+      {
+        path: "schedule/:scheduleDate",
         element: (
           <ProtectTemplate
             Component={NewSchedule}

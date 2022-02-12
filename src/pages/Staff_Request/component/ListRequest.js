@@ -20,6 +20,8 @@ import { makeStyles } from "@material-ui/styles";
 import ConfirmModal from "../../../components/ConfirmModal";
 import { deleteUser } from "../../../apis/Apis";
 import { connect } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
 function TablePaginationActions(props) {
   const theme = useTheme();
   const { count, page, rowsPerPage, onPageChange } = props;
@@ -130,6 +132,8 @@ function ListRequest({
   userState,
 }) {
   const classes = useStyles();
+  const navigate = useNavigate();
+
   const handleClickRow = (row, setRequest, handleOpen) => {
     // const user = {
     //   id: row.id,
@@ -158,21 +162,7 @@ function ListRequest({
   const handleClose = () => {
     setOpen(false);
   };
-  const handleRejectRequest = async (id) => {
-    // let response;
-    // try {
-    //   response = await deleteUser(id, userState.idToken);
-    //   if (listRequest.length === 1) {
-    //     if (page !== 1) {
-    //       setPage(page - 1);
-    //     }
-    //   }
-    //   await getData(searchName, page, 8);
-    // } catch (error) {
-    //   console.log(error);
-    // }
-    // return response;
-  };
+
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page - 1 > 0
@@ -191,13 +181,6 @@ function ListRequest({
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
-        <ConfirmModal
-          open={open}
-          handleClose={handleClose}
-          onHandleYes={handleRejectRequest}
-          id={currentId}
-          msg={"Delete user success!"}
-        />
         {mapListTableHeader(listHeaderName)}
         <TableBody>
           {listRequest?.map((row, index) => {
@@ -237,6 +220,15 @@ function ListRequest({
                 </TableCell>
                 <TableCell style={{ color: "black" }}>
                   <Button
+                    onClick={async () => {
+                      navigate(
+                        "/app/schedule/" +
+                          new Date(row.schedules[0].scheduleDay).toISOString(),
+                        {
+                          replace: false,
+                        }
+                      );
+                    }}
                     style={{
                       height: "45px",
                       paddingLeft: "16px",
@@ -249,15 +241,6 @@ function ListRequest({
                   >
                     Go to schedule
                   </Button>
-                  {/* <Button
-                    className={classes.button}
-                    onClick={() => {
-                      setCurrentId(row.id);
-                      handleConfirmOpen();
-                    }}
-                  >
-                    Reject
-                  </Button> */}
                 </TableCell>
               </TableRow>
             );

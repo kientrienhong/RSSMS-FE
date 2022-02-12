@@ -11,6 +11,8 @@ import OrderModal from "../../components/OrderModal";
 import { isDateAfter, isDateBefore } from "../../utils/DateUtils";
 import { getOrder, getListUser, getSchedule } from "../../apis/Apis";
 import ScheduleArea from "./components/ScheduleArea";
+import { useParams } from "react-router-dom";
+
 import ListUnassignOrderModal from "./components/ListUnassignOrderModal";
 import OrderAssignTimeModal from "./components/OrderAssignTimeModal";
 import OrderAssignModal from "./components/OrderAssignModal";
@@ -21,10 +23,9 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
   );
   const [listStaffAssigned, setListStaffAssigned] = React.useState([]);
   const [listStaffUnAssigned, setListStaffUnAssigned] = React.useState([]);
-
+  const { scheduleDate } = useParams();
   const [listDateAWeek, setListDateAWeek] = useState([]);
   const [currentIndexDate, setCurrentIndexDate] = useState(-1);
-  const [currentIndexGroup, setCurrentIndexGroup] = useState(0);
   const [listSelectedOrder, setListSelectedOrder] = useState([]);
   const [currentOrder, setCurrentOrder] = useState({});
   const [open, setOpen] = useState(false);
@@ -166,15 +167,12 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
     try {
       showLoading();
       let currStr = new Date().toLocaleDateString("en-US");
-
       let result = {};
       let currentIndexDateLocal = 0;
+      currentSchedule = new Date(currentSchedule).toLocaleDateString("en-US");
       if (startOfWeek.toLocaleDateString("en-US") === currStr) {
         setCurrentIndexDate(0);
-      } else if (
-        startOfWeek.toLocaleDateString("en-US") ===
-        currentSchedule?.split("T")[0]
-      ) {
+      } else if (startOfWeek.toLocaleDateString("en-US") === currentSchedule) {
         setCurrentIndexDate(0);
       }
 
@@ -183,14 +181,13 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
         let date = addDays(startOfWeek, i);
         let dateStr = date.toLocaleDateString("en-US");
         let listTime = new Map();
-
         LIST_TIME.forEach((e) => listTime.set(e["name"], []));
         result[dateStr] = {};
         result[dateStr].listSchedule = listTime;
         result[dateStr].amountNotAssignStaff = 0;
         if (
           (dateStr === currStr && currentSchedule === undefined) ||
-          dateStr === currentSchedule?.split("T")[0]
+          dateStr === currentSchedule
         ) {
           setCurrentIndexDate(i);
           currentIndexDateLocal = i;
@@ -383,42 +380,6 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
           hideLoading();
         }
       }
-      //   const loadUnassignStaff = async () => {
-      // try {
-      //   showLoading();
-      //   let listUserNotAssigned = await getListUser(
-      //     "",
-      //     1,
-      //     -1,
-      //     userState.idToken,
-      //     undefined,
-      //     "Delivery Staff",
-      //     currentOrder.id
-      //   );
-      //   setListShowStaffUnAssigned(
-      //     listUserNotAssigned.data.data.length === 0
-      //       ? []
-      //       : listUserNotAssigned.data.data
-      //   );
-      //   setListStaffUnAssigned(
-      //     listUserNotAssigned.data.data.length === 0
-      //       ? []
-      //       : listUserNotAssigned.data.data
-      //   );
-      //   setListStaffAssigned(currentOrder.listStaffDelivery ?? []);
-      //   setListShowStaffAssigned(currentOrder.listStaffDelivery ?? []);
-      // } catch (e) {
-      //   console.log(e);
-      //   console.log(e.response);
-      //   setListShowStaffUnAssigned([]);
-      //   setListStaffUnAssigned([]);
-      //   setListStaffAssigned(currentOrder.listStaffDelivery ?? []);
-      //   setListShowStaffAssigned(currentOrder.listStaffDelivery ?? []);
-      // } finally {
-      //   hideLoading();
-      // }
-      //   };
-      //   loadUnassignStaff();
     };
     process();
   }, [openAssignStaff]);
@@ -448,7 +409,11 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
 
         showLoading();
 
-        let result = await getData(startOfWeekLocal, endOfWeekLocal);
+        let result = await getData(
+          startOfWeekLocal,
+          endOfWeekLocal,
+          scheduleDate
+        );
 
         // let currentListDateAWeek = listDateAWeekTemp[currentIndexDateLocal];
 

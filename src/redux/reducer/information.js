@@ -26,7 +26,8 @@ const information = (state = initialState, action) => {
 
     case ActionType.ADD_NOTIFICATIONS: {
       let notificationsTemp = [...state.notifications];
-      notificationsTemp.push(action.payload);
+      notificationsTemp.unshift(action.payload);
+      state.unReadNoti.unshift(action.payload);
       return { ...state, notifications: notificationsTemp };
     }
 
