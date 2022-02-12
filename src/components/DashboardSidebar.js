@@ -101,7 +101,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile, user }) => {
           variant="temporary"
           PaperProps={{
             sx: {
-              width: 180,
+              width: 240,
             },
           }}
         >
@@ -115,7 +115,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile, user }) => {
           variant="persistent"
           PaperProps={{
             sx: {
-              width: 180,
+              width: 190,
               top: 64,
               height: "calc(100% - 64px)",
             },

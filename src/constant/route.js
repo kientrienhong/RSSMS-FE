@@ -70,6 +70,12 @@ export const LIST_SIDE_BAR_MANAGER = [
     icon: undefined,
     reactIcon: <GoClippy />,
   },
+  {
+    href: "/app/customer_request",
+    title: "Customer's Requests",
+    icon: undefined,
+    reactIcon: <GoClippy />,
+  },
 ];
 
 export const LIST_SIDE_BAR_OFFICE_STAFF = (idStorage) => {

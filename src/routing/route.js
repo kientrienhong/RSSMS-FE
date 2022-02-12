@@ -14,6 +14,7 @@ import Schedule from "../pages/Schedule/Schedule";
 import ProtectTemplate from "../Template/ProtectTemplate";
 import { ROLE_USER } from "../constant/constant";
 import NotStorage from "../pages/NotStorage";
+import CustomerRequest from "../pages/CustomerRequest/CustomerRequest";
 import NewSchedule from "../pages/NewSchedule/NewSchedule";
 import StaffRequest from "../pages/Staff_Request/StaffRequest";
 const routes = [
@@ -111,6 +112,17 @@ const routes = [
             permission={[Object.keys(ROLE_USER)[1]]}
           >
             <StaffRequest />
+          </ProtectTemplate>
+        ),
+      },
+      {
+        path: "customer_request",
+        element: (
+          <ProtectTemplate
+            Component={CustomerRequest}
+            permission={[Object.keys(ROLE_USER)[1]]}
+          >
+            <CustomerRequest />
           </ProtectTemplate>
         ),
       },

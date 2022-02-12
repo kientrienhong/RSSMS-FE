@@ -169,3 +169,7 @@
 .schedule__order__footer__status--Complete {
   color: #00993c;
 }
+
+.css-1yl9xtr-MuiPaper-root-MuiDrawer-paper {
+  width: 203 !important;
+}

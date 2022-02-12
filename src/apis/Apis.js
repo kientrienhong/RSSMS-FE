@@ -679,6 +679,15 @@ export const getStaffRequest = async (name, page, size, type, token) => {
   return response;
 };
 
+export const getCustomerRequest = async (name, page, size, type, token) => {
+  const response = await axios.get(
+    `https://localhost:44304/api/v1/requests?page=${page}&size=${size}`,
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+
+  return response;
+};
+
 export const updateNotification = async (listNotification, token) => {
   const response = await axios.put(
     `https://localhost:44304/api/v1/notifications`,
