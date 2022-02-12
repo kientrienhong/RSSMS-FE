@@ -808,19 +808,23 @@ function Storages(props) {
           quantity={storedOrder?.totalQuantity}
           isView={false}
         />
-        <Button
-          style={{
-            height: "45px",
-            paddingLeft: "16px",
-            paddingRight: "16px",
-            marginLeft: "4px",
-          }}
-          color="primary"
-          variant="contained"
-          onClick={() => handleOpen(false)}
-        >
-          Create storage
-        </Button>
+        {userState.roleName === "Admin" ? (
+          <Button
+            style={{
+              height: "45px",
+              paddingLeft: "16px",
+              paddingRight: "16px",
+              marginLeft: "4px",
+            }}
+            color="primary"
+            variant="contained"
+            onClick={() => handleOpen(false)}
+          >
+            Create storage
+          </Button>
+        ) : (
+          <></>
+        )}
       </Box>
       <ListStorage
         openAssignStaff={openAssignStaff}

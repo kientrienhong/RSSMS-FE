@@ -20,7 +20,7 @@ export default function ListUnassignOrderModal({
   handleOpenAssignTime,
 }) {
   const buildListOrder = () => {
-    return listUnassignOrder.map((e, index) => (
+    return listUnassignOrder?.map((e, index) => (
       // <Grid item sx={2} >
       <Schedule
         schedule={e}

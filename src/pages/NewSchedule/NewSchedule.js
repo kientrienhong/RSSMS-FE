@@ -162,7 +162,7 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
       </Box>
     ));
 
-  const getData = async (startOfWeek, endOfWeek) => {
+  const getData = async (startOfWeek, endOfWeek, currentSchedule) => {
     try {
       showLoading();
       let currStr = new Date().toLocaleDateString("en-US");
@@ -170,6 +170,11 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
       let result = {};
       let currentIndexDateLocal = 0;
       if (startOfWeek.toLocaleDateString("en-US") === currStr) {
+        setCurrentIndexDate(0);
+      } else if (
+        startOfWeek.toLocaleDateString("en-US") ===
+        currentSchedule?.split("T")[0]
+      ) {
         setCurrentIndexDate(0);
       }
 
@@ -183,7 +188,10 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
         result[dateStr] = {};
         result[dateStr].listSchedule = listTime;
         result[dateStr].amountNotAssignStaff = 0;
-        if (dateStr === currStr) {
+        if (
+          (dateStr === currStr && currentSchedule === undefined) ||
+          dateStr === currentSchedule?.split("T")[0]
+        ) {
           setCurrentIndexDate(i);
           currentIndexDateLocal = i;
         }
@@ -557,7 +565,7 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
         </Box>
         <Badge
           color="error"
-          badgeContent={listOrderNotAssignedReturnTime.length}
+          badgeContent={listOrderNotAssignedReturnTime?.length}
         >
           <Button
             style={{

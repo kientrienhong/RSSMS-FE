@@ -22,7 +22,7 @@ export default function Schedule({
   });
 
   let foundSameListStaff = 0;
-  if (listSelectedOrder.length > 0) {
+  if (listSelectedOrder?.length > 0) {
     listSelectedOrder[0]?.listStaffDelivery?.forEach((e) => {
       if (schedule?.listStaffDelivery) {
         schedule.listStaffDelivery.forEach((ele) => {
@@ -36,7 +36,7 @@ export default function Schedule({
   }
 
   let isSameListStaff = false;
-  if (listSelectedOrder.length > 0) {
+  if (listSelectedOrder?.length > 0) {
     if (listSelectedOrder[0]?.listStaffDelivery) {
       if (
         listSelectedOrder[0]?.listStaffDelivery.length === foundSameListStaff

@@ -49,9 +49,7 @@ function OrderAssignModal({
         userState.idToken
       );
 
-      console.log(response);
-
-      await getData(startOfWeek, endOfWeek);
+      await getData(startOfWeek, endOfWeek, currentSchedule);
       handleClose();
       showSnackbar("success", "Assign delivery staff success");
     } catch (e) {
