@@ -121,6 +121,7 @@ function ListRequest({
   totalRequest,
   setCurrentRequest,
   handleOpenIsPaid,
+  handleOpenReturnItem,
   handleOpenCancelOrder,
   searchName,
   getData,
@@ -175,6 +176,8 @@ function ListRequest({
                         handleOpenIsPaid();
                       } else if (row.type === 3) {
                         handleOpenCancelOrder();
+                      } else {
+                        handleOpenReturnItem();
                       }
                     }}
                     style={{

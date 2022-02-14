@@ -69,7 +69,7 @@ function ModalReturnItem({
             marginLeft: "2.5%",
           }}
         >
-          Detail Cancel Order Request
+          Detail Return Order Request
         </Typography>
         <Box
           sx={{

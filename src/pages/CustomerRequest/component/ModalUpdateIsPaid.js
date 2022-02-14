@@ -127,7 +127,7 @@ function ModalUpdateIsPaid({
             try {
               showLoading();
               const response = await updateIsPaidRequest(
-                currentRequest.id,
+                currentRequest.orderId,
                 userState.idToken
               );
               console.log(response);

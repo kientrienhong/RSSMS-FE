@@ -149,6 +149,7 @@ function CustomerRequest({
           setRequest={setRequest}
           setCurrentRequest={setCurrentRequest}
           handleOpenIsPaid={handleOpenIsPaid}
+          handleOpenReturnItem={handleOpenReturnItem}
           handleOpenCancelOrder={handleOpenCancelOrder}
           listRequest={listRequest}
           page={page}
