@@ -672,16 +672,16 @@ export const getNotifcations = async (id, token) => {
 
 export const getStaffRequest = async (name, page, size, type, token) => {
   const response = await axios.get(
-    `https://localhost:44304/api/v1/requests?page=${page}&size=${size}`,
+    `https://localhost:44304/api/v1/requests?page=${page}&size=${size}&RequestTypes=0`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
 
   return response;
 };
 
-export const getCustomerRequest = async (name, page, size, type, token) => {
+export const getCustomerRequest = async (name, page, size, token) => {
   const response = await axios.get(
-    `https://localhost:44304/api/v1/requests?page=${page}&size=${size}`,
+    `https://localhost:44304/api/v1/requests?RequestTypes=1&RequestTypes=2&RequestTypes=3&page=${page}&size=${size}`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
 
@@ -693,6 +693,18 @@ export const updateNotification = async (listNotification, token) => {
     `https://localhost:44304/api/v1/notifications`,
     {
       ids: listNotification,
+    },
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+
+  return response;
+};
+
+export const updateIsPaidRequest = async (idRequest, token) => {
+  const response = await axios.put(
+    `https://localhost:44304/api/v1/requests/${idRequest.toString()}`,
+    {
+      id: idRequest,
     },
     { headers: { Authorization: `Bearer ${token}` } }
   );

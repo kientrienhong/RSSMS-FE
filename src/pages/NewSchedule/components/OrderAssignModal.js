@@ -35,11 +35,11 @@ function OrderAssignModal({
       let listSelectedTime = listSelectedOrder?.map((e) => {
         if (e.isDelivery) {
           currentSchedule = e.deliveryDate;
-          return { deliveryTime: e["deliveryTime"], orderIds: e["id"] };
+          return { deliveryTime: e["deliveryTime"], orderId: e["id"] };
         } else {
           currentSchedule = e.returnDate;
 
-          return { deliveryTime: e["returnTime"], orderIds: e["id"] };
+          return { deliveryTime: e["returnTime"], orderId: e["id"] };
         }
       });
       const response = await assignSchedule(

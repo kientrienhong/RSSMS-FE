@@ -1,15 +1,28 @@
-import React from "react";
-import { Box, Modal, Button, Typography } from "@material-ui/core";
-import { STYLE_MODAL } from "../constant/style";
+import React, { useState } from "react";
+import { Box, Modal, Button, Typography, Checkbox } from "@material-ui/core";
+import { STYLE_MODAL } from "../../../constant/style";
 import { connect } from "react-redux";
-import * as action from "../redux/action/action";
+import { updateIsPaidRequest } from "../../../apis/Apis";
+import * as action from "../../../redux/action/action";
 const styleModal = {
   ...STYLE_MODAL,
-
   width: "50%",
 };
 
-function ModalUpdateIsPaid({ open, handleClose, request }) {
+function ModalUpdateIsPaid({
+  open,
+  handleClose,
+  currentRequest,
+  userState,
+  showLoading,
+  hideLoading,
+  showSnackbar,
+}) {
+  const [checked, setChecked] = React.useState(false);
+
+  const handleChange = (event) => {
+    setChecked(event.target.checked);
+  };
   const buildInformation = (title, value) => {
     return (
       <Box
@@ -22,7 +35,13 @@ function ModalUpdateIsPaid({ open, handleClose, request }) {
           height: "40px",
         }}
       >
-        <Typography color="black" variant="h2">
+        <Typography
+          color="black"
+          variant="h4"
+          sx={{
+            fontWeight: "bold",
+          }}
+        >
           {title}
         </Typography>
         <p style={{ fontSize: "18px" }}>{value}</p>
@@ -55,49 +74,76 @@ function ModalUpdateIsPaid({ open, handleClose, request }) {
             marginLeft: "2.5%",
           }}
         >
-          Detail Extension order request
+          Detail Extension Order Request
         </Typography>
         <Box
           sx={{
-            width: "60%",
-            margin: "40px auto 10px auto",
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
+            width: "100%",
+            flexDirection: "column",
           }}
         >
-          <Button
+          <Typography
+            color="black"
+            variant="h2"
             style={{
-              height: "45px",
-              paddingLeft: "16px",
-              paddingRight: "16px",
+              marginTop: "2%",
+              textAlign: "left",
             }}
-            onClick={async () => {
-              try {
-              } catch (error) {
-                console.log(error?.response);
-              } finally {
-              }
-            }}
-            color="primary"
-            variant="contained"
-            type="submit"
           >
-            Yes
-          </Button>
-          <Button
-            style={{
-              height: "45px",
-              paddingLeft: "16px",
-              paddingRight: "16px",
+            Order information
+          </Typography>
+          {buildInformation("Id:", `#${currentRequest?.id}`)}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              width: "100%",
             }}
-            onClick={() => handleClose()}
-            color="error"
-            variant="outlined"
           >
-            No
-          </Button>
+            <Typography
+              color="black"
+              variant="h4"
+              sx={{
+                fontWeight: "bold",
+              }}
+            >
+              Is paid:
+            </Typography>
+            <Checkbox
+              checked={checked}
+              onChange={handleChange}
+              inputProps={{ "aria-label": "controlled" }}
+            />
+          </Box>
         </Box>
+        <Button
+          style={{
+            height: "45px",
+            paddingLeft: "16px",
+            paddingRight: "16px",
+          }}
+          onClick={async () => {
+            try {
+              showLoading();
+              const response = await updateIsPaidRequest(
+                currentRequest.id,
+                userState.idToken
+              );
+              console.log(response);
+              showSnackbar("success", "Update success");
+            } catch (error) {
+              console.log(error?.response);
+            } finally {
+              hideLoading();
+            }
+          }}
+          color="primary"
+          variant="contained"
+          type="submit"
+        >
+          Submit
+        </Button>
       </Box>
     </Modal>
   );

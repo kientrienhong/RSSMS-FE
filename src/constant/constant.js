@@ -88,6 +88,13 @@ export const LIST_PRODUCT_MANAGE_TYPE = [
   "Areas",
 ];
 
+export const LIST_TYPE_REQUEST = [
+  { name: "Cancel Delivery" },
+  { name: "Extension" },
+  { name: "Return items" },
+  { name: "Cancel order" },
+];
+
 export const LIST_STATUS = [
   { label: "Canceled", value: 0 },
   { label: "Booked", value: 1 },

@@ -17,6 +17,7 @@ import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 import { Button, TableHead } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
+import { LIST_TYPE_REQUEST } from "../../../constant/constant";
 import ConfirmModal from "../../../components/ConfirmModal";
 import { deleteUser } from "../../../apis/Apis";
 import { connect } from "react-redux";
@@ -89,7 +90,7 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-const listHeaderName = ["Id", "Name", "Phone", "Schedule Date", "Action"];
+const listHeaderName = ["Id", "Name", "Phone", "Type", "Action"];
 
 const mapListTableHeader = (listHeader) => (
   <TableHead>
@@ -118,54 +119,13 @@ function ListRequest({
   page,
   setPage,
   totalRequest,
+  setCurrentRequest,
+  handleOpenIsPaid,
   searchName,
   getData,
   userState,
 }) {
-  const classes = useStyles();
-  const handleClickRow = (row, setRequest, handleOpen) => {
-    // const user = {
-    //   id: row.id,
-    //   name: row.name,
-    //   gender: row.gender,
-    //   birthdate: row.birthdate,
-    //   email: row.email,
-    //   avatar: row.avatar,
-    //   phone: row.phone,
-    //   storageId: row.storageId,
-    //   storageName: row.storageName,
-    //   roleName: row.roleName,
-    //   address: row.address,
-    //   images: [row.images[0]],
-    // };
-
-    // setRequest(user);
-    handleOpen(true);
-  };
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
-  const [open, setOpen] = React.useState(false);
-  const [currentId, setCurrentId] = React.useState(-1);
-  const handleConfirmOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-  const handleRejectRequest = async (id) => {
-    // let response;
-    // try {
-    //   response = await deleteUser(id, userState.idToken);
-    //   if (listRequest.length === 1) {
-    //     if (page !== 1) {
-    //       setPage(page - 1);
-    //     }
-    //   }
-    //   await getData(searchName, page, 8);
-    // } catch (error) {
-    //   console.log(error);
-    // }
-    // return response;
-  };
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page - 1 > 0
@@ -184,13 +144,6 @@ function ListRequest({
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
-        <ConfirmModal
-          open={open}
-          handleClose={handleClose}
-          onHandleYes={handleRejectRequest}
-          id={currentId}
-          msg={"Delete user success!"}
-        />
         {mapListTableHeader(listHeaderName)}
         <TableBody>
           {listRequest?.map((row, index) => {
@@ -200,52 +153,41 @@ function ListRequest({
                   component="th"
                   scope="row"
                   style={{ color: "black" }}
-                  onClick={(e) => handleClickRow(row, setRequest, handleOpen)}
                 >
                   {row.id}
                 </TableCell>
-                <TableCell
-                  style={{ color: "black" }}
-                  onClick={(e) => handleClickRow(row, setRequest, handleOpen)}
-                >
+                <TableCell style={{ color: "black" }}>
                   {row.deliveryStaffName}
                 </TableCell>
-                <TableCell
-                  style={{ color: "black" }}
-                  onClick={(e) => handleClickRow(row, setRequest, handleOpen)}
-                >
+                <TableCell style={{ color: "black" }}>
                   {row.deliveryStaffPhone}
                 </TableCell>
 
-                <TableCell
-                  style={{ color: "black" }}
-                  onClick={(e) => handleClickRow(row, setRequest, handleOpen)}
-                >
-                  {row.roleName}
+                <TableCell style={{ color: "black" }}>
+                  {LIST_TYPE_REQUEST[row.type].name}
                 </TableCell>
                 <TableCell style={{ color: "black" }}>
-                  <Button
-                    style={{
-                      height: "45px",
-                      paddingLeft: "16px",
-                      paddingRight: "16px",
-                      marginRight: "4%",
-                    }}
-                    color="success"
-                    variant="contained"
-                    type="submit"
-                  >
-                    Go to schedule
-                  </Button>
-                  {/* <Button
-                    className={classes.button}
-                    onClick={() => {
-                      setCurrentId(row.id);
-                      handleConfirmOpen();
-                    }}
-                  >
-                    Reject
-                  </Button> */}
+                  {row.type === 1 ? (
+                    <Button
+                      onClick={() => {
+                        setCurrentRequest(row);
+                        handleOpenIsPaid();
+                      }}
+                      style={{
+                        height: "45px",
+                        paddingLeft: "16px",
+                        paddingRight: "16px",
+                        marginRight: "4%",
+                      }}
+                      color="success"
+                      variant="contained"
+                      type="submit"
+                    >
+                      See more
+                    </Button>
+                  ) : (
+                    <></>
+                  )}
                 </TableCell>
               </TableRow>
             );

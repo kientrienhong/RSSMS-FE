@@ -206,11 +206,14 @@ function ListRequest({
                 >
                   {row.deliveryStaffPhone}
                 </TableCell>
+
                 <TableCell
                   style={{ color: "black" }}
                   onClick={(e) => handleClickRow(row, setRequest, handleOpen)}
                 >
-                  {row.roleName}
+                  {new Date(row.schedules[0].scheduleDay).toLocaleDateString(
+                    "en-US"
+                  )}
                 </TableCell>
                 <TableCell
                   style={{ color: "black", width: "45%" }}

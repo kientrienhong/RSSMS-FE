@@ -15,6 +15,8 @@ import { useForm } from "react-hook-form";
 import * as action from "../../redux/action/action";
 import { connect } from "react-redux";
 import { getCustomerRequest } from "../../apis/Apis";
+import ModalCancelDetail from "./component/ModalCancelDetail";
+import ModalUpdateIsPaid from "./component/ModalUpdateIsPaid";
 function CustomerRequest({
   showLoading,
   hideLoading,
@@ -23,17 +25,17 @@ function CustomerRequest({
 }) {
   const [listRequest, setListRequest] = useState([]);
   const [totalRequest, setTotalRequest] = useState(0);
-  const [open, setOpen] = useState(false);
+  const [openIsPaid, setOpenIsPaid] = useState(false);
   const [error, setError] = useState({});
   const [request, setRequest] = useState({});
   const [page, setPage] = useState(1);
-
-  const handleOpen = () => {
-    setOpen(true);
+  const [currentRequest, setCurrentRequest] = useState();
+  const handleOpenIsPaid = () => {
+    setOpenIsPaid(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleCloseIsPaid = () => {
+    setOpenIsPaid(false);
   };
 
   const getData = async (name, page, size) => {
@@ -43,7 +45,6 @@ function CustomerRequest({
         name,
         page,
         size,
-        0,
         userState.idToken
       );
       console.log(list.data.data);
@@ -106,6 +107,13 @@ function CustomerRequest({
         />
         <Box sx={{ width: "2%" }} />
       </Box>
+      <ModalCancelDetail />
+      <ModalUpdateIsPaid
+        open={openIsPaid}
+        handleClose={handleCloseIsPaid}
+        currentRequest={currentRequest}
+      />
+
       <Card
         variant="outlined"
         color="#FFF"
@@ -113,7 +121,8 @@ function CustomerRequest({
       >
         <ListRequest
           setRequest={setRequest}
-          handleOpen={handleOpen}
+          setCurrentRequest={setCurrentRequest}
+          handleOpenIsPaid={handleOpenIsPaid}
           listRequest={listRequest}
           page={page}
           setPage={page}
