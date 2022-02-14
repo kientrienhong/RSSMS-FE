@@ -9,7 +9,7 @@ const styleModal = {
   width: "50%",
 };
 
-function ModalCancelDetail({
+function ModalReturnItem({
   open,
   handleClose,
   currentRequest,
@@ -151,4 +151,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ModalCancelDetail);
+export default connect(mapStateToProps, mapDispatchToProps)(ModalReturnItem);

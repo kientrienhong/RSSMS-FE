@@ -121,6 +121,7 @@ function ListRequest({
   totalRequest,
   setCurrentRequest,
   handleOpenIsPaid,
+  handleOpenCancelOrder,
   searchName,
   getData,
   userState,
@@ -167,27 +168,27 @@ function ListRequest({
                   {LIST_TYPE_REQUEST[row.type].name}
                 </TableCell>
                 <TableCell style={{ color: "black" }}>
-                  {row.type === 1 ? (
-                    <Button
-                      onClick={() => {
-                        setCurrentRequest(row);
+                  <Button
+                    onClick={() => {
+                      setCurrentRequest(row);
+                      if (row.type === 1) {
                         handleOpenIsPaid();
-                      }}
-                      style={{
-                        height: "45px",
-                        paddingLeft: "16px",
-                        paddingRight: "16px",
-                        marginRight: "4%",
-                      }}
-                      color="success"
-                      variant="contained"
-                      type="submit"
-                    >
-                      See more
-                    </Button>
-                  ) : (
-                    <></>
-                  )}
+                      } else if (row.type === 3) {
+                        handleOpenCancelOrder();
+                      }
+                    }}
+                    style={{
+                      height: "45px",
+                      paddingLeft: "16px",
+                      paddingRight: "16px",
+                      marginRight: "4%",
+                    }}
+                    color="success"
+                    variant="contained"
+                    type="submit"
+                  >
+                    See more
+                  </Button>
                 </TableCell>
               </TableRow>
             );

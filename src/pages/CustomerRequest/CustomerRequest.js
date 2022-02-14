@@ -16,6 +16,7 @@ import * as action from "../../redux/action/action";
 import { connect } from "react-redux";
 import { getCustomerRequest } from "../../apis/Apis";
 import ModalCancelDetail from "./component/ModalCancelDetail";
+import ModalReturnItem from "./component/ModalReturnItem";
 import ModalUpdateIsPaid from "./component/ModalUpdateIsPaid";
 function CustomerRequest({
   showLoading,
@@ -25,17 +26,34 @@ function CustomerRequest({
 }) {
   const [listRequest, setListRequest] = useState([]);
   const [totalRequest, setTotalRequest] = useState(0);
-  const [openIsPaid, setOpenIsPaid] = useState(false);
   const [error, setError] = useState({});
   const [request, setRequest] = useState({});
   const [page, setPage] = useState(1);
   const [currentRequest, setCurrentRequest] = useState();
+  const [openIsPaid, setOpenIsPaid] = useState(false);
   const handleOpenIsPaid = () => {
     setOpenIsPaid(true);
   };
 
   const handleCloseIsPaid = () => {
     setOpenIsPaid(false);
+  };
+
+  const [openCancelOrder, setOpenCancelOrder] = useState(false);
+  const handleOpenCancelOrder = () => {
+    setOpenCancelOrder(true);
+  };
+
+  const handleCloseCancelOrder = () => {
+    setOpenCancelOrder(false);
+  };
+  const [openReturnItem, setOpenReturnItem] = useState(false);
+  const handleOpenReturnItem = () => {
+    setOpenReturnItem(true);
+  };
+
+  const handleCloseReturnItem = () => {
+    setOpenReturnItem(false);
   };
 
   const getData = async (name, page, size) => {
@@ -47,7 +65,6 @@ function CustomerRequest({
         size,
         userState.idToken
       );
-      console.log(list.data.data);
       setListRequest(list.data.data);
       setTotalRequest(list.data.metadata.total);
     } catch (error) {
@@ -107,7 +124,16 @@ function CustomerRequest({
         />
         <Box sx={{ width: "2%" }} />
       </Box>
-      <ModalCancelDetail />
+      <ModalReturnItem
+        open={openReturnItem}
+        handleClose={handleCloseReturnItem}
+        currentRequest={currentRequest}
+      />
+      <ModalCancelDetail
+        open={openCancelOrder}
+        handleClose={handleCloseCancelOrder}
+        currentRequest={currentRequest}
+      />
       <ModalUpdateIsPaid
         open={openIsPaid}
         handleClose={handleCloseIsPaid}
@@ -123,6 +149,7 @@ function CustomerRequest({
           setRequest={setRequest}
           setCurrentRequest={setCurrentRequest}
           handleOpenIsPaid={handleOpenIsPaid}
+          handleOpenCancelOrder={handleOpenCancelOrder}
           listRequest={listRequest}
           page={page}
           setPage={page}
