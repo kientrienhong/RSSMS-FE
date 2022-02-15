@@ -17,6 +17,7 @@ import { MenuItem, Select, FormControl } from "@material-ui/core";
 import OrderDetail from "./OrderDetail";
 import { connect } from "react-redux";
 import * as action from "../redux/action/action";
+import ListInfoHistoryExtension from "./ListInfoHistoryExtension";
 import { updateOrder } from "../apis/Apis";
 import { useNavigate } from "react-router";
 import { PRODUCT_TYPE, LIST_STATUS, LIST_TIME } from "../constant/constant";
@@ -230,7 +231,7 @@ function OrderModal({
   };
 
   const buildPosition = () => {
-    return currentOrder?.orderBoxDetails?.map((e) => (
+    return currentOrder?.orderDetails?.map((e) => (
       <Box
         sx={{
           display: "flex",
@@ -727,6 +728,7 @@ function OrderModal({
               </Box>
             ) : null}
           </Box>
+
           <Box
             sx={{
               width: "54%",
@@ -746,37 +748,57 @@ function OrderModal({
               choosenProduct={formatToChosenProduct()}
               duration={duration}
             />
-            <Typography color="black" variant="h2">
-              Order Position
-            </Typography>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                width: "100%",
-              }}
-            >
-              <Typography
-                color="black"
-                variant="h2"
-                sx={{ marginBottom: "4%", marginTop: "4%", width: "20%" }}
-              >
-                Name product
-              </Typography>
-              <Typography
-                color="black"
-                variant="h2"
+            {currentOrder?.orderHistoryExtensions?.length > 0 ? (
+              <Box
                 sx={{
-                  marginBottom: "4%",
-                  marginTop: "4%",
-                  textAlign: "right",
-                  width: "80%",
+                  display: "flex",
+                  flexDirection: "column",
                 }}
               >
-                Position
-              </Typography>
-            </Box>
-            {buildPosition()}
+                <Typography color="black" variant="h2">
+                  Order Position
+                </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    width: "100%",
+                  }}
+                >
+                  <Typography
+                    color="black"
+                    variant="h2"
+                    sx={{ marginBottom: "4%", marginTop: "4%", width: "20%" }}
+                  >
+                    Name product
+                  </Typography>
+                  <Typography
+                    color="black"
+                    variant="h2"
+                    sx={{
+                      marginBottom: "4%",
+                      marginTop: "4%",
+                      textAlign: "right",
+                      width: "80%",
+                    }}
+                  >
+                    Position
+                  </Typography>
+                  {buildPosition()}
+                </Box>
+              </Box>
+            ) : (
+              <></>
+            )}
+
+            {currentOrder?.orderHistoryExtensions?.length > 0 ? (
+              <ListInfoHistoryExtension
+                list={currentOrder?.orderHistoryExtensions}
+                currentOrder={currentOrder}
+              />
+            ) : (
+              <></>
+            )}
             {isView === true ? (
               <Box
                 sx={{
@@ -823,6 +845,7 @@ function OrderModal({
                     Store
                   </Button>
                 ) : null}
+
                 {currentOrder?.status !== 0 && currentOrder?.status !== 1 ? (
                   userState.roleName !== "Admin" ? (
                     <Button

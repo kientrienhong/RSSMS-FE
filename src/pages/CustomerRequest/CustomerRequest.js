@@ -65,6 +65,7 @@ function CustomerRequest({
         size,
         userState.idToken
       );
+      console.log(list);
       setListRequest(list.data.data);
       setTotalRequest(list.data.metadata.total);
     } catch (error) {
@@ -153,7 +154,7 @@ function CustomerRequest({
           handleOpenCancelOrder={handleOpenCancelOrder}
           listRequest={listRequest}
           page={page}
-          setPage={page}
+          setPage={setPage}
           totalRequest={totalRequest}
           getData={getData}
         />

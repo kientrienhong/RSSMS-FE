@@ -26,6 +26,7 @@ function OrderAssignModal({
   startOfWeek,
   endOfWeek,
   listSelectedOrder,
+  setListSelectedOrder,
 }) {
   const assignOrder = async () => {
     try {
@@ -48,6 +49,7 @@ function OrderAssignModal({
         userIds,
         userState.idToken
       );
+      setListSelectedOrder([]);
       await getData(
         startOfWeek,
         endOfWeek,

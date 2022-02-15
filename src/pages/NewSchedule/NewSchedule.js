@@ -186,7 +186,7 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
         result[dateStr].listSchedule = listTime;
         result[dateStr].amountNotAssignStaff = 0;
         if (
-          (dateStr === currStr && currentSchedule === undefined) ||
+          (dateStr === currStr && currentSchedule === "Invalid Date") ||
           dateStr === currentSchedule
         ) {
           setCurrentIndexDate(i);
@@ -414,35 +414,6 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
           endOfWeekLocal,
           scheduleDate
         );
-
-        // let currentListDateAWeek = listDateAWeekTemp[currentIndexDateLocal];
-
-        // Object.keys(result).find((e) => e === currentListDateAWeek.toLocaleDateString("en-US"));
-
-        // try {
-        //   let responseSchedule = await getScheduleEffect(
-        //     startOfWeek.toISOString().split("T")[0],
-        //     endOfWeek.toISOString().split("T")[0],
-        //     userState.idToken
-        //   );
-
-        //   if (responseSchedule.data.data) {
-        //     responseSchedule.data.data.forEach((schedule) => {
-        //       result.forEach((e) => {
-        //         let index = e.ListOrder.findIndex(
-        //           (ele) => ele.id === schedule.orderId
-        //         );
-        //         e.ListOrder[index] = {
-        //           ...e.ListOrder[index],
-        //           listStaffDelivery: schedule.users,
-        //         };
-        //       });
-        //     });
-        //   }
-        // } catch (exception) {
-        //   console.log(exception.response);
-        // }
-        // setListSchedule(result);
       } catch (error) {
         console.log(error);
       } finally {
@@ -466,6 +437,7 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
         handleClose={handleCloseAssignStaff}
         removeAssignStaff={removeAssignStaff}
         addAssignStaff={addAssignStaff}
+        setListSelectedOrder={setListSelectedOrder}
         listShowStaffAssigned={listShowStaffAssigned}
         listShowStaffUnAssigned={listShowStaffUnAssigned}
         listStaffUnAssigned={listStaffUnAssigned}

@@ -159,10 +159,10 @@ function ListRequest({
                   {row.id}
                 </TableCell>
                 <TableCell style={{ color: "black" }}>
-                  {row.deliveryStaffName}
+                  {row.customerName}
                 </TableCell>
                 <TableCell style={{ color: "black" }}>
-                  {row.deliveryStaffPhone}
+                  {row.customerPhone}
                 </TableCell>
 
                 <TableCell style={{ color: "black" }}>

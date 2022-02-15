@@ -111,7 +111,7 @@ function StaffRequest({ showLoading, hideLoading, showSnackbar, userState }) {
           handleOpen={handleOpen}
           listRequest={listRequest}
           page={page}
-          setPage={page}
+          setPage={setPage}
           totalRequest={totalRequest}
           getData={getData}
         />
