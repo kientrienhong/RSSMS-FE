@@ -63,6 +63,20 @@ function StaffRequest({ showLoading, hideLoading, showSnackbar, userState }) {
       }
     };
     firstCall();
+  }, [page]);
+
+  useEffect(() => {
+    const firstCall = async () => {
+      try {
+        showLoading();
+        await getData("", page, 8);
+        hideLoading();
+      } catch (error) {
+        console.log(error);
+        hideLoading();
+      }
+    };
+    firstCall();
   }, []);
 
   return (

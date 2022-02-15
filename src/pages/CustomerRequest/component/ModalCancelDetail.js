@@ -16,6 +16,7 @@ function ModalCancelDetail({
   userState,
   showLoading,
   hideLoading,
+  requestDetail,
   showSnackbar,
 }) {
   const buildInformation = (title, value) => {
@@ -87,7 +88,9 @@ function ModalCancelDetail({
           >
             Order information
           </Typography>
-          {buildInformation("Id:", `#${currentRequest?.id}`)}
+          {buildInformation("Id:", `#${requestDetail?.id}`)}
+          {buildInformation("Created date:", `${requestDetail?.createdDate}`)}
+          {buildInformation("Note: ", `${requestDetail?.note}`)}
           <Box
             sx={{
               display: "flex",
@@ -120,7 +123,6 @@ function ModalCancelDetail({
                 currentRequest.id,
                 userState.idToken
               );
-              console.log(response);
               showSnackbar("success", "Update success");
             } catch (error) {
               console.log(error?.response);

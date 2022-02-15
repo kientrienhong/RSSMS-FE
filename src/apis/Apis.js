@@ -711,3 +711,12 @@ export const updateIsPaidRequest = async (idRequest, token) => {
 
   return response;
 };
+
+export const getRequestDetail = async (id, token) => {
+  const response = await axios.get(
+    `https://localhost:44304/api/v1/requests/${id}`,
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+
+  return response;
+};

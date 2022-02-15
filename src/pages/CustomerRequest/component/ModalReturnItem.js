@@ -17,6 +17,7 @@ function ModalReturnItem({
   showLoading,
   hideLoading,
   showSnackbar,
+  requestDetail,
 }) {
   const buildInformation = (title, value) => {
     return (
@@ -88,24 +89,13 @@ function ModalReturnItem({
             Order information
           </Typography>
           {buildInformation("Id:", `#${currentRequest?.id}`)}
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              width: "100%",
-            }}
-          >
-            <Typography
-              color="black"
-              variant="h4"
-              sx={{
-                fontWeight: "bold",
-              }}
-            >
-              Is paid:
-            </Typography>
-          </Box>
+          {buildInformation("Created Date:", `${requestDetail?.createdDate}`)}
+          {buildInformation("Return date:", `${requestDetail?.returnDate}`)}
+          {buildInformation("Return time:", `${requestDetail?.returnTime}`)}
+          {buildInformation(
+            "Return address:",
+            `${requestDetail?.returnAddress}`
+          )}
         </Box>
         <Button
           style={{

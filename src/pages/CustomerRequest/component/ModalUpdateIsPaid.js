@@ -4,6 +4,8 @@ import { STYLE_MODAL } from "../../../constant/style";
 import { connect } from "react-redux";
 import { updateIsPaidRequest } from "../../../apis/Apis";
 import * as action from "../../../redux/action/action";
+import { formatCurrency } from "../../../utils/FormatCurrency";
+
 const styleModal = {
   ...STYLE_MODAL,
   width: "50%",
@@ -17,6 +19,7 @@ function ModalUpdateIsPaid({
   showLoading,
   hideLoading,
   showSnackbar,
+  requestDetail,
 }) {
   const [checked, setChecked] = React.useState(false);
 
@@ -93,6 +96,19 @@ function ModalUpdateIsPaid({
             Order information
           </Typography>
           {buildInformation("Id:", `#${currentRequest?.id}`)}
+          {buildInformation(
+            "Old return date:",
+            `${requestDetail?.oldReturnDate}`
+          )}
+          {buildInformation(
+            "New return date:",
+            `${requestDetail?.newReturnDate}`
+          )}
+          {buildInformation(
+            "Total price:",
+            `${formatCurrency(requestDetail?.totalPrice, " VND")}`
+          )}
+
           <Box
             sx={{
               display: "flex",

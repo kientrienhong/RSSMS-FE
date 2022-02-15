@@ -14,7 +14,7 @@ import ListRequest from "./component/ListRequest";
 import { useForm } from "react-hook-form";
 import * as action from "../../redux/action/action";
 import { connect } from "react-redux";
-import { getCustomerRequest } from "../../apis/Apis";
+import { getCustomerRequest, getRequestDetail } from "../../apis/Apis";
 import ModalCancelDetail from "./component/ModalCancelDetail";
 import ModalReturnItem from "./component/ModalReturnItem";
 import ModalUpdateIsPaid from "./component/ModalUpdateIsPaid";
@@ -26,6 +26,7 @@ function CustomerRequest({
 }) {
   const [listRequest, setListRequest] = useState([]);
   const [totalRequest, setTotalRequest] = useState(0);
+  const [requestDetail, setRequestDetail] = useState({});
   const [error, setError] = useState({});
   const [request, setRequest] = useState({});
   const [page, setPage] = useState(1);
@@ -36,6 +37,7 @@ function CustomerRequest({
   };
 
   const handleCloseIsPaid = () => {
+    setCurrentRequest({});
     setOpenIsPaid(false);
   };
 
@@ -45,6 +47,7 @@ function CustomerRequest({
   };
 
   const handleCloseCancelOrder = () => {
+    setCurrentRequest({});
     setOpenCancelOrder(false);
   };
   const [openReturnItem, setOpenReturnItem] = useState(false);
@@ -53,6 +56,7 @@ function CustomerRequest({
   };
 
   const handleCloseReturnItem = () => {
+    setCurrentRequest({});
     setOpenReturnItem(false);
   };
 
@@ -65,7 +69,6 @@ function CustomerRequest({
         size,
         userState.idToken
       );
-      console.log(list);
       setListRequest(list.data.data);
       setTotalRequest(list.data.metadata.total);
     } catch (error) {
@@ -89,6 +92,42 @@ function CustomerRequest({
     firstCall();
   }, []);
 
+  useEffect(() => {
+    const firstCall = async () => {
+      if (currentRequest === undefined) {
+        return;
+      }
+
+      try {
+        showLoading();
+        const response = await getRequestDetail(
+          currentRequest?.id,
+          userState.idToken
+        );
+        console.log(response.data);
+        setRequestDetail(response.data);
+        hideLoading();
+      } catch (error) {
+        console.log(error);
+        hideLoading();
+      }
+    };
+    firstCall();
+  }, [currentRequest]);
+
+  useEffect(() => {
+    const firstCall = async () => {
+      try {
+        showLoading();
+        await getData("", page, 8);
+        hideLoading();
+      } catch (error) {
+        console.log(error);
+        hideLoading();
+      }
+    };
+    firstCall();
+  }, [page]);
   return (
     <Box
       sx={{
@@ -129,16 +168,19 @@ function CustomerRequest({
         open={openReturnItem}
         handleClose={handleCloseReturnItem}
         currentRequest={currentRequest}
+        requestDetail={requestDetail}
       />
       <ModalCancelDetail
         open={openCancelOrder}
         handleClose={handleCloseCancelOrder}
         currentRequest={currentRequest}
+        requestDetail={requestDetail}
       />
       <ModalUpdateIsPaid
         open={openIsPaid}
         handleClose={handleCloseIsPaid}
         currentRequest={currentRequest}
+        requestDetail={requestDetail}
       />
 
       <Card

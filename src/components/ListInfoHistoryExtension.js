@@ -24,6 +24,7 @@ export default function ListInfoHistoryExtension({ list, currentOrder }) {
           display: "flex",
           flexDirection: "row",
           width: "100%",
+          marginBottom: "16px",
         }}
       >
         <TableContainer component={Paper}>
@@ -68,7 +69,7 @@ export default function ListInfoHistoryExtension({ list, currentOrder }) {
                     </TableCell>
                     <TableCell>{difference}</TableCell>
                     <TableCell>
-                      {paidDate === "Invalid Date"
+                      {row.paidDate === null
                         ? "Not yet"
                         : paidDate.toLocaleDateString("en-US")}
                     </TableCell>
