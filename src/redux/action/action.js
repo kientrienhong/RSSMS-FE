@@ -163,3 +163,10 @@ export const addNotification = (notifcation) => {
     payload: notifcation,
   };
 };
+
+export const setUpCurrentViewOrderId = (orderId) => {
+  return {
+    type: ActionType.SET_CURRENT_VIEW_ORDER_ID,
+    payload: orderId,
+  };
+};

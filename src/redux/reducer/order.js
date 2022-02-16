@@ -18,6 +18,7 @@ const initialState = {
   isLoadingStorage: false,
   isLoadingOrder: false,
   moveBox: undefined,
+  currentPositionViewOrderId: -1,
 };
 
 const order = (state = initialState, action) => {
@@ -85,6 +86,11 @@ const order = (state = initialState, action) => {
         boxes: [],
         typeOrder: -1,
       };
+      return { ...state };
+    }
+
+    case ActionType.SET_CURRENT_VIEW_ORDER_ID: {
+      state.currentPositionViewOrderId = action.payload;
       return { ...state };
     }
 

@@ -192,26 +192,26 @@ function ListRequest({
                   style={{ color: "black", width: "5%" }}
                   onClick={(e) => handleClickRow(row, setRequest, handleOpen)}
                 >
-                  {row.id}
+                  {row?.id}
                 </TableCell>
                 <TableCell
                   style={{ color: "black", width: "10%" }}
                   onClick={(e) => handleClickRow(row, setRequest, handleOpen)}
                 >
-                  {row.deliveryStaffName}
+                  {row?.deliveryStaffName}
                 </TableCell>
                 <TableCell
                   style={{ color: "black", width: "10%" }}
                   onClick={(e) => handleClickRow(row, setRequest, handleOpen)}
                 >
-                  {row.deliveryStaffPhone}
+                  {row?.deliveryStaffPhone}
                 </TableCell>
 
                 <TableCell
                   style={{ color: "black" }}
                   onClick={(e) => handleClickRow(row, setRequest, handleOpen)}
                 >
-                  {new Date(row.schedules[0].scheduleDay).toLocaleDateString(
+                  {new Date(row?.schedules[0]?.scheduleDay).toLocaleDateString(
                     "en-US"
                   )}
                 </TableCell>
@@ -219,14 +219,16 @@ function ListRequest({
                   style={{ color: "black", width: "45%" }}
                   onClick={(e) => handleClickRow(row, setRequest, handleOpen)}
                 >
-                  {row.note}
+                  {row?.note}
                 </TableCell>
                 <TableCell style={{ color: "black" }}>
                   <Button
                     onClick={async () => {
                       navigate(
                         "/app/schedule/" +
-                          new Date(row.schedules[0].scheduleDay).toISOString(),
+                          new Date(
+                            row?.schedules[0]?.scheduleDay
+                          ).toISOString(),
                         {
                           replace: false,
                         }

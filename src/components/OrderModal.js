@@ -21,6 +21,7 @@ import ListInfoHistoryExtension from "./ListInfoHistoryExtension";
 import { updateOrder } from "../apis/Apis";
 import { useNavigate } from "react-router";
 import { PRODUCT_TYPE, LIST_STATUS, LIST_TIME } from "../constant/constant";
+import ListPositionStored from "./ListPositionStored";
 const styleModal = {
   position: "absolute",
   top: "1%",
@@ -796,6 +797,11 @@ function OrderModal({
                 list={currentOrder?.orderHistoryExtensions}
                 currentOrder={currentOrder}
               />
+            ) : (
+              <></>
+            )}
+            {currentOrder?.orderDetails?.length > 0 ? (
+              <ListPositionStored currentOrder={currentOrder} />
             ) : (
               <></>
             )}

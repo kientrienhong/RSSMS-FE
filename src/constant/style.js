@@ -4,6 +4,7 @@ export const PRIMARY_SEMANTIC_GREEN = "#26FF7B";
 export const SECOND_SEMANTIC_GREEN = "#00993C";
 export const PRIMARY_SEMANTIC_RED = "#FF615F";
 export const PRIMARY_SEMANTIC_ORANGE = "#FF7C33";
+export const PRIMARY_PURPLE = "#8099FF";
 
 export const STYLE_MODAL = {
   position: "absolute",

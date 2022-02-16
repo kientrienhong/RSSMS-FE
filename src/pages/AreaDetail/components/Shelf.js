@@ -7,6 +7,7 @@ import {
   SECOND_BLUE,
   PRIMARY_SEMANTIC_GREEN,
   SECOND_SEMANTIC_GREEN,
+  PRIMARY_PURPLE,
 } from "../../../constant/style";
 function Shelf({
   shelf,
@@ -23,6 +24,7 @@ function Shelf({
   moveBox,
   storageId,
   handleOpenMoveBox,
+  currentPositionViewOrderId,
 }) {
   const buildBox = () => {
     let size = 12 / shelf.boxesInWidth;
@@ -62,6 +64,9 @@ function Shelf({
           color = SECOND_SEMANTIC_GREEN;
         }
       });
+      if (currentPositionViewOrderId === e.orderId) {
+        color = PRIMARY_PURPLE;
+      }
 
       if (shelf?.type === 0) {
         nameBox =
@@ -172,6 +177,7 @@ const mapStateToProps = (state) => ({
   currentBox: state.order.currentBox,
   placingProducts: state.order.placingProducts,
   moveBox: state.order.moveBox,
+  currentPositionViewOrderId: state.order.currentPositionViewOrderId,
 });
 
 const mapDispatchToProps = (dispatch) => {

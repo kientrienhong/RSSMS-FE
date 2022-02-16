@@ -44,6 +44,11 @@ const NavItem = ({ href, icon: Icon, title, reactIcon, ...rest }) => {
           },
         }}
         to={href}
+        onClick={
+          () => {
+            
+          }
+        }
       >
         {Icon && <Icon size="20" />}
         {reactIcon}

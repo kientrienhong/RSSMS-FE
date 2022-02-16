@@ -124,4 +124,5 @@ export const LIST_NOTE = [
   { color: style.PRIMARY_SEMANTIC_ORANGE, name: "Expired soon" },
   { color: style.PRIMARY_SEMANTIC_GREEN, name: "Selected" },
   { color: style.SECOND_SEMANTIC_GREEN, name: "Placing" },
+  { color: style.PRIMARY_PURPLE, name: "Current View Order" },
 ];
