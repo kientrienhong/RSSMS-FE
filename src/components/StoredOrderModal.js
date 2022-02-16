@@ -82,7 +82,7 @@ function StoredOrderModal({
             onClick={() => handleChange(eventTemp)}
           >
             <img
-              src={e?.images[0]?.url}
+              src={e?.productImages[0]?.url}
               alt={e.productName}
               width={80}
               height={80}

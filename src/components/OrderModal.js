@@ -830,7 +830,7 @@ function OrderModal({
                   justifyContent: "center",
                 }}
               >
-                {currentOrder?.status === 2 ? (
+                {currentOrder?.status === 2 || currentOrder?.status === 3 ? (
                   <Button
                     style={{
                       height: "45px",

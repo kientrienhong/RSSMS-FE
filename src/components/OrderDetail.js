@@ -5,12 +5,14 @@ import { formatCurrency } from "../utils/FormatCurrency";
 export default function OrderDetail({ choosenProduct, duration }) {
   const buildTotalPrice = () => {
     let months = Math.ceil(duration / 30);
-
     let sum = 0;
-    choosenProduct.product.forEach((e) => {
+    choosenProduct?.product?.forEach((e) => {
       sum += e.price * e.quantity * months;
     });
-    choosenProduct.accessory.forEach((e) => {
+    choosenProduct?.accessory?.forEach((e) => {
+      sum += e.price * e.quantity;
+    });
+    choosenProduct?.services?.forEach((e) => {
       sum += e.price * e.quantity;
     });
     return (
@@ -37,12 +39,16 @@ export default function OrderDetail({ choosenProduct, duration }) {
   const buildTotalEachPartPrice = (value) => {
     let total = choosenProduct[value].reduce(
       (a, b) => {
-        return a.price * a.quantity + b.price * b.quantity;
+        return {
+          price: a.price * a.quantity + b.price * b.quantity,
+          quantity: 1,
+        };
       },
       { price: 0, quantity: 1 }
     );
 
-    let totalNum = isNaN(parseInt(total)) === true ? 0 : parseInt(total);
+    let totalNum =
+      isNaN(parseInt(total?.price)) === true ? 0 : parseInt(total?.price);
 
     return (
       <Box
@@ -119,15 +125,17 @@ export default function OrderDetail({ choosenProduct, duration }) {
 
   const buildTotalProduct = (value) => {
     let months = Math.ceil(duration / 30);
-
     let total = choosenProduct[value].reduce(
       (a, b) => {
-        return a.price * a.quantity * months + b.price * b.quantity * months;
+        return {
+          price: a.price * a.quantity + b.price * b.quantity * months,
+          quantity: 1,
+        };
       },
       { price: 0, quantity: 1 }
     );
-
-    let totalNum = isNaN(parseInt(total)) === true ? 0 : parseInt(total);
+    let totalNum =
+      isNaN(parseInt(total?.price)) === true ? 0 : parseInt(total?.price);
 
     return (
       <Box
