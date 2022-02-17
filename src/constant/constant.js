@@ -49,10 +49,11 @@ export const ORDER_STATUS = {
   0: "Canceled",
   1: "Booked",
   2: "Assigned",
-  3: "Delivery",
+  3: "Delivery (take)",
   4: "Stored",
   5: "Expired",
   6: "Done",
+  7: "Delivery (return)",
 };
 
 export const ORDER_TYPE = {

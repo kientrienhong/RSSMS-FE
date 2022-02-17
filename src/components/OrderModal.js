@@ -207,6 +207,23 @@ function OrderModal({
     }
   };
 
+  const handleReturnItem = async () => {
+    try {
+      showLoading();
+      await updateOrder(
+        currentOrder.id,
+        { ...currentOrder, status: 7 },
+        userState.idToken
+      );
+      await getData(searchId, page, 8, userState.idToken);
+      handleClose();
+      showSnackbar("success", "Return order success");
+    } catch (error) {
+    } finally {
+      hideLoading();
+    }
+  };
+
   const handleOnClickPlus = (event) => {
     event.preventDefault();
     if (isView === true) {
@@ -849,6 +866,22 @@ function OrderModal({
                     onClick={() => handleStoreOrder()}
                   >
                     Store
+                  </Button>
+                ) : null}
+
+                {currentOrder?.status === 4 ? (
+                  <Button
+                    style={{
+                      height: "45px",
+                      paddingLeft: "16px",
+                      paddingRight: "16px",
+                      marginRight: "4%",
+                    }}
+                    color="primary"
+                    variant="contained"
+                    onClick={() => handleReturnItem()}
+                  >
+                    Return order
                   </Button>
                 ) : null}
 
