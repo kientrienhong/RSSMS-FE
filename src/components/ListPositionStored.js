@@ -17,7 +17,7 @@ function ListPositionStored({ currentOrder, setUpCurrentViewOrderId }) {
             onClick={() => {
               setUpCurrentViewOrderId(currentOrder.id);
               navigate(
-                `/app/storages/${currentOrder.storageId}/areas/${e.boxDetails.areaId}`,
+                `/app/storages/${currentOrder?.storageId}/areas/${e?.boxDetails?.areaId}`,
                 {
                   replace: true,
                 }
@@ -30,8 +30,8 @@ function ListPositionStored({ currentOrder, setUpCurrentViewOrderId }) {
               cursor: "pointer",
             }}
           >
-            {currentOrder.storageName} / {e.boxDetails.areaName} /
-            {e.boxDetails.shelfName}
+            {currentOrder?.storageName} / {e?.boxDetails?.areaName} /
+            {e.boxDetails?.shelfName}
           </Typography>
         </Box>
       );

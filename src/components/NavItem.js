@@ -2,10 +2,24 @@ import {
   NavLink as RouterLink,
   matchPath,
   useLocation,
+  useNavigate,
 } from "react-router-dom";
+import * as action from "../redux/action/action";
+import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { Button, ListItem } from "@material-ui/core";
-const NavItem = ({ href, icon: Icon, title, reactIcon, ...rest }) => {
+const NavItem = ({
+  href,
+  icon: Icon,
+  title,
+  reactIcon,
+  handleProgressModal,
+  setUpCurrentViewOrderId,
+  currentPositionViewOrderId,
+  ...rest
+}) => {
+  const navigate = useNavigate();
+
   const location = useLocation();
   const active = href
     ? !!matchPath(
@@ -44,11 +58,36 @@ const NavItem = ({ href, icon: Icon, title, reactIcon, ...rest }) => {
           },
         }}
         to={href}
-        onClick={
-          () => {
-            
-          }
-        }
+        // onClick={() => {
+        //   if (currentPositionViewOrderId !== -1) {
+        //     handleProgressModal(
+        //       true,
+        //       `You are viewing #${currentPositionViewOrderId} order. You want to keep it?`,
+        //       () => {
+        //         console.log("testesse");
+        //         handleProgressModal(
+        //           false,
+        //           "",
+        //           () => {},
+        //           () => {}
+        //         );
+        //       },
+        //       () => {
+        //         console.log("testessxzczbcme");
+
+        //         handleProgressModal(
+        //           false,
+        //           "",
+        //           () => {
+        //             setUpCurrentViewOrderId(-1);
+        //           },
+        //           () => {}
+        //         );
+        //       }
+        //     );
+        //   }
+        //   // navigate(href);
+        // }}
       >
         {Icon && <Icon size="20" />}
         {reactIcon}
@@ -58,10 +97,25 @@ const NavItem = ({ href, icon: Icon, title, reactIcon, ...rest }) => {
   );
 };
 
+const mapStateToProps = (state) => ({
+  currentPositionViewOrderId: state.order.currentPositionViewOrderId,
+});
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    handleProgressModal: (isOpen, title, yesFunction, noFunction) =>
+      dispatch(
+        action.handleProgressModal(isOpen, title, yesFunction, noFunction)
+      ),
+    setUpCurrentViewOrderId: (orderId) =>
+      dispatch(action.setUpCurrentViewOrderId(orderId)),
+  };
+};
+
 NavItem.propTypes = {
   href: PropTypes.string,
   icon: PropTypes.elementType,
   title: PropTypes.string,
 };
 
-export default NavItem;
+export default connect(mapStateToProps, mapDispatchToProps)(NavItem);

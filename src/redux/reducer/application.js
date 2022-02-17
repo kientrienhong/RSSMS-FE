@@ -7,6 +7,12 @@ const initialState = {
   msgSnackbar: "",
   isViewStoredModal: false,
   isOpenStoredModal: false,
+  progressModal: {
+    isOpen: false,
+    title: "",
+    yesFunction: null,
+    noFunction: null,
+  },
 };
 
 const application = (state = initialState, action) => {
@@ -38,14 +44,29 @@ const application = (state = initialState, action) => {
       return { ...state };
     }
 
-    case ActionType.OPEN_ORDER_MODAL: {
-      state.isViewStoredModal = action.payload;
-      state.isOpenStoredModal = true;
+    case ActionType.HANDLE_PROGRESS_MODAL: {
+      console.log(action.payload);
+      state.progressModal.isOpen = action.payload.isOpen;
+      state.progressModal.title = action.payload.title;
+      state.progressModal.yesFunction =
+        action.payload.yesFunction === undefined
+          ? state.progressModal.yesFunction
+          : action.payload.yesFunction;
+      state.progressModal.noFunction =
+        action.payload.noFunction === undefined
+          ? state.progressModal.noFunction
+          : action.payload.noFunction;
+
       return { ...state };
     }
 
     case ActionType.CLOSE_ORDER_MODAL: {
       state.isOpenStoredModal = false;
+      state.isViewStoredModal = false;
+      return { ...state };
+    }
+
+    case ActionType.HANDLE_PROGRESS_MODAL: {
       state.isViewStoredModal = false;
       return { ...state };
     }

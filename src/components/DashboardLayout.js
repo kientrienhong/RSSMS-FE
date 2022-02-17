@@ -10,6 +10,7 @@ import * as action from "../redux/action/action";
 import StoredOrderModal from "./StoredOrderModal";
 import moment from "moment";
 import { updateNotification } from "../apis/Apis";
+import ProgressModal from "./ProgressModal";
 const DashboardLayoutRoot = styled("div")(({ theme }) => ({
   backgroundColor: theme.palette.background.default,
   display: "flex",
@@ -159,6 +160,7 @@ const DashboardLayout = (props) => {
 
   return (
     <DashboardLayoutRoot>
+      <ProgressModal />
       <Snackbar
         open={props.snackbar}
         autoHideDuration={3000}
@@ -235,6 +237,8 @@ const mapDispatchToProps = (dispatch) => {
     setUpIsReadNoti: () => dispatch(action.setUpIsReadNoti()),
     setUpNotification: (notifcation) =>
       dispatch(action.setUpNotification(notifcation)),
+    handleProgressModal: (isOpen, title, doFunction) =>
+      dispatch(action.handleProgressModal(isOpen, title, doFunction)),
   };
 };
 

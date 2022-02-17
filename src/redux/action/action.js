@@ -170,3 +170,15 @@ export const setUpCurrentViewOrderId = (orderId) => {
     payload: orderId,
   };
 };
+
+export const handleProgressModal = (isOpen, title, yesFunction, noFunction) => {
+  return {
+    type: ActionType.HANDLE_PROGRESS_MODAL,
+    payload: {
+      isOpen,
+      title,
+      yesFunction,
+      noFunction,
+    },
+  };
+};

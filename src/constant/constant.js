@@ -52,6 +52,7 @@ export const ORDER_STATUS = {
   3: "Delivery",
   4: "Stored",
   5: "Expired",
+  6: "Done",
 };
 
 export const ORDER_TYPE = {
