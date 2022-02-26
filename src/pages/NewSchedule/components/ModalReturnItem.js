@@ -9,15 +9,15 @@ const styleModal = {
   width: "50%",
 };
 
-function ModalCancelDetail({
+function ModalReturnItem({
   open,
   handleClose,
   currentRequest,
   userState,
   showLoading,
   hideLoading,
-  requestDetail,
   showSnackbar,
+  requestDetail,
 }) {
   const buildInformation = (title, value) => {
     return (
@@ -70,7 +70,7 @@ function ModalCancelDetail({
             marginLeft: "2.5%",
           }}
         >
-          Detail Cancel Order Request
+          Detail Return Order Request
         </Typography>
         <Box
           sx={{
@@ -88,9 +88,14 @@ function ModalCancelDetail({
           >
             Order information
           </Typography>
-          {buildInformation("Id:", `#${requestDetail?.id}`)}
-          {/* {buildInformation("Created date:", `${requestDetail?.createdDate}`)} */}
-          {buildInformation("Note: ", `${requestDetail?.note}`)}
+          {buildInformation("Id:", `#${currentRequest?.id}`)}
+          {buildInformation("Created Date:", `${requestDetail?.createdDate}`)}
+          {buildInformation("Return date:", `${requestDetail?.returnDate}`)}
+          {buildInformation("Return time:", `${requestDetail?.returnTime}`)}
+          {buildInformation(
+            "Return address:",
+            `${requestDetail?.returnAddress}`
+          )}
         </Box>
         <Button
           style={{
@@ -105,6 +110,7 @@ function ModalCancelDetail({
                 currentRequest.id,
                 userState.idToken
               );
+              console.log(response);
               showSnackbar("success", "Update success");
             } catch (error) {
               console.log(error?.response);
@@ -135,4 +141,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ModalCancelDetail);
+export default connect(mapStateToProps, mapDispatchToProps)(ModalReturnItem);

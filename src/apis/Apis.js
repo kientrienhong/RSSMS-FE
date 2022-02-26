@@ -688,6 +688,14 @@ export const getCustomerRequest = async (name, page, size, token) => {
   return response;
 };
 
+export const getRequestToSchedule = async (dayFrom, dayTo, token) => {
+  const response = await axios.get(
+    `https://localhost:44304/api/v1/requests?FromDate=${dayFrom}&ToDate=${dayTo}&RequestTypes=2`,
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+  return response;
+};
+
 export const updateNotification = async (listNotification, token) => {
   const response = await axios.put(
     `https://localhost:44304/api/v1/notifications`,

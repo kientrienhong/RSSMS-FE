@@ -89,7 +89,7 @@ function ModalReturnItem({
             Order information
           </Typography>
           {buildInformation("Id:", `#${currentRequest?.id}`)}
-          {buildInformation("Created Date:", `${requestDetail?.createdDate}`)}
+          {/* {buildInformation("Created Date:", `${requestDetail?.createdDate}`)} */}
           {buildInformation("Return date:", `${requestDetail?.returnDate}`)}
           {buildInformation("Return time:", `${requestDetail?.returnTime}`)}
           {buildInformation(

@@ -75,6 +75,8 @@ export default function Schedule({
             ? "#FF615F"
             : schedule.isDelivery
             ? "#99E5FE"
+            : schedule.orderId
+            ? "#8099FF"
             : "#04BFFE",
         boxShadow: 16,
         display: "flex",
@@ -98,7 +100,8 @@ export default function Schedule({
         }}
       >
         <p style={{ display: "inline-block", margin: 0 }}>
-          Order: #{schedule.id}
+          {schedule.orderId === undefined ? "Order: #" : "Request: #"}
+          {schedule.id}
         </p>
         <Box
           sx={{
@@ -144,8 +147,11 @@ export default function Schedule({
         >
           <img
             onClick={() => {
-              setCurrentOrder(schedule);
-              handleOpen();
+              if (schedule.orderId) {
+              } else {
+                setCurrentOrder(schedule);
+                handleOpen();
+              }
             }}
             src="/img/info.png"
             alt="info"

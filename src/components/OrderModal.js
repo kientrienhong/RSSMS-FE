@@ -80,6 +80,7 @@ function OrderModal({
   userState,
   isView,
 }) {
+  console.log(currentOrder);
   const [timeDelivery, setTimeDelivery] = useState();
   const [timeReturn, setTimeReturn] = useState();
   const [duration, setDuration] = useState();
@@ -766,48 +767,6 @@ function OrderModal({
               choosenProduct={formatToChosenProduct()}
               duration={duration}
             />
-            {currentOrder?.orderHistoryExtensions?.length > 0 ? (
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                <Typography color="black" variant="h2">
-                  Order Position
-                </Typography>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    width: "100%",
-                  }}
-                >
-                  <Typography
-                    color="black"
-                    variant="h2"
-                    sx={{ marginBottom: "4%", marginTop: "4%", width: "20%" }}
-                  >
-                    Name product
-                  </Typography>
-                  <Typography
-                    color="black"
-                    variant="h2"
-                    sx={{
-                      marginBottom: "4%",
-                      marginTop: "4%",
-                      textAlign: "right",
-                      width: "80%",
-                    }}
-                  >
-                    Position
-                  </Typography>
-                  {buildPosition()}
-                </Box>
-              </Box>
-            ) : (
-              <></>
-            )}
 
             {currentOrder?.orderHistoryExtensions?.length > 0 ? (
               <ListInfoHistoryExtension
@@ -817,7 +776,7 @@ function OrderModal({
             ) : (
               <></>
             )}
-            {currentOrder?.orderDetails?.length > 0 ? (
+            {currentOrder?.orderDetails?.boxDetails != null ? (
               <ListPositionStored currentOrder={currentOrder} />
             ) : (
               <></>

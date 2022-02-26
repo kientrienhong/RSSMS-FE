@@ -160,7 +160,6 @@ const DashboardLayout = (props) => {
 
   return (
     <DashboardLayoutRoot>
-      <ProgressModal />
       <Snackbar
         open={props.snackbar}
         autoHideDuration={3000}

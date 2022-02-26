@@ -22,7 +22,6 @@ function ModalUpdateIsPaid({
   requestDetail,
 }) {
   const [checked, setChecked] = React.useState(false);
-  console.log(currentRequest);
   const handleChange = (event) => {
     setChecked(event.target.checked);
   };
@@ -96,15 +95,17 @@ function ModalUpdateIsPaid({
             Order information
           </Typography>
           {buildInformation("Id:", `#${currentRequest?.id}`)}
+          {buildInformation("Order Id:", `#${currentRequest?.orderId}`)}
+
           {buildInformation(
             "Old return date:",
             `${requestDetail?.oldReturnDate}`
           )}
           {buildInformation("New return date:", `${requestDetail?.returnDate}`)}
-          {buildInformation(
+          {/* {buildInformation(
             "Total price:",
             `${formatCurrency(requestDetail?.totalPrice, " VND")}`
-          )}
+          )} */}
 
           <Box
             sx={{

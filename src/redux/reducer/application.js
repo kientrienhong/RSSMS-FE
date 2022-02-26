@@ -66,8 +66,9 @@ const application = (state = initialState, action) => {
       return { ...state };
     }
 
-    case ActionType.HANDLE_PROGRESS_MODAL: {
-      state.isViewStoredModal = false;
+    case ActionType.OPEN_ORDER_MODAL: {
+      state.isViewStoredModal = action.payload;
+      state.isOpenStoredModal = true;
       return { ...state };
     }
 
