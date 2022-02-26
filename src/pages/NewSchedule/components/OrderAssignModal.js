@@ -38,6 +38,15 @@ function OrderAssignModal({
           currentSchedule = e.deliveryDate;
           return { deliveryTime: e["deliveryTime"], orderId: e["id"] };
         } else {
+          if (e.orderId) {
+            currentSchedule = e.returnDate;
+
+            return {
+              deliveryTime: e["returnTime"],
+              orderId: e["orderId"],
+              requestId: e["id"],
+            };
+          }
           currentSchedule = e.returnDate;
 
           return { deliveryTime: e["returnTime"], orderId: e["id"] };

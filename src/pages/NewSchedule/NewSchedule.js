@@ -9,7 +9,12 @@ import ListItemSidebar from "./components/ListItemSidebar";
 import { LIST_TIME, TYPE_SCHEDULE } from "../../constant/constant";
 import OrderModal from "../../components/OrderModal";
 import { isDateAfter, isDateBefore } from "../../utils/DateUtils";
-import { getOrder, getListUser, getSchedule } from "../../apis/Apis";
+import {
+  getOrder,
+  getListUser,
+  getSchedule,
+  getRequestToSchedule,
+} from "../../apis/Apis";
 import ScheduleArea from "./components/ScheduleArea";
 import { useParams } from "react-router-dom";
 
@@ -127,16 +132,20 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
       }
     });
     // }
-    // if (currentDate) {
     result[currentDate].listSchedule.get(order[value]).push(order);
     result[currentDate].amountNotAssignStaff += 1;
-    // } else {
-    // let listTime = {};
+  };
 
-    // LIST_TIME.forEach((e) => (listTime[e.name] = []));
-    // result[date.toLocaleDateString("en-US")] = listTime;
-    // result[date.toLocaleDateString("en-US")][order[value]].push(order);
-    // }
+  const handleFormatRequestSchedule = (date, result, request) => {
+    let currentDate = Object.keys(result)?.find((e) => {
+      if (e === date.toLocaleDateString("en-US")) {
+        return true;
+      }
+    });
+    result[currentDate].listSchedule
+      .get(request["returnTime"])
+      .push({ ...request, isDelivery: false });
+    result[currentDate].amountNotAssignStaff += 1;
   };
 
   const mapListNote = () =>
@@ -221,6 +230,20 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
         });
 
       try {
+        let responseRequest = await getRequestToSchedule(
+          startOfWeek.toISOString().split("T")[0],
+          endOfWeek.toISOString().split("T")[0],
+          userState.idToken
+        );
+
+        responseRequest.data.data.forEach((e) => {
+          handleFormatRequestSchedule(new Date(e.returnDate), result, e);
+        });
+      } catch (error) {
+        console.log(error.response);
+      }
+      console.log(result);
+      try {
         let responseSchedule = await getSchedule(
           startOfWeek.toISOString().split("T")[0],
           endOfWeek.toISOString().split("T")[0],
@@ -232,9 +255,22 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
             Object.keys(result).forEach((resultKey) => {
               for (const entry of result[resultKey].listSchedule?.entries()) {
                 if (entry[1]?.length > 0) {
-                  let index = entry[1].findIndex(
-                    (order) => order.id === schedule.orderId
-                  );
+                  let index = -1;
+                  console.log(entry[1]);
+                  console.log(schedule);
+                  if (schedule.requestId) {
+                    index = entry[1].findIndex((order) => {
+                      return (
+                        order.orderId === schedule.orderId &&
+                        order.id === schedule.requestId
+                      );
+                    });
+                  } else {
+                    index = entry[1].findIndex(
+                      (order) => order.id === schedule.orderId
+                    );
+                  }
+
                   if (index !== -1) {
                     result[resultKey].listSchedule.get(entry[0])[index] = {
                       ...result[resultKey].listSchedule.get(entry[0])[index],
@@ -341,6 +377,7 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
         if (listSelectedOrder?.length > 0) {
           storageId = listSelectedOrder[0].storageId;
         }
+
         try {
           showLoading();
           let listUserNotAssigned = await getListUser(
