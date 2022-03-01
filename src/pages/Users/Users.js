@@ -19,13 +19,16 @@ import { MALE, FEMALE, OTHER_GENDER } from "../../constant/constant";
 import SearchIcon from "@mui/icons-material/Search";
 import ListUsers from "./components/ListUsers";
 import CustomAvatar from "../../components/CustomAvatar";
-import { getListUser, createUser, updateUser } from "../../apis/Apis";
+import {
+  getListUser,
+  createUser,
+  updateUser,
+  getListRole,
+} from "../../apis/Apis";
 import { connect } from "react-redux";
 import * as action from "../../redux/action/action";
 import { Controller, useForm } from "react-hook-form";
 import CustomInput from "../../components/CustomInput";
-import { storageFirebase } from "../../firebase/firebase";
-import { ROLE_USER } from "../../constant/constant";
 import { STYLE_MODAL } from "../../constant/style";
 import CustomSelect from "../../components/CustomSelect";
 import { getBase64 } from "../../utils/convertImage";
@@ -65,12 +68,7 @@ const onChangeInputFile = (event, setUser, user, setError) => {
   ) {
     setUser({
       ...user,
-      images: [
-        {
-          id: user?.images[0]?.id,
-          url: URL.createObjectURL(event.target.files[0]),
-        },
-      ],
+      imageUrl: URL.createObjectURL(event.target.files[0]),
       avatarFile: event.target.files[0],
     });
     setError();
@@ -95,7 +93,8 @@ const buildModal = (
   error,
   gender,
   handleChangeGender,
-  setError
+  setError,
+  mapListRoleUser
 ) => {
   return (
     <Modal
@@ -131,7 +130,7 @@ const buildModal = (
             }}
           >
             <CustomAvatar
-              url={user?.images[0]?.url}
+              url={user?.imageUrl}
               isEdit="true"
               onHandleClick={handleOnclickAvatar}
             />
@@ -423,16 +422,13 @@ const buildModal = (
                 </Typography>
                 <CustomSelect
                   label="Type"
-                  name="roleName"
-                  defaultValue={user?.roleName}
+                  name="roleId"
+                  defaultValue={user?.roleId}
                   control={control}
                   errors={errors}
                   errorMsg={"Required role"}
                 >
-                  <MenuItem value={"Customer"}>Customer</MenuItem>
-                  <MenuItem value={"Manager"}>Manager</MenuItem>
-                  <MenuItem value={"Office staff"}>Office Staff</MenuItem>
-                  <MenuItem value={"Delivery Staff"}>Delivery Staff</MenuItem>
+                  {mapListRoleUser()}
                 </CustomSelect>
               </Box>
             ) : null}
@@ -492,7 +488,7 @@ function Users(props) {
   const [totalUser, setTotalUser] = React.useState(0);
   const [open, setOpen] = React.useState(false);
   const [error, setError] = React.useState({});
-
+  const [listRole, setListRole] = React.useState([]);
   const {
     handleSubmit,
     reset,
@@ -513,6 +509,7 @@ function Users(props) {
     try {
       showLoading();
       let list = await getListUser(name, page, size, userState.idToken);
+      console.log(list);
       setListUser(list.data.data);
       setTotalUser(list.data.metadata.total);
     } catch (error) {
@@ -552,7 +549,6 @@ function Users(props) {
     if (error?.message?.length > 0) {
       return;
     }
-    let roleName = ROLE_USER[data.roleName];
     let userTemp = {
       name: data.name,
       email: data.email,
@@ -560,13 +556,10 @@ function Users(props) {
       birthdate: data.birthdate,
       gender: gender,
       phone: data.phone,
-      roleId: roleName,
-      images: [
-        {
-          id: user?.images[0]?.id,
-          url: user?.images[0]?.url,
-        },
-      ],
+      roleId: data.roleId,
+      images: {
+        url: user?.imageUrl,
+      },
     };
     try {
       showLoading();
@@ -644,7 +637,6 @@ function Users(props) {
         file: base64.split(",")[1],
       };
     }
-    let roleName = ROLE_USER[data.roleName];
     let userTemp = {
       name: data.name,
       password: data.password,
@@ -653,13 +645,13 @@ function Users(props) {
       gender: gender,
       birthdate: data.birthdate,
       phone: data.phone,
-      roleId: roleName,
+      roleId: data.roleId,
       avatarLink: avatarLinkObject,
     };
     try {
       showLoading();
-
       const response = await createUser(userTemp, userState.idToken);
+
       if (response.status === 200) {
         showSnackbar("success", "Create user successful!");
         await getData(searchName, page, 8);
@@ -669,14 +661,15 @@ function Users(props) {
         setError({});
       }
     } catch (error) {
-      if (error.response) {
-        if (error.response.data.error.message === "Email is existed") {
+      console.log(error);
+      if (error?.response) {
+        if (error?.response?.data?.error?.message === "Email is existed") {
           setError({
             message: "Email is existed",
           });
         } else {
           setError({
-            message: error.response.data.error.message,
+            message: error?.response?.data?.error?.message,
           });
         }
       } else {
@@ -722,10 +715,33 @@ function Users(props) {
     process();
   }, [page]);
 
+  useEffect(() => {
+    if (open) {
+      const process = async () => {
+        try {
+          showLoading();
+          const response = await getListRole(userState.idToken);
+          setListRole(response.data.data);
+          hideLoading();
+        } catch (error) {
+          console.log(error);
+          hideLoading();
+        }
+      };
+      process();
+    }
+  }, [open]);
+
   const [listUser, setListUser] = React.useState([]);
   const [isEdit, setEdit] = React.useState(false);
   const [user, setUser] = React.useState({ images: [{ id: null, url: null }] });
   const [gender, setGender] = React.useState(user.gender ?? MALE);
+
+  const mapListRoleUser = () => {
+    return listRole?.map((e) => {
+      return <MenuItem value={e.id}>{e.name}</MenuItem>;
+    });
+  };
 
   const handleOpen = (isEdit) => {
     setOpen(true);
@@ -758,7 +774,8 @@ function Users(props) {
         error,
         gender,
         handleChangeGender,
-        setError
+        setError,
+        mapListRoleUser
       )}
       <Box
         sx={{

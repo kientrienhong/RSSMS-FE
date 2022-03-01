@@ -1,5 +1,13 @@
 import axios from "axios";
 
+export const getListRole = async (token) => {
+  let user = await axios.get(`https://localhost:44304/api/v1/roles`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  return user;
+};
+
 export const getListUser = async (
   name,
   page,
@@ -18,18 +26,18 @@ export const getListUser = async (
     scheduleTime === undefined
   ) {
     listUser = await axios.get(
-      `https://localhost:44304/api/v1/users?storageId=${storageId}&Name=${name}&page=${page}&size=${size}`,
+      `https://localhost:44304/api/v1/accounts?storageId=${storageId}&Name=${name}&page=${page}&size=${size}`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
   } else {
     if (scheduleDay !== undefined && scheduleTime !== undefined) {
       listUser = await axios.get(
-        `https://localhost:44304/api/v1/users?SheduleDay=${scheduleDay}&${scheduleTime}&page=${page}&size=${size}&RoleName=${roleName}&storageId=${storageId}`,
+        `https://localhost:44304/api/v1/accounts?SheduleDay=${scheduleDay}&${scheduleTime}&page=${page}&size=${size}&RoleName=${roleName}&storageId=${storageId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
     } else {
       listUser = await axios.get(
-        `https://localhost:44304/api/v1/users?Name=${name}&page=${page}&size=${size}`,
+        `https://localhost:44304/api/v1/accounts?Name=${name}&page=${page}&size=${size}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
     }
@@ -68,7 +76,7 @@ export const changePassword = async (
   token
 ) => {
   const response = await axios.post(
-    "https://localhost:44304/api/v1/users/changepassword",
+    "https://localhost:44304/api/v1/accounts/changepassword",
     {
       id: id,
       oldPassword: oldPassword,
@@ -83,7 +91,7 @@ export const changePassword = async (
 
 export const createUser = async (user, token) => {
   const response = await axios.post(
-    `https://localhost:44304/api/v1/users`,
+    `https://localhost:44304/api/v1/accounts`,
 
     {
       name: user.name,
@@ -94,12 +102,9 @@ export const createUser = async (user, token) => {
       gender: user.gender,
       birthdate: new Date(user.birthdate).toISOString(),
       roleId: user.roleId,
-      storageId: null,
-      images: [
-        {
-          file: user?.avatarLink === null ? null : user?.avatarLink.file,
-        },
-      ],
+      images: {
+        file: user?.avatarLink === null ? null : user?.avatarLink.file,
+      },
     },
     { headers: { Authorization: `Bearer ${token}` } }
   );
@@ -109,7 +114,7 @@ export const createUser = async (user, token) => {
 
 export const deleteUser = async (id, token) => {
   const response = await axios.delete(
-    `https://localhost:44304/api/v1/users/${id}`,
+    `https://localhost:44304/api/v1/accounts/${id}`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
 
@@ -128,7 +133,7 @@ export const updateUser = async (user, id, imageUrl, token) => {
       birthdate: new Date(user.birthdate).toISOString(),
       storageId: user.storageId,
       images: {
-        url: user?.image?.url,
+        url: user?.images?.url,
       },
     };
   } else {

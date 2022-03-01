@@ -115,7 +115,7 @@ const handleClickRow = (row, setUser, handleOpen, reset) => {
     storageName: row.storageName,
     roleName: row.roleName,
     address: row.address,
-    images: [row.images[0]],
+    imageUrl: row.imageUrl,
   };
 
   setUser(user);
@@ -230,7 +230,7 @@ function ListUsers({
                     handleClickRow(row, setUser, handleOpen, reset)
                   }
                 >
-                  {row?.staffManageStorages[0]?.storageName}
+                  {/* {row?.staffManageStorages[0]?.storageName} */}
                 </TableCell>
                 <TableCell
                   style={{ color: "black" }}
