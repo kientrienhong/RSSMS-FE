@@ -19,7 +19,6 @@ import {
 
 const DashboardSidebar = ({ onMobileClose, openMobile, user }) => {
   let items = [];
-
   if (user.roleName === "Admin") {
     items = LIST_SIDE_BAR_ADMIN;
   } else if (user.roleName === "Manager") {
@@ -58,7 +57,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile, user }) => {
       >
         <Avatar
           component={RouterLink}
-          src={user?.images.length === 0 ? undefined : user?.images[0].url}
+          src={user?.imageUrl}
           sx={{
             cursor: "pointer",
             width: 64,

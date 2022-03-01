@@ -34,7 +34,7 @@ function LogIn(props) {
         navigate("/app/account", { replace: true });
       }
     } catch (e) {
-      console.log(e);
+      console.log(e.response);
       setValid(false);
       setErrorMsg("Invalid username or password");
     } finally {

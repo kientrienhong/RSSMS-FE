@@ -80,12 +80,9 @@ function UpdateInformation({
       gender: value,
       birthdate: data.birthdate,
       roleId: roleId,
-      images: [
-        {
-          id: user?.images[0]?.id,
-          url: user?.images[0]?.url,
-        },
-      ],
+      images: {
+        url: user?.image?.url,
+      },
     };
     let responseUpdate;
     let id = user.userId;
@@ -99,57 +96,27 @@ function UpdateInformation({
           base64.split(",")[1],
           user.idToken
         );
-
-        setUpUser({
-          ...user,
-          address: data.address,
-          name: data.name,
-          gender: value,
-          birthdate: data.birthdate,
-          phone: data.phone,
-          images: responseUpdate.data.images,
-        });
+        if (responseUpdate.status === 200) {
+          setUpUser({
+            ...user,
+            address: data.address,
+            name: data.name,
+            gender: value,
+            birthdate: data.birthdate,
+            phone: data.phone,
+            imageUrl: responseUpdate.data.imageUrl,
+          });
+          showSnackbar("success", "Update information success!");
+        }
         hideLoading();
       } catch (error) {
         console.log(error.response);
         hideLoading();
       }
-
-      // let urlFirebase;
-      // let name = `user/${id}/avatar.png`;
-      // const ref = storageFirebase.ref(name);
-      // const uploadTask = ref.put(imageFile.file);
-      // uploadTask.on("state_changed", console.log, console.error, async () => {
-      //   urlFirebase = await ref.getDownloadURL();
-      // responseUpdate = await updateUser(
-      //   userTemp,
-      //   id,
-      //   urlFirebase,
-      //   user.idToken
-      // );
-      //   if (responseUpdate.status === 200) {
-      //     try {
-      //       showSnackbar("success", "Update user successful!");
-      // setUpUser({
-      //   ...user,
-      //   address: data.address,
-      //   name: data.name,
-      //   gender: value,
-      //   birthdate: data.birthdate,
-      //   phone: data.phone,
-      //   images: responseUpdate.data.images,
-      // });
-      //       hideLoading();
-      //     } catch (error) {
-      //       hideLoading();
-      //     }
-      //   } else {
-      //     hideLoading();
-      //   }
-      // });
     } else {
       try {
         responseUpdate = await updateUser(userTemp, id, "", user.idToken);
+        console.log(responseUpdate);
         if (responseUpdate.status === 200) {
           showSnackbar("success", "Update user successful!");
           setUpUser({
@@ -159,12 +126,10 @@ function UpdateInformation({
             birthdate: data.birthdate,
             name: data.name,
             phone: data.phone,
-            images: responseUpdate.data.images,
+            imageUrl: responseUpdate.data.imageUrl,
           });
-          hideLoading();
-        } else {
-          hideLoading();
         }
+        hideLoading();
       } catch (error) {
         hideLoading();
       }
@@ -194,10 +159,10 @@ function UpdateInformation({
   };
 
   if (imageFile?.url === undefined) {
-    if (user?.images.length === 0) {
+    if (user?.imageUrl === null) {
       imageUrl = undefined;
     } else {
-      imageUrl = user.images[0].url;
+      imageUrl = user.imageUrl;
     }
   } else {
     imageUrl = imageFile.url;

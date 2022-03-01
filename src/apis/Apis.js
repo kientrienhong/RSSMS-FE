@@ -49,7 +49,7 @@ export const findUserByPhone = async (phone, token) => {
 
 export const login = async (email, password, tokenFirebase) => {
   const response = await axios.post(
-    "https://localhost:44304/api/v1/users/login",
+    "https://localhost:44304/api/v1/accounts/login",
     {
       email: email,
       password: password,
@@ -127,13 +127,9 @@ export const updateUser = async (user, id, imageUrl, token) => {
       gender: user.gender,
       birthdate: new Date(user.birthdate).toISOString(),
       storageId: user.storageId,
-      images: [
-        {
-          id: user.images[0].id,
-          url: user.images[0].url,
-          file: "",
-        },
-      ],
+      images: {
+        url: user?.image?.url,
+      },
     };
   } else {
     object = {
@@ -144,17 +140,14 @@ export const updateUser = async (user, id, imageUrl, token) => {
       gender: user.gender,
       birthdate: new Date(user.birthdate).toISOString(),
       storageId: user.storageId,
-      images: [
-        {
-          id: user.images[0].id,
-          file: imageUrl,
-        },
-      ],
+      image: {
+        file: imageUrl,
+      },
     };
   }
 
   const response = await axios.put(
-    `https://localhost:44304/api/v1/users/${id}`,
+    `https://localhost:44304/api/v1/accounts/${id}`,
     object,
     { headers: { Authorization: `Bearer ${token}` } }
   );
