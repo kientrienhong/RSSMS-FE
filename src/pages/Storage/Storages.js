@@ -65,7 +65,7 @@ const buildInputFileImage = (storage) => {
         border: "solid 1px #000",
       }}
     >
-      {storage?.images[0]?.url === null ? (
+      {storage?.imageUrl === undefined ? (
         <img
           src="/img/imageEdit.png"
           width="50px"
@@ -81,7 +81,7 @@ const buildInputFileImage = (storage) => {
       ) : (
         <img
           style={{ height: "400px", width: "100%" }}
-          src={storage.images[0].url}
+          src={storage?.imageUrl}
           alt="avatar"
         />
       )}
@@ -308,18 +308,16 @@ function Storages(props) {
   };
 
   const onHandleCreateStorage = async (data) => {
-    let size = `${data.width}m x ${data.length}m x ${data.height}m`;
-
     let storageTemp = {
       name: data.name,
-      size: size,
+      height: data.height,
+      width: data.width,
+      length: data.length,
       address: data.address,
       status: 1,
-      images: [
-        {
-          url: null,
-        },
-      ],
+      image: {
+        url: null,
+      },
       listStaff: [],
     };
     try {
@@ -337,11 +335,9 @@ function Storages(props) {
 
       storageTemp = {
         ...storageTemp,
-        images: [
-          {
-            file: base64.split(",")[1],
-          },
-        ],
+        image: {
+          file: base64.split(",")[1],
+        },
       };
       const response = await createStorage(storageTemp, userState.idToken);
       if (response.status === 200) {
@@ -360,19 +356,16 @@ function Storages(props) {
   };
 
   const onHandleUpdateUser = async (data) => {
-    let size = `${data.width}m x ${data.length}m x ${data.height}m`;
-
     let storageTemp = {
       name: data.name,
-      size: size,
+      height: data.height,
+      width: data.width,
+      length: data.length,
       address: data.address,
       status: 1,
-      images: [
-        {
-          id: storage?.images[0]?.id,
-          url: storage?.images[0]?.url,
-        },
-      ],
+      image: {
+        url: storage?.imageUrl,
+      },
       listStaff: [],
     };
     try {
@@ -396,21 +389,6 @@ function Storages(props) {
         } else {
           hideLoading();
         }
-        // let urlFirebase;
-        // let name = `storages/${id}/avatar.png`;
-        // const ref = storageFirebase.ref(name);
-        // const uploadTask = ref.put(storage.avatarFile);
-        // uploadTask.on("state_changed", console.log, console.error, async () => {
-        //   urlFirebase = await ref.getDownloadURL();
-
-        // responseUpdate = await updateStorage(
-        //   storageTemp,
-        //   id,
-        //   urlFirebase,
-        //   userState.idToken
-        // );
-
-        // });
       } else {
         responseUpdate = await updateStorage(
           storageTemp,
@@ -509,12 +487,7 @@ function Storages(props) {
     ) {
       setStorage({
         ...storage,
-        images: [
-          {
-            id: storage?.images[0]?.id,
-            url: URL.createObjectURL(event.target.files[0]),
-          },
-        ],
+        imageUrl: URL.createObjectURL(event.target.files[0]),
         avatarFile: event.target.files[0],
       });
     } else {

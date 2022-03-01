@@ -38,7 +38,7 @@ function Storage({
       }}
     >
       <img
-        src={storage?.images[0]?.url}
+        src={storage?.imageUrl}
         alt="test"
         width="48%"
         height="96%"
@@ -95,7 +95,7 @@ function Storage({
             }}
           >
             <img src="/img/size.png" alt="size" style={styleIcon} />
-            {storage.size}
+            {`${storage?.width}m x ${storage?.length}m x ${storage?.height}m`}
           </Box>
 
           <Box sx={{ ...styleBoxTypo, marginTop: "2%" }}>

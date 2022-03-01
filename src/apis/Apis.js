@@ -183,14 +183,14 @@ export const createStorage = async (storage, token) => {
     `https://localhost:44304/api/v1/storages`,
     {
       name: storage.name,
-      size: storage.size,
+      height: parseInt(storage.height),
+      width: parseInt(storage.width),
+      length: parseInt(storage.length),
       address: storage.address,
       status: 1,
-      images: [
-        {
-          file: storage.images[0].file,
-        },
-      ],
+      image: {
+        file: storage.image.file,
+      },
       listStaff: [],
     },
     { headers: { Authorization: `Bearer ${token}` } }
@@ -208,14 +208,13 @@ export const updateStorage = async (storage, id, imageUrl, token) => {
       managerId: null,
       status: 1,
       address: storage.address,
-      size: storage.size,
+      height: parseInt(storage.height),
+      width: parseInt(storage.width),
+      length: parseInt(storage.length),
       storageId: null,
-      images: [
-        {
-          id: storage.images[0].id,
-          url: storage.images[0].url,
-        },
-      ],
+      image: {
+        url: storage.image.url,
+      },
       usage: 0,
     };
   } else {
@@ -225,14 +224,13 @@ export const updateStorage = async (storage, id, imageUrl, token) => {
       managerId: null,
       status: 1,
       address: storage.address,
-      size: storage.size,
+      height: parseInt(storage.height),
+      width: parseInt(storage.width),
+      length: parseInt(storage.length),
       storageId: null,
-      images: [
-        {
-          id: storage.images[0].id,
-          file: imageUrl,
-        },
-      ],
+      image: {
+        file: imageUrl,
+      },
       usage: 0,
     };
   }
