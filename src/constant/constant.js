@@ -40,9 +40,8 @@ export const STORAGE_STATUS = {
 export const PRODUCT_TYPE = {
   0: "product",
   2: "product",
-  4: "product",
+  3: "product",
   1: "accessory",
-  3: "services",
 };
 
 export const ORDER_STATUS = {
@@ -87,7 +86,6 @@ export const LIST_PRODUCT_MANAGE_TYPE = [
   "Storages",
   "Accessories",
   "Boxes",
-  "Services",
   "Areas",
 ];
 
