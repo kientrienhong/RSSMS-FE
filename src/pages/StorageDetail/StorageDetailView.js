@@ -59,9 +59,9 @@ export default function StorageDetailView({ storage }) {
           Storage Infomation
         </Typography>
       </Box>
-      {storage.images === undefined ? null : (
+      {storage.imageUrl === undefined ? null : (
         <img
-          src={storage?.images[0]?.url}
+          src={storage?.imageUrl}
           alt="storage"
           width="90%"
           height="160px"
@@ -70,7 +70,10 @@ export default function StorageDetailView({ storage }) {
       )}
 
       {buildInfoRow("Name", storage.name)}
-      {buildInfoRow("Size", storage.size)}
+      {buildInfoRow(
+        "Size",
+        `${storage.width}m x ${storage.length}m x ${storage.height}m`
+      )}
       {buildInfoRow("Address", storage.address)}
       {buildInfoRow(
         "Manager",

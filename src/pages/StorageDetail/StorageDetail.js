@@ -10,20 +10,19 @@ function StorageDetail({ showLoading, hideLoading, userState }) {
   const [storage, setStorage] = useState({});
   const [listArea, setListArea] = useState([]);
   const { storageId } = useParams();
+  console.log(storageId);
   useEffect(() => {
     const getData = async () => {
       let storageTemp = await getStorageDetail(storageId, userState.idToken);
       setStorage(storageTemp.data);
+      console.log(storageTemp.data);
     };
 
     const firstCall = async () => {
       try {
         showLoading();
         await getData();
-        let listAreaTemp = await getArea(
-          parseInt(storageId),
-          userState.idToken
-        );
+        let listAreaTemp = await getArea(storageId, userState.idToken);
         setListArea(listAreaTemp.data.data);
       } catch (error) {
         console.log(error?.response);
@@ -47,7 +46,7 @@ function StorageDetail({ showLoading, hideLoading, userState }) {
       <AreaList
         listArea={listArea}
         setListArea={setListArea}
-        storageId={storageId}
+        storageId={storage.id}
       />
     </Box>
   );

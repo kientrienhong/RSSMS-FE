@@ -8,6 +8,21 @@ export const getListRole = async (token) => {
   return user;
 };
 
+export const getListStaff = async (storageId, token) => {
+  if (storageId) {
+    return await axios.get(
+      `https://localhost:44304/api/v1/accounts/staffs?storageId=${storageId}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+  } else {
+    return await axios.get(`https://localhost:44304/api/v1/accounts/staffs`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  }
+};
+
 export const getListUser = async (
   name,
   page,
@@ -265,7 +280,7 @@ export const assignListStaffToStorage = async (
   });
 
   const response = await axios.put(
-    "https://localhost:44304/api/v1/staff-manage-storages/assign-staff",
+    "https://localhost:44304/api/v1/staff-assign-storages/assign-staff-to-storage",
     {
       storageId: storage.id,
       storageName: storage.name,
@@ -292,7 +307,7 @@ export const createArea = async (storageId, name, description, type, token) => {
     "https://localhost:44304/api/v1/areas",
     {
       name: name,
-      storageId: parseInt(storageId),
+      storageId: storageId,
       status: 1,
       type: type,
       description: description,
@@ -304,6 +319,7 @@ export const createArea = async (storageId, name, description, type, token) => {
 };
 
 export const deleteArea = async (id, token) => {
+  console.log(id);
   const response = await axios.delete(
     `https://localhost:44304/api/v1/areas/${id}`,
     { headers: { Authorization: `Bearer ${token}` } }

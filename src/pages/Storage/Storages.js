@@ -21,6 +21,7 @@ import {
   deleteStorage,
   getListUser,
   assignListStaffToStorage,
+  getListStaff,
 } from "../../apis/Apis";
 import { connect } from "react-redux";
 import * as action from "../../redux/action/action";
@@ -118,7 +119,6 @@ function Storages(props) {
   const [listStaffAssigned, setListStaffAssigned] = React.useState([]);
   const [listStaffUnAssigned, setListStaffUnAssigned] = React.useState([]);
   const [isEdit, setEdit] = React.useState(false);
-  const [type, setType] = React.useState("");
   const [storage, setStorage] = React.useState({
     images: [{ id: null, url: null }],
   });
@@ -211,48 +211,40 @@ function Storages(props) {
         let listUserNotAssigned = [];
         try {
           showLoading();
-          listUserNotAssigned = await getListUser(
-            "",
-            1,
-            -1,
-            userState.idToken,
-            0
-          );
+          listUserNotAssigned = await getListStaff(null, userState.idToken);
         } catch (error) {
           console.log(error);
           setListStaffUnAssigned([]);
           setListShowStaffUnAssigned([]);
         }
         try {
-          let listUserAssigned = await getListUser(
-            "",
-            1,
-            -1,
-            userState.idToken,
-            storage.id
+          let listUserAssigned = await getListStaff(
+            storage.id,
+            userState.idToken
           );
-          let managerFound = listUserAssigned.data.data.find(
+
+          let managerFound = listUserAssigned.data.find(
             (e) => e.roleName === "Manager"
           );
           let newListUserUnAssign;
           if (listUserNotAssigned?.data) {
-            newListUserUnAssign = listUserNotAssigned?.data?.data?.filter(
-              (e) => e.id !== managerFound.id
+            newListUserUnAssign = listUserNotAssigned?.data?.filter(
+              (e) => e.id !== managerFound?.id
             );
           } else {
             newListUserUnAssign = [];
           }
 
-          setListStaffAssigned(listUserAssigned.data.data);
-          setListShowStaffAssigned(listUserAssigned.data.data);
+          setListStaffAssigned(listUserAssigned.data);
+          setListShowStaffAssigned(listUserAssigned.data);
           setListStaffUnAssigned(newListUserUnAssign);
           setListShowStaffUnAssigned(newListUserUnAssign);
         } catch (error) {
           console.log(error);
           setListStaffAssigned([]);
           setListShowStaffAssigned([]);
-          setListStaffUnAssigned(listUserNotAssigned.data.data);
-          setListShowStaffUnAssigned(listUserNotAssigned.data.data);
+          setListStaffUnAssigned(listUserNotAssigned.data);
+          setListShowStaffUnAssigned(listUserNotAssigned.data);
         } finally {
           hideLoading();
         }
@@ -300,7 +292,7 @@ function Storages(props) {
       setError({
         ...error,
         assignStaff: {
-          message: error.response.data.error.message,
+          message: error?.response?.data?.error?.message,
         },
       });
       hideLoading();

@@ -8,6 +8,7 @@ import * as action from "../../redux/action/action";
 import ConfirmModal from "../../components/ConfirmModal";
 import { createArea, deleteArea, updateArea, getArea } from "../../apis/Apis";
 import { TYPE_AREA } from "../../constant/constant";
+import { ErrorHandle } from "../../utils/ErrorHandle";
 
 function AreaList({
   listArea,
@@ -50,13 +51,13 @@ function AreaList({
     try {
       showLoading();
       await createArea(
-        parseInt(storageId),
+        storageId,
         name,
         description,
         type === "Self-Storage" ? 0 : 1,
         userState.idToken
       );
-      let listAreaTemp = await getArea(parseInt(storageId), userState.idToken);
+      let listAreaTemp = await getArea(storageId, userState.idToken);
 
       setListArea(listAreaTemp.data.data);
       showSnackbar("success", "Create area success!");
@@ -72,21 +73,22 @@ function AreaList({
     try {
       showLoading();
       await updateArea(
-        parseInt(currentArea.id),
+        currentArea.id,
         name,
         description,
         type === "Self-Storage" ? 0 : 1,
         userState.idToken
       );
 
-      let listAreaTemp = await getArea(parseInt(storageId), userState.idToken);
+      let listAreaTemp = await getArea(storageId, userState.idToken);
       setListArea(listAreaTemp.data.data);
       showSnackbar("success", "Update area success!");
+      handleClose();
     } catch (error) {
-      console.log(error);
+      ErrorHandle.handle(error, showSnackbar);
+      console.log(error.response);
     } finally {
       hideLoading();
-      handleClose();
     }
   };
 
@@ -130,7 +132,12 @@ function AreaList({
       setListArea(listAreaTemp.data.data);
       showSnackbar("success", "Delete area success!");
     } catch (error) {
-      throw error;
+      if (error?.response?.status === 404) {
+        setListArea([]);
+        showSnackbar("success", "Delete area success!");
+      } else {
+        throw error;
+      }
     } finally {
       hideLoading();
       handleClose();
