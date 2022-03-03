@@ -46,22 +46,22 @@ export default function ModalArea({
             <CustomInput
               control={control}
               rules={{
-                required: "Name required",
+                required: "*Vui lòng nhập",
               }}
               styles={{ width: "400px" }}
               name="name"
-              label="Name"
+              label="Tên"
               userInfo={currentArea.name}
               inlineStyle={{ ...styleInput, marginBottom: "4%" }}
             />
             <CustomAreaInput
               control={control}
               rules={{
-                required: "Description required",
+                required: "*Vui lòng nhập",
               }}
               styles={{ width: "400px" }}
               name="description"
-              label="Description"
+              label="Mô tả"
               userInfo={currentArea.description}
               inlineStyle={styleInput}
             />
@@ -91,17 +91,17 @@ export default function ModalArea({
                   marginBottom: "16px",
                 }}
               >
-                Area type
+                Loại khu vực
               </Typography>
               <CustomSelect
                 name="type"
                 control={control}
                 errors={errors}
-                errorMsg={"Required type"}
+                errorMsg={"*Vui lòng nhập"}
                 defaultValue={typeList[currentArea.type] || ""}
               >
-                <MenuItem value={"Self-Storage"}>Self-Storage</MenuItem>
-                <MenuItem value={"Door-to-door"}>Door-to-door</MenuItem>
+                <MenuItem value={"Self-Storage"}>Kho tự quản</MenuItem>
+                <MenuItem value={"Door-to-door"}>Giữ đồ thuê</MenuItem>
               </CustomSelect>
             </Box>
           </Box>
@@ -114,7 +114,7 @@ export default function ModalArea({
             }}
           >
             <Button color="primary" type="submit" variant="contained">
-              Submit
+              Xác nhận
             </Button>
           </Box>
         </form>

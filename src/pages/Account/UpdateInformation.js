@@ -49,9 +49,9 @@ function UpdateInformation({
     let dob = new Date(data.birthdate);
     let currentYear = new Date();
     if (dob > currentYear) {
-      setError("\nPlease enter date of birth before today");
+      setError("\nVui lòng nhập ngày trước ngày hôm nay");
     } else if (currentYear.getFullYear() - dob.getFullYear() < 18) {
-      setError("\nPlease enter date of birth more than 18 years old");
+      setError("\nVui lòng nhập năm sinh lớn hơn 18 tuổi");
     }
 
     if (error.length > 0) {
@@ -106,7 +106,7 @@ function UpdateInformation({
             phone: data.phone,
             imageUrl: responseUpdate.data.imageUrl,
           });
-          showSnackbar("success", "Update information success!");
+          showSnackbar("success", "Cập nhật thông tin thành công!");
         }
         hideLoading();
       } catch (error) {
@@ -118,7 +118,7 @@ function UpdateInformation({
         responseUpdate = await updateUser(userTemp, id, "", user.idToken);
         console.log(responseUpdate);
         if (responseUpdate.status === 200) {
-          showSnackbar("success", "Update user successful!");
+          showSnackbar("success", "Cập nhật thông tin thành công!");
           setUpUser({
             ...user,
             address: data.address,
@@ -154,7 +154,7 @@ function UpdateInformation({
       });
       setError("");
     } else {
-      setError("Please choose image file!");
+      setError("Vui lòng chọn tập tin hình ảnh!");
     }
   };
 
@@ -231,7 +231,7 @@ function UpdateInformation({
               }}
               styles={{ width: "300px" }}
               name="name"
-              label="Name"
+              label="Họ và tên"
               disabled={false}
               userInfo={user.name}
               inlineStyle={styleInput}
@@ -239,15 +239,15 @@ function UpdateInformation({
             <CustomInput
               control={control}
               rules={{
-                required: "Phone required",
+                required: "*Vui lòng nhập",
                 pattern: {
                   value: /^[0][0-9]{9}$/,
-                  message: "Invalid phone number",
+                  message: "*Vui lòng nhập số điện thoại đúng",
                 },
               }}
               styles={{ width: "240px" }}
               name="phone"
-              label="Phone"
+              label="Số điện thoại"
               userInfo={user.phone}
               inlineStyle={styleInput}
             />
@@ -256,12 +256,12 @@ function UpdateInformation({
             <CustomInput
               control={control}
               rules={{
-                required: "Birthday required",
+                required: "*Vui lòng nhập",
               }}
               styles={{ width: "240px" }}
               name="birthdate"
               type="date"
-              label="Birthday"
+              label="Ngày sinh"
               userInfo={
                 user?.birthdate?.split("T") === undefined
                   ? ""
@@ -271,7 +271,7 @@ function UpdateInformation({
             />
           </Box>
 
-          <p style={{ marginLeft: "2.5%", marginTop: "5%" }}>Gender</p>
+          <p style={{ marginLeft: "2.5%", marginTop: "5%" }}>Giới tính</p>
           <FormControl
             component="fieldset"
             sx={{
@@ -280,31 +280,27 @@ function UpdateInformation({
           >
             <RadioGroup
               row
-              aria-label="gender"
+              aria-label="Giới tính"
               name="row-radio-buttons-group"
               onChange={handleChange}
               value={value}
             >
-              <FormControlLabel value={MALE} control={<Radio />} label="Male" />
-              <FormControlLabel
-                value={FEMALE}
-                control={<Radio />}
-                label="Female"
-              />
+              <FormControlLabel value={MALE} control={<Radio />} label="Nam" />
+              <FormControlLabel value={FEMALE} control={<Radio />} label="Nữ" />
               <FormControlLabel
                 value={OTHER_GENDER}
                 control={<Radio />}
-                label="Other"
+                label="Khác"
               />
             </RadioGroup>
           </FormControl>
           <Box sx={{ ...styleBoxInput, marginTop: "3%" }}>
             <CustomInput
               control={control}
-              rules={{ required: "Address required" }}
+              rules={{ required: "*Vui lòng nhập" }}
               styles={{ width: "540px" }}
               name="address"
-              label="Address"
+              label="Địa chỉ"
               userInfo={user.address}
               inlineStyle={styleInput}
             />
@@ -333,7 +329,7 @@ function UpdateInformation({
               variant="contained"
               type="submit"
             >
-              Submit
+              Cập nhật
             </Button>
           </Box>
         </form>

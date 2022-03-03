@@ -59,7 +59,7 @@ export default function ListStorage({
         handleClose={handleClose}
         onHandleYes={onHandleDeleteStorage}
         id={currentId}
-        msg={"Delete storage success!"}
+        msg={"Xóa kho thành công!"}
       />
       {mapListToGrid(
         listStorages,

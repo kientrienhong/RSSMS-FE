@@ -38,7 +38,7 @@ function ChangePassword({
         data.confirmPassword,
         userState.idToken
       );
-      showSnackbar("success", "Change password successful!");
+      showSnackbar("success", "Thay đổi mật khẩu thành công!");
     } catch (e) {
       if (e?.response?.data?.error?.message) {
         setError(e?.response?.data?.error?.message);
@@ -61,11 +61,11 @@ function ChangePassword({
           <CustomInput
             control={control}
             rules={{
-              required: "Old password required",
+              required: "*Vui lòng nhập",
             }}
             styles={{ width: "300px" }}
             name="oldPassword"
-            label="Old Password"
+            label="Mật khẩu cũ"
             disabled={false}
             type="password"
             userInfo={""}
@@ -75,7 +75,7 @@ function ChangePassword({
             name="password"
             control={control}
             rules={{
-              required: "Password required",
+              required: "*Vui lòng nhập",
             }}
             render={({ field: { onChange, value }, fieldState: { error } }) => {
               return (
@@ -97,17 +97,17 @@ function ChangePassword({
           <CustomInput
             control={control}
             rules={{
-              required: "Confirm password required",
+              required: "*Vui lòng nhập",
               validate: (value) => {
                 return (
                   value === (password.current.value ?? password.current) ||
-                  "The passwords do not match"
+                  "*Mật khẩu không khớp"
                 );
               },
             }}
             styles={{ width: "300px" }}
             name="confirmPassword"
-            label="Confirm Password"
+            label="Xác nhận mật khẩu mới"
             type="password"
             userInfo={""}
             inlineStyle={styleInput}
@@ -137,7 +137,7 @@ function ChangePassword({
             variant="contained"
             type="submit"
           >
-            Submit
+            Xác nhận
           </Button>
         </Box>
       </form>

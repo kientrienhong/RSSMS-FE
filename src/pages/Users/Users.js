@@ -73,7 +73,7 @@ const onChangeInputFile = (event, setUser, user, setError) => {
     });
     setError();
   } else {
-    setError({ message: "Please choose image file!" });
+    setError({ message: "Vui lòng chọn tập tin hình ảnh!" });
   }
 };
 
@@ -141,17 +141,17 @@ const buildModal = (
             variant="h2"
             style={{ marginTop: "2%", textAlign: "left", marginLeft: "2.5%" }}
           >
-            Account information
+            Thông tin tài khoản
           </Typography>
           <Box sx={{ ...styleBoxInput, marginTop: "2%" }}>
             <CustomInput
               control={control}
               rules={{
-                required: "Email required",
+                required: "*Vui lòng nhập",
                 pattern: {
                   value:
                     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                  message: "Invalid email",
+                  message: "*Vui lòng mail đúng",
                 },
               }}
               styles={{ width: "240px" }}
@@ -163,25 +163,25 @@ const buildModal = (
             />
             <CustomInput
               control={control}
-              rules={{ required: "Name required" }}
+              rules={{ required: "*Vui lòng nhập" }}
               styles={{ width: "240px" }}
               name="name"
-              label="Name"
+              label="Họ và tên"
               userInfo={user.name}
               inlineStyle={styleInput}
             />
             <CustomInput
               control={control}
               rules={{
-                required: "Phone required",
+                required: "*Vui lòng nhập",
                 pattern: {
                   value: /^[0][0-9]{9}$/,
-                  message: "Invalid phone number",
+                  message: "*Vui lòng nhập đúng số điện thoại",
                 },
               }}
               styles={{ width: "240px" }}
               name="phone"
-              label="Phone"
+              label="Số điện thoại"
               userInfo={user.phone}
               inlineStyle={styleInput}
             />
@@ -189,10 +189,10 @@ const buildModal = (
           <Box sx={{ ...styleBoxInput, alignItems: "center" }}>
             <CustomInput
               control={control}
-              rules={{ required: "Address required" }}
+              rules={{ required: "*Vui lòng nhập" }}
               styles={{ width: "370px" }}
               name="address"
-              label="Address"
+              label="Địa chỉ"
               userInfo={user.address}
               inlineStyle={styleInput}
             />
@@ -211,7 +211,7 @@ const buildModal = (
                   marginBottom: "0",
                 }}
               >
-                Gender
+                Giới tính
               </p>
               <FormControl
                 component="fieldset"
@@ -221,7 +221,7 @@ const buildModal = (
               >
                 <RadioGroup
                   row
-                  aria-label="gender"
+                  aria-label="Giớ tính"
                   name="row-radio-buttons-group"
                   onChange={handleChangeGender}
                   value={gender}
@@ -229,17 +229,17 @@ const buildModal = (
                   <FormControlLabel
                     value={MALE}
                     control={<Radio />}
-                    label="Male"
+                    label="Nam"
                   />
                   <FormControlLabel
                     value={FEMALE}
                     control={<Radio />}
-                    label="Female"
+                    label="Nữ"
                   />
                   <FormControlLabel
                     value={OTHER_GENDER}
                     control={<Radio />}
-                    label="Other"
+                    label="Khác"
                   />
                 </RadioGroup>
               </FormControl>
@@ -269,12 +269,12 @@ const buildModal = (
                     marginTop: "5%",
                   }}
                 >
-                  Birthday
+                  Ngày sinh
                 </p>
                 <CustomInput
                   control={control}
                   rules={{
-                    required: "Birthday required",
+                    required: "*Vui lòng nhập",
                   }}
                   styles={{ width: "240px" }}
                   name="birthdate"
@@ -314,7 +314,7 @@ const buildModal = (
                   }) => {
                     return (
                       <TextField
-                        label="Password"
+                        label="Mật khẩu"
                         variant="outlined"
                         inputRef={password}
                         value={value}
@@ -329,7 +329,7 @@ const buildModal = (
                     );
                   }}
                   rules={{
-                    required: "Password required",
+                    required: "*Vui lòng nhập",
                   }}
                 />
               </Box>
@@ -344,18 +344,18 @@ const buildModal = (
                 <CustomInput
                   control={control}
                   rules={{
-                    required: "Confirm password required",
+                    required: "*Vui lòng nhập",
                     validate: (value) => {
                       return (
                         value ===
                           (password.current.value ?? password.current) ||
-                        "The passwords do not match"
+                        "*Mật khẩu không khớp"
                       );
                     },
                   }}
                   styles={{ width: "280px" }}
                   name="confirmPassword"
-                  label="Confirm Password"
+                  label="Xác nhận mật khẩu"
                   type="password"
                   inlineStyle={styleInput}
                   userInfo={""}
@@ -376,12 +376,12 @@ const buildModal = (
                     marginTop: "5%",
                   }}
                 >
-                  Birthday
+                  Ngày sinh
                 </p>
                 <CustomInput
                   control={control}
                   rules={{
-                    required: "Birthday required",
+                    required: "*Vui lòng nhập",
                   }}
                   styles={{ width: "240px" }}
                   name="birthdate"
@@ -418,10 +418,10 @@ const buildModal = (
                     marginBottom: "5%",
                   }}
                 >
-                  Type
+                  Chức vụ
                 </Typography>
                 <CustomSelect
-                  label="Type"
+                  label="Chức vụ"
                   name="roleId"
                   defaultValue={user?.roleId}
                   control={control}
@@ -461,7 +461,7 @@ const buildModal = (
               variant="contained"
               type="submit"
             >
-              Submit
+              Xác nhận
             </Button>
             <Button
               style={{
@@ -473,7 +473,7 @@ const buildModal = (
               color="error"
               variant="outlined"
             >
-              Cancel
+              Đóng
             </Button>
           </Box>
         </form>
@@ -537,11 +537,11 @@ function Users(props) {
     let dob = new Date(data.birthdate);
     let currentYear = new Date();
     if (dob > currentYear) {
-      setError({ message: "Please enter date of birth before today" });
+      setError({ message: "Vui lòng nhập ngày sau ngày hôm nay" });
       return;
     } else if (currentYear.getFullYear() - dob.getFullYear() < 18) {
       setError({
-        message: "\nPlease enter date of birth more than 18 years old",
+        message: "\nVui lòng nhập ngày sinh lớn hơn 18 tuổi",
       });
       return;
     }
@@ -575,7 +575,7 @@ function Users(props) {
           userState.idToken
         );
         if (responseUpdate.status === 200) {
-          showSnackbar("success", "Update user successful!");
+          showSnackbar("success", "Cập nhật tài khoản thành công!");
           await getData(searchName, page, 8);
           handleClose();
           hideLoading();
@@ -585,7 +585,7 @@ function Users(props) {
       } else {
         responseUpdate = await updateUser(userTemp, id, "", userState.idToken);
         if (responseUpdate.status === 200) {
-          showSnackbar("success", "Update user successful!");
+          showSnackbar("success", "Cập nhật tài khoản thành công!");
           await getData(searchName, page, 8);
           handleClose();
           hideLoading();
@@ -598,7 +598,7 @@ function Users(props) {
       if (error.response) {
         if (error.response.message === "Email is existed") {
           setError({
-            message: "Email is existed",
+            message: "Email đã tồn tại",
           });
         } else {
           setError({
@@ -617,11 +617,11 @@ function Users(props) {
     let dob = new Date(data.birthdate);
     let currentYear = new Date();
     if (dob > currentYear) {
-      setError({ message: "Please enter date of birth before today" });
+      setError({ message: "Vui lòng nhập ngày sau ngày hôm nay" });
       return;
     } else if (currentYear.getFullYear() - dob.getFullYear() < 18) {
       setError({
-        message: "\nPlease enter date of birth more than 18 years old",
+        message: "\nVui lòng nhập ngày sinh lớn hơn 18 tuổi",
       });
       return;
     }
@@ -653,7 +653,7 @@ function Users(props) {
       const response = await createUser(userTemp, userState.idToken);
 
       if (response.status === 200) {
-        showSnackbar("success", "Create user successful!");
+        showSnackbar("success", "Tạo tài khoản thành công!");
         await getData(searchName, page, 8);
 
         handleClose();
@@ -665,7 +665,7 @@ function Users(props) {
       if (error?.response) {
         if (error?.response?.data?.error?.message === "Email is existed") {
           setError({
-            message: "Email is existed",
+            message: "Email đã tồn tại",
           });
         } else {
           setError({
@@ -813,7 +813,7 @@ function Users(props) {
             handleOpen(false);
           }}
         >
-          Create user
+          Tạo tài khoản
         </Button>
       </Box>
       <Card
@@ -843,7 +843,7 @@ function Users(props) {
               margin: "2% 0",
             }}
           >
-            User not found
+            Không tìm thấy tài khoản
           </Typography>
         )}
       </Card>

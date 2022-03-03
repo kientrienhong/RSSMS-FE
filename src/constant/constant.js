@@ -45,19 +45,19 @@ export const PRODUCT_TYPE = {
 };
 
 export const ORDER_STATUS = {
-  0: "Canceled",
-  1: "Booked",
-  2: "Assigned",
-  3: "Delivery (take)",
-  4: "Stored",
-  5: "Expired",
-  6: "Done",
-  7: "Delivery (return)",
+  0: "Đã hủy",
+  1: "Đã đặt",
+  2: "Đã xử lý",
+  3: "Đang vận chuyển",
+  4: "Đã lưu kho",
+  5: "Đã quá hạn",
+  6: "Hoàn tất",
+  7: "Đang vận chuyển",
 };
 
 export const ORDER_TYPE = {
-  0: "Self-Storage",
-  1: "Door to door",
+  0: "Kho tự quản",
+  1: "Giữ đồ thuê",
 };
 
 export const BOX_SIZE = {
@@ -69,10 +69,10 @@ export const BOX_SIZE = {
 };
 
 export const TYPE_SCHEDULE = [
-  { name: "Request return item", color: style.PRIMARY_PURPLE },
-  { name: "Delivery order", color: style.SECOND_BLUE },
-  { name: "Return order", color: style.PRIMARY_BLUE },
-  { name: "Canceled delivery order", color: style.PRIMARY_SEMANTIC_RED },
+  { name: "Yêu cầu trả đơn", color: style.PRIMARY_PURPLE },
+  { name: "Lịch giao hàng", color: style.SECOND_BLUE },
+  { name: "Lịch trả hàng", color: style.PRIMARY_BLUE },
+  { name: "Có nhân viên hủy lịch", color: style.PRIMARY_SEMANTIC_RED },
 ];
 
 export const AREA_SIZE = {
@@ -90,24 +90,24 @@ export const LIST_PRODUCT_MANAGE_TYPE = [
 ];
 
 export const LIST_TYPE_REQUEST = [
-  { name: "Cancel Delivery" },
-  { name: "Extension" },
-  { name: "Return items" },
-  { name: "Cancel order" },
+  { name: "Hủy lịch giao hàng" },
+  { name: "Gia hạn đơn" },
+  { name: "Yêu cầu trả đơn" },
+  { name: "Hủy đơn" },
 ];
 
 export const LIST_STATUS = [
-  { label: "Canceled", value: 0 },
-  { label: "Booked", value: 1 },
-  { label: "Assgined", value: 2 },
-  { label: "Delivery", value: 3 },
-  { label: "Stored", value: 4 },
-  { label: "Expired", value: 5 },
+  { label: "Đã hủy", value: 0 },
+  { label: "Đã đặt", value: 1 },
+  { label: "Đặt xử lý", value: 2 },
+  { label: "Đang vận chuyển", value: 3 },
+  { label: "Đang lưu kho", value: 4 },
+  { label: "Đã hết hạng", value: 5 },
 ];
 
 export const LIST_UNIT = [
-  { label: "Month", value: "month" },
-  { label: "Quantity", value: "quantity" },
+  { label: "Tháng", value: "month" },
+  { label: "Số lượng", value: "quantity" },
 ];
 
 export const LIST_TIME = [
@@ -119,11 +119,11 @@ export const LIST_TIME = [
 ];
 
 export const LIST_NOTE = [
-  { color: style.SECOND_BLUE, name: "Available" },
-  { color: style.PRIMARY_BLUE, name: "Rented" },
-  { color: style.PRIMARY_SEMANTIC_RED, name: "Expired" },
-  { color: style.PRIMARY_SEMANTIC_ORANGE, name: "Expired soon" },
-  { color: style.PRIMARY_SEMANTIC_GREEN, name: "Selected" },
-  { color: style.SECOND_SEMANTIC_GREEN, name: "Placing" },
-  { color: style.PRIMARY_PURPLE, name: "Current View Order" },
+  { color: style.SECOND_BLUE, name: "Trống" },
+  { color: style.PRIMARY_BLUE, name: "Đã thuê" },
+  { color: style.PRIMARY_SEMANTIC_RED, name: "Đã hết hạn" },
+  { color: style.PRIMARY_SEMANTIC_ORANGE, name: "Sắp hết hạn" },
+  { color: style.PRIMARY_SEMANTIC_GREEN, name: "Đang chọn" },
+  { color: style.SECOND_SEMANTIC_GREEN, name: "Đang đặt" },
+  { color: style.PRIMARY_PURPLE, name: "Đơn hàng đang xem" },
 ];

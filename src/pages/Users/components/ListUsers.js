@@ -89,7 +89,14 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-const listHeaderName = ["Name", "Email", "Phone", "Storage", "Type", "Action"];
+const listHeaderName = [
+  "Họ và tên",
+  "Email",
+  "Số điện thoại",
+  "Kho",
+  "Chức vụ",
+  "Thao tác",
+];
 
 const mapListTableHeader = (listHeader) => (
   <TableHead>
@@ -191,7 +198,7 @@ function ListUsers({
           handleClose={handleClose}
           onHandleYes={handleDeleteUser}
           id={currentId}
-          msg={"Delete user success!"}
+          msg={"Xóa tài khoản thành công!"}
         />
         {mapListTableHeader(listHeaderName)}
         <TableBody>
@@ -248,7 +255,7 @@ function ListUsers({
                       handleConfirmOpen();
                     }}
                   >
-                    Delete
+                    Xóa
                   </Button>
                 </TableCell>
               </TableRow>

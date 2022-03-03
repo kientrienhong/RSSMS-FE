@@ -36,7 +36,7 @@ function LogIn(props) {
     } catch (e) {
       console.log(e.response);
       setValid(false);
-      setErrorMsg("Invalid username or password");
+      setErrorMsg("Sai tài khoản / mật khẩu");
     } finally {
       props.hideLoading();
     }
@@ -94,7 +94,7 @@ function LogIn(props) {
               className="nav__log-in__img"
             ></img>
             <Typography color="primary" variant="h1" style={{ margin: "4%" }}>
-              Sign in
+              Đăng nhập
             </Typography>
             <Box sx={style.boxTextField}>
               <Typography variant="h3" style={{ marginBottom: "4%" }}>
@@ -107,7 +107,7 @@ function LogIn(props) {
             </Box>
             <Box sx={style.boxTextField}>
               <Typography variant="h3" style={{ marginBottom: "1%" }}>
-                Password
+                Mật khẩu
               </Typography>
 
               <TextField
@@ -128,7 +128,7 @@ function LogIn(props) {
                 component="a"
                 variant="contained"
               >
-                Sign in
+                Đăng nhập
               </Button>
             </Box>
           </Box>

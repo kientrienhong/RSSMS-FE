@@ -100,7 +100,7 @@ function Storage({
 
           <Box sx={{ ...styleBoxTypo, marginTop: "2%" }}>
             <Typography color="black" variant="h3" sx={{ marginRight: "2%" }}>
-              Manager:
+              Người quản lý:
             </Typography>
             <Typography color="black" variant="body">
               {storage.managerName}
@@ -143,7 +143,7 @@ function Storage({
                 handleOpen(true);
               }}
             >
-              Edit
+              Chỉnh sửa
             </Button>
           </Grid>
           {userState.roleName === "Manager" ? (
@@ -165,7 +165,7 @@ function Storage({
                   handleConfirmOpen();
                 }}
               >
-                Delete
+                Xóa
               </Button>
             </Grid>
           )}
@@ -190,7 +190,7 @@ function Storage({
                 handleOpenAssignStaff();
               }}
             >
-              Assign Staff
+              Phân công nhân viên
             </Button>
           </Grid>
 
@@ -206,7 +206,7 @@ function Storage({
               }
               variant="contained"
             >
-              See more
+              Xem thêm
             </Button>
           </Grid>
         </Grid>

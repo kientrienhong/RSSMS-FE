@@ -192,7 +192,7 @@ function ProductModal({
       });
       setError();
     } else {
-      setError({ avatarFile: { message: "Please choose image file!" } });
+      setError({ avatarFile: { message: "Vui lòng chọn tập tin hình ảnh!" } });
     }
   };
 

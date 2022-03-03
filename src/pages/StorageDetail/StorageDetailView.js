@@ -56,7 +56,7 @@ export default function StorageDetailView({ storage }) {
         }}
       >
         <Typography color="black" variant="h2" sx={{ textAlign: "left" }}>
-          Storage Infomation
+          Thông tin kho
         </Typography>
       </Box>
       {storage.imageUrl === undefined ? null : (
@@ -69,15 +69,15 @@ export default function StorageDetailView({ storage }) {
         />
       )}
 
-      {buildInfoRow("Name", storage.name)}
+      {buildInfoRow("Tên", storage.name)}
       {buildInfoRow(
-        "Size",
+        "Kích thước",
         `${storage.width}m x ${storage.length}m x ${storage.height}m`
       )}
       {buildInfoRow("Address", storage.address)}
       {buildInfoRow(
-        "Manager",
-        storage.managerName === undefined ? "Not yet" : storage.managerName
+        "Người quản lý",
+        storage.managerName === undefined ? "Chưa có" : storage.managerName
       )}
     </Card>
   );

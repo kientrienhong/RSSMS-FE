@@ -50,7 +50,7 @@ export default function AssignStaffModal({
             <ListStaff
               listStaff={listShowStaffAssigned}
               isAssigned={true}
-              name="Staffs belong to this storage"
+              name="Danh sách nhân viên được phân công vào kho"
               addAssignStaff={addAssignStaff}
               removeAssignStaff={removeAssignStaff}
               onHandleSearch={handleChangeSearchAssigned}
@@ -58,7 +58,7 @@ export default function AssignStaffModal({
             <ListStaff
               listStaff={listShowStaffUnAssigned}
               isAssigned={false}
-              name="Staffs are not assigned yet"
+              name="Danh sách nhân viên chưa được phân công"
               addAssignStaff={addAssignStaff}
               removeAssignStaff={removeAssignStaff}
               onHandleSearch={handleChangeSearchUnAssigned}
@@ -100,7 +100,7 @@ export default function AssignStaffModal({
                 )
               }
             >
-              Submit
+              Xác nhận
             </Button>
           </Box>
         </Box>

@@ -283,7 +283,7 @@ function Storages(props) {
       await getData(searchName, page, 4, userState.idToken);
 
       hideLoading();
-      showSnackbar("success", "Assign Success!");
+      showSnackbar("success", "Phân công thành công!");
       setError({});
       handleCloseAssignStaff();
     } catch (error) {
@@ -317,7 +317,7 @@ function Storages(props) {
       if (!storage.avatarFile) {
         setError({
           ...error,
-          avatarFile: { message: "Please provide storage image!" },
+          avatarFile: { message: "Vui lòng thêm hình ảnh" },
         });
         hideLoading();
 
@@ -334,7 +334,7 @@ function Storages(props) {
       const response = await createStorage(storageTemp, userState.idToken);
       if (response.status === 200) {
         if (response.status === 200) {
-          showSnackbar("success", "Create storage successful!");
+          showSnackbar("success", "Tạo kho thành công!");
           await getData(searchName, page, 4, userState.idToken);
           handleClose();
           setError({});
@@ -373,7 +373,7 @@ function Storages(props) {
           userState.idToken
         );
         if (responseUpdate.status === 200) {
-          showSnackbar("success", "Update storage successful!");
+          showSnackbar("success", "Cập nhật kho thành công!");
           await getData(searchName, page, 4, userState.idToken);
           handleClose();
           hideLoading();
@@ -389,7 +389,7 @@ function Storages(props) {
           userState.idToken
         );
         if (responseUpdate.status === 200) {
-          showSnackbar("success", "Update storage successful!");
+          showSnackbar("success", "Cập nhật kho thành công!");
           await getData(searchName, page, 4, userState.idToken);
           handleClose();
           hideLoading();
@@ -483,7 +483,7 @@ function Storages(props) {
         avatarFile: event.target.files[0],
       });
     } else {
-      setError({ avatarFile: { message: "Please choose image storage!" } });
+      setError({ avatarFile: { message: "Vui lòng chọn tập tin hình ảnh" } });
     }
   };
 
@@ -543,17 +543,17 @@ function Storages(props) {
           variant="h2"
           style={{ marginTop: "1%", marginLeft: "3%" }}
         >
-          Storage Information
+          Thông tin kho
         </Typography>
         <Box sx={{ ...styleBoxInput, marginTop: "16px" }}>
           <CustomInput
             control={control}
             rules={{
-              required: "Name required",
+              required: "*Vui lòng nhập",
             }}
             styles={{ width: "400px" }}
             name="name"
-            label="Name"
+            label="Tên"
             userInfo={storage.name}
             inlineStyle={styleInput}
           />
@@ -562,11 +562,11 @@ function Storages(props) {
           <CustomInput
             control={control}
             rules={{
-              required: "Address required",
+              required: "*Vui lòng nhập",
             }}
             styles={{ width: "400px" }}
             name="address"
-            label="Address"
+            label="Địa chỉ"
             userInfo={storage.address}
             inlineStyle={styleInput}
           />
@@ -576,51 +576,51 @@ function Storages(props) {
           variant="h2"
           style={{ marginTop: "8%", marginLeft: "3%", marginBottom: "2%" }}
         >
-          Storage Size Detail
+          Thông tin kích thước kho
         </Typography>
         <Box sx={{ ...styleBoxInput, marginTop: "5%" }}>
           <CustomInput
             control={control}
             rules={{
-              required: "Width required",
+              required: "*Vui lòng nhập",
               pattern: {
                 value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
-                message: "Invalid width",
+                message: "*Vui lòng nhập đúng chiều rộng",
               },
             }}
             styles={{ width: "120px" }}
             name="width"
-            label="Width (m)"
+            label="Chiều rộng (m)"
             userInfo={storage.width}
             inlineStyle={styleInput}
           />
           <CustomInput
             control={control}
             rules={{
-              required: "Length required",
+              required: "*Vui lòng nhập",
               pattern: {
                 value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
-                message: "Invalid length",
+                message: "*Vui lòng nhập đúng chiều dài",
               },
             }}
             styles={{ width: "120px" }}
             name="length"
-            label="Length (m)"
+            label="Chiều dài (m)"
             userInfo={storage.length}
             inlineStyle={styleInput}
           />
           <CustomInput
             control={control}
             rules={{
-              required: "Height required",
+              required: "*Vui lòng nhập",
               pattern: {
                 value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
-                message: "Invalid height",
+                message: "*Vui lòng nhập chiều cao",
               },
             }}
             styles={{ width: "120px" }}
             name="height"
-            label="Height (m)"
+            label="Chiều cao (m)"
             userInfo={storage.height}
             inlineStyle={styleInput}
           />
@@ -655,7 +655,7 @@ function Storages(props) {
             variant="contained"
             type="submit"
           >
-            Submit
+            Xác nhận
           </Button>
           <Button
             style={{
@@ -667,7 +667,7 @@ function Storages(props) {
             color="error"
             variant="outlined"
           >
-            Cancel
+            Đóng
           </Button>
         </Box>
       </form>
@@ -785,7 +785,7 @@ function Storages(props) {
             variant="contained"
             onClick={() => handleOpen(false)}
           >
-            Create storage
+            Tạo kho
           </Button>
         ) : (
           <></>

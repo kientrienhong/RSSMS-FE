@@ -60,7 +60,7 @@ function AreaList({
       let listAreaTemp = await getArea(storageId, userState.idToken);
 
       setListArea(listAreaTemp.data.data);
-      showSnackbar("success", "Create area success!");
+      showSnackbar("success", "Tạo khu vực thành công!");
     } catch (error) {
       console.log(error);
     } finally {
@@ -82,7 +82,7 @@ function AreaList({
 
       let listAreaTemp = await getArea(storageId, userState.idToken);
       setListArea(listAreaTemp.data.data);
-      showSnackbar("success", "Update area success!");
+      showSnackbar("success", "Cập nhật khu vực thành công!");
       handleClose();
     } catch (error) {
       ErrorHandle.handle(error, showSnackbar);
@@ -130,11 +130,11 @@ function AreaList({
       await deleteArea(id, userState.idToken);
       let listAreaTemp = await getArea(storageId, userState.idToken);
       setListArea(listAreaTemp.data.data);
-      showSnackbar("success", "Delete area success!");
+      showSnackbar("success", "Xóa khu vực thành công!");
     } catch (error) {
       if (error?.response?.status === 404) {
         setListArea([]);
-        showSnackbar("success", "Delete area success!");
+        showSnackbar("success", "Xóa khu vực thành công!");
       } else {
         throw error;
       }
@@ -173,7 +173,7 @@ function AreaList({
         handleClose={handleCloseConfirm}
         onHandleYes={onHandleDeleteArea}
         id={currentArea.id}
-        msg={"Delete area success!"}
+        msg={"Xóa khu vực thành công!"}
       />
       <Box
         sx={{
@@ -186,7 +186,7 @@ function AreaList({
         }}
       >
         <Typography color="black" variant="h2">
-          List area
+          Danh sách khu vực
         </Typography>
         <Button
           style={{

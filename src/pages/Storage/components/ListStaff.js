@@ -84,7 +84,7 @@ export default function ListStaff({
               }}
             >
               <Typography color="black" variant="h3">
-                Name
+                Tên
               </Typography>
             </Box>
             <Box
@@ -93,7 +93,7 @@ export default function ListStaff({
               }}
             >
               <Typography color="black" variant="h3">
-                Role
+                Chức vụ
               </Typography>
             </Box>
             <Box
@@ -102,7 +102,7 @@ export default function ListStaff({
               }}
             >
               <Typography color="black" variant="h3">
-                Action
+                Thao tác
               </Typography>
             </Box>
           </Box>

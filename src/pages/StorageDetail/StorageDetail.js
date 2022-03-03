@@ -10,12 +10,10 @@ function StorageDetail({ showLoading, hideLoading, userState }) {
   const [storage, setStorage] = useState({});
   const [listArea, setListArea] = useState([]);
   const { storageId } = useParams();
-  console.log(storageId);
   useEffect(() => {
     const getData = async () => {
       let storageTemp = await getStorageDetail(storageId, userState.idToken);
       setStorage(storageTemp.data);
-      console.log(storageTemp.data);
     };
 
     const firstCall = async () => {
