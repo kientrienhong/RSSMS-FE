@@ -45,11 +45,23 @@ function FormHandy({
     let nameBox = listBoxes.find((e) => {
       return e.id === event.target.value;
     }).name;
-    console.log(nameBox);
+
+    let boxes = [];
+    if (currentShelf.boxes) {
+      boxes = [...currentShelf.boxes];
+    }
+    boxes = boxes.map((e, i) => {
+      return {
+        ...e,
+        name: `${nameBox} - ${i + 1}`,
+      };
+    });
     setCurrentShelf({
       ...currentShelf,
+      boxes: boxes,
       productId: event.target.value,
       sizeType: nameBox,
+      serviceId: event.target.value,
     });
     setError({ ...error, sizeType: undefined });
     return nameBox;
@@ -111,7 +123,6 @@ function FormHandy({
   const onHandleEditShelf = async (data) => {
     try {
       showLoading();
-      showLoading();
       const valid = validation();
       if (valid === false) {
         return;
@@ -150,6 +161,14 @@ function FormHandy({
     boxesInHeight: { value: "" },
     boxesInWidth: { value: "" },
   });
+
+  useEffect(() => {
+    if (currentShelf?.boxesInHeight)
+      setInputAmountBox({
+        boxesInHeight: { value: currentShelf?.boxesInHeight?.toString() },
+        boxesInWidth: { value: currentShelf?.boxesInWidth?.toString() },
+      });
+  }, [currentShelf]);
 
   const onChangeAmountBox = (e, value) => {
     const inputAmountBoxTemp = { ...inputAmountBox };
@@ -274,7 +293,7 @@ function FormHandy({
               label={"Width"}
               disabled={false}
               variant="outlined"
-              value={currentShelf.boxesInWidth}
+              value={currentShelf?.boxesInWidth}
               error={!!inputAmountBox.boxesInWidth.error}
               helperText={
                 inputAmountBox.boxesInWidth.error
@@ -289,7 +308,7 @@ function FormHandy({
               label={"Height"}
               disabled={false}
               variant="outlined"
-              value={currentShelf.boxesInHeight}
+              value={currentShelf?.boxesInHeight}
               error={!!inputAmountBox.boxesInHeight.error}
               helperText={
                 inputAmountBox.boxesInHeight.error

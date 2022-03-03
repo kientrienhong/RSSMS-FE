@@ -382,17 +382,6 @@ export const createShelf = async (shelf, areaId, token) => {
 };
 
 export const updateShelf = async (id, shelf, token) => {
-  console.log({
-    id: id,
-    type: shelf.type,
-    name: shelf.name,
-    note: shelf.note,
-    boxesInWidth: shelf.boxesInWidth,
-    boxesInHeight: shelf.boxesInHeight,
-    boxSize: -1,
-    productId: shelf.productId,
-  });
-
   let listShelves = await axios.put(
     `https://localhost:44304/api/v1/shelves/${id}`,
     {

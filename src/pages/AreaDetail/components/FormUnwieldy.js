@@ -39,6 +39,7 @@ function FormUnwieldy({
     }).name;
     setCurrentShelf({
       ...currentShelf,
+      serviceId: event.target.value,
       productId: event.target.value,
       sizeType: nameBox,
       boxes: [{ name: nameBox }],

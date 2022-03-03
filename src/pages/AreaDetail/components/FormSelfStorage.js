@@ -50,6 +50,8 @@ function FormSelfStorage({
     }).name;
     setCurrentShelf({
       ...currentShelf,
+      serviceId: event.target.value,
+
       productId: event.target.value,
       sizeType: nameBox,
     });
@@ -75,6 +77,7 @@ function FormSelfStorage({
         boxesInHeight: parseInt(currentShelf.boxesInHeight),
         boxSize: currentShelf.boxSize,
         productId: currentShelf.productId,
+        serviceId: currentShelf.serviceId,
       };
       await updateShelf(currentShelf.id, shelf, userState.idToken);
       await getData(searchName, page, 4);
