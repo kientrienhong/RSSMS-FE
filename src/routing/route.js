@@ -83,7 +83,7 @@ const routes = [
         ),
       },
       {
-        path: "products",
+        path: "services",
         element: (
           <ProtectTemplate
             Component={Products}

@@ -31,7 +31,7 @@ export default function Product({
       }}
     >
       <img
-        src={product?.images[0]?.url}
+        src={product?.imageUrl}
         alt={product?.name}
         width="80px"
         height="80px"

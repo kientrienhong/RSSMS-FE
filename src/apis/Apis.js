@@ -584,11 +584,11 @@ export const assignOrder = async (orderId, storageId, token) => {
 export const getProduct = async (type, token) => {
   let response =
     type === undefined
-      ? await axios.get(`https://localhost:44304/api/v1/products`, {
+      ? await axios.get(`https://localhost:44304/api/v1/services`, {
           headers: { Authorization: `Bearer ${token}` },
         })
       : await axios.get(
-          `https://localhost:44304/api/v1/products?Type=${type}`,
+          `https://localhost:44304/api/v1/services?Type=${type}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
@@ -597,20 +597,21 @@ export const getProduct = async (type, token) => {
 
 export const createProduct = async (product, token) => {
   const response = await axios.post(
-    `https://localhost:44304/api/v1/products`,
+    `https://localhost:44304/api/v1/services`,
     {
       name: product.name,
       price: product.price,
       description: product.description,
       type: product.type,
+      length: parseInt(product.length),
+      width: parseInt(product.width),
+      height: parseInt(product.height),
       size: product.size,
       unit: product.unit,
       tooltip: product.tooltip,
-      images: [
-        {
-          file: product.images[0].file,
-        },
-      ],
+      image: {
+        file: product.image.file,
+      },
     },
 
     { headers: { Authorization: `Bearer ${token}` } }
@@ -628,15 +629,14 @@ export const updateProduct = async (product, id, imageUrl, token) => {
       price: product.price,
       description: product.description,
       type: product.type,
-      size: product.size,
+      length: parseInt(product.length),
+      width: parseInt(product.width),
+      height: parseInt(product.height),
       unit: product.unit,
       tooltip: product.tooltip,
-      images: [
-        {
-          id: product.images[0].id,
-          url: product.images[0].url,
-        },
-      ],
+      image: {
+        url: product.image.url,
+      },
     };
   } else {
     object = {
@@ -645,19 +645,18 @@ export const updateProduct = async (product, id, imageUrl, token) => {
       price: product.price,
       description: product.description,
       type: product.type,
-      size: product.size,
+      length: parseInt(product.length),
+      width: parseInt(product.width),
+      height: parseInt(product.height),
       unit: product.unit,
       tooltip: product.tooltip,
-      images: [
-        {
-          id: product.images[0].id,
-          file: imageUrl,
-        },
-      ],
+      image: {
+        file: imageUrl,
+      },
     };
   }
   const response = await axios.put(
-    `https://localhost:44304/api/v1/products/${id}`,
+    `https://localhost:44304/api/v1/services/${id}`,
     object,
     { headers: { Authorization: `Bearer ${token}` } }
   );
@@ -666,7 +665,7 @@ export const updateProduct = async (product, id, imageUrl, token) => {
 
 export const deleteProduct = async (id, token) => {
   const response = await axios.delete(
-    `https://localhost:44304/api/v1/products/${id}`,
+    `https://localhost:44304/api/v1/services/${id}`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
 

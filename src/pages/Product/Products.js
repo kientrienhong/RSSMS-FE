@@ -68,11 +68,21 @@ function Products({ showLoading, hideLoading, showSnackbar, userState }) {
   }, []);
 
   const handleDeleteProduct = async (id) => {
-    await deleteProduct(id, userState.idToken);
-    await getData();
-    setCurrentProduct({
-      images: [{ id: null, url: null }],
-    });
+    try {
+      await deleteProduct(id, userState.idToken);
+      setCurrentProduct({
+        images: [{ id: null, url: null }],
+      });
+      await getData();
+      showSnackbar("success", "Delete service success!");
+    } catch (error) {
+      if (error?.response?.status === 404) {
+        setListProduct([]);
+        showSnackbar("success", "Delete service success!");
+      } else {
+        throw error;
+      }
+    }
   };
 
   const buildListSection = () =>

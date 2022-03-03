@@ -16,9 +16,9 @@ export const LIST_SIDE_BAR_ADMIN = [
     title: "Users",
   },
   {
-    href: "/app/products",
+    href: "/app/services",
     icon: undefined,
-    title: "Product",
+    title: "Services",
     reactIcon: <VscTag />,
   },
   {

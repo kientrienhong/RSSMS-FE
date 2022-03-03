@@ -47,7 +47,6 @@ function ProductModal({
   errors,
 }) {
   const [unit, setUnit] = useState("");
-  const [sizeArray, setSizeArray] = useState();
   const [error, setError] = useState({});
   const buildDropDown = (listSizeStorage) =>
     listSizeStorage.map((e) => <MenuItem value={e.value}>{e.label}</MenuItem>);
@@ -57,14 +56,10 @@ function ProductModal({
   };
   useEffect(() => {
     setUnit(currentProduct.unit);
-    setSizeArray(currentProduct?.size?.split(" x "));
   }, [currentProduct]);
 
   useEffect(() => {
     setError({});
-    if (open === false) {
-      setSizeArray();
-    }
   }, [open]);
 
   const onHandleCreateProduct = async (data) => {
@@ -73,14 +68,14 @@ function ProductModal({
       price: parseInt(data.price),
       description: data.description,
       type: typeProduct,
-      size: `${data.width}m x ${data.length}m x ${data.height}m`,
+      width: data.width,
+      height: data.height,
+      length: data.length,
       unit: data.unit,
       tooltip: data.tooltip,
-      images: [
-        {
-          url: null,
-        },
-      ],
+      image: {
+        url: null,
+      },
     };
     try {
       showLoading();
@@ -97,11 +92,9 @@ function ProductModal({
       let base64 = await getBase64(currentProduct.avatarFile);
       productTemp = {
         ...productTemp,
-        images: [
-          {
-            file: base64.split(",")[1],
-          },
-        ],
+        image: {
+          file: base64.split(",")[1],
+        },
       };
       const response = await createProduct(productTemp, userState.idToken);
       if (response.status === 200) {
@@ -128,15 +121,14 @@ function ProductModal({
       price: parseInt(data.price),
       description: data.description,
       type: typeProduct,
-      size: `${data.width}m x ${data.length}m x ${data.height}m`,
+      width: data.width,
+      height: data.height,
+      length: data.length,
       unit: data.unit,
       tooltip: data.tooltip,
-      images: [
-        {
-          id: currentProduct?.images[0]?.id,
-          url: currentProduct?.images[0]?.url,
-        },
-      ],
+      image: {
+        url: currentProduct?.imageUrl,
+      },
     };
     try {
       showLoading();
@@ -195,12 +187,7 @@ function ProductModal({
     ) {
       setCurrentProduct({
         ...currentProduct,
-        images: [
-          {
-            id: currentProduct?.images[0]?.id,
-            url: URL.createObjectURL(event.target.files[0]),
-          },
-        ],
+        imageUrl: URL.createObjectURL(event.target.files[0]),
         avatarFile: event.target.files[0],
       });
       setError();
@@ -221,7 +208,7 @@ function ProductModal({
           border: "solid 1px #000",
         }}
       >
-        {currentProduct?.images[0]?.url === null ? (
+        {currentProduct?.imageUrl === undefined ? (
           <img
             src="/img/imageEdit.png"
             width="50px"
@@ -237,7 +224,7 @@ function ProductModal({
         ) : (
           <img
             style={{ height: "444px", width: "310px" }}
-            src={currentProduct?.images[0]?.url}
+            src={currentProduct?.imageUrl}
             alt="avatar"
           />
         )}
@@ -318,9 +305,7 @@ function ProductModal({
                   styles={{ width: "120px" }}
                   name="width"
                   label="Width (m)"
-                  userInfo={
-                    sizeArray?.length === 3 ? sizeArray[0].slice(0, -1) : ""
-                  }
+                  userInfo={currentProduct?.width}
                   inlineStyle={styleInput}
                 />
                 <CustomInput
@@ -335,9 +320,7 @@ function ProductModal({
                   styles={{ width: "120px" }}
                   name="length"
                   label="Length (m)"
-                  userInfo={
-                    sizeArray?.length === 3 ? sizeArray[1].slice(0, -1) : ""
-                  }
+                  userInfo={currentProduct?.length}
                   inlineStyle={styleInput}
                 />
                 <CustomInput
@@ -352,9 +335,7 @@ function ProductModal({
                   styles={{ width: "120px" }}
                   name="height"
                   label="Height (m)"
-                  userInfo={
-                    sizeArray?.length === 3 ? sizeArray[2].slice(0, -1) : ""
-                  }
+                  userInfo={currentProduct?.height}
                   inlineStyle={styleInput}
                 />
               </Box>
