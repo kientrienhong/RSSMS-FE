@@ -36,11 +36,12 @@ function FormUnwieldy({
   const handleChangeSize = (event) => {
     const nameBox = listAreas.find((e) => {
       return e.id === event.target.value;
-    }).size;
+    }).name;
     setCurrentShelf({
       ...currentShelf,
       productId: event.target.value,
       sizeType: nameBox,
+      boxes: [{ name: nameBox }],
     });
     setError({ ...error, sizeType: undefined });
   };
@@ -54,7 +55,7 @@ function FormUnwieldy({
 
   const validation = () => {
     let valid = true;
-    if (currentShelf.sizeType === undefined) {
+    if (currentShelf?.boxes[0]?.name === undefined) {
       setError({ sizeType: { msg: "*Required" } });
       valid = false;
     }
@@ -76,6 +77,7 @@ function FormUnwieldy({
         boxesInHeight: parseInt(currentShelf.boxesInHeight),
         boxSize: currentShelf.boxSize,
         productId: currentShelf.productId,
+        serviceId: currentShelf.serviceId,
       };
       await updateShelf(currentShelf.id, shelf, userState.idToken);
       await getData(searchName, page, 4);
@@ -105,7 +107,7 @@ function FormUnwieldy({
         boxSize: currentShelf.boxSize,
         productId: currentShelf.productId,
       };
-      await createShelf(shelf, parseInt(areaId), userState.idToken);
+      await createShelf(shelf, areaId, userState.idToken);
       await getData(searchName, page, 4);
       showSnackbar("success", "Create shelf success");
       handleClose();
@@ -200,7 +202,7 @@ function FormUnwieldy({
             error={error?.sizeType}
           >
             <Select
-              value={currentShelf?.productId}
+              value={currentShelf?.serviceId}
               onChange={handleChangeSize}
               displayEmpty
               sx={{

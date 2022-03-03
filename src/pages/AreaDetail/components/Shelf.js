@@ -46,7 +46,6 @@ function Shelf({
         </Box>
       );
     }
-
     return shelf?.boxes?.map((e, i) => {
       let color = SECOND_BLUE;
       let nameBox;
@@ -66,14 +65,6 @@ function Shelf({
       });
       if (currentPositionViewOrderId === e.orderId) {
         color = PRIMARY_PURPLE;
-      }
-
-      if (shelf?.type === 0) {
-        nameBox =
-          shelf?.sizeType === "Bolo" ? "Bolo" : shelf?.sizeType?.split(" ")[1];
-        nameBox += ` - ${i + 1}`;
-      } else {
-        nameBox = shelf?.sizeType;
       }
 
       return (
@@ -122,7 +113,7 @@ function Shelf({
                 fontWeight: 700,
               }}
             >
-              {nameBox}
+              {e.name}
             </p>
           </Box>
         </Grid>

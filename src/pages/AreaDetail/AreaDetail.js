@@ -64,9 +64,10 @@ function AreaDetail(props) {
           listSelfStorageTemp.data[SELF_STORAGE_TYPE.toString()]
         );
       } else {
-        const listBoxexTemp = await getProduct(BOX_TYPE, userState.idToken);
+        const listBoxesTemp = await getProduct(BOX_TYPE, userState.idToken);
         const listAreasTemp = await getProduct(AREA_TYPE, userState.idToken);
-        setListBoxes(listBoxexTemp.data[BOX_TYPE.toString()]);
+
+        setListBoxes(listBoxesTemp.data[BOX_TYPE.toString()]);
         setListAreas(listAreasTemp.data[AREA_TYPE.toString()]);
       }
 
@@ -116,14 +117,14 @@ function AreaDetail(props) {
         name,
         page,
         6,
-        parseInt(areaId),
+        areaId,
         userState.idToken
       );
       let listShelves = response.data.data;
       listShelves = listShelves.map((e) => {
         return { ...e, boxSize: e.boxes[0].sizeType };
       });
-      let area = await getDetailArea(parseInt(areaId), userState.idToken);
+      let area = await getDetailArea(areaId, userState.idToken);
       filterUsage(area.data);
       setCurrentArea(area.data);
       setTotalPage(response.data.metadata.totalPage);
@@ -139,25 +140,23 @@ function AreaDetail(props) {
     const getData = async () => {
       try {
         showLoading();
-        let storageTemp = await getStorageDetail(
-          parseInt(storageId),
-          userState.idToken
-        );
+        let storageTemp = await getStorageDetail(storageId, userState.idToken);
 
         setStorage(storageTemp.data);
         let response = await getListShelves(
           searchName,
           page,
           6,
-          parseInt(areaId),
+          areaId,
           userState.idToken
         );
         let listShelves = response.data.data;
+        console.log(listShelves);
         listShelves = listShelves.map((e) => {
-          return { ...e, boxSize: e.boxes[0].sizeType };
+          return { ...e, boxSize: e?.boxes[0]?.sizeType };
         });
 
-        let area = await getDetailArea(parseInt(areaId), userState.idToken);
+        let area = await getDetailArea(areaId, userState.idToken);
         filterUsage(area);
         setCurrentArea(area.data);
 

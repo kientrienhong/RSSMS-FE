@@ -48,7 +48,7 @@ const DashboardLayout = (props) => {
   };
 
   const mapListNotifcation = () => {
-    if (props.notifications.length === 0) {
+    if (props?.notifications?.length === 0) {
       return (
         <Typography color="black" variant="h2" style={{ margin: "4%" }}>
           No notifications yets!
@@ -56,7 +56,7 @@ const DashboardLayout = (props) => {
       );
     }
 
-    return props.notifications.map((e) => {
+    return props?.notifications?.map((e) => {
       return (
         <Box
           sx={{

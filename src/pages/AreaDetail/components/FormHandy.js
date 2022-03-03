@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import {
   Typography,
@@ -44,19 +44,21 @@ function FormHandy({
   const handleChangeSize = (event) => {
     let nameBox = listBoxes.find((e) => {
       return e.id === event.target.value;
-    }).size;
+    }).name;
+    console.log(nameBox);
     setCurrentShelf({
       ...currentShelf,
       productId: event.target.value,
       sizeType: nameBox,
     });
     setError({ ...error, sizeType: undefined });
+    return nameBox;
   };
 
   const [error, setError] = useState({});
   const validation = () => {
     let valid = true;
-    if (currentShelf.sizeType === undefined) {
+    if (currentShelf?.boxes[0]?.name === undefined) {
       setError({ sizeType: { msg: "*Required" } });
       valid = false;
     }
@@ -93,7 +95,7 @@ function FormHandy({
         boxSize: currentShelf.boxSize,
         productId: currentShelf.productId,
       };
-      await createShelf(shelf, parseInt(areaId), userState.idToken);
+      await createShelf(shelf, areaId, userState.idToken);
       await getData(searchName, page, 4);
       showSnackbar("success", "Create shelf success");
       setError({});
@@ -121,6 +123,7 @@ function FormHandy({
         boxesInWidth: parseInt(currentShelf.boxesInWidth),
         boxesInHeight: parseInt(currentShelf.boxesInHeight),
         boxSize: currentShelf.boxSize,
+        serviceId: currentShelf.serviceId,
         productId: currentShelf.productId,
       };
       await updateShelf(currentShelf.id, shelf, userState.idToken);
@@ -152,7 +155,17 @@ function FormHandy({
     const inputAmountBoxTemp = { ...inputAmountBox };
     inputAmountBoxTemp[value].value = e.target.value;
     if (!isNaN(e.target.value)) {
-      const shelfTemp = { ...currentShelf };
+      let shelfTemp = { ...currentShelf };
+      if (shelfTemp.serviceId) {
+        shelfTemp = {
+          ...shelfTemp,
+          sizeType: handleChangeSize({
+            target: {
+              value: shelfTemp.serviceId,
+            },
+          }),
+        };
+      }
       shelfTemp[value] = e.target.value;
       let boxesTemp = [];
       for (
@@ -160,9 +173,12 @@ function FormHandy({
         i < shelfTemp.boxesInWidth * shelfTemp.boxesInHeight;
         i++
       ) {
-        boxesTemp.push({});
+        boxesTemp.push({
+          name: `${shelfTemp.sizeType} - ${i + 1}`,
+        });
       }
       shelfTemp.boxes = boxesTemp;
+
       setCurrentShelf(shelfTemp);
       inputAmountBoxTemp[value].error = undefined;
       setInputAmountBox(inputAmountBoxTemp);
@@ -230,7 +246,7 @@ function FormHandy({
             name="boxSize"
           >
             <Select
-              value={currentShelf?.productId}
+              value={currentShelf?.serviceId}
               onChange={handleChangeSize}
               displayEmpty
               sx={{

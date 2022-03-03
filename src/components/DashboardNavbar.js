@@ -131,7 +131,7 @@ const DashboardNavbar = ({
 
         <Hidden xlDown>
           <IconButton color="primary" size="large">
-            <Badge badgeContent={unReadNoti.length} color="error">
+            <Badge badgeContent={unReadNoti?.length} color="error">
               <NotificationsIcon
                 onClick={() => {
                   if (openNotification === true) {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import {
   Typography,
@@ -35,17 +35,19 @@ function FormSelfStorage({
 
   const validation = () => {
     let valid = true;
-    if (currentShelf.sizeType === undefined) {
+    if (currentShelf?.boxes[0]?.name === undefined) {
       setError({ sizeType: { msg: "*Required" } });
       valid = false;
     }
     return valid;
   };
 
+  useEffect(() => {}, [currentShelf]);
+
   const handleChangeSize = (event) => {
     const nameBox = listSelfStorage.find((e) => {
       return e.id === event.target.value;
-    }).size;
+    }).name;
     setCurrentShelf({
       ...currentShelf,
       productId: event.target.value,
@@ -102,9 +104,11 @@ function FormSelfStorage({
         boxesInWidth: parseInt(currentShelf.boxesInWidth),
         boxesInHeight: parseInt(currentShelf.boxesInHeight),
         boxSize: currentShelf.boxSize,
+        serviceId: currentShelf.serviceId,
+
         productId: currentShelf.productId,
       };
-      await createShelf(shelf, parseInt(areaId), userState.idToken);
+      await createShelf(shelf, areaId, userState.idToken);
       await getData(searchName, page, 4);
       showSnackbar("success", "Create storage success");
       handleClose();
