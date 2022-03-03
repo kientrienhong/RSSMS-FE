@@ -6,7 +6,7 @@ import { STYLE_MODAL } from "../constant/style";
 const styleModal = {
   ...STYLE_MODAL,
 
-  width: "20%",
+  width: "25%",
 };
 
 function ConfirmModal({
@@ -44,7 +44,7 @@ function ConfirmModal({
             marginLeft: "2.5%",
           }}
         >
-          Are you sure?
+          Bạn đã chắc chắn?
         </Typography>
         <Box
           sx={{
@@ -60,6 +60,7 @@ function ConfirmModal({
               height: "45px",
               paddingLeft: "16px",
               paddingRight: "16px",
+              marginRight: "16%",
             }}
             onClick={async () => {
               try {
@@ -78,7 +79,7 @@ function ConfirmModal({
             variant="contained"
             type="submit"
           >
-            Yes
+            Xác nhận
           </Button>
           <Button
             style={{
@@ -90,7 +91,7 @@ function ConfirmModal({
             color="error"
             variant="outlined"
           >
-            No
+            Không
           </Button>
         </Box>
       </Box>

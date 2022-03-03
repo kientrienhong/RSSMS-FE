@@ -39,7 +39,7 @@ export default function ModalArea({
         }}
       >
         <Typography color="black" variant="h2">
-          {isEdit === true ? "Edit area" : "Create area"}
+          {isEdit === true ? "Cập nhật khu vực" : "Tạo khu vực"}
         </Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Box sx={{ marginTop: "16px" }}>
@@ -79,6 +79,7 @@ export default function ModalArea({
                 flexDirection: "column",
                 justifyContent: "flex-start",
                 marginRight: "4%",
+                marginTop: "4%",
               }}
             >
               <Typography

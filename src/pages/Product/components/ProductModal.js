@@ -255,7 +255,7 @@ function ProductModal({
               variant="h2"
               style={{ marginTop: "1%", marginBottom: "2%" }}
             >
-              Product Information
+              Thông tin dịch vụ
             </Typography>
             <form
               onSubmit={handleSubmit(onSubmit)}
@@ -282,10 +282,10 @@ function ProductModal({
               >
                 <CustomInput
                   control={control}
-                  rules={{ required: "Name is required" }}
+                  rules={{ required: "*Vui lòng nhập" }}
                   styles={{ width: "475px" }}
                   name="name"
-                  label="Name"
+                  label="Tên"
                   userInfo={currentProduct?.name}
                   inlineStyle={{ ...styleInput }}
                 />
@@ -296,45 +296,45 @@ function ProductModal({
                 <CustomInput
                   control={control}
                   rules={{
-                    required: "Width required",
+                    required: "*Vui lòng nhập",
                     pattern: {
                       value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
-                      message: "Invalid width",
+                      message: "*Vui lòng nhập đúng chiều rộng",
                     },
                   }}
                   styles={{ width: "120px" }}
                   name="width"
-                  label="Width (m)"
+                  label="Chiều rộng (m)"
                   userInfo={currentProduct?.width}
                   inlineStyle={styleInput}
                 />
                 <CustomInput
                   control={control}
                   rules={{
-                    required: "Length required",
+                    required: "*Vui lòng nhập",
                     pattern: {
                       value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
-                      message: "Invalid length",
+                      message: "*Vui lòng nhập đúng chiều dài",
                     },
                   }}
                   styles={{ width: "120px" }}
                   name="length"
-                  label="Length (m)"
+                  label="Chiều dài (m)"
                   userInfo={currentProduct?.length}
                   inlineStyle={styleInput}
                 />
                 <CustomInput
                   control={control}
                   rules={{
-                    required: "Height required",
+                    required: "*Vui lòng nhập",
                     pattern: {
                       value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
-                      message: "Invalid height",
+                      message: "*Vui lòng nhập đúng chiều cao",
                     },
                   }}
                   styles={{ width: "120px" }}
                   name="height"
-                  label="Height (m)"
+                  label="Chiều cao (m)"
                   userInfo={currentProduct?.height}
                   inlineStyle={styleInput}
                 />
@@ -342,19 +342,19 @@ function ProductModal({
 
               <CustomAreaInput
                 control={control}
-                rules={{ required: "Description is required" }}
+                rules={{ required: "*Vui lòng nhập" }}
                 styles={{ width: "500px" }}
                 name="description"
-                label="Description"
+                label="Mô tả"
                 userInfo={currentProduct?.description}
                 inlineStyle={{ ...styleInput, marginTop: "4%", width: "500px" }}
               />
               <CustomAreaInput
                 control={control}
-                rules={{ required: "Tooltip is required" }}
+                rules={{ required: "*Vui lòng nhập" }}
                 styles={{ width: "500px" }}
                 name="tooltip"
-                label="Tooltip"
+                label="Chú thích"
                 userInfo={currentProduct?.tooltip}
                 inlineStyle={{ ...styleInput, marginTop: "4%", width: "500px" }}
               />
@@ -381,24 +381,23 @@ function ProductModal({
                     variant="h2"
                     style={{
                       marginTop: "1%",
-                      marginBottom: "2.8%",
+                      marginBottom: "4.5%",
                     }}
                   >
-                    Price
+                    Giá tiền
                   </Typography>
                   <CustomInput
                     control={control}
                     rules={{
-                      required: "Price is required",
+                      required: "*Vui lòng nhập",
 
                       pattern: {
                         value: /^\+?([1-9]\d{4,14})$/,
-                        message: "Invalid price",
+                        message: "*Vui lòng nhập đúng giá tiền",
                       },
                     }}
                     styles={{ width: "240px" }}
                     name="price"
-                    label="Price"
                     userInfo={currentProduct?.price}
                     inlineStyle={{ ...styleInput }}
                   />
@@ -417,18 +416,18 @@ function ProductModal({
                     style={{
                       marginTop: "1%",
                       marginLeft: "5%",
-                      marginBottom: "3%",
+                      marginBottom: "5%",
                     }}
                   >
-                    Unit
+                    Đơn vị
                   </Typography>
                   <CustomSelect
-                    label="Type"
+                    label="Loại"
                     name="unit"
                     control={control}
                     errors={errors}
                     defaultValue={unit}
-                    errorMsg={"Required unit"}
+                    errorMsg={"*Vui lòng chọn"}
                   >
                     {buildDropDown(LIST_UNIT)}
                   </CustomSelect>
@@ -473,7 +472,7 @@ function ProductModal({
                   variant="contained"
                   type="submit"
                 >
-                  Submit
+                  Xác nhận
                 </Button>
                 <Button
                   style={{
@@ -485,7 +484,7 @@ function ProductModal({
                   color="error"
                   variant="outlined"
                 >
-                  Cancel
+                  Đóng
                 </Button>
               </Box>
             </form>

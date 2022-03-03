@@ -80,7 +80,8 @@ export default function AssignStaffModal({
               display: "flex",
               flexDirection: "row",
               justifyContent: "center",
-              marginTop: "16px",
+              alignItems: "center",
+              marginTop: "4%",
             }}
           >
             <Button
@@ -88,7 +89,7 @@ export default function AssignStaffModal({
                 height: "45px",
                 paddingLeft: "16px",
                 paddingRight: "16px",
-                marginTop: "4%",
+                marginRight: "4%",
               }}
               color="primary"
               variant="contained"
@@ -101,6 +102,18 @@ export default function AssignStaffModal({
               }
             >
               Xác nhận
+            </Button>
+            <Button
+              style={{
+                height: "45px",
+                paddingLeft: "16px",
+                paddingRight: "16px",
+              }}
+              onClick={() => handleCloseAssignStaff()}
+              color="error"
+              variant="outlined"
+            >
+              Đóng
             </Button>
           </Box>
         </Box>

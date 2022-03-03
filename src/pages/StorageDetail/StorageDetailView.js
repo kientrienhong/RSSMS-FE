@@ -13,7 +13,7 @@ export default function StorageDetailView({ storage }) {
           marginBottom: "2%",
         }}
       >
-        <Box sx={{ width: "10%" }}>
+        <Box sx={{ width: "50%" }}>
           <Typography color="black" variant="h2">
             {title}
           </Typography>
@@ -74,7 +74,7 @@ export default function StorageDetailView({ storage }) {
         "Kích thước",
         `${storage.width}m x ${storage.length}m x ${storage.height}m`
       )}
-      {buildInfoRow("Address", storage.address)}
+      {buildInfoRow("Địa chỉ", storage.address)}
       {buildInfoRow(
         "Người quản lý",
         storage.managerName === undefined ? "Chưa có" : storage.managerName

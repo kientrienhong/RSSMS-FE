@@ -74,11 +74,11 @@ function Products({ showLoading, hideLoading, showSnackbar, userState }) {
         images: [{ id: null, url: null }],
       });
       await getData();
-      showSnackbar("success", "Delete service success!");
+      showSnackbar("success", "Xóa dịch vụ thành công!");
     } catch (error) {
       if (error?.response?.status === 404) {
         setListProduct([]);
-        showSnackbar("success", "Delete service success!");
+        showSnackbar("success", "Xóa dịch vụ thành công!");
       } else {
         throw error;
       }

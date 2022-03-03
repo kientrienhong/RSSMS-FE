@@ -201,7 +201,7 @@ function AreaList({
             setIsEdit(false);
           }}
         >
-          Create area
+          Tạo khu vực
         </Button>
       </Box>
       {mapListToview(

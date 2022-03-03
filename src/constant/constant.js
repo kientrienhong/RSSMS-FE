@@ -16,8 +16,8 @@ export const ROLE_USER = {
 };
 
 export const TYPE_AREA = {
-  "Self-Storage": 0,
-  "Door-to-door": 1,
+  "Kho tự quản": 0,
+  "Giữ đồ thuê": 1,
 };
 
 export const TYPE_STORAGE = {
@@ -83,10 +83,10 @@ export const AREA_SIZE = {
 };
 
 export const LIST_PRODUCT_MANAGE_TYPE = [
-  "Storages",
-  "Accessories",
-  "Boxes",
-  "Areas",
+  "Kho",
+  "Phụ kiện",
+  "Gửi theo loại",
+  "Gửi theo diện tích",
 ];
 
 export const LIST_TYPE_REQUEST = [
@@ -106,8 +106,8 @@ export const LIST_STATUS = [
 ];
 
 export const LIST_UNIT = [
-  { label: "Tháng", value: "month" },
-  { label: "Số lượng", value: "quantity" },
+  { label: "Tháng", value: "tháng" },
+  { label: "Số lượng", value: "số lượng" },
 ];
 
 export const LIST_TIME = [
