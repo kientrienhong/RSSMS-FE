@@ -80,7 +80,7 @@ function ChangePassword({
             render={({ field: { onChange, value }, fieldState: { error } }) => {
               return (
                 <TextField
-                  label="Password"
+                  label="Mật khẩu mới"
                   variant="outlined"
                   inputRef={password}
                   value={value}

@@ -63,7 +63,7 @@ export const getListUser = async (
 
 export const findUserByPhone = async (phone, token) => {
   let user = await axios.get(
-    `https://localhost:44304/api/v1/users/user/${phone}`,
+    `https://localhost:44304/api/v1/accounts/account/${phone}`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
 
@@ -411,6 +411,21 @@ export const deleteShelf = async (id, token) => {
 };
 
 export const createOrder = async (order, token) => {
+  console.log({
+    customerId: order.customerId,
+    deliveryAddress: order.deliveryAddress,
+    addressReturn: order.addressReturn,
+    totalPrice: order.totalPrice,
+    typeOrder: order.typeOrder,
+    deliveryTime: order.deliveryTime,
+    isPaid: order.isPaid,
+    paymentMethod: order.paymentMethod,
+    isUserDelivery: order.isUserDelivery,
+    deliveryDate: order.deliveryDate,
+    duration: order.duration,
+    listProduct: order.listProduct,
+  });
+
   const response = await axios.post(
     `https://localhost:44304/api/v1/orders`,
     {
@@ -425,7 +440,7 @@ export const createOrder = async (order, token) => {
       isUserDelivery: order.isUserDelivery,
       deliveryDate: order.deliveryDate,
       duration: order.duration,
-      listProduct: order.listProduct,
+      listService: order.listProduct,
     },
     { headers: { Authorization: `Bearer ${token}` } }
   );

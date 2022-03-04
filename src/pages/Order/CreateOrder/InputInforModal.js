@@ -62,8 +62,8 @@ function InputInforModal({
       Object.keys(order.choosenProduct).forEach((e) => {
         order.choosenProduct[e].forEach((e) => {
           listProduct.push({
-            productId: e.id,
-            productName: e.name,
+            serviceId: e.id,
+            serviceName: e.name,
             price: e.price,
             type: e.typeInt,
             amount: e.quantity,
@@ -109,7 +109,7 @@ function InputInforModal({
       }
       await createOrder(orderTemp, userState.idToken);
       navigate("/app/orders", { replace: true });
-      // showSnackbar("success", "Create order success");
+      showSnackbar("success", "Tạo order thành công!");
     } catch (e) {
       console.log(e.response);
     } finally {

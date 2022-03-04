@@ -443,26 +443,26 @@ function SelfStorageOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
           if (!dateStart) {
             errorTemp = {
               dateStart: {
-                message: "Required Date Start",
+                message: "*Vui lòng nhập",
               },
             };
           } else if (dateStart < new Date().toISOString().split("T")[0]) {
             errorTemp = {
               dateStart: {
-                message: "Please choose date after today!",
+                message: "*Vui lòng chọn ngày sau ngày hôm nay!",
               },
             };
           }
 
           if (duration === 0) {
-            errorTemp.duration = "Please input duration";
+            errorTemp.duration = "Vui lòng chọn thời hạn";
           }
 
           if (
             choosenProduct.product.length === 0 &&
             choosenProduct.accessory.length === 0
           ) {
-            errorTemp.product = "Please buy something";
+            errorTemp.product = "Vui lòng chọn dịch vụ";
           }
 
           if (Object.keys(errorTemp).length === 0) {
@@ -473,7 +473,7 @@ function SelfStorageOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
           }
         }}
       >
-        Next
+        Tiếp theo
       </Button>
     </Box>
   );

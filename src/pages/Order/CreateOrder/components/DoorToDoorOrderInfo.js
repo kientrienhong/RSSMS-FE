@@ -474,7 +474,7 @@ function DoorToDoorOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
             choosenProduct.accessory.length === 0 &&
             choosenProduct.services.length === 0
           ) {
-            errorTemp.product = "Vui lòng chọn sản phẩm";
+            errorTemp.product = "Vui lòng chọn dịch vụ";
           }
 
           if (Object.keys(errorTemp).length === 0) {

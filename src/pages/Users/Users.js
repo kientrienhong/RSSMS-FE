@@ -426,7 +426,7 @@ const buildModal = (
                   defaultValue={user?.roleId}
                   control={control}
                   errors={errors}
-                  errorMsg={"Required role"}
+                  errorMsg={"*Vui lòng chọn"}
                 >
                   {mapListRoleUser()}
                 </CustomSelect>

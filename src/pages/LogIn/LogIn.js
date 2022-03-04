@@ -18,7 +18,7 @@ function LogIn(props) {
       const response = await login(input.email, input.password, token);
       if (response.code === 404) {
         setValid(false);
-        setErrorMsg("Invalid username or password");
+        setErrorMsg("Tài khoản / mật khẩu không đúng");
       } else {
         try {
           let responseNotifcation = await getNotifcations(
@@ -36,7 +36,7 @@ function LogIn(props) {
     } catch (e) {
       console.log(e.response);
       setValid(false);
-      setErrorMsg("Sai tài khoản / mật khẩu");
+      setErrorMsg("Tài khoản / mật khẩu không đúng");
     } finally {
       props.hideLoading();
     }
