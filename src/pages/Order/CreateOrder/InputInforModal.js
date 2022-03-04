@@ -134,16 +134,16 @@ function InputInforModal({
       console.log(error?.response);
       console.log(error?.response?.data?.error?.code);
       if (error?.response?.data?.error?.code === 404) {
-        showSnackbar("error", "Not found user");
+        showSnackbar("error", "Không tìm thấy tài khoản!");
       } else if (error?.response?.data?.error?.code === 400) {
-        showSnackbar("error", "Please enter and search phone number");
+        showSnackbar("error", "Vui lòng nhập và tìm kiếm số điện thoại");
       }
     } finally {
       hideLoading();
     }
   };
   let ruleOfDeliveryAddress = {
-    rule: "Delivery Address required",
+    rule: "*Vui lòng nhập",
   };
   if (order.isCustomerDelivery) {
     ruleOfDeliveryAddress = {};
@@ -174,7 +174,7 @@ function InputInforModal({
           variant="h2"
           style={{ marginTop: "2%", textAlign: "left" }}
         >
-          Search user
+          Tìm kiếm tài khoản
         </Typography>
         <TextField
           label="Phone"
@@ -203,18 +203,18 @@ function InputInforModal({
           variant="h2"
           style={{ marginTop: "2%", textAlign: "left" }}
         >
-          Customer information
+          Thông tin khách hàng
         </Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Box sx={{ display: "flex", flexDirection: "row", marginTop: "2%" }}>
             <CustomInput
               control={control}
               rules={{
-                required: "Name required",
+                required: "*Vui lòng nhập",
               }}
               styles={{ width: "320px" }}
               name="name"
-              label={user?.name ? "" : "Name"}
+              label={user?.name ? "" : "Tên"}
               userInfo={user?.name}
               inlineStyle={styleInput}
               disabled={true}
@@ -223,7 +223,7 @@ function InputInforModal({
             <CustomInput
               control={control}
               rules={{
-                required: "Email required",
+                required: "*Vui lòng nhập",
               }}
               styles={{ width: "320px" }}
               name="email"
@@ -235,11 +235,11 @@ function InputInforModal({
             <CustomInput
               control={control}
               rules={{
-                required: "Phone required",
+                required: "*Vui lòng nhập",
               }}
               styles={{ width: "120px" }}
               name="phone"
-              label={user?.phone ? "" : "Phone"}
+              label={user?.phone ? "" : "Số điện thoại"}
               inlineStyle={styleInput}
               disabled={true}
             />
@@ -255,14 +255,14 @@ function InputInforModal({
                   marginBottom: "2%",
                 }}
               >
-                Delivery Address
+                Địa chỉ lấy đồ
               </Typography>
               <CustomInput
                 control={control}
                 rules={ruleOfDeliveryAddress}
                 styles={{ width: "320px" }}
                 name="deliveryAddress"
-                label="Delivery Address"
+                label="Địa chỉ lấy đồ"
                 disabled={false}
                 userInfo={""}
                 inlineStyle={styleInput}
@@ -276,7 +276,7 @@ function InputInforModal({
                   marginBottom: "2%",
                 }}
               >
-                Return item address
+                Địa chỉ trả hàng
               </Typography>
               <FormControl component="fieldset">
                 <RadioGroup
@@ -288,17 +288,17 @@ function InputInforModal({
                   <FormControlLabel
                     value={0}
                     control={<Radio />}
-                    label="The same with delivery address"
+                    label="Giống địa chỉ lấy đồ"
                   />
                   <FormControlLabel
                     value={1}
                     control={<Radio />}
-                    label="Difference with delivery address"
+                    label="Khác địa chỉ lấy đồ"
                   />
                   <FormControlLabel
                     value={2}
                     control={<Radio />}
-                    label="Not determine yet"
+                    label="Chưa xác định"
                   />
                 </RadioGroup>
               </FormControl>
@@ -316,16 +316,16 @@ function InputInforModal({
                   marginBottom: "2%",
                 }}
               >
-                Input return address
+                Nhập địa chỉ trả hàng
               </Typography>
               <CustomInput
                 control={control}
                 rules={{
-                  required: "Return address required",
+                  required: "*Vui lòng nhập",
                 }}
                 styles={{ width: "320px" }}
                 name="returnAddress"
-                label="Return Address"
+                label="Địa chỉ trả hàng"
                 disabled={false}
                 userInfo={""}
                 inlineStyle={styleInput}
@@ -338,11 +338,11 @@ function InputInforModal({
             variant="h2"
             style={{ marginTop: "2%", textAlign: "left", marginBottom: "2%" }}
           >
-            Note
+            Ghi chú
           </Typography>
           <CustomAreaInput
             control={control}
-            rules={{ required: "Note is required" }}
+            rules={{ required: "*Vui lòng nhập" }}
             styles={{ width: "560px" }}
             name="note"
             label=""
@@ -368,7 +368,7 @@ function InputInforModal({
               variant="contained"
               type="submit"
             >
-              Submit
+              Xác nhận
             </Button>
           </Box>
         </form>

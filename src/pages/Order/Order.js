@@ -183,7 +183,7 @@ function Order({
               navigate("/orders/makingOrder");
             }}
           >
-            Create order
+            Tạo đơn
           </Button>
         ) : (
           <></>

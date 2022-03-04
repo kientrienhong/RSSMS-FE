@@ -36,13 +36,13 @@ function AssignOrderModal({
   };
   const handleAssignStorage = async () => {
     if (selectedValue === "") {
-      setError("Please storage to assign");
+      setError("Vui lòng chọn kho");
       return;
     }
     try {
       showLoading();
       await assignOrder(currentId, parseInt(selectedValue), userState.idToken);
-      showSnackbar("success", "Assign success");
+      showSnackbar("success", "Phân đơn thành công!");
       changeIsLoadOrder();
       handleClose();
     } catch (e) {
@@ -210,7 +210,7 @@ function AssignOrderModal({
             color="primary"
             variant="contained"
           >
-            Submit
+            Xác nhận
           </Button>
           <Button
             style={{
@@ -222,7 +222,7 @@ function AssignOrderModal({
             color="error"
             variant="outlined"
           >
-            Cancel
+            Đóng
           </Button>
         </Box>
       </Box>

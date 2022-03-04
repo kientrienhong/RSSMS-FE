@@ -18,7 +18,7 @@ export default function BoxTab({
       <Grid item xs={4} key={index}>
         <ItemNote
           product={e}
-          image={e?.images}
+          image={e?.imageUrl}
           unit={e.unit}
           type={e.type}
           price={e.price}
@@ -40,7 +40,7 @@ export default function BoxTab({
       <Grid item xs={4} key={index}>
         <Item
           product={e}
-          image={e?.images}
+          image={e?.imageUrl}
           unit={e.unit}
           type={e.type}
           price={e.price}
@@ -64,7 +64,7 @@ export default function BoxTab({
         flexDirection: "column",
         alignItems: "flex-start",
         justifyContent: "flex-start",
-        marginTop: "-6.5%",
+        marginTop: "2.5%",
       }}
     >
       <Typography
@@ -74,7 +74,7 @@ export default function BoxTab({
         color="textPrimary"
         variant="h2"
       >
-        Item
+        Dịch vụ
       </Typography>
       <Grid
         container
@@ -93,7 +93,7 @@ export default function BoxTab({
         color="textPrimary"
         variant="h2"
       >
-        Accessory
+        Phụ kiện
       </Typography>
       <Grid
         container
@@ -104,25 +104,6 @@ export default function BoxTab({
         }}
       >
         {mapListItemsToGrid(listAccessory, setListAccessory)}
-      </Grid>
-      <Typography
-        sx={{
-          marginBottom: "2%",
-        }}
-        color="textPrimary"
-        variant="h2"
-      >
-        Services
-      </Typography>
-      <Grid
-        container
-        spacing={2}
-        sx={{
-          width: "98%",
-          marginBottom: "3%",
-        }}
-      >
-        {mapListItemsToGrid(listServices, setListServices)}
       </Grid>
     </Box>
   );

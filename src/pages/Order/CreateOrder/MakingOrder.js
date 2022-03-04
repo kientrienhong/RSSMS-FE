@@ -51,15 +51,15 @@ function MakingOrder({
       "accessory"
     );
     let listBoxesTemp = setResetQuantity(listProductTemp.data[2], "product");
-    let listAreasTemp = setResetQuantity(listProductTemp.data[4], "product");
-    let listServicesTemp = setResetQuantity(
-      listProductTemp.data[3],
-      "services"
-    );
+    let listAreasTemp = setResetQuantity(listProductTemp.data[3], "product");
+    // let listServicesTemp = setResetQuantity(
+    //   listProductTemp.data[3],
+    //   "services"
+    // );
 
     setListAccessory(listAccessoryTemp);
     setListStorages(listStoragesTemp);
-    setListServices(listServicesTemp);
+    // setListServices(listServicesTemp);
     setListBoxes(listBoxesTemp);
     setListAreas(listAreasTemp);
   };
@@ -86,7 +86,7 @@ function MakingOrder({
   }, []);
 
   const onClickMainTab = (name) => {
-    if (name === "Self-Storage") {
+    if (name === "Kho tự quản") {
       setIndexMain(0);
       setCurrentColor({ selfStorage: "#04BFFE", doorToDoor: "#A19FA8" });
       setChoosenProduct({
@@ -180,12 +180,12 @@ function MakingOrder({
 
         {buildMainTab(
           <FaWarehouse size={40} color={currentColor.selfStorage} />,
-          "Self-Storage",
+          "Kho tự quản",
           currentColor.selfStorage
         )}
         {buildMainTab(
           <BsBoxSeam size={40} color={currentColor.doorToDoor} />,
-          "Door to door",
+          "Giữ đồ thuê",
           currentColor.doorToDoor
         )}
       </Box>

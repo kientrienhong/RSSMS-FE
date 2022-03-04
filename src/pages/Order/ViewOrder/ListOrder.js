@@ -101,14 +101,14 @@ TablePaginationActions.propTypes = {
 };
 
 const listHeaderName = [
-  "ID",
-  "Customer name",
-  "Customer phone",
-  "Address Delivery",
-  "Type",
-  "Is Paid",
-  "Status",
-  "Action",
+  "Mã",
+  "Tên khách hàng",
+  "Số điện thoại khách hàng",
+  "Địa chỉ giao hàng",
+  "Loại đơn",
+  "Đã thanh toán",
+  "Trạng thái",
+  "Thao tác",
 ];
 
 const mapListTableHeader = (listHeader, userState) => (
@@ -232,7 +232,7 @@ function ListOrder({
       showLoading();
       await handleDeleteOrder(currentId, data.reason, userState.idToken);
       handleClose();
-      showSnackbar("success", " Cancel order success!");
+      showSnackbar("success", "Hủy đơn thành công!");
     } catch (error) {
       console.log(error);
     } finally {
@@ -267,16 +267,16 @@ function ListOrder({
                 marginBottom: "2%",
               }}
             >
-              Are you sure?
+              Bạn đã chắc chắn?
             </Typography>
             <CustomAreaInput
               control={control}
               rules={{
-                required: "Reason required",
+                required: "*Vui lòng nhập",
               }}
               styles={{ width: "550px" }}
               name="reason"
-              label="Reason"
+              label="Lý do"
               userInfo={""}
             />
             <Box
@@ -308,7 +308,7 @@ function ListOrder({
                   variant="contained"
                   type="submit"
                 >
-                  Yes
+                  Xác nhận
                 </Button>
                 <Button
                   style={{
@@ -320,7 +320,7 @@ function ListOrder({
                   color="error"
                   variant="outlined"
                 >
-                  No
+                  Đóng
                 </Button>
               </Box>
             </Box>

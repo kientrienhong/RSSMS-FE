@@ -105,7 +105,7 @@ export default function Item({
       }}
     >
       <img
-        src={image ? image[0]?.url : undefined}
+        src={image ? image : undefined}
         alt={name}
         style={{
           marginTop: "20px",

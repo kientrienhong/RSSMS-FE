@@ -63,7 +63,7 @@ export default function ItemNote({
           disabled={false}
           multiline
           rows={2}
-          label="Please description items"
+          label="Mô tả"
           rowsMax={4}
           variant="outlined"
           value={currentProductInChooseProduct.note}
@@ -138,7 +138,7 @@ export default function ItemNote({
       }}
     >
       <img
-        src={image ? image[0]?.url : undefined}
+        src={image ? image : undefined}
         alt={name}
         style={{
           marginTop: "20px",
