@@ -124,6 +124,7 @@ function AreaDetail(props) {
       listShelves = listShelves.map((e) => {
         return { ...e, boxSize: e.boxes[0].sizeType };
       });
+      console.log(listShelves);
       let area = await getDetailArea(areaId, userState.idToken);
       filterUsage(area.data);
       setCurrentArea(area.data);

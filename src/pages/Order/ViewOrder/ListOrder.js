@@ -474,7 +474,7 @@ function ListOrder({
                             color="primary"
                             variant="contained"
                           >
-                            Assign
+                            Phân đơn
                           </Button>
                         ) : null}
                         <Button
@@ -484,7 +484,7 @@ function ListOrder({
                             handleConfirmOpen();
                           }}
                         >
-                          Cancel
+                          Hủy
                         </Button>
                       </Box>
                     )}

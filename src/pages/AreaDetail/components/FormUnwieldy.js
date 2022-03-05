@@ -50,9 +50,7 @@ function FormUnwieldy({
   const [error, setError] = useState({});
 
   const buildListCombo = (listAreas) =>
-    listAreas?.map((e) => (
-      <MenuItem value={e.id}>{e.name.split(" ")[1]}</MenuItem>
-    ));
+    listAreas?.map((e) => <MenuItem value={e.id}>{e.name}</MenuItem>);
 
   const validation = () => {
     let valid = true;
@@ -80,7 +78,8 @@ function FormUnwieldy({
         productId: currentShelf.productId,
         serviceId: currentShelf.serviceId,
       };
-      await updateShelf(currentShelf.id, shelf, userState.idToken);
+      let test = await updateShelf(currentShelf.id, shelf, userState.idToken);
+      console.log(test);
       await getData(searchName, page, 4);
       showSnackbar("success", "Update shelf success");
       handleClose();
@@ -188,7 +187,7 @@ function FormUnwieldy({
       >
         <Box
           sx={{
-            width: "35%",
+            width: "50%",
             display: "flex",
             flexDirection: "column",
             marginRight: "5%",

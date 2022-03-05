@@ -27,7 +27,7 @@ export default function OrderDetail({ choosenProduct, duration }) {
         }}
       >
         <Typography variant="h2" color="black" style={{ marginBottom: "3%" }}>
-          Total Bill
+          Tổng đơn
         </Typography>
         <Typography variant="h2" color="primary" style={{ marginBottom: "3%" }}>
           {formatCurrency(sum, " đ")}
@@ -72,7 +72,7 @@ export default function OrderDetail({ choosenProduct, duration }) {
             variant="h2"
             style={{ marginBottom: "3%", marginRight: "8%" }}
           >
-            Total
+            Tổng
           </Typography>
         </Box>
 
@@ -159,7 +159,7 @@ export default function OrderDetail({ choosenProduct, duration }) {
             variant="h2"
             style={{ marginBottom: "3%", marginRight: "8%" }}
           >
-            Total
+            Tổng
           </Typography>
         </Box>
 
@@ -222,10 +222,10 @@ export default function OrderDetail({ choosenProduct, duration }) {
         }}
       >
         <Typography variant="h2" style={{ marginBottom: "3%" }}>
-          Product
+          Dịch vụ
         </Typography>
         <Typography variant="h2" style={{ marginBottom: "3%" }}>
-          Cost
+          Giá tiền
         </Typography>
       </Box>
       <Divider />
@@ -241,35 +241,16 @@ export default function OrderDetail({ choosenProduct, duration }) {
         }}
       >
         <Typography variant="h2" style={{ marginBottom: "3%" }}>
-          Accessory
+          Phụ kiện
         </Typography>
         <Typography variant="h2" style={{ marginBottom: "3%" }}>
-          Cost
+          Giá tiền
         </Typography>
       </Box>
       <Divider />
       {mapListDetailOthers(choosenProduct.accessory)}
       <Divider />
       {buildTotalEachPartPrice("accessory")}
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between",
-          marginTop: "4%",
-        }}
-      >
-        <Typography variant="h2" style={{ marginBottom: "3%" }}>
-          Services
-        </Typography>
-        <Typography variant="h2" style={{ marginBottom: "3%" }}>
-          Cost
-        </Typography>
-      </Box>
-      <Divider />
-      {mapListDetailOthers(choosenProduct.services)}
-      <Divider />
-      {buildTotalEachPartPrice("services")}
       {buildTotalPrice()}
     </Box>
   );

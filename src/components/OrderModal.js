@@ -365,7 +365,7 @@ function OrderModal({
       await updateOrder(orderTemp.id, orderTemp, userState.idToken);
       await getData(searchId, page, 8, userState.idToken);
       handleClose();
-      showSnackbar("success", "Update order success");
+      showSnackbar("success", "Cập nhật đơn thành công!");
     } catch (error) {
       console.log(error.response);
     } finally {
@@ -410,7 +410,7 @@ function OrderModal({
             }}
           >
             <Typography color="black" variant="h2" sx={{ marginBottom: "4%" }}>
-              Order Information
+              Thông tin hóa đơn
             </Typography>
             <Box
               sx={{
@@ -421,17 +421,20 @@ function OrderModal({
               }}
             >
               <Typography color="black" variant="h2">
-                Order id
+                Mã đơn hàng
               </Typography>
               <Typography color="black" variant="h2">
                 #{currentOrder?.id}
               </Typography>
             </Box>
-            {buildInformation("Customer name", currentOrder?.customerName)}
-            {buildInformation("Customer phone", currentOrder?.customerPhone)}
+            {buildInformation("Tên khách hàng", currentOrder?.customerName)}
             {buildInformation(
-              "Type",
-              currentOrder?.typeOrder === 0 ? "Self-Storage" : "Door to door"
+              "Số điện thoại khách hàng",
+              currentOrder?.customerPhone
+            )}
+            {buildInformation(
+              "Loại đơn",
+              currentOrder?.typeOrder === 0 ? "Kho tự quản" : "Giữ đồ thuê"
             )}
             <Box
               sx={{
@@ -445,7 +448,7 @@ function OrderModal({
                 variant="h2"
                 sx={{ marginBottom: "2%", marginTop: "4%" }}
               >
-                Status
+                Trạng thái
               </Typography>
               <FormControl
                 sx={{
@@ -480,7 +483,7 @@ function OrderModal({
                 variant="h2"
                 sx={{ marginBottom: "2%", marginTop: "4%" }}
               >
-                Is Paid
+                Đã thanh toán
               </Typography>
               <FormControlLabel
                 value="isPaid"
@@ -499,14 +502,14 @@ function OrderModal({
               variant="h3"
               sx={{ marginBottom: "2%", marginTop: "4%" }}
             >
-              Delivery address:
+              Địa chỉ lấy hàng:
             </Typography>
             <CustomInput
               control={control}
               rules={{}}
               styles={{ width: "300px" }}
               name="deliveryAddress"
-              label="Delivery Address"
+              label="Địa chỉ lấy hàng"
               disabled={isView}
               userInfo={currentOrder?.deliveryAddress}
               inlineStyle={{}}
@@ -516,14 +519,14 @@ function OrderModal({
               variant="h3"
               sx={{ marginBottom: "2%", marginTop: "4%" }}
             >
-              Delivery item address:
+              Địa chỉ trả hàng:
             </Typography>
             <CustomInput
               control={control}
               rules={{}}
               styles={{ width: "300px", display: "block" }}
               name="returnAddress"
-              label="Return Address"
+              label="Địa chỉ trả hàng"
               disabled={isView}
               userInfo={currentOrder?.addressReturn}
               inlineStyle={{}}
@@ -540,13 +543,11 @@ function OrderModal({
                 variant="h2"
                 sx={{ marginBottom: "4%", marginTop: "4%" }}
               >
-                Time
+                Thời gian
               </Typography>
             </Box>
             <Typography color="black" variant="h3" sx={{ marginBottom: "2%" }}>
-              {currentOrder?.typeOrder === 0
-                ? "Start Date"
-                : "Delivery Date Time"}
+              {currentOrder?.typeOrder === 0 ? "Ngày bắt đầu" : "Ngày lấy đơn"}
             </Typography>
             <TextField
               id="date"
@@ -583,7 +584,7 @@ function OrderModal({
                       onChange={handleChangeCheckBox}
                     />
                   }
-                  label="Customer delivery by themselves"
+                  label="Khách hàng tự vận chuyển"
                   labelPlacement="Customer delivery by themselves"
                 />
               </Box>
@@ -599,7 +600,7 @@ function OrderModal({
                 }}
               >
                 <Typography variant="h2" style={{ marginBottom: "3%" }}>
-                  Duration (months)
+                  Thời hạn (tháng)
                 </Typography>
                 <Box
                   sx={{
@@ -632,8 +633,8 @@ function OrderModal({
                 sx={{ marginBottom: "2%" }}
               >
                 {currentOrder?.typeOrder === 0
-                  ? "End Date"
-                  : "Return Date Time"}
+                  ? "Ngày kết thúc"
+                  : "Ngày trả hàng"}
               </Typography>
               <Typography
                 color="primary"
@@ -667,10 +668,10 @@ function OrderModal({
                   variant="h3"
                   sx={{ marginRight: "2%" }}
                 >
-                  Durations:
+                  Thời hạn:
                 </Typography>
                 <Typography color="primary" variant="h3">
-                  {duration} {currentOrder?.typeOrder === 0 ? "months" : "days"}
+                  {duration} {currentOrder?.typeOrder === 0 ? "tháng" : "ngày"}
                 </Typography>
               </Box>
             )}
@@ -694,7 +695,7 @@ function OrderModal({
                       onChange={handleChangeCheckBoxCustomerReturn}
                     />
                   }
-                  label="Customer return by themselves"
+                  label="Khách tự vẫn chuyến trả đồ"
                   labelPlacement="Customer return by themselves"
                 />
               </Box>
@@ -705,7 +706,7 @@ function OrderModal({
               variant="h3"
               sx={{ marginBottom: "2%", marginTop: "4%" }}
             >
-              Payment method
+              Phương thức thanh toán
             </Typography>
             <Box>
               <FormControl component="fieldset">
@@ -717,12 +718,12 @@ function OrderModal({
                   <FormControlLabel
                     value={0}
                     control={<Radio />}
-                    label="Pay on cash"
+                    label="Trả tiền mặt"
                   />
                   <FormControlLabel
                     value={1}
                     control={<Radio />}
-                    label="Transfer money"
+                    label="Chuyển khoản"
                   />
                 </RadioGroup>
               </FormControl>
@@ -741,7 +742,7 @@ function OrderModal({
                   variant="h3"
                   sx={{ marginBottom: "2%", marginTop: "4%" }}
                 >
-                  Reason
+                  Lý do
                 </Typography>
                 <p style={{ color: "red" }}>{currentOrder?.rejectedReason}</p>
               </Box>
@@ -761,7 +762,7 @@ function OrderModal({
               variant="h2"
               sx={{ marginBottom: "4%", marginTop: "4%" }}
             >
-              Order Detail
+              Chi tiết đơn hàng
             </Typography>
             <OrderDetail
               choosenProduct={formatToChosenProduct()}
@@ -800,7 +801,7 @@ function OrderModal({
                   onClick={() => handleClose()}
                   variant="outlined"
                 >
-                  Cancel
+                  Đóng
                 </Button>
               </Box>
             ) : (
@@ -824,7 +825,7 @@ function OrderModal({
                     variant="contained"
                     onClick={() => handleStoreOrder()}
                   >
-                    Store
+                    Lưu trữ đơn
                   </Button>
                 ) : null}
 
@@ -840,7 +841,7 @@ function OrderModal({
                     variant="contained"
                     onClick={() => handleReturnItem()}
                   >
-                    Return order
+                    Trả đơn
                   </Button>
                 ) : null}
 
@@ -857,7 +858,7 @@ function OrderModal({
                       variant="contained"
                       type="submit"
                     >
-                      Edit
+                      Cập nhật
                     </Button>
                   ) : null
                 ) : null}
@@ -872,7 +873,7 @@ function OrderModal({
                   onClick={() => handleClose()}
                   variant="outlined"
                 >
-                  Cancel
+                  Đóng
                 </Button>
               </Box>
             )}

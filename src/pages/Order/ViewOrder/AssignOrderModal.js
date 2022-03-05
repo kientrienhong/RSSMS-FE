@@ -41,7 +41,7 @@ function AssignOrderModal({
     }
     try {
       showLoading();
-      await assignOrder(currentId, parseInt(selectedValue), userState.idToken);
+      await assignOrder(currentId, selectedValue, userState.idToken);
       showSnackbar("success", "Phân đơn thành công!");
       changeIsLoadOrder();
       handleClose();
@@ -65,6 +65,7 @@ function AssignOrderModal({
           -1,
           userState.idToken
         );
+        console.log(listStorageTemp);
         setListStorage(listStorageTemp.data.data);
       } catch (error) {
         console.log(error);
@@ -108,12 +109,7 @@ function AssignOrderModal({
               width: "80%",
             }}
           >
-            <img
-              src={e?.images[0]?.url}
-              alt={e.name}
-              width={160}
-              height={160}
-            />
+            <img src={e?.imageUrl} alt={e.name} width={160} height={160} />
             <Box
               sx={{
                 display: "flex",

@@ -382,6 +382,16 @@ export const createShelf = async (shelf, areaId, token) => {
 };
 
 export const updateShelf = async (id, shelf, token) => {
+  console.log({
+    id: id,
+    type: shelf.type,
+    name: shelf.name,
+    note: shelf.note,
+    boxesInWidth: shelf.boxesInWidth,
+    boxesInHeight: shelf.boxesInHeight,
+    boxSize: -1,
+    serviceId: shelf.serviceId,
+  });
   let listShelves = await axios.put(
     `https://localhost:44304/api/v1/shelves/${id}`,
     {
@@ -392,7 +402,6 @@ export const updateShelf = async (id, shelf, token) => {
       boxesInWidth: shelf.boxesInWidth,
       boxesInHeight: shelf.boxesInHeight,
       boxSize: -1,
-      productId: shelf.productId,
       serviceId: shelf.serviceId,
     },
     { headers: { Authorization: `Bearer ${token}` } }
@@ -586,7 +595,7 @@ export const moveBoxApi = async (box, token) => {
 
 export const assignOrder = async (orderId, storageId, token) => {
   const response = await axios.post(
-    `https://localhost:44304/api/v1/orderstoragedetails`,
+    `https://localhost:44304/api/v1/orders/assign order`,
     {
       orderId: orderId,
       storageId: storageId,
