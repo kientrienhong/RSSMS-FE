@@ -17,6 +17,7 @@ import NotStorage from "../pages/NotStorage";
 import CustomerRequest from "../pages/CustomerRequest/CustomerRequest";
 import NewSchedule from "../pages/NewSchedule/NewSchedule";
 import StaffRequest from "../pages/Staff_Request/StaffRequest";
+import AreaDetailNew from "../pages/AreaDetailNew/AreaDetailNew";
 const routes = [
   {
     path: "app",
@@ -156,14 +157,14 @@ const routes = [
         path: "storages/:storageId/areas/:areaId",
         element: (
           <ProtectTemplate
-            Component={AreaDetail}
+            Component={AreaDetailNew}
             permission={[
               Object.keys(ROLE_USER)[0],
               Object.keys(ROLE_USER)[1],
               Object.keys(ROLE_USER)[4],
             ]}
           >
-            <AreaDetail />
+            <AreaDetailNew />
           </ProtectTemplate>
         ),
       },

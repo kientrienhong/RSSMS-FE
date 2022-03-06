@@ -80,7 +80,8 @@ function OrderModal({
   userState,
   isView,
 }) {
-  console.log(currentOrder);
+  const [returnAddress, setReturnAddress] = useState();
+  const [deliveryAddress, setDeliveryAddress] = useState();
   const [timeDelivery, setTimeDelivery] = useState();
   const [timeReturn, setTimeReturn] = useState();
   const [duration, setDuration] = useState();
@@ -135,35 +136,45 @@ function OrderModal({
   };
 
   useEffect(() => {
-    setDateDelivery(currentOrder?.deliveryDate?.split("T")[0]);
-    setTimeDelivery({
-      name: currentOrder?.deliveryTime,
-      isAvailable: true,
-    });
-    setTimeReturn({
-      name: currentOrder?.returnTime,
-      isAvailable: true,
-    });
-    let currentDuration;
-    if (currentOrder?.typeOrder === 0) {
-      setDuration(currentOrder?.durationMonths);
-      currentDuration = currentOrder?.durationMonths;
-    } else {
-      setDuration(currentOrder?.durationDays);
-      currentDuration = currentOrder?.durationDays;
-    }
-    setIsPaid(currentOrder?.isPaid);
-    setIsCustomerDelivery(currentOrder?.isUserDelivery);
-    setStatusOrder(currentOrder?.status);
-    if (currentOrder?.deliveryDate !== undefined) {
-      let date = new Date(currentOrder?.deliveryDate);
-      if (date) {
-        if (currentOrder?.typeOrder === 0) {
-          date.setMonth(date.getMonth() + currentDuration);
-        } else {
-          date.setDate(date.getDate() + currentDuration);
+    if (currentOrder) {
+      console.log(currentOrder);
+      setReturnAddress(currentOrder?.addressReturn);
+      setDeliveryAddress(currentOrder?.deliveryAddress);
+
+      setDateDelivery(currentOrder?.deliveryDate?.split("T")[0]);
+      reset({
+        deliveryAddress: currentOrder.deliveryAddress,
+        returnAddress: currentOrder.returnAddress,
+      });
+      setTimeDelivery({
+        name: currentOrder?.deliveryTime,
+        isAvailable: true,
+      });
+      setTimeReturn({
+        name: currentOrder?.returnTime,
+        isAvailable: true,
+      });
+      let currentDuration;
+      if (currentOrder?.typeOrder === 0) {
+        setDuration(currentOrder?.durationMonths);
+        currentDuration = currentOrder?.durationMonths;
+      } else {
+        setDuration(currentOrder?.durationDays);
+        currentDuration = currentOrder?.durationDays;
+      }
+      setIsPaid(currentOrder?.isPaid);
+      setIsCustomerDelivery(currentOrder?.isUserDelivery);
+      setStatusOrder(currentOrder?.status);
+      if (currentOrder?.deliveryDate !== undefined) {
+        let date = new Date(currentOrder?.deliveryDate);
+        if (date) {
+          if (currentOrder?.typeOrder === 0) {
+            date.setMonth(date.getMonth() + currentDuration);
+          } else {
+            date.setDate(date.getDate() + currentDuration);
+          }
+          setDateReturn(new Date(date).toISOString().split("T")[0]);
         }
-        setDateReturn(new Date(date).toISOString().split("T")[0]);
       }
     }
   }, [currentOrder]);
@@ -326,9 +337,9 @@ function OrderModal({
     };
 
     currentOrder?.orderDetails?.forEach((e) => {
-      let type = PRODUCT_TYPE[e.productType];
+      let type = PRODUCT_TYPE[e.serviceType];
       result[type].push({
-        name: e.productName,
+        name: e.serviceName,
         quantity: e.amount,
         price: e.price,
       });
@@ -373,6 +384,7 @@ function OrderModal({
     }
   };
 
+  console.log("============", deliveryAddress);
   return (
     <Modal
       open={open}
@@ -511,7 +523,7 @@ function OrderModal({
               name="deliveryAddress"
               label="Địa chỉ lấy hàng"
               disabled={isView}
-              userInfo={currentOrder?.deliveryAddress}
+              userInfo={deliveryAddress}
               inlineStyle={{}}
             />
             <Typography
@@ -528,7 +540,7 @@ function OrderModal({
               name="returnAddress"
               label="Địa chỉ trả hàng"
               disabled={isView}
-              userInfo={currentOrder?.addressReturn}
+              userInfo={returnAddress}
               inlineStyle={{}}
             />
             <Box

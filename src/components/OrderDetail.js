@@ -125,6 +125,7 @@ export default function OrderDetail({ choosenProduct, duration }) {
 
   const buildTotalProduct = (value) => {
     let months = Math.ceil(duration / 30);
+    console.log(choosenProduct);
     let total = choosenProduct[value].reduce(
       (a, b) => {
         return {
@@ -136,7 +137,7 @@ export default function OrderDetail({ choosenProduct, duration }) {
     );
     let totalNum =
       isNaN(parseInt(total?.price)) === true ? 0 : parseInt(total?.price);
-
+    console.log(total);
     return (
       <Box
         sx={{

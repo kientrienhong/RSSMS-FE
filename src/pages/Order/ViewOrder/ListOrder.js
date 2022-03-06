@@ -208,7 +208,6 @@ function ListOrder({
     try {
       showLoading();
       let orderTemp = await getOrderById(row.id, userState.idToken);
-      console.log(orderTemp.data);
       setOrder(orderTemp.data);
     } catch (e) {
       console.log(e.response);
@@ -366,7 +365,6 @@ function ListOrder({
 
         <TableBody>
           {listOrder?.map((row, index) => {
-            console.log(row);
             let typeOrder = ORDER_TYPE[row.typeOrder];
             let status = ORDER_STATUS[row.status];
 
