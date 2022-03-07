@@ -538,6 +538,19 @@ export const cancelOrder = async (id, reason, token) => {
 };
 
 export const updateOrder = async (id, order, token) => {
+  console.log({
+    id: order.id,
+    paymentMethod: order.paymentMethod,
+    isUserDelivery: order.isUserDelivery,
+    deliveryDate: order.deliveryDate,
+    returnTime: order.returnTime,
+    deliveryTime: order.deliveryTime,
+    returnDate: order.returnDate,
+    deliveryAddress: order.deliveryAddress,
+    addressReturn: order.addressReturn,
+    status: order.status,
+    isPaid: order.isPaid,
+  });
   const response = await axios.put(
     `https://localhost:44304/api/v1/orders/${id}`,
     {

@@ -22,6 +22,8 @@ import { updateOrder } from "../apis/Apis";
 import { useNavigate } from "react-router";
 import { PRODUCT_TYPE, LIST_STATUS, LIST_TIME } from "../constant/constant";
 import ListPositionStored from "./ListPositionStored";
+import { Controller } from "react-hook-form";
+import CustomSelect from "./CustomSelect";
 const styleModal = {
   position: "absolute",
   top: "1%",
@@ -142,10 +144,7 @@ function OrderModal({
       setDeliveryAddress(currentOrder?.deliveryAddress);
 
       setDateDelivery(currentOrder?.deliveryDate?.split("T")[0]);
-      reset({
-        deliveryAddress: currentOrder.deliveryAddress,
-        returnAddress: currentOrder.returnAddress,
-      });
+
       setTimeDelivery({
         name: currentOrder?.deliveryTime,
         isAvailable: true,
@@ -164,7 +163,11 @@ function OrderModal({
       }
       setIsPaid(currentOrder?.isPaid);
       setIsCustomerDelivery(currentOrder?.isUserDelivery);
-      setStatusOrder(currentOrder?.status);
+      reset({
+        deliveryAddress: currentOrder.deliveryAddress,
+        returnAddress: currentOrder.returnAddress,
+        dateDelivery: currentOrder.deliveryDate?.split("T")[0],
+      });
       if (currentOrder?.deliveryDate !== undefined) {
         let date = new Date(currentOrder?.deliveryDate);
         if (date) {
@@ -359,32 +362,32 @@ function OrderModal({
   const onSubmit = async (data) => {
     try {
       showLoading();
+      console.log(data);
       const orderTemp = {
         id: currentOrder.id,
         isUserDelivery: isCustomerDelivery,
-        deliveryDate: new Date(dateDelivery).toISOString(),
+        deliveryDate: new Date(data.dateDelivery).toISOString(),
         deliveryTime: timeDelivery.name,
         returnTime: timeReturn.name,
-        returnDate: new Date(dateReturn).toISOString(),
+        returnDate: new Date(currentOrder.returnDate).toISOString(),
         deliveryAddress: data.deliveryAddress,
         paymentMethod: paymentMethod,
         addressReturn: data.returnAddress,
-        status: statusOrder,
+        status: currentOrder?.status,
         isPaid: isPaid,
       };
-
       await updateOrder(orderTemp.id, orderTemp, userState.idToken);
       await getData(searchId, page, 8, userState.idToken);
       handleClose();
       showSnackbar("success", "Cập nhật đơn thành công!");
     } catch (error) {
+      console.log(error);
       console.log(error.response);
     } finally {
       hideLoading();
     }
   };
 
-  console.log("============", deliveryAddress);
   return (
     <Modal
       open={open}
@@ -448,41 +451,11 @@ function OrderModal({
               "Loại đơn",
               currentOrder?.typeOrder === 0 ? "Kho tự quản" : "Giữ đồ thuê"
             )}
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography
-                color="black"
-                variant="h2"
-                sx={{ marginBottom: "2%", marginTop: "4%" }}
-              >
-                Trạng thái
-              </Typography>
-              <FormControl
-                sx={{
-                  m: 1,
-                  maxWidth: 240,
-                  color: "black",
-                  margin: "0 0 16px 0",
-                }}
-                name="status"
-              >
-                <Select
-                  displayEmpty
-                  value={statusOrder}
-                  sx={{
-                    marginTop: "11%",
-                  }}
-                  onChange={handleChangeStatus}
-                >
-                  {generateSelectOptions()}
-                </Select>
-              </FormControl>
-            </Box>
+            {buildInformation(
+              "Trạng thái",
+              LIST_STATUS[currentOrder?.status]?.label
+            )}
+
             <Box
               sx={{
                 display: "flex",
@@ -561,15 +534,22 @@ function OrderModal({
             <Typography color="black" variant="h3" sx={{ marginBottom: "2%" }}>
               {currentOrder?.typeOrder === 0 ? "Ngày bắt đầu" : "Ngày lấy đơn"}
             </Typography>
-            <TextField
-              id="date"
-              type="date"
-              disabled={isView}
-              defaultValue={dateDelivery}
-              onChange={handleChangeDeliveryDate}
-              sx={{ width: 220, marginBottom: "16px" }}
-              InputLabelProps={{
-                shrink: true,
+            <Controller
+              name={"dateDelivery"}
+              control={control}
+              render={({ field: { onChange, value } }) => {
+                return (
+                  <TextField
+                    type="date"
+                    disabled={isView}
+                    defaultValue={value}
+                    onChange={onChange}
+                    sx={{ width: 220, marginBottom: "16px" }}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                );
               }}
             />
             {currentOrder?.typeOrder === 0 ? null : (

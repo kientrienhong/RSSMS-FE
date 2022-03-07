@@ -102,7 +102,7 @@ export const LIST_STATUS = [
   { label: "Đặt xử lý", value: 2 },
   { label: "Đang vận chuyển", value: 3 },
   { label: "Đang lưu kho", value: 4 },
-  { label: "Đã hết hạng", value: 5 },
+  { label: "Đã hết hạn", value: 5 },
 ];
 
 export const LIST_UNIT = [

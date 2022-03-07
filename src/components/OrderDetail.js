@@ -4,6 +4,7 @@ import { formatCurrency } from "../utils/FormatCurrency";
 
 export default function OrderDetail({ choosenProduct, duration }) {
   const buildTotalPrice = () => {
+    console.log(choosenProduct);
     let months = Math.ceil(duration / 30);
     let sum = 0;
     choosenProduct?.product?.forEach((e) => {
@@ -125,7 +126,6 @@ export default function OrderDetail({ choosenProduct, duration }) {
 
   const buildTotalProduct = (value) => {
     let months = Math.ceil(duration / 30);
-    console.log(choosenProduct);
     let total = choosenProduct[value].reduce(
       (a, b) => {
         return {
