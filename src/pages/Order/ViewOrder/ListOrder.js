@@ -380,7 +380,7 @@ function ListOrder({
                     handleClickRow(row);
                   }}
                 >
-                  {row.id}
+                  {row.name}
                 </TableCell>
                 <TableCell
                   style={{ color: "black" }}

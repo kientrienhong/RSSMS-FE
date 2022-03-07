@@ -36,7 +36,7 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
   const [open, setOpen] = useState(false);
   const [openAssignStaff, setOpenAssignStaff] = useState(false);
   const [openAssignTime, setOpenAssignTime] = useState(false);
-  const { handleSubmit, control, watch } = useForm();
+  const { handleSubmit, control, watch, reset } = useForm();
   const [startOfWeek, setStartOfWeek] = React.useState();
   const [endOfWeek, setEndOfWeek] = React.useState();
   const [openAssignReturnTime, setOpenAssignReturnTime] = useState(false);
@@ -510,6 +510,7 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
         currentOrder={currentOrder}
         control={control}
         isView={true}
+        reset={reset}
       />
       <ListDateComponent
         setListSelectedOrder={setListSelectedOrder}

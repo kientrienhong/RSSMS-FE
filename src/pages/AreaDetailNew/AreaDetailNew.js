@@ -24,6 +24,7 @@ import {
   SELF_STORAGE_TYPE,
 } from "../../constant/constant";
 import { TYPE_AREA, TYPE_SHELF } from "../../constant/constant";
+import AreaUsage from "./components/AreaUsage";
 
 function AreaDetailNew({
   storedOrder,
@@ -137,6 +138,17 @@ function AreaDetailNew({
             ? "Create storage"
             : "Create shelf"}
         </Button>
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          width: "100%",
+          height: "100%",
+          flexDirection: "row",
+          alignItems: "center",
+        }}
+      >
+        <AreaUsage value={80} />
       </Box>
     </Box>
   );

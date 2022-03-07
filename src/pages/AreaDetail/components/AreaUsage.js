@@ -3,13 +3,6 @@ import { Box, Card, Typography, Grid } from "@material-ui/core";
 import CircularProgressWithLabel from "./CircularProgressWithLabel";
 
 export default function AreaUsage({ list, name, numberInRow, currentArea }) {
-  const mapListToView = () => {
-    return list?.map((e, index) => {
-      let finalIndex = name === "Handy Usage" ? 0 : 5;
-      return buildProductUsage(e.sizeType, e.usage, finalIndex + index);
-    });
-  };
-
   const buildProductUsage = (name, usage, index) => {
     return (
       <Grid item xs={12 / numberInRow} key={index}>
@@ -49,10 +42,20 @@ export default function AreaUsage({ list, name, numberInRow, currentArea }) {
         variant="h2"
         sx={{ textAlign: "left", marginBottom: "16px" }}
       >
-        {name}
+        Usage
       </Typography>
       <Grid container spacing={2}>
-        {mapListToView()}
+        <Box sx={{ display: "flex", flexDirection: "column" }}>
+          <CircularProgressWithLabel
+            value={80}
+            width="80px"
+            height="80px"
+            sx={{
+              diplay: "inline-block",
+            }}
+          />
+          <p style={{ textAlign: "center" }}>{name}</p>
+        </Box>
       </Grid>
     </Card>
   );
