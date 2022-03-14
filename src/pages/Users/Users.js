@@ -626,10 +626,6 @@ function Users(props) {
       return;
     }
 
-    if (error?.message?.length > 0) {
-      return;
-    }
-
     let avatarLinkObject = null;
     if (user.avatarFile) {
       let base64 = await getBase64(user.avatarFile);
@@ -750,6 +746,7 @@ function Users(props) {
   const handleClose = () => {
     setOpen(false);
     setUser({ avatarFile: undefined, images: [{ id: null, url: null }] });
+    setError({});
     reset();
   };
   return (

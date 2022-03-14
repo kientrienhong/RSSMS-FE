@@ -34,30 +34,21 @@ function OrderAssignModal({
       const userIds = listStaffAssigned.map((e) => e.id);
       let currentSchedule;
       let listSelectedTime = listSelectedOrder?.map((e) => {
-        if (e.isDelivery) {
-          currentSchedule = e.deliveryDate;
-          return { deliveryTime: e["deliveryTime"], orderId: e["id"] };
-        } else {
-          if (e.orderId) {
-            currentSchedule = e.returnDate;
-
-            return {
-              deliveryTime: e["returnTime"],
-              orderId: e["orderId"],
-              requestId: e["id"],
-            };
-          }
-          currentSchedule = e.returnDate;
-
-          return { deliveryTime: e["returnTime"], orderId: e["id"] };
-        }
+        return {
+          scheduleTime: e.deliveryTime,
+          orderId: e.orderId,
+          requestId: e.id,
+          deliveryAddress: e.deliveryAddress,
+        };
       });
-      const response = await assignSchedule(
+      currentSchedule = listSelectedOrder[0]?.deliveryDate;
+      await assignSchedule(
         currentSchedule,
         listSelectedTime,
         userIds,
         userState.idToken
       );
+
       setListSelectedOrder([]);
       await getData(
         startOfWeek,
@@ -65,7 +56,7 @@ function OrderAssignModal({
         new Date(currentSchedule).toISOString()
       );
       handleClose();
-      showSnackbar("success", "Assign delivery staff success");
+      showSnackbar("success", "Phân công thành công");
     } catch (e) {
       console.log(e.response);
     } finally {

@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, Checkbox, Button, Avatar } from "@material-ui/core";
+import { getOrderById } from "../../../apis/Apis";
 export default function Schedule({
   schedule,
   setCurrentOrder,
@@ -59,9 +60,9 @@ export default function Schedule({
             height: 28,
             marginLeft: index === 0 ? "0px" : "-8px",
           }}
-          src={e?.images[0]?.url}
+          src={e?.imageUrl}
           alt={e}
-          key={e?.images[0]?.url}
+          key={e?.imageUrl}
         />
       ));
     }
@@ -100,8 +101,8 @@ export default function Schedule({
         }}
       >
         <p style={{ display: "inline-block", margin: 0 }}>
-          {schedule.orderId === undefined ? "Order: #" : "Request: #"}
-          {schedule.id}
+          {/* {schedule.orderId === undefined ? "Order: #" : "Request: #"} */}#
+          {schedule.orderName}
         </p>
         <Box
           sx={{
@@ -146,11 +147,13 @@ export default function Schedule({
           }}
         >
           <img
-            onClick={() => {
-              if (schedule.orderId) {
-              } else {
-                setCurrentOrder(schedule);
+            onClick={async () => {
+              try {
+                const orderDetail = await getOrderById(schedule.orderId);
+                setCurrentOrder(orderDetail.data);
                 handleOpen();
+              } catch (error) {
+                console.log(error);
               }
             }}
             src="/img/info.png"

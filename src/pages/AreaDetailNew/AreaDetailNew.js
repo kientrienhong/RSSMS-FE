@@ -5,6 +5,7 @@ import {
   InputAdornment,
   IconButton,
   TextField,
+  Typography,
 } from "@material-ui/core";
 import SearchIcon from "@mui/icons-material/Search";
 import ProductButton from "../Order/CreateOrder/components/ProductButton";
@@ -25,6 +26,8 @@ import {
 } from "../../constant/constant";
 import { TYPE_AREA, TYPE_SHELF } from "../../constant/constant";
 import AreaUsage from "./components/AreaUsage";
+import Shelf from "./components/Shelf";
+import ListShelf from "./components/ListShelf";
 
 function AreaDetailNew({
   storedOrder,
@@ -35,6 +38,7 @@ function AreaDetailNew({
 }) {
   const { storageId, areaId } = useParams();
   const [storage, setStorage] = useState({});
+  const [area, setArea] = useState({});
   const [searchName, setSearchName] = useState("");
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
@@ -55,13 +59,13 @@ function AreaDetailNew({
           userState.idToken
         );
         let listShelves = response.data.data;
-        console.log(listShelves);
         listShelves = listShelves.map((e) => {
           return { ...e, boxSize: e?.boxes[0]?.sizeType };
         });
-
         let area = await getDetailArea(areaId, userState.idToken);
-
+        setArea(area.data);
+        console.log(area);
+        console.log(storageTemp);
         setTotalPage(response.data.metadata.totalPage);
       } catch (e) {
         console.log(e);
@@ -142,13 +146,184 @@ function AreaDetailNew({
       <Box
         sx={{
           display: "flex",
-          width: "100%",
-          height: "100%",
-          flexDirection: "row",
-          alignItems: "center",
+          width: "95%",
+          height: "90%",
+          margin: "1% 2%",
+          padding: "1%",
+          flexDirection: "column",
+          backgroundColor: "white",
         }}
       >
-        <AreaUsage value={80} />
+        <Typography
+          color="black"
+          variant="h2"
+          style={{
+            marginTop: "2%",
+            textAlign: "left",
+            marginLeft: "2.5%",
+          }}
+        >
+          {storage.name} / {area.name}
+        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            width: "100%",
+            height: "100%",
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          <AreaUsage value={80} />
+          <Box
+            sx={{
+              width: "2px",
+              height: "100%",
+              margin: "2% 3%",
+              display: "flex",
+              backgroundColor: "black",
+            }}
+          ></Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              height: "100%",
+
+              justifyContent: "flex-start",
+            }}
+          >
+            <ListShelf
+              listShelf={[
+                {
+                  name: "Shelf - 1",
+                  width: 3,
+                  height: 3,
+                  length: 3,
+                  usage: 6,
+                  floors: [
+                    {
+                      name: "Tầng 1",
+                      usage: 30,
+                    },
+                    {
+                      name: "Tầng 2",
+                      usage: 40,
+                    },
+                    {
+                      name: "Tầng 3",
+                      usage: 50,
+                    },
+                    {
+                      name: "Tầng 4",
+                      usage: 60,
+                    },
+                  ],
+                },
+                {
+                  name: "Shelf - 2",
+                  width: 3,
+                  height: 3,
+                  length: 3,
+                  usage: 6,
+                  floors: [
+                    {
+                      name: "Tầng 1",
+                      usage: 30,
+                    },
+                    {
+                      name: "Tầng 2",
+                      usage: 40,
+                    },
+                    {
+                      name: "Tầng 3",
+                      usage: 50,
+                    },
+                    {
+                      name: "Tầng 4",
+                      usage: 60,
+                    },
+                  ],
+                },
+                {
+                  name: "Shelf - 3",
+                  width: 3,
+                  height: 3,
+                  length: 3,
+                  usage: 6,
+                  floors: [
+                    {
+                      name: "Tầng 1",
+                      usage: 30,
+                    },
+                    {
+                      name: "Tầng 2",
+                      usage: 40,
+                    },
+                    {
+                      name: "Tầng 3",
+                      usage: 50,
+                    },
+                    {
+                      name: "Tầng 4",
+                      usage: 60,
+                    },
+                  ],
+                },
+                {
+                  name: "Shelf - 4",
+                  width: 3,
+                  height: 3,
+                  length: 3,
+                  usage: 6,
+                  floors: [
+                    {
+                      name: "Tầng 1",
+                      usage: 30,
+                    },
+                    {
+                      name: "Tầng 2",
+                      usage: 40,
+                    },
+                    {
+                      name: "Tầng 3",
+                      usage: 50,
+                    },
+                    {
+                      name: "Tầng 4",
+                      usage: 60,
+                    },
+                  ],
+                },
+                {
+                  name: "Shelf - 5",
+                  width: 3,
+                  height: 3,
+                  length: 3,
+                  usage: 6,
+                  floors: [
+                    {
+                      name: "Tầng 1",
+                      usage: 30,
+                    },
+                    {
+                      name: "Tầng 2",
+                      usage: 40,
+                    },
+                    {
+                      name: "Tầng 3",
+                      usage: 50,
+                    },
+                    {
+                      name: "Tầng 4",
+                      usage: 60,
+                    },
+                  ],
+                },
+              ]}
+            />
+          </Box>
+        </Box>
       </Box>
     </Box>
   );

@@ -14,7 +14,9 @@ import {
   getListUser,
   getSchedule,
   getRequestToSchedule,
+  getRequestToScheduleNew,
 } from "../../apis/Apis";
+import { TYPE_REQUEST_DELIVERY_TAKE } from "../../constant/constant";
 import ScheduleArea from "./components/ScheduleArea";
 import { useParams } from "react-router-dom";
 
@@ -40,7 +42,6 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
   const [startOfWeek, setStartOfWeek] = React.useState();
   const [endOfWeek, setEndOfWeek] = React.useState();
   const [openAssignReturnTime, setOpenAssignReturnTime] = useState(false);
-
   const [listOrderNotAssignedReturnTime, setListOrderNotAssignedReturnTime] =
     React.useState([]);
   const [listScheduleWholeWeek, setListScheduleWholeWeek] = useState([]);
@@ -85,11 +86,8 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
 
   const onChangeCheckBox = (schedule, value) => {
     let listSelectedOrderTemp = [...listSelectedOrder];
-    let timeString = schedule.isDelivery ? "deliveryTime" : "returnTime";
     let indexFound = listSelectedOrderTemp.findIndex((e) => {
-      let timeStringElement = e.isDelivery ? "deliveryTime" : "returnTime";
-
-      if (e[timeStringElement] === schedule[timeString]) {
+      if (e["timeStringElement"] === schedule["deliveryTime"]) {
         if (schedule.id === e.id) {
           schedule = { ...schedule, isSelected: false };
           return true;
@@ -111,18 +109,11 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
     }
   };
 
-  const handleFormatDate = (date, result, order, value) => {
-    if (value === "returnTime" && order[value] === null) {
-      let listOrderNotAssignedTemp = [...listOrderNotAssignedReturnTime];
-      listOrderNotAssignedTemp.push(order);
-      setListOrderNotAssignedReturnTime(listOrderNotAssignedTemp);
-      return;
-    }
-
-    if (value === "returnTime") {
-      order = { ...order, isDelivery: false };
-    } else {
+  const handleFormatDate = (date, result, order) => {
+    if (order.type === TYPE_REQUEST_DELIVERY_TAKE) {
       order = { ...order, isDelivery: true };
+    } else {
+      order = { ...order, isDelivery: false };
     }
     order = { ...order, isSelected: false };
     // if (Object.keys(result).length > 0) {
@@ -132,7 +123,7 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
       }
     });
     // }
-    result[currentDate].listSchedule.get(order[value]).push(order);
+    result[currentDate].listSchedule.get(order.deliveryTime).push(order);
     result[currentDate].amountNotAssignStaff += 1;
   };
 
@@ -142,9 +133,13 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
         return true;
       }
     });
+    console.log(currentDate);
+    console.log(result[currentDate].listSchedule);
+    console.log(result[currentDate].listSchedule.get(request["scheduleTime"]));
+
     result[currentDate].listSchedule
-      .get(request["returnTime"])
-      .push({ ...request, isDelivery: false });
+      .get(request["scheduleTime"])
+      .push({ ...request, isDelivery: true });
     result[currentDate].amountNotAssignStaff += 1;
   };
 
@@ -205,95 +200,93 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
       }
       setListDateAWeek(listDateAWeekTemp);
 
-      let response = await getOrder(
-        "",
-        "",
-        "",
+      let response = await getRequestToScheduleNew(
         startOfWeek.toISOString().split("T")[0],
         endOfWeek.toISOString().split("T")[0],
-        userState.idToken,
-        "OrderStatuses=2&OrderStatuses=3&OrderStatuses=4"
+        userState.idToken
       );
-      response?.data?.data
-        ?.filter((e) => e.status !== 0 && e.typeOrder !== 0)
-        ?.forEach((e) => {
-          let dateDelivery = new Date(e.deliveryDate);
-          let dateReturn = new Date(e.returnDate);
-          if (
-            isDateBefore(dateReturn, endOfWeek) === true &&
-            isDateAfter(dateReturn, startOfWeek) === true
-          ) {
-            handleFormatDate(dateReturn, result, e, "returnTime");
-          } else {
-            handleFormatDate(dateDelivery, result, e, "deliveryTime");
-          }
-        });
+      response?.data?.data.forEach((e) => {
+        handleFormatDate(new Date(e.deliveryDate), result, e);
+      });
+      //   ?.filter((e) => e.status !== 0 && e.typeOrder !== 0)
+      //   ?.forEach((e) => {
+      //     let dateDelivery = new Date(e.deliveryDate);
+      //     let dateReturn = new Date(e.returnDate);
+      //     if (
+      //       isDateBefore(dateReturn, endOfWeek) === true &&
+      //       isDateAfter(dateReturn, startOfWeek) === true
+      //     ) {
+      //       handleFormatDate(dateReturn, result, e, "returnTime");
+      //     } else {
+      //       handleFormatDate(dateDelivery, result, e, "deliveryTime");
+      //     }
+      //   });
 
       try {
-        let responseRequest = await getRequestToSchedule(
-          startOfWeek.toISOString().split("T")[0],
-          endOfWeek.toISOString().split("T")[0],
+        let responseRequest = await getSchedule(
+          startOfWeek.toISOString(),
+          endOfWeek.toISOString(),
           userState.idToken
         );
-
+        console.log(responseRequest);
         responseRequest.data.data.forEach((e) => {
-          handleFormatRequestSchedule(new Date(e.returnDate), result, e);
+          handleFormatRequestSchedule(new Date(e.scheduleDay), result, e);
         });
       } catch (error) {
         console.log(error.response);
       }
-      console.log(result);
-      try {
-        let responseSchedule = await getSchedule(
-          startOfWeek.toISOString().split("T")[0],
-          endOfWeek.toISOString().split("T")[0],
-          userState.idToken
-        );
+      // console.log(result);
+      // try {
+      //   let responseSchedule = await getSchedule(
+      //     startOfWeek.toISOString().split("T")[0],
+      //     endOfWeek.toISOString().split("T")[0],
+      //     userState.idToken
+      //   );
 
-        if (responseSchedule.data.data) {
-          responseSchedule.data.data.forEach((schedule) => {
-            Object.keys(result).forEach((resultKey) => {
-              for (const entry of result[resultKey].listSchedule?.entries()) {
-                if (entry[1]?.length > 0) {
-                  let index = -1;
-                  console.log(entry[1]);
-                  console.log(schedule);
-                  if (schedule.requestId) {
-                    index = entry[1].findIndex((order) => {
-                      return (
-                        order.orderId === schedule.orderId &&
-                        order.id === schedule.requestId
-                      );
-                    });
-                  } else {
-                    index = entry[1].findIndex(
-                      (order) => order.id === schedule.orderId
-                    );
-                  }
+      //   if (responseSchedule.data.data) {
+      //     responseSchedule.data.data.forEach((schedule) => {
+      //       Object.keys(result).forEach((resultKey) => {
+      //         for (const entry of result[resultKey].listSchedule?.entries()) {
+      //           if (entry[1]?.length > 0) {
+      //             let index = -1;
+      //             console.log(entry[1]);
+      //             console.log(schedule);
+      //             if (schedule.requestId) {
+      //               index = entry[1].findIndex((order) => {
+      //                 return (
+      //                   order.orderId === schedule.orderId &&
+      //                   order.id === schedule.requestId
+      //                 );
+      //               });
+      //             } else {
+      //               index = entry[1].findIndex(
+      //                 (order) => order.id === schedule.orderId
+      //               );
+      //             }
 
-                  if (index !== -1) {
-                    result[resultKey].listSchedule.get(entry[0])[index] = {
-                      ...result[resultKey].listSchedule.get(entry[0])[index],
-                      listStaffDelivery: schedule.users,
-                    };
-                    result[resultKey].amountNotAssignStaff -= 1;
-                  }
-                }
-              }
-            });
-          });
-          setListScheduleWholeWeek(result);
-          setListScheduleCurrentDate(
-            result[Object.keys(result)[currentIndexDateLocal]]
-          );
-        }
-      } catch (exception) {
-        console.log(exception.response);
-        setListScheduleWholeWeek(result);
-        setListScheduleCurrentDate(
-          result[Object.keys(result)[currentIndexDateLocal]]
-        );
-      }
+      //             if (index !== -1) {
+      //               result[resultKey].listSchedule.get(entry[0])[index] = {
+      //                 ...result[resultKey].listSchedule.get(entry[0])[index],
+      //                 listStaffDelivery: schedule.users,
+      //               };
+      //               result[resultKey].amountNotAssignStaff -= 1;
+      //             }
+      //           }
+      //         }
+      //       });
+      //     });
+      setListScheduleWholeWeek(result);
+      setListScheduleCurrentDate(
+        result[Object.keys(result)[currentIndexDateLocal]]
+      );
+      //   }
+      // } catch (exception) {
+      //   console.log(exception.response);
+      //   setListScheduleWholeWeek(result);
+      //   setListScheduleCurrentDate(
+      //     result[Object.keys(result)[currentIndexDateLocal]]
+      //   );
+      // }
     } catch (e) {
       console.log(e);
     } finally {

@@ -9,7 +9,8 @@ export default function AreaUsage({ value }) {
         sx={{
           display: "flex",
           flexDirection: "column",
-          width: "60%",
+          width: "100%",
+          height: "auto",
           alignItems: "center",
         }}
       >

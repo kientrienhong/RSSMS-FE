@@ -506,7 +506,7 @@ export const assignSchedule = async (
   let response = await axios.post(
     `https://localhost:44304/api/v1/schedules`,
     {
-      sheduleDay: scheduleDay,
+      scheduleDay: new Date(scheduleDay).toISOString(),
       schedules: listOrder,
       userIds: userIds,
     },
@@ -538,19 +538,6 @@ export const cancelOrder = async (id, reason, token) => {
 };
 
 export const updateOrder = async (id, order, token) => {
-  console.log({
-    id: order.id,
-    paymentMethod: order.paymentMethod,
-    isUserDelivery: order.isUserDelivery,
-    deliveryDate: order.deliveryDate,
-    returnTime: order.returnTime,
-    deliveryTime: order.deliveryTime,
-    returnDate: order.returnDate,
-    deliveryAddress: order.deliveryAddress,
-    addressReturn: order.addressReturn,
-    status: order.status,
-    isPaid: order.isPaid,
-  });
   const response = await axios.put(
     `https://localhost:44304/api/v1/orders/${id}`,
     {
@@ -740,6 +727,14 @@ export const getCustomerRequest = async (name, page, size, token) => {
 export const getRequestToSchedule = async (dayFrom, dayTo, token) => {
   const response = await axios.get(
     `https://localhost:44304/api/v1/requests?FromDate=${dayFrom}&ToDate=${dayTo}&RequestTypes=2`,
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+  return response;
+};
+
+export const getRequestToScheduleNew = async (dayFrom, dayTo, token) => {
+  const response = await axios.get(
+    `https://localhost:44304/api/v1/requests?FromDate=${dayFrom}&ToDate=${dayTo}&RequestTypes=1`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
   return response;

@@ -4,6 +4,8 @@ export const AREA_TYPE = 3;
 export const BOX_TYPE = 2;
 export const SELF_STORAGE_TYPE = 0;
 
+export const TYPE_REQUEST_DELIVERY_TAKE = 1;
+
 export const MALE = 0;
 export const FEMALE = 1;
 export const OTHER_GENDER = 2;
@@ -18,11 +20,6 @@ export const ROLE_USER = {
 export const TYPE_AREA = {
   "Kho tự quản": 0,
   "Giữ đồ thuê": 1,
-};
-
-export const TYPE_STORAGE = {
-  "Self-Storage": 0,
-  "Door-to-door": 1,
 };
 
 export const TYPE_SHELF = {
@@ -42,17 +39,6 @@ export const PRODUCT_TYPE = {
   2: "product",
   3: "product",
   1: "accessory",
-};
-
-export const ORDER_STATUS = {
-  0: "Đã hủy",
-  1: "Đã đặt",
-  2: "Đã xử lý",
-  3: "Đang vận chuyển",
-  4: "Đã lưu kho",
-  5: "Đã quá hạn",
-  6: "Hoàn tất",
-  7: "Đang vận chuyển",
 };
 
 export const ORDER_TYPE = {
@@ -91,19 +77,32 @@ export const LIST_PRODUCT_MANAGE_TYPE = [
 
 export const LIST_TYPE_REQUEST = [
   { name: "Hủy lịch giao hàng" },
+  { name: "Tạo đơn" },
   { name: "Gia hạn đơn" },
-  { name: "Yêu cầu trả đơn" },
   { name: "Hủy đơn" },
+  { name: "Yêu cầu trả đơn" },
 ];
 
 export const LIST_STATUS = [
   { label: "Đã hủy", value: 0 },
   { label: "Đã đặt", value: 1 },
-  { label: "Đặt xử lý", value: 2 },
+  { label: "Đã xử lý", value: 2 },
   { label: "Đang vận chuyển", value: 3 },
-  { label: "Đang lưu kho", value: 4 },
+  { label: "Đã lưu kho", value: 4 },
   { label: "Đã hết hạn", value: 5 },
+  { label: "Đã hoàn tất", value: 6 },
 ];
+
+export const ORDER_STATUS = {
+  0: "Đã hủy",
+  1: "Đã đặt",
+  2: "Đã xử lý",
+  3: "Đang vận chuyển",
+  4: "Đã lưu kho",
+  5: "Đã quá hạn",
+  6: "Hoàn tất",
+  7: "Đang vận chuyển",
+};
 
 export const LIST_UNIT = [
   { label: "Tháng", value: "tháng" },
