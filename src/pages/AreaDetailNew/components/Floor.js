@@ -1,18 +1,7 @@
 import React from "react";
-import {
-  Box,
-  Button,
-  InputAdornment,
-  IconButton,
-  TextField,
-  Accordion,
-  Typography,
-  AccordionDetails,
-  AccordionSummary,
-  Grid,
-} from "@material-ui/core";
+import { Box, Button, Typography, Grid } from "@material-ui/core";
 import CircularProgressWithLabel from "./CircularProgressWithLabel";
-export default function Floor({ floor }) {
+export default function Floor({ floor, handleOpen, shelf }) {
   return (
     <Grid>
       <Box
@@ -20,7 +9,7 @@ export default function Floor({ floor }) {
           borderWidth: "2px",
           borderRadius: "4px",
           borderStyle: "solid",
-          padding: "1%",
+          padding: "2%",
           borderColor: "black",
           display: "flex",
           flexDirection: "row",
@@ -56,7 +45,6 @@ export default function Floor({ floor }) {
               height: "32px",
               paddingLeft: "16px",
               paddingRight: "16px",
-              marginRight: "2%",
               width: "100%",
             }}
             color="primary"
@@ -70,12 +58,13 @@ export default function Floor({ floor }) {
               height: "32px",
               paddingLeft: "16px",
               paddingRight: "16px",
-              marginRight: "2%",
               width: "100%",
             }}
             color="success"
             variant="contained"
-            onClick={() => {}}
+            onClick={() => {
+              handleOpen(shelf, floor);
+            }}
           >
             Xem thêm
           </Button>
@@ -84,7 +73,6 @@ export default function Floor({ floor }) {
               height: "32px",
               paddingLeft: "16px",
               paddingRight: "16px",
-              marginRight: "2%",
               width: "100%",
             }}
             color="error"

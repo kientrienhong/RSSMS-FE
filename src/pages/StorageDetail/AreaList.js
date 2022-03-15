@@ -47,7 +47,7 @@ function AreaList({
       );
     });
 
-  const addArea = async (name, description, type) => {
+  const addArea = async (name, description, type, data) => {
     try {
       showLoading();
       await createArea(
@@ -55,6 +55,11 @@ function AreaList({
         name,
         description,
         type === "Self-Storage" ? 0 : 1,
+        {
+          width: data.width,
+          height: data.height,
+          length: data.length,
+        },
         userState.idToken
       );
       let listAreaTemp = await getArea(storageId, userState.idToken);
@@ -69,14 +74,21 @@ function AreaList({
     }
   };
 
-  const editArea = async (name, description, type) => {
+  const editArea = async (name, description, type, data) => {
     try {
       showLoading();
       await updateArea(
         currentArea.id,
         name,
         description,
+
         type === "Self-Storage" ? 0 : 1,
+        {
+          width: data.width,
+          height: data.height,
+          length: data.length,
+        },
+
         userState.idToken
       );
 
@@ -107,9 +119,9 @@ function AreaList({
 
   const onSubmit = (data) => {
     if (isEdit === false) {
-      addArea(data.name, data.description, data.type);
+      addArea(data.name, data.description, data.type, data);
     } else {
-      editArea(data.name, data.description, data.type);
+      editArea(data.name, data.description, data.type, data);
     }
   };
 

@@ -1,5 +1,12 @@
 import React from "react";
-import { MenuItem, Box, Typography, Button, Modal } from "@material-ui/core";
+import {
+  MenuItem,
+  Box,
+  Typography,
+  Button,
+  Modal,
+  Grid,
+} from "@material-ui/core";
 import CustomInput from "../../components/CustomInput";
 import CustomAreaInput from "../../components/CustomAreaInput";
 import { STYLE_MODAL } from "../../constant/style";
@@ -65,6 +72,63 @@ export default function ModalArea({
               userInfo={currentArea.description}
               inlineStyle={styleInput}
             />
+            <Grid
+              container
+              spacing={2}
+              sx={{
+                width: "98%",
+                marginTop: "3%",
+              }}
+            >
+              <Grid item xs={4}>
+                <CustomInput
+                  control={control}
+                  rules={{
+                    required: "*Vui lòng nhập",
+                    pattern: {
+                      value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
+                      message: "*Vui lòng nhập đúng chiều dài",
+                    },
+                  }}
+                  name="length"
+                  label="Chiều dài (m)"
+                  userInfo={currentArea?.length}
+                  inlineStyle={{ ...styleInput, marginBottom: "4%" }}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <CustomInput
+                  control={control}
+                  rules={{
+                    required: "*Vui lòng nhập",
+                    pattern: {
+                      value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
+                      message: "*Vui lòng nhập đúng chiều rộng",
+                    },
+                  }}
+                  name="width"
+                  label="Chiều rộng (m)"
+                  userInfo={currentArea?.width}
+                  inlineStyle={{ ...styleInput, marginBottom: "4%" }}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <CustomInput
+                  control={control}
+                  rules={{
+                    required: "*Vui lòng nhập",
+                    pattern: {
+                      value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
+                      message: "*Vui lòng nhập đúng chiều cao",
+                    },
+                  }}
+                  name="height"
+                  label="Chiều cao (m)"
+                  userInfo={currentArea?.height}
+                  inlineStyle={{ ...styleInput, marginBottom: "4%" }}
+                />
+              </Grid>
+            </Grid>
           </Box>
           <Box
             sx={{

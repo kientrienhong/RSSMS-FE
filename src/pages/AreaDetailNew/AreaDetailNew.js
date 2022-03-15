@@ -19,6 +19,7 @@ import {
   getDetailArea,
   getProduct,
 } from "../../apis/Apis";
+import ModalDetailFloor from "./components/ModalDetailFloor";
 import {
   AREA_TYPE,
   BOX_TYPE,
@@ -43,6 +44,22 @@ function AreaDetailNew({
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
   const [currentArea, setCurrentArea] = useState({});
+  const [openDetailFloor, setOpenDetailFloor] = useState(false);
+  const [currentShelf, setCurrentShelf] = useState({});
+  const [currentFloor, setCurrentFloor] = useState({});
+
+  const handleOpenDetailFloor = (shelf, floor) => {
+    console.log(floor);
+    setCurrentFloor(floor);
+    setCurrentShelf(shelf);
+    setOpenDetailFloor(true);
+  };
+
+  const handleCloseDetailFloor = () => {
+    setCurrentFloor({});
+    setCurrentShelf({});
+    setOpenDetailFloor(false);
+  };
 
   useEffect(() => {
     const getData = async () => {
@@ -64,8 +81,7 @@ function AreaDetailNew({
         });
         let area = await getDetailArea(areaId, userState.idToken);
         setArea(area.data);
-        console.log(area);
-        console.log(storageTemp);
+
         setTotalPage(response.data.metadata.totalPage);
       } catch (e) {
         console.log(e);
@@ -94,6 +110,11 @@ function AreaDetailNew({
         py: 3,
       }}
     >
+      <ModalDetailFloor
+        currentFloor={currentFloor}
+        open={openDetailFloor}
+        handleClose={handleCloseDetailFloor}
+      />
       <Box
         sx={{
           marginLeft: "2%",
@@ -147,7 +168,8 @@ function AreaDetailNew({
         sx={{
           display: "flex",
           width: "95%",
-          height: "90%",
+          height: "80%",
+          overflowY: "scroll",
           margin: "1% 2%",
           padding: "1%",
           flexDirection: "column",
@@ -194,6 +216,7 @@ function AreaDetailNew({
             }}
           >
             <ListShelf
+              handleOpen={handleOpenDetailFloor}
               listShelf={[
                 {
                   name: "Shelf - 1",

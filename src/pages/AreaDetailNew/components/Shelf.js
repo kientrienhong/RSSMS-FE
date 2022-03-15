@@ -14,11 +14,17 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Floor from "./Floor";
 
-export default function Shelf({ expanded, id, handleChange, shelf }) {
+export default function Shelf({
+  handleOpen,
+  expanded,
+  id,
+  handleChange,
+  shelf,
+}) {
   const mapFloors = () => {
     return shelf.floors.map((e, index) => (
       <Grid item xs={6} key={index}>
-        <Floor floor={e} />
+        <Floor shelf={shelf} handleOpen={handleOpen} floor={e} />
       </Grid>
     ));
   };

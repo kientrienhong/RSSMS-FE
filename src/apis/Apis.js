@@ -302,7 +302,14 @@ export const getArea = async (storageId, token) => {
   return response;
 };
 
-export const createArea = async (storageId, name, description, type, token) => {
+export const createArea = async (
+  storageId,
+  name,
+  description,
+  type,
+  size,
+  token
+) => {
   const response = await axios.post(
     "https://localhost:44304/api/v1/areas",
     {
@@ -310,6 +317,9 @@ export const createArea = async (storageId, name, description, type, token) => {
       storageId: storageId,
       status: 1,
       type: type,
+      width: size.width,
+      height: size.height,
+      length: size.length,
       description: description,
     },
     { headers: { Authorization: `Bearer ${token}` } }
@@ -319,7 +329,6 @@ export const createArea = async (storageId, name, description, type, token) => {
 };
 
 export const deleteArea = async (id, token) => {
-  console.log(id);
   const response = await axios.delete(
     `https://localhost:44304/api/v1/areas/${id}`,
     { headers: { Authorization: `Bearer ${token}` } }
@@ -328,13 +337,16 @@ export const deleteArea = async (id, token) => {
   return response;
 };
 
-export const updateArea = async (id, name, description, type, token) => {
+export const updateArea = async (id, name, description, type, size, token) => {
   const response = await axios.put(
     `https://localhost:44304/api/v1/areas/${id}`,
     {
       id: id,
       name: name,
       type: type,
+      width: size.width,
+      height: size.height,
+      length: size.length,
       description: description,
     },
     { headers: { Authorization: `Bearer ${token}` } }

@@ -20,7 +20,7 @@ export default function CircularProgressWithLabel(props) {
         }}
       >
         <p
-          style={{ fontSize: "24px", display: "inline-block", margin: "0" }}
+          style={{ fontSize: "20px", display: "inline-block", margin: "0" }}
         >{`${Math.round(props.value)}%`}</p>
       </Box>
     </Box>

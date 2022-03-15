@@ -63,15 +63,13 @@ export default function AreaUsage({ value }) {
     <Card
       sx={{
         width: "30%",
-        height: "37%",
-        overflowY: "scroll",
+        height: "40%",
         display: "flex",
         flexDirection: "column",
         marginRight: "3%",
         alignItems: "center",
         justifyAligns: "space-between",
         padding: "2%",
-        paddingTop: "4%",
         marginBottom: "4%",
       }}
     >

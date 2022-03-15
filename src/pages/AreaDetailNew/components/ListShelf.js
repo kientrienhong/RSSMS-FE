@@ -1,10 +1,8 @@
 import React from "react";
 import Shelf from "./Shelf";
-export default function ListShelf({ listShelf }) {
+export default function ListShelf({ listShelf, handleOpen }) {
   const [expanded, setExpanded] = React.useState(false);
-  console.log(listShelf);
   const handleChange = (panel) => (event, isExpanded) => {
-    console.log(isExpanded, panel);
     setExpanded(isExpanded ? panel : false);
   };
 
@@ -16,6 +14,7 @@ export default function ListShelf({ listShelf }) {
           handleChange={handleChange}
           expanded={expanded}
           id={index}
+          handleOpen={handleOpen}
         />
       );
     });
