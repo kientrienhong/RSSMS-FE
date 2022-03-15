@@ -364,67 +364,55 @@ export const getDetailArea = async (id, token) => {
   return response;
 };
 
-export const getListShelves = async (name, page, size, areaId, token) => {
-  let listShelves;
-  listShelves = await axios.get(
-    `https://localhost:44304/api/v1/shelves?AreaId=${areaId}&Name=${name}&page=${page}&size=${size}`,
+export const getListSpace = async (name, page, size, areaId, token) => {
+  let listSpace;
+  listSpace = await axios.get(
+    `https://localhost:44304/api/v1/spaces?AreaId=${areaId}&Name=${name}&page=${page}&size=${size}`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
 
-  return listShelves;
+  return listSpace;
 };
 
-export const createShelf = async (shelf, areaId, token) => {
-  let listShelves = await axios.post(
-    `https://localhost:44304/api/v1/shelves`,
+export const createSpace = async (space, areaId, token) => {
+  let result = await axios.post(
+    `https://localhost:44304/api/v1/spaces`,
     {
       areaId: areaId,
-      type: shelf.type,
-      name: shelf.name,
-      note: shelf.note,
-      boxesInWidth: shelf.boxesInWidth,
-      boxesInHeight: shelf.boxesInHeight,
-      boxSize: -1,
-      serviceId: shelf.productId,
+      type: space.type,
+      name: space.name,
+      floorWidth: space.floorWidth,
+      floorLength: space.floorLength,
+      floorHeight: space.floorHeight,
+      numberOfFloor: space.numberOfFloor ?? 1,
     },
     { headers: { Authorization: `Bearer ${token}` } }
   );
 
-  return listShelves;
+  return result;
 };
 
-export const updateShelf = async (id, shelf, token) => {
-  console.log({
-    id: id,
-    type: shelf.type,
-    name: shelf.name,
-    note: shelf.note,
-    boxesInWidth: shelf.boxesInWidth,
-    boxesInHeight: shelf.boxesInHeight,
-    boxSize: -1,
-    serviceId: shelf.serviceId,
-  });
-  let listShelves = await axios.put(
-    `https://localhost:44304/api/v1/shelves/${id}`,
+export const updateShelf = async (id, space, token) => {
+  let result = await axios.put(
+    `https://localhost:44304/api/v1/spaces/${id}`,
     {
       id: id,
-      type: shelf.type,
-      name: shelf.name,
-      note: shelf.note,
-      boxesInWidth: shelf.boxesInWidth,
-      boxesInHeight: shelf.boxesInHeight,
-      boxSize: -1,
-      serviceId: shelf.serviceId,
+      type: space.type,
+      name: space.name,
+      numberOfFloor: space.numberOfFloor ?? 1,
+      floorWidth: space.floorWidth,
+      floorLength: space.floorLength,
+      floorHeight: space.floorHeight,
     },
     { headers: { Authorization: `Bearer ${token}` } }
   );
 
-  return listShelves;
+  return result;
 };
 
-export const deleteShelf = async (id, token) => {
+export const deleteSpace = async (id, token) => {
   const response = await axios.delete(
-    `https://localhost:44304/api/v1/shelves/${id}`,
+    `https://localhost:44304/api/v1/spaces/${id}`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
 
@@ -432,21 +420,6 @@ export const deleteShelf = async (id, token) => {
 };
 
 export const createOrder = async (order, token) => {
-  console.log({
-    customerId: order.customerId,
-    deliveryAddress: order.deliveryAddress,
-    addressReturn: order.addressReturn,
-    totalPrice: order.totalPrice,
-    typeOrder: order.typeOrder,
-    deliveryTime: order.deliveryTime,
-    isPaid: order.isPaid,
-    paymentMethod: order.paymentMethod,
-    isUserDelivery: order.isUserDelivery,
-    deliveryDate: order.deliveryDate,
-    duration: order.duration,
-    listProduct: order.listProduct,
-  });
-
   const response = await axios.post(
     `https://localhost:44304/api/v1/orders`,
     {

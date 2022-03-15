@@ -15,9 +15,9 @@ import * as action from "../../redux/action/action";
 import { useParams } from "react-router-dom";
 import {
   getStorageDetail,
-  getListShelves,
+  getListSpace,
   getDetailArea,
-  getProduct,
+  deleteSpace,
 } from "../../apis/Apis";
 import ModalDetailFloor from "./components/ModalDetailFloor";
 import {
@@ -29,6 +29,9 @@ import { TYPE_AREA, TYPE_SHELF } from "../../constant/constant";
 import AreaUsage from "./components/AreaUsage";
 import Shelf from "./components/Shelf";
 import ListShelf from "./components/ListShelf";
+import ModalSpace from "./components/ModalSpace";
+import SelfStorageModal from "./components/SelfStorageModal";
+import ConfirmModal from "../../components/ConfirmModal";
 
 function AreaDetailNew({
   storedOrder,
@@ -45,61 +48,127 @@ function AreaDetailNew({
   const [totalPage, setTotalPage] = useState(0);
   const [currentArea, setCurrentArea] = useState({});
   const [openDetailFloor, setOpenDetailFloor] = useState(false);
-  const [currentShelf, setCurrentShelf] = useState({});
+  const [currentSpace, setCurrentSpace] = useState({});
   const [currentFloor, setCurrentFloor] = useState({});
+  const [isEdit, setIsEdit] = useState(false);
+  const [isOpenSelfStorage, setIsOpenSelfStorage] = useState(false);
+  const [isOpenSpace, setIsOpenSpace] = useState(false);
+  const [isHandy, setIsHandy] = useState(true);
+  const [isOpenConfirm, setIsOpenConfirm] = useState(false);
+  const [listShelves, setListShelves] = useState([]);
 
-  const handleOpenDetailFloor = (shelf, floor) => {
-    console.log(floor);
+  const handleOpenConfirm = (space) => {
+    setCurrentSpace(space);
+    setIsOpenConfirm(true);
+  };
+
+  const handleCloseConfirm = () => {
+    setIsOpenConfirm(false);
+  };
+
+  const handleOpenSelfStorage = (space, isEdit) => {
+    if (isEdit) {
+      setCurrentSpace({
+        ...space,
+        floorWidth: space.floors[0].width,
+        floorHeight: space.floors[0].height,
+        floorLength: space.floors[0].length,
+      });
+    } else {
+      setCurrentSpace({ type: 0 });
+    }
+    setCurrentSpace(space);
+
+    setIsOpenSelfStorage(true);
+  };
+
+  const handleCloseSelfStorage = (space, isEdit) => {
+    setCurrentSpace({});
+    setIsEdit(false);
+    setIsOpenSelfStorage(false);
+  };
+
+  const handleOpenSpace = (space, isEdit) => {
+    setIsEdit(isEdit);
+    if (isEdit) {
+      setCurrentSpace({
+        ...space,
+        floorWidth: space.floors[0].width,
+        floorHeight: space.floors[0].height,
+        floorLength: space.floors[0].length,
+      });
+    } else {
+      setCurrentSpace({ type: 0 });
+    }
+    setIsOpenSpace(true);
+  };
+
+  const handleCloseSpace = () => {
+    setCurrentSpace({});
+    setIsEdit(false);
+    setIsOpenSpace(false);
+  };
+
+  const handleOpenDetailFloor = (space, floor) => {
     setCurrentFloor(floor);
-    setCurrentShelf(shelf);
+    setCurrentSpace(space);
     setOpenDetailFloor(true);
   };
 
   const handleCloseDetailFloor = () => {
     setCurrentFloor({});
-    setCurrentShelf({});
+    setCurrentSpace({});
     setOpenDetailFloor(false);
   };
 
+  const handleDeleteSpace = async (id) => {
+    console.log(id);
+    try {
+      await deleteSpace(id, userState.idToken);
+      setCurrentSpace({});
+      await getData();
+      showSnackbar("success", "Xóa không gian thành công!");
+    } catch (error) {
+      console.log(error);
+      if (error?.response?.status === 404) {
+        setListShelves([]);
+        showSnackbar("success", "Xóa không gian thành công!");
+      } else {
+        throw error;
+      }
+    }
+  };
+  const getData = async () => {
+    try {
+      showLoading();
+      let storageTemp = await getStorageDetail(storageId, userState.idToken);
+
+      setStorage(storageTemp.data);
+      let response = await getListSpace(
+        searchName,
+        page,
+        6,
+        areaId,
+        userState.idToken
+      );
+      setListShelves(response.data.data);
+      // let listShelves = response.data.data;
+      // listShelves = listShelves.map((e) => {
+      //   return { ...e, boxSize: e?.boxes[0]?.sizeType };
+      // });
+      let area = await getDetailArea(areaId, userState.idToken);
+      console.log(response);
+      setArea(area.data);
+      setTotalPage(response.data.metadata.totalPage);
+      hideLoading();
+    } catch (e) {
+      console.log(e);
+      hideLoading();
+    }
+  };
+
   useEffect(() => {
-    const getData = async () => {
-      try {
-        showLoading();
-        let storageTemp = await getStorageDetail(storageId, userState.idToken);
-
-        setStorage(storageTemp.data);
-        let response = await getListShelves(
-          searchName,
-          page,
-          6,
-          areaId,
-          userState.idToken
-        );
-        let listShelves = response.data.data;
-        listShelves = listShelves.map((e) => {
-          return { ...e, boxSize: e?.boxes[0]?.sizeType };
-        });
-        let area = await getDetailArea(areaId, userState.idToken);
-        setArea(area.data);
-
-        setTotalPage(response.data.metadata.totalPage);
-      } catch (e) {
-        console.log(e);
-        hideLoading();
-      }
-    };
-
-    const firstCall = async () => {
-      try {
-        showLoading();
-        await getData();
-      } catch (error) {
-        console.log(error);
-      } finally {
-        hideLoading();
-      }
-    };
-    firstCall();
+    getData();
   }, []);
 
   return (
@@ -110,10 +179,35 @@ function AreaDetailNew({
         py: 3,
       }}
     >
+      <ConfirmModal
+        open={isOpenConfirm}
+        handleClose={handleCloseConfirm}
+        onHandleYes={handleDeleteSpace}
+        id={currentSpace.id}
+        msg={"Xóa không gian thành công!"}
+      />{" "}
       <ModalDetailFloor
         currentFloor={currentFloor}
         open={openDetailFloor}
         handleClose={handleCloseDetailFloor}
+      />
+      <SelfStorageModal
+        currentSpace={currentSpace}
+        setCurrentSpace={setCurrentSpace}
+        open={isOpenSelfStorage}
+        handleClose={handleCloseSelfStorage}
+      />
+      <ModalSpace
+        currentSpace={currentSpace}
+        getData={getData}
+        setCurrentSpace={setCurrentSpace}
+        open={isOpenSpace}
+        handleClose={handleCloseSpace}
+        isEdit={isEdit}
+        areaId={area.id}
+        searchName={searchName}
+        isHandy={isHandy}
+        setIsHandy={setIsHandy}
       />
       <Box
         sx={{
@@ -153,15 +247,21 @@ function AreaDetailNew({
             height: "45px",
             paddingLeft: "16px",
             paddingRight: "16px",
-            marginLeft: "2%",
+            marginLeft: "1%",
           }}
           color="primary"
           variant="contained"
-          onClick={() => {}}
+          onClick={() => {
+            if (area.type === 1) {
+              handleOpenSpace({}, false);
+            } else {
+              handleOpenSelfStorage({}, false);
+            }
+          }}
         >
-          {currentArea.type === TYPE_AREA["Self-Storage"]
-            ? "Create storage"
-            : "Create shelf"}
+          {area?.type === TYPE_AREA["Kho tự quản"]
+            ? "Tạo kho"
+            : "Tạo không gian chứa"}
         </Button>
       </Box>
       <Box
@@ -211,139 +311,17 @@ function AreaDetailNew({
               display: "flex",
               flexDirection: "column",
               height: "100%",
-
+              width: "70%",
               justifyContent: "flex-start",
             }}
           >
             <ListShelf
+              area={area}
               handleOpen={handleOpenDetailFloor}
-              listShelf={[
-                {
-                  name: "Shelf - 1",
-                  width: 3,
-                  height: 3,
-                  length: 3,
-                  usage: 6,
-                  floors: [
-                    {
-                      name: "Tầng 1",
-                      usage: 30,
-                    },
-                    {
-                      name: "Tầng 2",
-                      usage: 40,
-                    },
-                    {
-                      name: "Tầng 3",
-                      usage: 50,
-                    },
-                    {
-                      name: "Tầng 4",
-                      usage: 60,
-                    },
-                  ],
-                },
-                {
-                  name: "Shelf - 2",
-                  width: 3,
-                  height: 3,
-                  length: 3,
-                  usage: 6,
-                  floors: [
-                    {
-                      name: "Tầng 1",
-                      usage: 30,
-                    },
-                    {
-                      name: "Tầng 2",
-                      usage: 40,
-                    },
-                    {
-                      name: "Tầng 3",
-                      usage: 50,
-                    },
-                    {
-                      name: "Tầng 4",
-                      usage: 60,
-                    },
-                  ],
-                },
-                {
-                  name: "Shelf - 3",
-                  width: 3,
-                  height: 3,
-                  length: 3,
-                  usage: 6,
-                  floors: [
-                    {
-                      name: "Tầng 1",
-                      usage: 30,
-                    },
-                    {
-                      name: "Tầng 2",
-                      usage: 40,
-                    },
-                    {
-                      name: "Tầng 3",
-                      usage: 50,
-                    },
-                    {
-                      name: "Tầng 4",
-                      usage: 60,
-                    },
-                  ],
-                },
-                {
-                  name: "Shelf - 4",
-                  width: 3,
-                  height: 3,
-                  length: 3,
-                  usage: 6,
-                  floors: [
-                    {
-                      name: "Tầng 1",
-                      usage: 30,
-                    },
-                    {
-                      name: "Tầng 2",
-                      usage: 40,
-                    },
-                    {
-                      name: "Tầng 3",
-                      usage: 50,
-                    },
-                    {
-                      name: "Tầng 4",
-                      usage: 60,
-                    },
-                  ],
-                },
-                {
-                  name: "Shelf - 5",
-                  width: 3,
-                  height: 3,
-                  length: 3,
-                  usage: 6,
-                  floors: [
-                    {
-                      name: "Tầng 1",
-                      usage: 30,
-                    },
-                    {
-                      name: "Tầng 2",
-                      usage: 40,
-                    },
-                    {
-                      name: "Tầng 3",
-                      usage: 50,
-                    },
-                    {
-                      name: "Tầng 4",
-                      usage: 60,
-                    },
-                  ],
-                },
-              ]}
+              handleOpenSpace={handleOpenSpace}
+              handleOpenSelfStorage={handleOpenSelfStorage}
+              listShelf={listShelves}
+              handleOpenConfirm={handleOpenConfirm}
             />
           </Box>
         </Box>

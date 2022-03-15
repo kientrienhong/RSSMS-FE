@@ -7,7 +7,6 @@ import {
   TextField,
   Modal,
 } from "@material-ui/core";
-import Shelf from "./Shelf";
 
 import { STYLE_MODAL } from "../../../constant/style";
 import FormSelfStorage from "./FormSelfStorage";
@@ -17,12 +16,10 @@ const styleModal = {
   width: "70%",
 };
 export default function SelfStorageModal({
-  currentShelf,
-  isModifyShelf,
-  setCurrentShelf,
+  currentSpace,
+  setCurrentSpace,
   handleClose,
   open,
-  listSelfStorage,
   isEdit,
   areaId,
   page,
@@ -44,14 +41,6 @@ export default function SelfStorageModal({
           alignItems: "center",
         }}
       >
-        <Box sx={{ width: "60%", height: "auto" }}>
-          <Shelf
-            shelf={currentShelf}
-            index={2}
-            isModifyShelf={isModifyShelf}
-            setCurrentShelf={setCurrentShelf}
-          />
-        </Box>
         <Box
           sx={{
             display: "flex",
@@ -62,14 +51,13 @@ export default function SelfStorageModal({
         >
           <FormSelfStorage
             isEdit={isEdit}
-            currentShelf={currentShelf}
-            setCurrentShelf={setCurrentShelf}
+            currentSpace={currentSpace}
+            setCurrentSpace={setCurrentSpace}
             getData={getData}
             page={page}
             areaId={areaId}
             searchName={searchName}
             handleClose={handleClose}
-            listSelfStorage={listSelfStorage}
           />
         </Box>
       </Box>

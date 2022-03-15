@@ -1,6 +1,13 @@
 import React from "react";
 import Shelf from "./Shelf";
-export default function ListShelf({ listShelf, handleOpen }) {
+export default function ListShelf({
+  listShelf,
+  handleOpen,
+  area,
+  handleOpenSpace,
+  handleOpenSelfStorage,
+  handleOpenConfirm,
+}) {
   const [expanded, setExpanded] = React.useState(false);
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -14,7 +21,11 @@ export default function ListShelf({ listShelf, handleOpen }) {
           handleChange={handleChange}
           expanded={expanded}
           id={index}
+          area={area}
+          handleOpenSpace={handleOpenSpace}
+          handleOpenSelfStorage={handleOpenSelfStorage}
           handleOpen={handleOpen}
+          handleOpenConfirm={handleOpenConfirm}
         />
       );
     });

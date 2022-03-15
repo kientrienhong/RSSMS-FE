@@ -6,7 +6,6 @@ import NotFound from "../pages/NotFoundPage";
 import Users from "../pages/Users/Users";
 import Storages from "../pages/Storage/Storages";
 import StorageDetail from "../pages/StorageDetail/StorageDetail";
-import AreaDetail from "../pages/AreaDetail/AreaDetail";
 import Order from "../pages/Order/Order";
 import MakingOrder from "../pages/Order/CreateOrder/MakingOrder";
 import Products from "../pages/Product/Products";

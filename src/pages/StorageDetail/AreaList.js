@@ -56,9 +56,9 @@ function AreaList({
         description,
         type === "Self-Storage" ? 0 : 1,
         {
-          width: data.width,
-          height: data.height,
-          length: data.length,
+          width: parseInt(data.width),
+          height: parseInt(data.height),
+          length: parseInt(data.length),
         },
         userState.idToken
       );
@@ -84,9 +84,9 @@ function AreaList({
 
         type === "Self-Storage" ? 0 : 1,
         {
-          width: data.width,
-          height: data.height,
-          length: data.length,
+          width: parseInt(data.width),
+          height: parseInt(data.height),
+          length: parseInt(data.length),
         },
 
         userState.idToken

@@ -20,6 +20,10 @@ export default function Shelf({
   id,
   handleChange,
   shelf,
+  area,
+  handleOpenSpace,
+  handleOpenSelfStorage,
+  handleOpenConfirm,
 }) {
   const mapFloors = () => {
     return shelf.floors.map((e, index) => (
@@ -34,6 +38,7 @@ export default function Shelf({
       sx={{
         borderRadius: "8px",
         marginBottom: "4%",
+        width: "100%",
       }}
       expanded={expanded === id}
       onChange={handleChange(id)}
@@ -61,21 +66,44 @@ export default function Shelf({
         </Typography>
         <Typography
           sx={{
-            width: "50%",
+            width: "40%",
 
             marginRight: "1%",
           }}
         >
-          Kích thước tầng: {shelf.width}m x {shelf.length}m x {shelf.height}m
+          Kích thước tầng: {shelf?.floors[0]?.width}m x{" "}
+          {shelf?.floors[0]?.length}m x {shelf?.floors[0]?.height}m
         </Typography>
         <Typography
           sx={{
-            width: "30%",
+            width: "20%",
           }}
         >
           Số tầng tầng: {shelf.floors.length}
         </Typography>
         <Button
+          style={{
+            height: "32px",
+            paddingLeft: "16px",
+            paddingRight: "16px",
+            marginRight: "1%",
+          }}
+          onClick={() => {
+            if (area.type === 1) {
+              handleOpenSpace(shelf, true);
+            } else {
+              handleOpenSelfStorage(shelf, true);
+            }
+          }}
+          color="primary"
+          variant="contained"
+        >
+          Chỉnh sửa
+        </Button>
+        <Button
+          onClick={() => {
+            handleOpenConfirm(shelf);
+          }}
           style={{
             height: "32px",
             paddingLeft: "16px",
