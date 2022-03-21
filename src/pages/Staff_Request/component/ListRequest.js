@@ -92,12 +92,12 @@ TablePaginationActions.propTypes = {
 };
 
 const listHeaderName = [
-  "Id",
-  "Name",
-  "Phone",
-  "Schedule Date",
-  "Note",
-  "Action",
+  "Mã",
+  "Tên khách hàng",
+  "Số điện thoại khách",
+  "Lịch giao",
+  "Ghi chú",
+  "Hành động",
 ];
 
 const mapListTableHeader = (listHeader) => (
@@ -130,6 +130,7 @@ function ListRequest({
   searchName,
   getData,
   userState,
+  handleOpenAssignOrder,
 }) {
   const classes = useStyles();
   const navigate = useNavigate();

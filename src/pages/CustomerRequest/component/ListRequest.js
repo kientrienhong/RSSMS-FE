@@ -21,6 +21,7 @@ import { LIST_TYPE_REQUEST } from "../../../constant/constant";
 import ConfirmModal from "../../../components/ConfirmModal";
 import { deleteUser } from "../../../apis/Apis";
 import { connect } from "react-redux";
+import { getRequestDetail } from "../../../apis/Apis";
 function TablePaginationActions(props) {
   const theme = useTheme();
   const { count, page, rowsPerPage, onPageChange } = props;
@@ -126,6 +127,8 @@ function ListRequest({
   searchName,
   getData,
   userState,
+  handleOpenAssignOrder,
+  handleOpenOrderModal,
 }) {
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   // Avoid a layout jump when reaching the last page with empty rows.
@@ -170,12 +173,20 @@ function ListRequest({
                 </TableCell>
                 <TableCell style={{ color: "black" }}>
                   <Button
-                    onClick={() => {
-                      setCurrentRequest(row);
-                      if (row.type === 1) {
+                    onClick={async () => {
+                      const response = await getRequestDetail(
+                        row.id,
+                        userState.idToken
+                      );
+
+                      setCurrentRequest(response.data);
+
+                      if (row.type === 2) {
                         handleOpenIsPaid();
                       } else if (row.type === 3) {
                         handleOpenCancelOrder();
+                      } else if (row.type === 1) {
+                        handleOpenOrderModal(response.data);
                       } else {
                         handleOpenReturnItem();
                       }
@@ -190,8 +201,28 @@ function ListRequest({
                     variant="contained"
                     type="submit"
                   >
-                    See more
+                    Xem thêm
                   </Button>
+                  {row.type === 1 ? (
+                    <Button
+                      onClick={() => {
+                        setRequest(row);
+                        handleOpenAssignOrder();
+                      }}
+                      style={{
+                        height: "45px",
+                        paddingLeft: "16px",
+                        paddingRight: "16px",
+                        marginRight: "4%",
+                      }}
+                      color="primary"
+                      variant="contained"
+                    >
+                      Xử lý đơn
+                    </Button>
+                  ) : (
+                    <></>
+                  )}
                 </TableCell>
               </TableRow>
             );

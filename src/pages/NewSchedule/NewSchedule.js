@@ -87,7 +87,7 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
   const onChangeCheckBox = (schedule, value) => {
     let listSelectedOrderTemp = [...listSelectedOrder];
     let indexFound = listSelectedOrderTemp.findIndex((e) => {
-      if (e["timeStringElement"] === schedule["deliveryTime"]) {
+      if (e["deliveryTime"] === schedule["deliveryTime"]) {
         if (schedule.id === e.id) {
           schedule = { ...schedule, isSelected: false };
           return true;
@@ -116,13 +116,11 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
       order = { ...order, isDelivery: false };
     }
     order = { ...order, isSelected: false };
-    // if (Object.keys(result).length > 0) {
     let currentDate = Object.keys(result)?.find((e) => {
       if (e === date.toLocaleDateString("en-US")) {
         return true;
       }
     });
-    // }
     result[currentDate].listSchedule.get(order.deliveryTime).push(order);
     result[currentDate].amountNotAssignStaff += 1;
   };
@@ -133,9 +131,6 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
         return true;
       }
     });
-    console.log(currentDate);
-    console.log(result[currentDate].listSchedule);
-    console.log(result[currentDate].listSchedule.get(request["scheduleTime"]));
 
     result[currentDate].listSchedule
       .get(request["scheduleTime"])

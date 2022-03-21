@@ -171,6 +171,12 @@ export const setUpCurrentViewOrderId = (orderId) => {
   };
 };
 
+export const changeIsLoadRequest = () => {
+  return {
+    type: ActionType.CHANGE_IS_LOAD_REQUEST,
+  };
+};
+
 export const handleProgressModal = (isOpen, title, yesFunction, noFunction) => {
   return {
     type: ActionType.HANDLE_PROGRESS_MODAL,

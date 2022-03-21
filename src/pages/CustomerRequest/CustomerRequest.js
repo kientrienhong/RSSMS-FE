@@ -18,11 +18,15 @@ import { getCustomerRequest, getRequestDetail } from "../../apis/Apis";
 import ModalCancelDetail from "./component/ModalCancelDetail";
 import ModalReturnItem from "./component/ModalReturnItem";
 import ModalUpdateIsPaid from "./component/ModalUpdateIsPaid";
+import AssignOrderModal from "./component/AssignOrderModal";
+import OrderModal from "../../components/OrderModal";
+
 function CustomerRequest({
   showLoading,
   hideLoading,
   showSnackbar,
   userState,
+  isLoadingRequest,
 }) {
   const [listRequest, setListRequest] = useState([]);
   const [totalRequest, setTotalRequest] = useState(0);
@@ -32,6 +36,32 @@ function CustomerRequest({
   const [page, setPage] = useState(1);
   const [currentRequest, setCurrentRequest] = useState();
   const [openIsPaid, setOpenIsPaid] = useState(false);
+  const [openAssignOrder, setOpenAssignOrder] = useState(false);
+  const [openOrderModal, setOpenOrderModal] = useState(false);
+  const { handleSubmit, control, reset } = useForm();
+
+  useEffect(() => {
+    try {
+      showLoading();
+
+      getData("", page, 8);
+      hideLoading();
+    } catch (error) {
+      console.log(error);
+      hideLoading();
+    }
+  }, [isLoadingRequest]);
+
+  const handleOpenOrderModal = (request) => {
+    setCurrentRequest(request);
+    setOpenOrderModal(true);
+  };
+
+  const handleCloseOrderModal = () => {
+    setCurrentRequest({});
+    setOpenOrderModal(false);
+  };
+
   const handleOpenIsPaid = () => {
     setOpenIsPaid(true);
   };
@@ -44,6 +74,14 @@ function CustomerRequest({
   const [openCancelOrder, setOpenCancelOrder] = useState(false);
   const handleOpenCancelOrder = () => {
     setOpenCancelOrder(true);
+  };
+
+  const handleOpenAssignOrder = () => {
+    setOpenAssignOrder(true);
+  };
+
+  const handleCloseAssignOrder = () => {
+    setOpenAssignOrder(false);
   };
 
   const handleCloseCancelOrder = () => {
@@ -105,7 +143,6 @@ function CustomerRequest({
           currentRequest?.id,
           userState.idToken
         );
-        console.log(response.data);
         setRequestDetail(response.data);
         hideLoading();
       } catch (error) {
@@ -137,6 +174,11 @@ function CustomerRequest({
         py: 3,
       }}
     >
+      <AssignOrderModal
+        open={openAssignOrder}
+        handleClose={handleCloseAssignOrder}
+        currentId={request.id}
+      />
       <Box
         sx={{
           marginLeft: "2%",
@@ -183,7 +225,14 @@ function CustomerRequest({
         currentRequest={currentRequest}
         requestDetail={requestDetail}
       />
-
+      <OrderModal
+        open={openOrderModal}
+        handleClose={handleCloseOrderModal}
+        currentOrder={currentRequest}
+        control={control}
+        isView={true}
+        reset={reset}
+      />
       <Card
         variant="outlined"
         color="#FFF"
@@ -198,8 +247,10 @@ function CustomerRequest({
           listRequest={listRequest}
           page={page}
           setPage={setPage}
+          handleOpenOrderModal={handleOpenOrderModal}
           totalRequest={totalRequest}
           getData={getData}
+          handleOpenAssignOrder={handleOpenAssignOrder}
         />
       </Card>
     </Box>
@@ -208,6 +259,7 @@ function CustomerRequest({
 
 const mapStateToProps = (state) => ({
   userState: state.information.user,
+  isLoadingRequest: state.order.isLoadingRequest,
 });
 
 const mapDispatchToProps = (dispatch) => {

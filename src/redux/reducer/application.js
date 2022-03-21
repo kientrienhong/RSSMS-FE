@@ -45,7 +45,6 @@ const application = (state = initialState, action) => {
     }
 
     case ActionType.HANDLE_PROGRESS_MODAL: {
-      console.log(action.payload);
       state.progressModal.isOpen = action.payload.isOpen;
       state.progressModal.title = action.payload.title;
       state.progressModal.yesFunction =

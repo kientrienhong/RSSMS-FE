@@ -578,11 +578,11 @@ export const moveBoxApi = async (box, token) => {
   return response;
 };
 
-export const assignOrder = async (orderId, storageId, token) => {
+export const assignOrder = async (requestId, storageId, token) => {
   const response = await axios.post(
-    `https://localhost:44304/api/v1/orders/assign order`,
+    `https://localhost:44304/api/v1/requests/assign order`,
     {
-      orderId: orderId,
+      requestId: requestId,
       storageId: storageId,
     },
     { headers: { Authorization: `Bearer ${token}` } }
@@ -719,7 +719,9 @@ export const getRequestToSchedule = async (dayFrom, dayTo, token) => {
 
 export const getRequestToScheduleNew = async (dayFrom, dayTo, token) => {
   const response = await axios.get(
-    `https://localhost:44304/api/v1/requests?FromDate=${dayFrom}&ToDate=${dayTo}&RequestTypes=1`,
+    `https://localhost:44304/api/v1/requests?FromDate=${new Date(
+      dayFrom
+    ).toISOString()}&ToDate=${new Date(dayTo).toISOString()}&RequestTypes=1`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
   return response;

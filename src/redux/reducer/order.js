@@ -16,6 +16,7 @@ const initialState = {
   },
   isLoadingShelf: false,
   isLoadingStorage: false,
+  isLoadingRequest: false,
   isLoadingOrder: false,
   moveBox: undefined,
   currentPositionViewOrderId: -1,
@@ -86,6 +87,11 @@ const order = (state = initialState, action) => {
         boxes: [],
         typeOrder: -1,
       };
+      return { ...state };
+    }
+
+    case ActionType.CHANGE_IS_LOAD_REQUEST: {
+      state.isLoadingRequest = !state.isLoadingRequest;
       return { ...state };
     }
 

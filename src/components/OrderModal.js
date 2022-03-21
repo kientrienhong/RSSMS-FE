@@ -82,6 +82,7 @@ function OrderModal({
   userState,
   isView,
 }) {
+  console.log(currentOrder);
   const [returnAddress, setReturnAddress] = useState();
   const [deliveryAddress, setDeliveryAddress] = useState();
   const [timeDelivery, setTimeDelivery] = useState();
@@ -171,12 +172,12 @@ function OrderModal({
       if (currentOrder?.deliveryDate !== undefined) {
         let date = new Date(currentOrder?.deliveryDate);
         if (date) {
-          if (currentOrder?.typeOrder === 0) {
-            date.setMonth(date.getMonth() + currentDuration);
-          } else {
-            date.setDate(date.getDate() + currentDuration);
-          }
-          setDateReturn(new Date(date).toISOString().split("T")[0]);
+          // if (currentOrder?.typeOrder === 0) {
+          //   date.setMonth(date.getMonth() + currentDuration);
+          // } else {
+          //   date.setDate(date.getDate() + currentDuration);
+          // }
+          setDateReturn(date.toISOString().split("T")[0]);
         }
       }
     }
@@ -339,14 +340,25 @@ function OrderModal({
       accessory: [],
     };
 
-    currentOrder?.orderDetails?.forEach((e) => {
-      let type = PRODUCT_TYPE[e.serviceType];
-      result[type].push({
-        name: e.serviceName,
-        quantity: e.amount,
-        price: e.price,
+    if (currentOrder?.orderDetaill) {
+      currentOrder?.orderDetails?.forEach((e) => {
+        let type = PRODUCT_TYPE[e.serviceType];
+        result[type].push({
+          name: e.serviceName,
+          quantity: e.amount,
+          price: e.price,
+        });
       });
-    });
+    } else {
+      currentOrder?.requestDetails?.forEach((e) => {
+        let type = PRODUCT_TYPE[e.serviceType];
+        result[type].push({
+          name: e.serviceName,
+          quantity: e.amount,
+          price: e.price,
+        });
+      });
+    }
 
     return result;
   };

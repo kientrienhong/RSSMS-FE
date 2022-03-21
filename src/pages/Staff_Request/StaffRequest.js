@@ -22,7 +22,6 @@ function StaffRequest({ showLoading, hideLoading, showSnackbar, userState }) {
   const [error, setError] = useState({});
   const [request, setRequest] = useState({});
   const [page, setPage] = useState(1);
-
   const handleOpen = () => {
     setOpen(true);
   };

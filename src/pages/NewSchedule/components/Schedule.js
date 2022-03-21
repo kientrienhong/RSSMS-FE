@@ -1,23 +1,29 @@
 import React from "react";
 import { Box, Checkbox, Button, Avatar } from "@material-ui/core";
-import { getOrderById } from "../../../apis/Apis";
-export default function Schedule({
+import { getOrderById, getRequestDetail } from "../../../apis/Apis";
+import { connect } from "react-redux";
+
+import * as action from "../../../redux/action/action";
+
+function Schedule({
   schedule,
   setCurrentOrder,
   handleOpen,
   onChangeCheckBox,
   listSelectedOrder,
   handleOpenAssignTime,
+  userState,
 }) {
-  let timeString = schedule.isDelivery ? "deliveryTime" : "returnTime";
   let foundSameStorage = false;
-
+  console.log(listSelectedOrder);
   let indexFound = listSelectedOrder?.findIndex((e) => {
-    let timeStringElement = e.isDelivery ? "deliveryTime" : "returnTime";
     if (e.storageId === schedule.storageId) {
       foundSameStorage = true;
     }
-    if (e[timeStringElement] === schedule[timeString] && schedule.id !== e.id) {
+    if (
+      e["deliveryTime"] === schedule["deliveryTime"] &&
+      schedule.id !== e.id
+    ) {
       return true;
     }
   });
@@ -100,10 +106,22 @@ export default function Schedule({
           justifyContent: "space-between",
         }}
       >
-        <p style={{ display: "inline-block", margin: 0 }}>
-          {/* {schedule.orderId === undefined ? "Order: #" : "Request: #"} */}#
-          {schedule.orderName}
-        </p>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <p style={{ display: "inline-block", margin: 0 }}>
+            {/* {schedule.orderId === undefined ? "Order: #" : "Request: #"} */}
+            {schedule.customerName}
+          </p>
+          <p style={{ display: "inline-block", margin: 0 }}>
+            {/* {schedule.orderId === undefined ? "Order: #" : "Request: #"} */}
+            {schedule.deliveryAddress}
+          </p>
+        </Box>
+
         <Box
           sx={{
             width: "70%",
@@ -149,7 +167,10 @@ export default function Schedule({
           <img
             onClick={async () => {
               try {
-                const orderDetail = await getOrderById(schedule.orderId);
+                const orderDetail = await getRequestDetail(
+                  schedule.id,
+                  userState.idToken
+                );
                 setCurrentOrder(orderDetail.data);
                 handleOpen();
               } catch (error) {
@@ -200,3 +221,17 @@ export default function Schedule({
     </Box>
   );
 }
+
+const mapStateToProps = (state) => ({
+  userState: state.information.user,
+});
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    showLoading: () => dispatch(action.showLoader()),
+    hideLoading: () => dispatch(action.hideLoader()),
+    showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Schedule);
