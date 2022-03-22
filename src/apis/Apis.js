@@ -545,18 +545,17 @@ export const updateOrder = async (id, order, token) => {
 };
 
 export const placeBoxes = async (placingProducts, token) => {
-  const boxesId = placingProducts.boxes.map((e) => {
+  const boxesId = placingProducts.floors.map((e) => {
     return {
-      boxId: e.idBox,
+      floorId: e.floorId,
       orderDetailId: e.idOrderDetail,
     };
   });
 
   const response = await axios.post(
-    `https://localhost:44304/api/v1/box-order-details`,
+    `https://localhost:44304/api/v1/orders/assign to floor`,
     {
-      orderId: placingProducts.orderId,
-      boxes: boxesId,
+      orderDetailAssignFloor: boxesId,
     },
     { headers: { Authorization: `Bearer ${token}` } }
   );

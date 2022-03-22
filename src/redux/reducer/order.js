@@ -114,16 +114,21 @@ const order = (state = initialState, action) => {
         return e.id.toString() == action.payload.idOrderDetail;
       });
       foundProduct.amount--;
+      foundProduct.isPlaced = true;
       storedOrderTemp.totalQuantity--;
+
       placingProductTemp.orderId = storedOrderTemp.orderId;
       placingProductTemp.floors.push({
         idItemPlacing: placingProductTemp.floors.length,
         areaName: state.currentFloor.areaName,
         shelfName: state.currentFloor.shelfName,
         floorName: state.currentFloor.name,
-        floorId: state.currentFloor.floorId,
+        floorId: state.currentFloor.id,
         storageName: state.currentFloor.storageName,
         areaId: state.currentFloor.areaId,
+        width: action.payload.infoProduct.width,
+        length: action.payload.infoProduct.length,
+        height: action.payload.infoProduct.height,
         storageId: state.currentFloor.storageId,
         nameProduct: action.payload.nameProduct,
         idOrderDetail: action.payload.idOrderDetail,
@@ -139,16 +144,17 @@ const order = (state = initialState, action) => {
       let placingProductTemp = { ...state.placingProducts };
       let storedOrderTemp = { ...state.storedOrder };
       let foundProduct = storedOrderTemp.products.find(
-        (e) => e.productId.toString() === action.payload.idProduct
+        (e) => e.id.toString() === action.payload.idOrderDetail
       );
       foundProduct.amount += 1;
       storedOrderTemp.totalQuantity++;
+      foundProduct.isPlaced = false;
 
-      let indexCurrentProduct = placingProductTemp.boxes.findIndex(
+      let indexCurrentProduct = placingProductTemp.floors.findIndex(
         (e) => e.idItemPlacing === action.payload.idItemPlacing
       );
-      placingProductTemp.boxes.splice(indexCurrentProduct, 1);
-      placingProductTemp.boxes.forEach((e, index) => {
+      placingProductTemp.floors.splice(indexCurrentProduct, 1);
+      placingProductTemp.floors.forEach((e, index) => {
         e.idItemPlacing = index;
       });
 

@@ -13,7 +13,17 @@ function Floor({
   setUpCurrentFloor,
   area,
   storage,
+  placingProducts,
 }) {
+  let additionUsage = 0;
+
+  placingProducts?.floors.forEach((e) => {
+    if (e.floorId === floor.id) {
+      additionUsage += e.width * e.height * e.length;
+    }
+  });
+  additionUsage =
+    (additionUsage / (floor.width * floor.height * floor.length)) * 100;
   return (
     <Grid>
       <Box
@@ -35,7 +45,7 @@ function Floor({
             alignItems: "center",
           }}
         >
-          <CircularProgressWithLabel value={floor.usage} />
+          <CircularProgressWithLabel value={floor.usage + additionUsage} />
           <Typography
             color="black"
             variant="h2"
@@ -108,6 +118,10 @@ function Floor({
   );
 }
 
+const mapStateToProps = (state) => ({
+  placingProducts: state.order.placingProducts,
+});
+
 const mapDispatchToProps = (dispatch) => {
   return {
     openStoredOrderModal: (isView) =>
@@ -116,4 +130,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(Floor);
+export default connect(mapStateToProps, mapDispatchToProps)(Floor);

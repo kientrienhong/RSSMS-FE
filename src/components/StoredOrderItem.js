@@ -93,13 +93,25 @@ export default function StoredOrderItem({
     ));
   };
 
+  let styleAccordition = {
+    borderRadius: "8px",
+    marginBottom: "4%",
+    width: "100%",
+  };
+
+  styleAccordition = storedOrder.isPlaced
+    ? {
+        ...styleAccordition,
+        borderWidth: "2px",
+        borderStyle: "solid",
+        borderColor: "#04BFFE",
+        boxShadow: "none",
+      }
+    : styleAccordition;
+
   return (
     <Accordion
-      sx={{
-        borderRadius: "8px",
-        marginBottom: "4%",
-        width: "100%",
-      }}
+      sx={styleAccordition}
       expanded={expanded === id}
       onChange={handleChange(id)}
     >

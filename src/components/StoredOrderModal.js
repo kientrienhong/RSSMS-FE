@@ -96,7 +96,7 @@ function StoredOrderModal({
               });
             }}
           >
-            {e.shelfName} / {e.nameBox}
+            {e.areaName} / {e.shelfName} / {e.floorName}
           </Typography>
         </Box>
         <Box sx={{ width: "10%" }}>
@@ -108,7 +108,7 @@ function StoredOrderModal({
             style={style}
             onClick={() => {
               removePlacedProduct(e);
-              showSnackbar("success", "Remove product success");
+              showSnackbar("success", "Gỡ hàng hóa thành công");
             }}
           />
         </Box>
@@ -119,7 +119,7 @@ function StoredOrderModal({
   const onHandleSubmit = async () => {
     storedOrder.products.forEach((e) => {
       if (e.amount > 0) {
-        setError("You must place all product in order");
+        setError("Vui lòng đặt hết hàng hóa lên kệ");
         return;
       }
     });
@@ -147,13 +147,17 @@ function StoredOrderModal({
       (e) => e.id.toString() === selectedValue
     );
 
+    if (foundOrderDetail.isPlaced) {
+      setError("Hàng hóa này đã được đạt trên kệ");
+      return;
+    }
+
     const availableSpace =
       currentFloor.width *
       currentFloor.height *
       currentFloor.length *
       (100 - currentFloor.usage);
 
-    console.log(foundOrderDetail);
     const placingArea =
       foundOrderDetail.width *
       foundOrderDetail.height *
@@ -168,7 +172,10 @@ function StoredOrderModal({
       placeProductToShelf({
         idOrderDetail: foundOrderDetail.id,
         nameProduct: foundOrderDetail.serviceName,
+        infoProduct: foundOrderDetail,
       });
+      setError("");
+      showSnackbar("success", "Đặt hàng lên kệ thành công");
     } else {
       setError("Kích thước không phù hợp hoặc không còn chỗ");
       return;
@@ -185,9 +192,9 @@ function StoredOrderModal({
     //   idProduct: foundOrderDetail.productId,
     //   nameProduct: foundOrderDetail.productName,
     // });
-    //   setError("");
-    //   showSnackbar("success", "Place product success");
-    //   handleClose();
+    // setError("");
+    // showSnackbar("success", "Place product success");
+    // handleClose();
     // } else {
     //   setError("You must choose right product to place");
     // }

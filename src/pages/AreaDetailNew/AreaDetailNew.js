@@ -39,6 +39,7 @@ function AreaDetailNew({
   hideLoading,
   showSnackbar,
   userState,
+  isLoadingShelf,
 }) {
   const { storageId, areaId } = useParams();
   const [storage, setStorage] = useState({});
@@ -170,6 +171,10 @@ function AreaDetailNew({
   useEffect(() => {
     getData();
   }, []);
+
+  useEffect(() => {
+    getData();
+  }, [isLoadingShelf]);
 
   return (
     <Box
