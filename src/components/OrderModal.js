@@ -817,21 +817,21 @@ function OrderModal({
                   justifyContent: "center",
                 }}
               >
-                {currentOrder?.status === 2 || currentOrder?.status === 3 ? (
-                  <Button
-                    style={{
-                      height: "45px",
-                      paddingLeft: "16px",
-                      paddingRight: "16px",
-                      marginRight: "4%",
-                    }}
-                    color="primary"
-                    variant="contained"
-                    onClick={() => handleStoreOrder()}
-                  >
-                    Lưu trữ đơn
-                  </Button>
-                ) : null}
+                {/* {currentOrder?.status === 2 || currentOrder?.status === 3 ? ( */}
+                <Button
+                  style={{
+                    height: "45px",
+                    paddingLeft: "16px",
+                    paddingRight: "16px",
+                    marginRight: "4%",
+                  }}
+                  color="primary"
+                  variant="contained"
+                  onClick={() => handleStoreOrder()}
+                >
+                  Lưu trữ đơn
+                </Button>
+                {/* ) : null} */}
 
                 {currentOrder?.status === 4 ? (
                   <Button

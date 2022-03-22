@@ -5,6 +5,7 @@ export default function ListShelf({
   handleOpen,
   area,
   handleOpenSpace,
+  storage,
   handleOpenSelfStorage,
   handleOpenConfirm,
 }) {
@@ -22,6 +23,7 @@ export default function ListShelf({
           expanded={expanded}
           id={index}
           area={area}
+          storage={storage}
           handleOpenSpace={handleOpenSpace}
           handleOpenSelfStorage={handleOpenSelfStorage}
           handleOpen={handleOpen}

@@ -188,3 +188,10 @@ export const handleProgressModal = (isOpen, title, yesFunction, noFunction) => {
     },
   };
 };
+
+export const setUpCurrentFloor = (floor) => {
+  return {
+    type: ActionType.SET_UP_CURRENT_FLOOR,
+    payload: floor,
+  };
+};

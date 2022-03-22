@@ -5,6 +5,7 @@ import * as action from "../redux/action/action";
 import { placeBoxes } from "../apis/Apis";
 import { useNavigate } from "react-router";
 import { STYLE_MODAL } from "../constant/style";
+import StoredOrderItem from "./StoredOrderItem";
 const styleModal = STYLE_MODAL;
 
 const styleInput = {
@@ -24,7 +25,6 @@ function StoredOrderModal({
   open,
   handleClose,
   isView,
-  currentBox,
   placeProductToShelf,
   placingProducts,
   removePlacedProduct,
@@ -36,16 +36,22 @@ function StoredOrderModal({
   changeIsLoadStorage,
   userState,
   cancelStoreOrder,
+  currentFloor,
 }) {
   const [selectedValue, setSelectedValue] = React.useState("");
   const [error, setError] = React.useState();
   const navigate = useNavigate();
+  const [expanded, setExpanded] = React.useState(false);
+  const handleChange = (panel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
+  };
 
-  const handleChange = (event) => {
+  const handleChangeRadio = (event) => {
     setSelectedValue(event.target.value);
   };
+
   const buildRadioSelect = () => {
-    return storedOrder?.products?.map((e) => {
+    return storedOrder?.products?.map((e, index) => {
       let eventTemp = {
         target: {
           value: e.id.toString(),
@@ -53,59 +59,20 @@ function StoredOrderModal({
       };
 
       return (
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            width: "30%",
-            justifyContent: "center",
-            alignItems: "center",
-            marginBottom: "8%",
-          }}
-          key={e.id}
-        >
-          <Radio
-            value={e.id}
-            checked={selectedValue === e.id.toString()}
-            name="radio-buttons"
-            onChange={handleChange}
-            inputProps={{ "aria-label": "B" }}
-          />
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              width: "80%",
-              cursor: "pointer",
-            }}
-            onClick={() => handleChange(eventTemp)}
-          >
-            <img
-              src={e?.productImages[0]?.url}
-              alt={e.productName}
-              width={80}
-              height={80}
-            />
-            <Typography
-              color="black"
-              variant="h2"
-              style={{
-                marginTop: "2%",
-                marginLeft: "2.5%",
-              }}
-            >
-              {e.productName}
-            </Typography>
-            <input style={styleInput} value={e.amount} disabled></input>
-          </Box>
-        </Box>
+        <StoredOrderItem
+          expanded={expanded}
+          id={index}
+          handleChangeRadio={handleChangeRadio}
+          selectedValue={selectedValue}
+          storedOrder={e}
+          handleChange={handleChange}
+        />
       );
     });
   };
 
   const buildListPlacingProduct = () => {
-    return placingProducts?.boxes.map((e) => (
+    return placingProducts?.floors.map((e) => (
       <Box
         sx={{
           display: "flex",
@@ -172,31 +139,58 @@ function StoredOrderModal({
 
   const handlePlaceBox = () => {
     if (selectedValue === "") {
-      setError("Please choose product to place");
+      setError("Vui lòng chọn hàng hóa đặt vào kệ");
       return;
     }
 
     let foundOrderDetail = storedOrder?.products?.find(
       (e) => e.id.toString() === selectedValue
     );
+
+    const availableSpace =
+      currentFloor.width *
+      currentFloor.height *
+      currentFloor.length *
+      (100 - currentFloor.usage);
+
+    console.log(foundOrderDetail);
+    const placingArea =
+      foundOrderDetail.width *
+      foundOrderDetail.height *
+      foundOrderDetail.length;
+
     if (
-      foundOrderDetail.productId.toString() === currentBox.productId.toString()
+      placingArea <= availableSpace &&
+      foundOrderDetail.length < currentFloor.length &&
+      foundOrderDetail.width < currentFloor.width &&
+      foundOrderDetail.height < currentFloor.height
     ) {
-      if (foundOrderDetail?.amount === 0) {
-        setError("There is no product to place");
-        return;
-      }
       placeProductToShelf({
         idOrderDetail: foundOrderDetail.id,
-        idProduct: foundOrderDetail.productId,
-        nameProduct: foundOrderDetail.productName,
+        nameProduct: foundOrderDetail.serviceName,
       });
-      setError("");
-      showSnackbar("success", "Place product success");
-      handleClose();
     } else {
-      setError("You must choose right product to place");
+      setError("Kích thước không phù hợp hoặc không còn chỗ");
+      return;
     }
+    // if (
+    //   foundOrderDetail.productId.toString() === currentBox.productId.toString()
+    // ) {
+    //   if (foundOrderDetail?.amount === 0) {
+    // setError("There is no product to place");
+    // return;
+    //   }
+    // placeProductToShelf({
+    //   idOrderDetail: foundOrderDetail.id,
+    //   idProduct: foundOrderDetail.productId,
+    //   nameProduct: foundOrderDetail.productName,
+    // });
+    //   setError("");
+    //   showSnackbar("success", "Place product success");
+    //   handleClose();
+    // } else {
+    //   setError("You must choose right product to place");
+    // }
   };
 
   const onHandlePlace = () => {
@@ -224,13 +218,15 @@ function StoredOrderModal({
           }}
         >
           <Typography color="black" variant="h2">
-            Do not have any orders to place
+            Bạn chưa có đơn nào để lưu kho
           </Typography>
         </Box>
       ) : (
         <Box
           sx={{
             ...styleModal,
+            maxHeight: "70%",
+            overflowY: "scroll",
             display: "flex",
             justifyContent: "flex-start",
             flexDirection: "column",
@@ -248,6 +244,7 @@ function StoredOrderModal({
               sx={{
                 width: "60%",
                 display: "flex",
+                marginRight: "3%",
                 flexDirection: "column",
                 justifyContent: "flex-start",
                 alignItems: "flex-start",
@@ -260,7 +257,7 @@ function StoredOrderModal({
                   marginBottom: "8%",
                 }}
               >
-                Total products in order
+                Tất cả các sản phẩm trong đơn
               </Typography>
               <Grid container spacing={2}>
                 {buildRadioSelect(storedOrder?.product)}
@@ -282,7 +279,7 @@ function StoredOrderModal({
                   marginBottom: "8%",
                 }}
               >
-                List products is placing
+                Danh sách những món hàng đã được đặt
               </Typography>
               <Box
                 sx={{
@@ -404,7 +401,7 @@ function StoredOrderModal({
 }
 
 const mapStateToProps = (state) => ({
-  currentBox: state.order.currentBox,
+  currentFloor: state.order.currentFloor,
   placingProducts: state.order.placingProducts,
   userState: state.information.user,
 });

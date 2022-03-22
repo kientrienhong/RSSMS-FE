@@ -21,6 +21,7 @@ export default function Shelf({
   handleChange,
   shelf,
   area,
+  storage,
   handleOpenSpace,
   handleOpenSelfStorage,
   handleOpenConfirm,
@@ -28,7 +29,13 @@ export default function Shelf({
   const mapFloors = () => {
     return shelf.floors.map((e, index) => (
       <Grid item xs={6} key={index}>
-        <Floor shelf={shelf} handleOpen={handleOpen} floor={e} />
+        <Floor
+          storage={storage}
+          area={area}
+          shelf={shelf}
+          handleOpen={handleOpen}
+          floor={e}
+        />
       </Grid>
     ));
   };

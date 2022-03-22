@@ -7,12 +7,13 @@ const initialState = {
     products: [],
     totalQuantity: 0,
   },
+  currentFloor: {},
   currentBox: {},
   currentStorage: {},
   placingProducts: {
     typeOrder: -1,
     orderId: -1,
-    boxes: [],
+    floors: [],
   },
   isLoadingShelf: false,
   isLoadingStorage: false,
@@ -33,11 +34,11 @@ const order = (state = initialState, action) => {
       let storedOrderTemp = { ...state.storedOrder };
       let placingProductsTemp = {
         orderId: -1,
-        boxes: [],
+        floors: [],
         typeOrder: action.payload.typeOrder,
       };
       storedOrderTemp.products = action.payload.orderDetails.filter((e) => {
-        if (e.productType === 0 || e.productType === 2 || e.productType === 4) {
+        if (e.serviceType === 0 || e.serviceType === 2 || e.serviceType === 4) {
           return e;
         }
       });
@@ -54,6 +55,11 @@ const order = (state = initialState, action) => {
         storedOrder: storedOrderTemp,
         placingProducts: placingProductsTemp,
       };
+    }
+
+    case ActionType.SET_UP_CURRENT_FLOOR: {
+      state.currentFloor = action.payload;
+      return { ...state };
     }
 
     case ActionType.SET_CURRENT_BOX: {
@@ -84,7 +90,7 @@ const order = (state = initialState, action) => {
       };
       state.placingProducts = {
         orderId: -1,
-        boxes: [],
+        floors: [],
         typeOrder: -1,
       };
       return { ...state };
@@ -110,16 +116,15 @@ const order = (state = initialState, action) => {
       foundProduct.amount--;
       storedOrderTemp.totalQuantity--;
       placingProductTemp.orderId = storedOrderTemp.orderId;
-      placingProductTemp.boxes.push({
-        idItemPlacing: placingProductTemp.boxes.length,
-        areaName: state.currentBox.areaName,
-        idProduct: action.payload.idProduct,
-        shelfName: state.currentBox.shelfName,
-        nameBox: state.currentBox.nameBox,
-        storageName: state.currentBox.storageName,
-        areaId: state.currentBox.areaId,
-        storageId: state.currentBox.storageId,
-        idBox: state.currentBox.id,
+      placingProductTemp.floors.push({
+        idItemPlacing: placingProductTemp.floors.length,
+        areaName: state.currentFloor.areaName,
+        shelfName: state.currentFloor.shelfName,
+        floorName: state.currentFloor.name,
+        floorId: state.currentFloor.floorId,
+        storageName: state.currentFloor.storageName,
+        areaId: state.currentFloor.areaId,
+        storageId: state.currentFloor.storageId,
         nameProduct: action.payload.nameProduct,
         idOrderDetail: action.payload.idOrderDetail,
       });

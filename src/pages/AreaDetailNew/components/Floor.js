@@ -1,7 +1,19 @@
 import React from "react";
 import { Box, Button, Typography, Grid } from "@material-ui/core";
 import CircularProgressWithLabel from "./CircularProgressWithLabel";
-export default function Floor({ floor, handleOpen, shelf }) {
+import * as action from "../../../redux/action/action";
+
+import { connect } from "react-redux";
+
+function Floor({
+  floor,
+  handleOpen,
+  shelf,
+  openStoredOrderModal,
+  setUpCurrentFloor,
+  area,
+  storage,
+}) {
   return (
     <Grid>
       <Box
@@ -49,7 +61,16 @@ export default function Floor({ floor, handleOpen, shelf }) {
             }}
             color="primary"
             variant="contained"
-            onClick={() => {}}
+            onClick={() => {
+              setUpCurrentFloor({
+                ...floor,
+                shelfName: shelf.name,
+                areaName: area.name,
+                storageName: storage.name,
+                storageId: storage.id,
+              });
+              openStoredOrderModal();
+            }}
           >
             Lưu trữ đồ
           </Button>
@@ -86,3 +107,13 @@ export default function Floor({ floor, handleOpen, shelf }) {
     </Grid>
   );
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    openStoredOrderModal: (isView) =>
+      dispatch(action.openStoredOrderModal(isView)),
+    setUpCurrentFloor: (floor) => dispatch(action.setUpCurrentFloor(floor)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(Floor);

@@ -316,6 +316,7 @@ function AreaDetailNew({
             }}
           >
             <ListShelf
+              storage={storage}
               area={area}
               handleOpen={handleOpenDetailFloor}
               handleOpenSpace={handleOpenSpace}
