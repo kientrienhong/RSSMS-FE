@@ -57,7 +57,7 @@ function AreaDetailNew({
   const [isHandy, setIsHandy] = useState(true);
   const [isOpenConfirm, setIsOpenConfirm] = useState(false);
   const [listShelves, setListShelves] = useState([]);
-
+  const [detailFloor, setDetailFloor] = useState({});
   const handleOpenConfirm = (space) => {
     setCurrentSpace(space);
     setIsOpenConfirm(true);
@@ -110,8 +110,7 @@ function AreaDetailNew({
     setIsOpenSpace(false);
   };
 
-  const handleOpenDetailFloor = (space, floor) => {
-    setCurrentFloor(floor);
+  const handleOpenDetailFloor = (space) => {
     setCurrentSpace(space);
     setOpenDetailFloor(true);
   };
@@ -153,12 +152,8 @@ function AreaDetailNew({
         userState.idToken
       );
       setListShelves(response.data.data);
-      // let listShelves = response.data.data;
-      // listShelves = listShelves.map((e) => {
-      //   return { ...e, boxSize: e?.boxes[0]?.sizeType };
-      // });
+
       let area = await getDetailArea(areaId, userState.idToken);
-      console.log(response);
       setArea(area.data);
       setTotalPage(response.data.metadata.totalPage);
       hideLoading();
@@ -192,7 +187,7 @@ function AreaDetailNew({
         msg={"Xóa không gian thành công!"}
       />{" "}
       <ModalDetailFloor
-        currentFloor={currentFloor}
+        detailFloor={detailFloor}
         open={openDetailFloor}
         handleClose={handleCloseDetailFloor}
       />
@@ -323,6 +318,7 @@ function AreaDetailNew({
             <ListShelf
               storage={storage}
               area={area}
+              setDetailFloor={setDetailFloor}
               handleOpen={handleOpenDetailFloor}
               handleOpenSpace={handleOpenSpace}
               handleOpenSelfStorage={handleOpenSelfStorage}

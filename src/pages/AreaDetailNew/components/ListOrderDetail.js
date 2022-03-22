@@ -123,9 +123,8 @@ const handleClickRow = (row, setCurrentOrderDetail, handleOpen) => {
   //     address: row.address,
   //     imageUrl: row.imageUrl,
   //   };
-
   //   setCurrentOrderDetail(user);
-  handleOpen(true);
+  // handleOpen(true);
 };
 const useStyles = makeStyles({
   button: {
@@ -212,7 +211,7 @@ function ListOrderDetail({
                     handleClickRow(row, setCurrentOrderDetail, handleOpen)
                   }
                 >
-                  {"MD34DM"}
+                  {row.orderName}
                 </TableCell>
                 <TableCell
                   style={{ color: "black" }}
@@ -220,7 +219,12 @@ function ListOrderDetail({
                     handleClickRow(row, setCurrentOrderDetail, handleOpen)
                   }
                 >
-                  'dasjkdhasjkhd'
+                  <img
+                    width="40"
+                    height="40"
+                    src={row?.images[0].url}
+                    alt="order detail"
+                  />
                 </TableCell>
                 <TableCell
                   style={{ color: "black" }}
@@ -228,7 +232,7 @@ function ListOrderDetail({
                     handleClickRow(row, setCurrentOrderDetail, handleOpen)
                   }
                 >
-                  {"Lâm Nhựt Phúc"}
+                  {row.customerName}
                 </TableCell>
                 <TableCell
                   style={{ color: "black" }}
@@ -236,10 +240,14 @@ function ListOrderDetail({
                     handleClickRow(row, setCurrentOrderDetail, handleOpen)
                   }
                 >
-                  {"Đã Đặt"}
+                  {row.orderStatus}
                 </TableCell>
-                <TableCell style={{ color: "black" }}>10/12/2022</TableCell>
-                <TableCell style={{ color: "black" }}>20mx80mx11m</TableCell>
+                <TableCell style={{ color: "black" }}>
+                  {row.returnDate}
+                </TableCell>
+                <TableCell style={{ color: "black" }}>
+                  {row.width}m x {row.length}m x {row.height}
+                </TableCell>
               </TableRow>
             );
           })}

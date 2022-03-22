@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Button, Typography, Grid } from "@material-ui/core";
 import CircularProgressWithLabel from "./CircularProgressWithLabel";
 import * as action from "../../../redux/action/action";
-
+import { getDetailFloor } from "../../../apis/Apis";
 import { connect } from "react-redux";
 
 function Floor({
@@ -14,6 +14,10 @@ function Floor({
   area,
   storage,
   placingProducts,
+  showLoading,
+  hideLoading,
+  setDetailFloor,
+  userState,
 }) {
   let additionUsage = 0;
 
@@ -93,8 +97,19 @@ function Floor({
             }}
             color="success"
             variant="contained"
-            onClick={() => {
-              handleOpen(shelf, floor);
+            onClick={async () => {
+              try {
+                showLoading();
+                const response = await getDetailFloor(
+                  floor.id,
+                  userState.idToken
+                );
+                setDetailFloor(response.data);
+                handleOpen(shelf);
+              } catch (error) {
+              } finally {
+                hideLoading();
+              }
             }}
           >
             Xem thêm
@@ -120,10 +135,13 @@ function Floor({
 
 const mapStateToProps = (state) => ({
   placingProducts: state.order.placingProducts,
+  userState: state.information.user,
 });
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    showLoading: () => dispatch(action.showLoader()),
+    hideLoading: () => dispatch(action.hideLoader()),
     openStoredOrderModal: (isView) =>
       dispatch(action.openStoredOrderModal(isView)),
     setUpCurrentFloor: (floor) => dispatch(action.setUpCurrentFloor(floor)),

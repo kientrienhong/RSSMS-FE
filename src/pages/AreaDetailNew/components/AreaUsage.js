@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Card, Typography } from "@material-ui/core";
 import CircularProgressWithLabel from "../../AreaDetailNew/components/CircularProgressWithLabel";
 
-export default function AreaUsage({ value }) {
+export default function AreaUsage({ detailFloor }) {
   const buildNameValue = (name, value) => {
     return (
       <Box
@@ -52,8 +52,8 @@ export default function AreaUsage({ value }) {
             justifyContent: "space-between",
           }}
         >
-          {buildNameValue("Diện tích đã dùng", "72m2")}
-          {buildNameValue("Diện tích trống", "80m2")}
+          {buildNameValue("Diện tích đã dùng", detailFloor?.used + "m3")}
+          {buildNameValue("Diện tích trống", detailFloor?.available + "m3")}
         </Box>
       </Box>
     );
@@ -80,7 +80,7 @@ export default function AreaUsage({ value }) {
       >
         Usage
       </Typography>
-      {buildProductUsage(value)}
+      {buildProductUsage(detailFloor?.usage)}
     </Card>
   );
 }

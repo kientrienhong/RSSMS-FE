@@ -15,7 +15,8 @@ const styleModal = {
   ...STYLE_MODAL,
   width: "90%",
 };
-export default function ModalDetailFloor({ open, handleClose, currentFloor }) {
+export default function ModalDetailFloor({ open, handleClose, detailFloor }) {
+  console.log(detailFloor);
   return (
     <Modal
       open={open}
@@ -33,9 +34,9 @@ export default function ModalDetailFloor({ open, handleClose, currentFloor }) {
           justifyContent: "flex-start",
         }}
       >
-        <AreaUsage value={currentFloor?.usage} />
+        <AreaUsage detailFloor={detailFloor} />
         <ListOrderDetail
-          listOrderDetail={[{}, {}, {}]}
+          listOrderDetail={detailFloor.orderDetails}
           page={1}
           totalOrderDetail={3}
         />

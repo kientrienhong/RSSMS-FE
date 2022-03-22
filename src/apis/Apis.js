@@ -758,3 +758,12 @@ export const getRequestDetail = async (id, token) => {
 
   return response;
 };
+
+export const getDetailFloor = async (id, token) => {
+  const response = await axios.get(
+    `https://localhost:44304/api/v1/floors/${id}`,
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+
+  return response;
+};

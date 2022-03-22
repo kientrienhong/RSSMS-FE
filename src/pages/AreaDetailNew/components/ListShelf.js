@@ -8,6 +8,7 @@ export default function ListShelf({
   storage,
   handleOpenSelfStorage,
   handleOpenConfirm,
+  setDetailFloor,
 }) {
   const [expanded, setExpanded] = React.useState(false);
   const handleChange = (panel) => (event, isExpanded) => {
@@ -28,6 +29,7 @@ export default function ListShelf({
           handleOpenSelfStorage={handleOpenSelfStorage}
           handleOpen={handleOpen}
           handleOpenConfirm={handleOpenConfirm}
+          setDetailFloor={setDetailFloor}
         />
       );
     });
