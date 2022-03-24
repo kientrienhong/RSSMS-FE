@@ -15,8 +15,13 @@ const styleModal = {
   ...STYLE_MODAL,
   width: "90%",
 };
-export default function ModalDetailFloor({ open, handleClose, detailFloor }) {
-  console.log(detailFloor);
+export default function ModalDetailFloor({
+  open,
+  handleClose,
+  detailFloor,
+  handleOpenOrderDetail,
+  setCurrentOrderDetail,
+}) {
   return (
     <Modal
       open={open}
@@ -37,6 +42,8 @@ export default function ModalDetailFloor({ open, handleClose, detailFloor }) {
         <AreaUsage detailFloor={detailFloor} />
         <ListOrderDetail
           listOrderDetail={detailFloor.orderDetails}
+          handleOpenOrderDetail={handleOpenOrderDetail}
+          setCurrentOrderDetail={setCurrentOrderDetail}
           page={1}
           totalOrderDetail={3}
         />

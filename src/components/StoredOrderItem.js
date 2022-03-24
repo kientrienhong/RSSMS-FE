@@ -127,13 +127,18 @@ export default function StoredOrderItem({
         aria-controls="panel1bh-content"
         id="panel1bh-header"
       >
-        <Radio
-          value={storedOrder.id}
-          checked={selectedValue === storedOrder.id.toString()}
-          name="radio-buttons"
-          onChange={handleChangeRadio}
-          inputProps={{ "aria-label": "B" }}
-        />
+        {selectedValue ? (
+          <Radio
+            value={storedOrder.id}
+            checked={selectedValue === storedOrder.id.toString()}
+            name="radio-buttons"
+            onChange={handleChangeRadio}
+            inputProps={{ "aria-label": "B" }}
+          />
+        ) : (
+          <></>
+        )}
+
         <p
           style={{
             width: "20%",

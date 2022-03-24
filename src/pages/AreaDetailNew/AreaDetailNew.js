@@ -32,6 +32,7 @@ import ListShelf from "./components/ListShelf";
 import ModalSpace from "./components/ModalSpace";
 import SelfStorageModal from "./components/SelfStorageModal";
 import ConfirmModal from "../../components/ConfirmModal";
+import ModalOrderDetail from "./components/ModalOrderDetail";
 
 function AreaDetailNew({
   storedOrder,
@@ -58,6 +59,17 @@ function AreaDetailNew({
   const [isOpenConfirm, setIsOpenConfirm] = useState(false);
   const [listShelves, setListShelves] = useState([]);
   const [detailFloor, setDetailFloor] = useState({});
+  const [currentOrderDetail, setCurrentOrderDetail] = useState({});
+  const [openOrderDetail, setOpenOrderDetail] = useState(false);
+
+  const handleOpenOrderDetail = () => {
+    setOpenOrderDetail(true);
+  };
+
+  const handleCloseOpenOrderDetail = () => {
+    setOpenOrderDetail(false);
+  };
+
   const handleOpenConfirm = (space) => {
     setCurrentSpace(space);
     setIsOpenConfirm(true);
@@ -179,6 +191,11 @@ function AreaDetailNew({
         py: 3,
       }}
     >
+      <ModalOrderDetail
+        handleClose={handleCloseOpenOrderDetail}
+        open={openOrderDetail}
+        currentOrderDetail={currentOrderDetail}
+      />
       <ConfirmModal
         open={isOpenConfirm}
         handleClose={handleCloseConfirm}
@@ -190,6 +207,8 @@ function AreaDetailNew({
         detailFloor={detailFloor}
         open={openDetailFloor}
         handleClose={handleCloseDetailFloor}
+        handleOpenOrderDetail={handleOpenOrderDetail}
+        setCurrentOrderDetail={setCurrentOrderDetail}
       />
       <SelfStorageModal
         currentSpace={currentSpace}

@@ -16,9 +16,10 @@ import {
 import TabPanel from "./TabPanel";
 
 import InformationOrder from "./InformationOrder";
+import ItemTab from "./ItemTab";
 const styleModal = {
   position: "absolute",
-  top: "1%",
+  top: "6%",
   right: "10%",
   width: "80%",
   height: "92vh",
@@ -56,6 +57,8 @@ export default function OrderModal({
       <Box
         sx={{
           ...styleModal,
+          height: "auto",
+          maxHeight: "80%",
           display: "flex",
           justifyContent: "flex-start",
           alignItems: "flex-start",
@@ -63,11 +66,14 @@ export default function OrderModal({
           pading: "3%",
         }}
       >
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+        <Box>
           <Tabs
             value={value}
             onChange={handleChange}
             aria-label="basic tabs example"
+            sx={{
+              marginBottom: "2%",
+            }}
           >
             <Tab label="Thông tin đơn" />
             <Tab label="Đồ đạc" />
@@ -92,7 +98,9 @@ export default function OrderModal({
             searchId={searchId}
           />
         </TabPanel>
-        <TabPanel value={value} index={1}></TabPanel>
+        <TabPanel value={value} index={1}>
+          <ItemTab listOrderDetail={currentOrder?.orderDetails} />{" "}
+        </TabPanel>
         <TabPanel value={value} index={2}></TabPanel>
       </Box>
     </Modal>

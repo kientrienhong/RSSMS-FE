@@ -107,24 +107,9 @@ const mapListTableHeader = (listHeader) => (
   </TableHead>
 );
 
-const handleClickRow = (row, setCurrentOrderDetail, handleOpen) => {
-  // handleOpen();
-  //   const user = {
-  //     id: row.id,
-  //     name: row.name,
-  //     gender: row.gender,
-  //     birthdate: row.birthdate,
-  //     email: row.email,
-  //     avatar: row.avatar,
-  //     phone: row.phone,
-  //     storageId: row.storageId,
-  //     storageName: row.storageName,
-  //     roleName: row.roleName,
-  //     address: row.address,
-  //     imageUrl: row.imageUrl,
-  //   };
-  //   setCurrentOrderDetail(user);
-  // handleOpen(true);
+const handleClickRow = (row, setCurrentOrderDetail, handleOpenOrderDetail) => {
+  setCurrentOrderDetail(row);
+  handleOpenOrderDetail();
 };
 const useStyles = makeStyles({
   button: {
@@ -146,6 +131,7 @@ function ListOrderDetail({
   searchName,
   getData,
   userState,
+  handleOpenOrderDetail,
 }) {
   const classes = useStyles();
 
@@ -208,7 +194,11 @@ function ListOrderDetail({
                   scope="row"
                   style={{ color: "black" }}
                   onClick={(e) =>
-                    handleClickRow(row, setCurrentOrderDetail, handleOpen)
+                    handleClickRow(
+                      row,
+                      setCurrentOrderDetail,
+                      handleOpenOrderDetail
+                    )
                   }
                 >
                   {row.orderName}
@@ -216,7 +206,11 @@ function ListOrderDetail({
                 <TableCell
                   style={{ color: "black" }}
                   onClick={(e) =>
-                    handleClickRow(row, setCurrentOrderDetail, handleOpen)
+                    handleClickRow(
+                      row,
+                      setCurrentOrderDetail,
+                      handleOpenOrderDetail
+                    )
                   }
                 >
                   <img
@@ -229,7 +223,11 @@ function ListOrderDetail({
                 <TableCell
                   style={{ color: "black" }}
                   onClick={(e) =>
-                    handleClickRow(row, setCurrentOrderDetail, handleOpen)
+                    handleClickRow(
+                      row,
+                      setCurrentOrderDetail,
+                      handleOpenOrderDetail
+                    )
                   }
                 >
                   {row.customerName}
@@ -237,15 +235,37 @@ function ListOrderDetail({
                 <TableCell
                   style={{ color: "black" }}
                   onClick={(e) =>
-                    handleClickRow(row, setCurrentOrderDetail, handleOpen)
+                    handleClickRow(
+                      row,
+                      setCurrentOrderDetail,
+                      handleOpenOrderDetail
+                    )
                   }
                 >
                   {row.orderStatus}
                 </TableCell>
-                <TableCell style={{ color: "black" }}>
+                <TableCell
+                  style={{ color: "black" }}
+                  onClick={(e) =>
+                    handleClickRow(
+                      row,
+                      setCurrentOrderDetail,
+                      handleOpenOrderDetail
+                    )
+                  }
+                >
                   {row.returnDate}
                 </TableCell>
-                <TableCell style={{ color: "black" }}>
+                <TableCell
+                  style={{ color: "black" }}
+                  onClick={(e) =>
+                    handleClickRow(
+                      row,
+                      setCurrentOrderDetail,
+                      handleOpenOrderDetail
+                    )
+                  }
+                >
                   {row.width}m x {row.length}m x {row.height}
                 </TableCell>
               </TableRow>
