@@ -4,7 +4,6 @@ import { formatCurrency } from "../utils/FormatCurrency";
 
 export default function OrderDetail({ choosenProduct, duration }) {
   const buildTotalPrice = () => {
-    console.log(choosenProduct);
     let months = Math.ceil(duration / 30);
     let sum = 0;
     choosenProduct?.product?.forEach((e) => {
@@ -137,7 +136,6 @@ export default function OrderDetail({ choosenProduct, duration }) {
     );
     let totalNum =
       isNaN(parseInt(total?.price)) === true ? 0 : parseInt(total?.price);
-    console.log(total);
     return (
       <Box
         sx={{

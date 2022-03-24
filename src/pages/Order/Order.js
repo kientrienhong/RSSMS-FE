@@ -9,7 +9,6 @@ import {
 } from "@material-ui/core";
 import SearchIcon from "@mui/icons-material/Search";
 import { useNavigate } from "react-router";
-import OrderModal from "../../components/OrderModal";
 import ListOrder from "./ViewOrder/ListOrder";
 import { useForm } from "react-hook-form";
 import { connect } from "react-redux";
@@ -17,6 +16,7 @@ import * as action from "../../redux/action/action";
 import { getOrder } from "../../apis/Apis";
 
 import ProductButton from "./CreateOrder/components/ProductButton";
+import OrderModal from "../../components/OrderModal";
 function Order({
   isLoadingOrder,
   showLoading,

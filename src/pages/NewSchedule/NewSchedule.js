@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import ListDateComponent from "./components/ListDateComponent";
 import ListItemSidebar from "./components/ListItemSidebar";
 import { LIST_TIME, TYPE_SCHEDULE } from "../../constant/constant";
-import OrderModal from "../../components/OrderModal";
+import RequestModal from "../../components/RequestModal";
 import { isDateAfter, isDateBefore } from "../../utils/DateUtils";
 import {
   getOrder,
@@ -492,7 +492,7 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
         open={openAssignTime}
         handleClose={handleCloseAssignTime}
       />
-      <OrderModal
+      <RequestModal
         open={open}
         handleClose={handleClose}
         currentOrder={currentOrder}

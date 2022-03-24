@@ -19,7 +19,7 @@ import ModalCancelDetail from "./component/ModalCancelDetail";
 import ModalReturnItem from "./component/ModalReturnItem";
 import ModalUpdateIsPaid from "./component/ModalUpdateIsPaid";
 import AssignOrderModal from "./component/AssignOrderModal";
-import OrderModal from "../../components/OrderModal";
+import RequestModal from "../../components/RequestModal";
 
 function CustomerRequest({
   showLoading,
@@ -225,7 +225,7 @@ function CustomerRequest({
         currentRequest={currentRequest}
         requestDetail={requestDetail}
       />
-      <OrderModal
+      <RequestModal
         open={openOrderModal}
         handleClose={handleCloseOrderModal}
         currentOrder={currentRequest}
