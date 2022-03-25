@@ -24,6 +24,7 @@ import { PRODUCT_TYPE, LIST_STATUS, LIST_TIME } from "../constant/constant";
 import ListPositionStored from "./ListPositionStored";
 import { Controller } from "react-hook-form";
 import CustomSelect from "./CustomSelect";
+
 const styleModal = {
   position: "absolute",
   top: "1%",
@@ -65,6 +66,7 @@ const styleInput = {
   height: "32px",
   width: "20%",
 };
+
 function RequestModal({
   open,
   handleClose,
@@ -346,6 +348,8 @@ function RequestModal({
           name: e.serviceName,
           quantity: e.amount,
           price: e.price,
+          imageUrl: e.serviceImageUrl,
+          note: e.note,
         });
       });
     } else {
@@ -355,6 +359,8 @@ function RequestModal({
           name: e.serviceName,
           quantity: e.amount,
           price: e.price,
+          imageUrl: e.serviceImageUrl,
+          note: e.note,
         });
       });
     }

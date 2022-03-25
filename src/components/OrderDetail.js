@@ -1,6 +1,21 @@
 import React from "react";
 import { Box, Divider, Typography } from "@material-ui/core";
 import { formatCurrency } from "../utils/FormatCurrency";
+import { styled } from "@mui/material/styles";
+import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
+
+const HtmlTooltip = styled(({ className, ...props }) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: "#f5f5f9",
+    color: "rgba(0, 0, 0, 0.87)",
+    maxWidth: 220,
+    zIndex: "99999999999999999999 !important",
+    fontSize: theme.typography.pxToRem(12),
+    border: "1px solid #dadde9",
+  },
+}));
 
 export default function OrderDetail({ choosenProduct, duration }) {
   const buildTotalPrice = () => {
@@ -84,6 +99,7 @@ export default function OrderDetail({ choosenProduct, duration }) {
   };
 
   const mapListDetailOthers = (listProduct) => {
+    console.log(listProduct);
     return listProduct.map((e) => (
       <Box
         sx={{
@@ -181,29 +197,63 @@ export default function OrderDetail({ choosenProduct, duration }) {
           justifyContent: "space-between",
         }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "flex-end",
-            width: "40%",
-          }}
+        <HtmlTooltip
+          title={
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+              }}
+            >
+              <Box
+                sx={{
+                  marginRight: "8px",
+                }}
+              >
+                <img src={e?.imageUrl} width="80" height="80" alt={e.name} />
+              </Box>
+              <Box>
+                <Typography color="black" variant="h5">
+                  Mô tả đồ khách hàng sẽ gửi
+                </Typography>
+                <p>{e.note}</p>
+              </Box>
+            </Box>
+          }
         >
-          <Typography
-            variant="h2"
-            style={{ marginBottom: "3%", marginRight: "8%" }}
+          <Box
+            sx={{
+              width: "40%",
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+            }}
           >
-            {e.name}
-          </Typography>
-          <Typography
-            variant="h3"
-            color="primary"
-            style={{ marginBottom: "3%" }}
-          >
-            X {e.quantity}
-          </Typography>
-        </Box>
-
+            <Typography
+              variant="h2"
+              style={{ marginBottom: "3%", marginRight: "8%" }}
+            >
+              {e.name}
+              <img
+                src="/img/info.png"
+                alt="edit"
+                style={{
+                  cursor: "pointer",
+                  width: "18px",
+                  height: "18px",
+                  marginLeft: "8px",
+                }}
+              />
+            </Typography>
+            <Typography
+              variant="h3"
+              color="primary"
+              style={{ marginBottom: "3%" }}
+            >
+              X {e.quantity}
+            </Typography>
+          </Box>
+        </HtmlTooltip>
         <Typography variant="h2" color="primary" style={{ marginBottom: "3%" }}>
           {formatCurrency(e.price * e.quantity * months, "đ")}
         </Typography>

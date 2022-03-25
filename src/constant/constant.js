@@ -83,6 +83,12 @@ export const LIST_TYPE_REQUEST = [
   { name: "Yêu cầu trả đơn" },
 ];
 
+export const LIST_STATUS_REQUEST = [
+  { name: "Đã hủy" },
+  { name: "Đang xử lý" },
+  { name: "Đã xử lý" },
+];
+
 export const LIST_STATUS = [
   { label: "Đã hủy", value: 0 },
   { label: "Đã đặt", value: 1 },

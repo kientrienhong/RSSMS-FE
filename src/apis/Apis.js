@@ -476,6 +476,9 @@ export const getOrder = async (
 };
 
 export const getSchedule = async (dateStart, dateEnd, token) => {
+  console.log(
+    `https://localhost:44304/api/v1/schedules?DateFrom=${dateStart}&DateTo=${dateEnd}&page=1&size=-1`
+  );
   let response = await axios.get(
     `https://localhost:44304/api/v1/schedules?DateFrom=${dateStart}&DateTo=${dateEnd}&page=1&size=-1`,
     { headers: { Authorization: `Bearer ${token}` } }

@@ -15,7 +15,6 @@ function Schedule({
   userState,
 }) {
   let foundSameStorage = false;
-  console.log(listSelectedOrder);
   let indexFound = listSelectedOrder?.findIndex((e) => {
     if (e.storageId === schedule.storageId) {
       foundSameStorage = true;

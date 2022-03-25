@@ -17,7 +17,10 @@ import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 import { Button, TableHead } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
-import { LIST_TYPE_REQUEST } from "../../../constant/constant";
+import {
+  LIST_TYPE_REQUEST,
+  LIST_STATUS_REQUEST,
+} from "../../../constant/constant";
 import ConfirmModal from "../../../components/ConfirmModal";
 import { deleteUser } from "../../../apis/Apis";
 import { connect } from "react-redux";
@@ -91,7 +94,14 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-const listHeaderName = ["Id", "Name", "Phone", "Type", "Action"];
+const listHeaderName = [
+  "Mã",
+  "Tên khách hàng",
+  "Số điện thoại",
+  "Loại",
+  "Trạng thái",
+  "Hành động",
+];
 
 const mapListTableHeader = (listHeader) => (
   <TableHead>
@@ -152,6 +162,7 @@ function ListRequest({
         {mapListTableHeader(listHeaderName)}
         <TableBody>
           {listRequest?.map((row, index) => {
+            console.log(row);
             return (
               <TableRow key={row.id}>
                 <TableCell
@@ -170,6 +181,9 @@ function ListRequest({
 
                 <TableCell style={{ color: "black" }}>
                   {LIST_TYPE_REQUEST[row.type].name}
+                </TableCell>
+                <TableCell style={{ color: "black" }}>
+                  {LIST_STATUS_REQUEST[row.status].name}
                 </TableCell>
                 <TableCell style={{ color: "black" }}>
                   <Button
@@ -203,7 +217,7 @@ function ListRequest({
                   >
                     Xem thêm
                   </Button>
-                  {row.type === 1 ? (
+                  {row.type === 1 && row.status === 1 ? (
                     <Button
                       onClick={() => {
                         setRequest(row);
