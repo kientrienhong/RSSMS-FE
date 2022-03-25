@@ -66,7 +66,7 @@ export default function Shelf({
       >
         <Typography
           sx={{
-            width: "10%",
+            width: "35%",
             margin: 0,
             marginRight: "1%",
           }}
@@ -75,7 +75,7 @@ export default function Shelf({
         </Typography>
         <Typography
           sx={{
-            width: "40%",
+            width: "35%",
 
             marginRight: "1%",
           }}
@@ -83,13 +83,7 @@ export default function Shelf({
           Kích thước tầng: {shelf?.floors[0]?.width}m x{" "}
           {shelf?.floors[0]?.length}m x {shelf?.floors[0]?.height}m
         </Typography>
-        <Typography
-          sx={{
-            width: "20%",
-          }}
-        >
-          Số tầng tầng: {shelf.floors.length}
-        </Typography>
+
         <Button
           style={{
             height: "32px",

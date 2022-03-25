@@ -63,9 +63,7 @@ function InputInforModal({
         order.choosenProduct[e].forEach((e) => {
           listProduct.push({
             serviceId: e.id,
-            serviceName: e.name,
             price: e.price,
-            type: e.typeInt,
             amount: e.quantity,
             note: e.note,
           });
@@ -73,9 +71,14 @@ function InputInforModal({
       });
 
       let orderTemp = {};
+      let dateStart = new Date(order.dateStart);
 
       if (order.type === 0) {
         // Storage order
+        let returnDate = new Date(
+          dateStart.setMonth(dateStart.getMonth() + order.duration)
+        );
+
         orderTemp = {
           customerId: user.id,
           deliveryAddress: "",
@@ -86,12 +89,16 @@ function InputInforModal({
           paymentMethod: null,
           isUserDelivery: null,
           deliveryDate: order.dateStart,
+          returnDate: returnDate.toISOString(),
           deliveryTime: null,
           duration: order.duration,
           listProduct: listProduct,
         };
       } else {
         // door - to - door  order
+        let returnDate = new Date(
+          dateStart.setDate(dateStart.setDate() + order.duration)
+        );
         orderTemp = {
           customerId: user.id,
           deliveryAddress: data.deliveryAddress,
@@ -99,6 +106,7 @@ function InputInforModal({
           totalPrice: order.totalPrice,
           typeOrder: order.type,
           isPaid: false,
+          returnDate: returnDate.toISOString(),
           paymentMethod: null,
           isUserDelivery: order.isCustomerDelivery,
           deliveryDate: order.dateDelivery,
@@ -107,9 +115,10 @@ function InputInforModal({
           listProduct: listProduct,
         };
       }
-      await createOrder(orderTemp, userState.idToken);
-      navigate("/app/orders", { replace: true });
-      showSnackbar("success", "Tạo order thành công!");
+      console.log(orderTemp);
+      // await createOrder(orderTemp, userState.idToken);
+      // navigate("/app/orders", { replace: true });
+      // showSnackbar("success", "Tạo order thành công!");
     } catch (e) {
       console.log(e.response);
     } finally {

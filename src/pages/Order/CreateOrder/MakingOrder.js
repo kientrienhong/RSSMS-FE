@@ -89,20 +89,25 @@ function MakingOrder({
     if (name === "Kho tự quản") {
       setIndexMain(0);
       setCurrentColor({ selfStorage: "#04BFFE", doorToDoor: "#A19FA8" });
-      setChoosenProduct({
-        product: [],
-        accessory: [],
-        services: [],
-      });
     } else {
       setIndexMain(1);
       setCurrentColor({ selfStorage: "#A19FA8", doorToDoor: "#04BFFE" });
-      setChoosenProduct({
-        product: [],
-        accessory: [],
-        services: [],
-      });
     }
+    setChoosenProduct({
+      product: [],
+      accessory: [],
+      services: [],
+    });
+
+    let listStoragesTemp = setResetQuantity(listStorages, "product");
+    let listAccessoryTemp = setResetQuantity(listAccessory, "accessory");
+    let listBoxesTemp = setResetQuantity(listBoxes, "product");
+    let listAreasTemp = setResetQuantity(listAreas, "product");
+    setListAccessory(listAccessoryTemp);
+    setListStorages(listStoragesTemp);
+    // setListServices(listServicesTemp);
+    setListBoxes(listBoxesTemp);
+    setListAreas(listAreasTemp);
   };
 
   const buildMainTab = (icon, name, color) => {

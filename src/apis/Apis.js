@@ -421,7 +421,7 @@ export const deleteSpace = async (id, token) => {
 
 export const createOrder = async (order, token) => {
   const response = await axios.post(
-    `https://localhost:44304/api/v1/orders`,
+    `https://localhost:44304/api/v1/requests`,
     {
       customerId: order.customerId,
       deliveryAddress: order.deliveryAddress,
@@ -430,11 +430,12 @@ export const createOrder = async (order, token) => {
       typeOrder: order.typeOrder,
       deliveryTime: order.deliveryTime,
       isPaid: order.isPaid,
+      type: 1,
+      returnDate: order.returnDate,
       paymentMethod: order.paymentMethod,
       isUserDelivery: order.isUserDelivery,
       deliveryDate: order.deliveryDate,
-      duration: order.duration,
-      listService: order.listProduct,
+      requestDetails: order.listProduct,
     },
     { headers: { Authorization: `Bearer ${token}` } }
   );

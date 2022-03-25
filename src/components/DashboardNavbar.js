@@ -78,7 +78,7 @@ const DashboardNavbar = ({
               marginLeft: "2.5%",
             }}
           >
-            Are you sure?
+            Bạn đã chắc chắn?
           </Typography>
           <Box
             sx={{
@@ -107,7 +107,7 @@ const DashboardNavbar = ({
               variant="contained"
               type="submit"
             >
-              Yes
+              Xác nhận
             </Button>
             <Button
               style={{
@@ -119,7 +119,7 @@ const DashboardNavbar = ({
               color="error"
               variant="outlined"
             >
-              No
+              Không
             </Button>
           </Box>
         </Box>

@@ -203,19 +203,6 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
       response?.data?.data.forEach((e) => {
         handleFormatDate(new Date(e.deliveryDate), result, e);
       });
-      //   ?.filter((e) => e.status !== 0 && e.typeOrder !== 0)
-      //   ?.forEach((e) => {
-      //     let dateDelivery = new Date(e.deliveryDate);
-      //     let dateReturn = new Date(e.returnDate);
-      //     if (
-      //       isDateBefore(dateReturn, endOfWeek) === true &&
-      //       isDateAfter(dateReturn, startOfWeek) === true
-      //     ) {
-      //       handleFormatDate(dateReturn, result, e, "returnTime");
-      //     } else {
-      //       handleFormatDate(dateDelivery, result, e, "deliveryTime");
-      //     }
-      //   });
 
       try {
         let responseRequest = await getSchedule(

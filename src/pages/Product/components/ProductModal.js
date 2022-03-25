@@ -291,7 +291,7 @@ function ProductModal({
                 />
               </Box>
               <Box
-                sx={{ ...styleBoxInput, marginTop: "5%", marginLeft: "-2%" }}
+                sx={{ ...styleBoxInput, marginTop: "5%", marginLeft: "-6%" }}
               >
                 <CustomInput
                   control={control}
