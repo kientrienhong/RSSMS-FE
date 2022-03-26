@@ -17,6 +17,7 @@ import TabPanel from "./TabPanel";
 
 import InformationOrder from "./InformationOrder";
 import ItemTab from "./ItemTab";
+import ListInfoHistoryExtension from "./ListInfoHistoryExtension";
 const styleModal = {
   position: "absolute",
   top: "6%",
@@ -77,7 +78,11 @@ export default function OrderModal({
           >
             <Tab label="Thông tin đơn" />
             <Tab label="Đồ đạc" />
-            <Tab label="Lịch sử gia hạn" />
+            {currentOrder?.orderHistoryExtensions?.length > 0 ? (
+              <Tab label="Lịch sử gia hạn" />
+            ) : (
+              <></>
+            )}
           </Tabs>
         </Box>
         <TabPanel
@@ -101,7 +106,16 @@ export default function OrderModal({
         <TabPanel value={value} index={1}>
           <ItemTab listOrderDetail={currentOrder?.orderDetails} />{" "}
         </TabPanel>
-        <TabPanel value={value} index={2}></TabPanel>
+        {currentOrder?.orderHistoryExtensions?.length > 0 ? (
+          <TabPanel value={value} index={2}>
+            <ListInfoHistoryExtension
+              list={currentOrder?.orderHistoryExtensions}
+              currentOrder={currentOrder}
+            />
+          </TabPanel>
+        ) : (
+          <></>
+        )}
       </Box>
     </Modal>
   );

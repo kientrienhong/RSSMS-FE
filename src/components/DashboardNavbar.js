@@ -82,7 +82,7 @@ const DashboardNavbar = ({
           </Typography>
           <Box
             sx={{
-              width: "60%",
+              width: "80%",
               margin: "40px auto 10px auto",
               display: "flex",
               flexDirection: "row",

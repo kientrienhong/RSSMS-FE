@@ -195,3 +195,9 @@ export const setUpCurrentFloor = (floor) => {
     payload: floor,
   };
 };
+
+export const changeMoveOrderDetail = () => {
+  return {
+    type: ActionType.CHANGE_MOVE_ORDER_DETAIL,
+  };
+};

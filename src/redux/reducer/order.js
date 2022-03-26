@@ -20,6 +20,7 @@ const initialState = {
   isLoadingRequest: false,
   isLoadingOrder: false,
   moveBox: undefined,
+  isMoveOrderDetail: false,
   currentPositionViewOrderId: -1,
 };
 
@@ -138,6 +139,11 @@ const order = (state = initialState, action) => {
         placingProducts: placingProductTemp,
         storedOrder: storedOrderTemp,
       };
+    }
+
+    case ActionType.CHANGE_MOVE_ORDER_DETAIL: {
+      state.isMoveOrderDetail = !state.isMoveOrderDetail;
+      return { ...state };
     }
 
     case ActionType.REMOVE_PLACED_PRODUCT: {

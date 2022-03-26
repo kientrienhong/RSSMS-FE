@@ -66,7 +66,8 @@ function FormSelfStorage({
       handleClose();
     } catch (e) {
       console.log(e.response);
-      setError({ msg: e.response.data.error.message });
+      if (e?.response?.data?.error?.message)
+        setError({ msg: e.response.data.error.message });
     } finally {
       hideLoading();
     }
@@ -81,7 +82,12 @@ function FormSelfStorage({
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      style={{
+        width: "100%",
+      }}
+    >
       <Box
         sx={{
           width: "100%",
@@ -108,7 +114,7 @@ function FormSelfStorage({
       <Typography
         color="black"
         variant="h2"
-        sx={{ textAlign: "left", marginTop: "2%" }}
+        sx={{ textAlign: "left", marginTop: "4%" }}
       >
         Kích thước
       </Typography>
@@ -116,8 +122,8 @@ function FormSelfStorage({
         container
         spacing={2}
         sx={{
-          width: "70%",
-          marginTop: "1%",
+          width: "100%",
+          marginTop: "2%",
         }}
       >
         <Grid item xs={4}>
@@ -178,7 +184,7 @@ function FormSelfStorage({
           display: "flex",
           flexDirection: "row",
           justifyContent: "center",
-          marginTop: "16px",
+          marginTop: "4%",
         }}
       >
         <Button

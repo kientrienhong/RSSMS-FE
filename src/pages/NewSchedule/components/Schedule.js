@@ -14,6 +14,7 @@ function Schedule({
   handleOpenAssignTime,
   userState,
 }) {
+  console.log(schedule);
   let foundSameStorage = false;
   let indexFound = listSelectedOrder?.findIndex((e) => {
     if (e.storageId === schedule.storageId) {

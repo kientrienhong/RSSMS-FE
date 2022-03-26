@@ -3,7 +3,8 @@ import * as style from "./style";
 export const AREA_TYPE = 3;
 export const BOX_TYPE = 2;
 export const SELF_STORAGE_TYPE = 0;
-
+export const ACCESSSORY_TYPE = 1;
+export const SERVICE_TYPE = 4;
 export const TYPE_REQUEST_DELIVERY_TAKE = 1;
 
 export const MALE = 0;
@@ -101,10 +102,8 @@ export const LIST_STATUS = [
 
 export const ORDER_STATUS = {
   0: "Đã hủy",
-  1: "Đã đặt",
-  2: "Đã xử lý",
-  3: "Đang vận chuyển",
-  4: "Đã lưu kho",
+  1: "Đang vận chuyển",
+  2: "Đã lưu kho",
   5: "Đã quá hạn",
   6: "Hoàn tất",
   7: "Đang vận chuyển",

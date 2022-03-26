@@ -456,25 +456,6 @@ function ListOrder({
                           flexDirection: "row",
                         }}
                       >
-                        {row.status === 1 ? (
-                          <Button
-                            style={{
-                              height: "45px",
-                              paddingLeft: "16px",
-                              paddingRight: "16px",
-                              marginRight: "4%",
-                            }}
-                            onClick={() => {
-                              setCurrentId(row.id);
-                              handleClickRow(row);
-                              handleOpenAssign();
-                            }}
-                            color="primary"
-                            variant="contained"
-                          >
-                            Phân đơn
-                          </Button>
-                        ) : null}
                         <Button
                           className={classes.button}
                           onClick={() => {

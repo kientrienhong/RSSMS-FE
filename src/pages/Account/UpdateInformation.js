@@ -213,7 +213,7 @@ function UpdateInformation({
             <CustomInput
               control={control}
               rules={{
-                required: "Email required",
+                required: "*Vui lòng nhập",
               }}
               styles={{ width: "540px" }}
               name="email"
@@ -227,7 +227,7 @@ function UpdateInformation({
             <CustomInput
               control={control}
               rules={{
-                required: "Name required",
+                required: "*Vui lòng nhập",
               }}
               styles={{ width: "300px" }}
               name="name"

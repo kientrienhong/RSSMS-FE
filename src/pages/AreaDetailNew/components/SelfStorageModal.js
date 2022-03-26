@@ -13,7 +13,7 @@ import FormSelfStorage from "./FormSelfStorage";
 
 const styleModal = {
   ...STYLE_MODAL,
-  width: "70%",
+  width: "50%",
 };
 export default function SelfStorageModal({
   currentSpace,
@@ -46,7 +46,7 @@ export default function SelfStorageModal({
             display: "flex",
             justifyContent: "flex-start",
             flexDirection: "column",
-            width: "50%",
+            width: "100%",
           }}
         >
           <FormSelfStorage

@@ -17,7 +17,7 @@ const HtmlTooltip = styled(({ className, ...props }) => (
   },
 }));
 
-export default function OrderDetail({ choosenProduct, duration }) {
+export default function OrderDetail({ choosenProduct, duration, order }) {
   const buildTotalPrice = () => {
     let months = Math.ceil(duration / 30);
     let sum = 0;
@@ -30,6 +30,10 @@ export default function OrderDetail({ choosenProduct, duration }) {
     choosenProduct?.services?.forEach((e) => {
       sum += e.price * e.quantity;
     });
+
+    if (order.additionalFee) {
+      sum += order.additionalFee;
+    }
     return (
       <Box
         sx={{
@@ -99,7 +103,6 @@ export default function OrderDetail({ choosenProduct, duration }) {
   };
 
   const mapListDetailOthers = (listProduct) => {
-    console.log(listProduct);
     return listProduct.map((e) => (
       <Box
         sx={{
@@ -137,6 +140,45 @@ export default function OrderDetail({ choosenProduct, duration }) {
         </Typography>
       </Box>
     ));
+  };
+
+  const buildAdditionPrice = () => {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          marginTop: "4%",
+        }}
+      >
+        <Typography
+          variant="h2"
+          style={{ marginBottom: "3%", marginRight: "8%" }}
+        >
+          Chi phí thêm
+        </Typography>
+        <Divider />
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginTop: "1%",
+          }}
+        >
+          <Typography variant="h2" style={{ marginBottom: "3%", width: "50%" }}>
+            {order.additionalFeeDescription}
+          </Typography>
+          <Typography
+            variant="h2"
+            color="primary"
+            style={{ marginBottom: "3%", width: "50%", textAlign: "right" }}
+          >
+            {formatCurrency(order.additionalFee, "đ")}
+          </Typography>
+        </Box>
+      </Box>
+    );
   };
 
   const buildTotalProduct = (value) => {
@@ -300,6 +342,7 @@ export default function OrderDetail({ choosenProduct, duration }) {
       {mapListDetailOthers(choosenProduct.accessory)}
       <Divider />
       {buildTotalEachPartPrice("accessory")}
+      {order.additionalFee !== 0 ? buildAdditionPrice() : <></>}
       {buildTotalPrice()}
     </Box>
   );

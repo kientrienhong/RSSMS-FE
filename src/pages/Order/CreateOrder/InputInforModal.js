@@ -23,6 +23,8 @@ import { createOrder } from "../../../apis/Apis";
 import LoadingPage from "../../Loading/LoadingPage";
 import { useNavigate } from "react-router";
 import { STYLE_MODAL } from "../../../constant/style";
+import moment from "moment";
+
 const styleInput = { marginRight: "2.5%", backgroundColor: "white" };
 const styleModal = { ...STYLE_MODAL, overflow: "hidden", overflowY: "scroll" };
 
@@ -69,11 +71,13 @@ function InputInforModal({
           });
         });
       });
-
+      let test = order;
       let orderTemp = {};
-      let dateStart = new Date(order.dateStart);
 
       if (order.type === 0) {
+        // let dateStart = new Date(order.dateStart);
+        let dateStart = moment(order.dateStart).toDate();
+
         // Storage order
         let returnDate = new Date(
           dateStart.setMonth(dateStart.getMonth() + order.duration)
@@ -86,6 +90,7 @@ function InputInforModal({
           totalPrice: order.totalPrice,
           typeOrder: order.type,
           isPaid: false,
+          note: data.note,
           paymentMethod: null,
           isUserDelivery: null,
           deliveryDate: order.dateStart,
@@ -96,15 +101,20 @@ function InputInforModal({
         };
       } else {
         // door - to - door  order
-        let returnDate = new Date(
-          dateStart.setDate(dateStart.setDate() + order.duration)
+        let returnDate = moment(order.dateDelivery).toDate();
+        returnDate = new Date(
+          returnDate.setDate(returnDate.getDate() + order.duration)
         );
+        // let dateStart = Date.parse(order.dateDelivery);
+
+        console.log(order);
         orderTemp = {
           customerId: user.id,
           deliveryAddress: data.deliveryAddress,
           addressReturn: addressReturn,
           totalPrice: order.totalPrice,
           typeOrder: order.type,
+          note: data.note,
           isPaid: false,
           returnDate: returnDate.toISOString(),
           paymentMethod: null,
@@ -115,11 +125,11 @@ function InputInforModal({
           listProduct: listProduct,
         };
       }
-      console.log(orderTemp);
-      // await createOrder(orderTemp, userState.idToken);
-      // navigate("/app/orders", { replace: true });
-      // showSnackbar("success", "Tạo order thành công!");
+      await createOrder(orderTemp, userState.idToken);
+      navigate("/app/customer_request", { replace: true });
+      showSnackbar("success", "Tạo yêu cầu thành công!");
     } catch (e) {
+      console.log(e);
       console.log(e.response);
     } finally {
       hideLoading();

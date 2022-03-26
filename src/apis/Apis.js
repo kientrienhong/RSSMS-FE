@@ -375,6 +375,15 @@ export const getListSpace = async (name, page, size, areaId, token) => {
 };
 
 export const createSpace = async (space, areaId, token) => {
+  console.log({
+    areaId: areaId,
+    type: space.type,
+    name: space.name,
+    floorWidth: space.floorWidth,
+    floorLength: space.floorLength,
+    floorHeight: space.floorHeight,
+    numberOfFloor: space.numberOfFloor ?? 1,
+  });
   let result = await axios.post(
     `https://localhost:44304/api/v1/spaces`,
     {
@@ -430,6 +439,7 @@ export const createOrder = async (order, token) => {
       typeOrder: order.typeOrder,
       deliveryTime: order.deliveryTime,
       isPaid: order.isPaid,
+      note: order.note,
       type: 1,
       returnDate: order.returnDate,
       paymentMethod: order.paymentMethod,
@@ -439,7 +449,6 @@ export const createOrder = async (order, token) => {
     },
     { headers: { Authorization: `Bearer ${token}` } }
   );
-
   return response;
 };
 

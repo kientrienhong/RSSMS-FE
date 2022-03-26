@@ -7,18 +7,10 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import moment from "moment";
 export default function ListInfoHistoryExtension({ list, currentOrder }) {
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
-      <Typography
-        color="black"
-        variant="h2"
-        sx={{
-          marginBottom: "16px",
-        }}
-      >
-        Order History extension
-      </Typography>
       <Box
         sx={{
           display: "flex",
@@ -34,13 +26,13 @@ export default function ListInfoHistoryExtension({ list, currentOrder }) {
           >
             <TableHead>
               <TableRow>
-                <TableCell>Request Id</TableCell>
-                <TableCell>Old return date</TableCell>
-                <TableCell>New return date</TableCell>
+                <TableCell>Mã yêu cầu</TableCell>
+                <TableCell>Ngày kết thúc cũ</TableCell>
+                <TableCell>Ngày kết thúc mới</TableCell>
                 <TableCell>
-                  Difference ({currentOrder.type === 0 ? "Month(s)" : "Day(s)"})
+                  ({currentOrder.type === 0 ? "Số tháng" : "Số ngày"})
                 </TableCell>
-                <TableCell>Date Paid</TableCell>
+                <TableCell>Ngày thanh toán</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -62,16 +54,16 @@ export default function ListInfoHistoryExtension({ list, currentOrder }) {
                       {row.requestId}
                     </TableCell>
                     <TableCell>
-                      {oldReturnDate.toLocaleDateString("en-US")}
+                      {moment(new Date(row.oldReturnDate)).format("DD/MM/YYYY")}
                     </TableCell>
                     <TableCell>
-                      {returnDate.toLocaleDateString("en-US")}
+                      {moment(new Date(row.returnDate)).format("DD/MM/YYYY")}
                     </TableCell>
                     <TableCell>{difference}</TableCell>
                     <TableCell>
                       {row.paidDate === null
-                        ? "Not yet"
-                        : paidDate.toLocaleDateString("en-US")}
+                        ? "Chưa thanh toán"
+                        : moment(new Date(row.paidDate)).format("DD/MM/YYYY")}
                     </TableCell>
                   </TableRow>
                 );

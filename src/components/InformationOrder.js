@@ -24,6 +24,8 @@ import {
   LIST_TIME,
   AREA_TYPE,
   BOX_TYPE,
+  ACCESSSORY_TYPE,
+  SERVICE_TYPE,
 } from "../constant/constant";
 import { useNavigate } from "react-router";
 import { updateOrder } from "../apis/Apis";
@@ -78,6 +80,7 @@ function InformationOrder({
   userState,
   isView,
 }) {
+  console.log(currentOrder);
   const [returnAddress, setReturnAddress] = useState();
   const [deliveryAddress, setDeliveryAddress] = useState();
   const [timeDelivery, setTimeDelivery] = useState();
@@ -342,18 +345,20 @@ function InformationOrder({
         if (type === undefined) {
           return;
         }
-        let indexFound = result[type].findIndex(
-          (ele1) => e.serviceId === ele1.serviceId
-        );
-        if (indexFound === -1) {
-          result[type].push({
-            id: e.serviceId,
-            name: e.serviceName,
-            quantity: 1,
-            price: e.servicePrice,
-          });
-        } else {
-          result[type][indexFound].quantity++;
+        if (e.serviceType === AREA_TYPE || e.serviceType === BOX_TYPE) {
+          let indexFound = result[type].findIndex(
+            (ele1) => e.serviceId === ele1.serviceId
+          );
+          if (indexFound === -1) {
+            result[type].push({
+              id: e.serviceId,
+              name: e.serviceName,
+              quantity: 1,
+              price: e.servicePrice,
+            });
+          } else {
+            result[type][indexFound].quantity++;
+          }
         }
 
         e.orderDetailServices.forEach((addition) => {
@@ -365,7 +370,7 @@ function InformationOrder({
           }
           let typeAddition = PRODUCT_TYPE[addition.serviceType];
           let indexFound = result[typeAddition].findIndex(
-            (ele1) => addition.serviceId === ele1.serviceId
+            (ele1) => addition.serviceId === ele1.id
           );
 
           if (indexFound === -1) {
@@ -787,16 +792,9 @@ function InformationOrder({
           <OrderDetail
             choosenProduct={formatToChosenProduct()}
             duration={duration}
+            order={currentOrder}
           />
 
-          {currentOrder?.orderHistoryExtensions?.length > 0 ? (
-            <ListInfoHistoryExtension
-              list={currentOrder?.orderHistoryExtensions}
-              currentOrder={currentOrder}
-            />
-          ) : (
-            <></>
-          )}
           {currentOrder?.orderDetails?.boxDetails != null ? (
             <ListPositionStored currentOrder={currentOrder} />
           ) : (
@@ -833,19 +831,23 @@ function InformationOrder({
                 justifyContent: "center",
               }}
             >
-              <Button
-                style={{
-                  height: "45px",
-                  paddingLeft: "16px",
-                  paddingRight: "16px",
-                  marginRight: "4%",
-                }}
-                color="primary"
-                variant="contained"
-                onClick={() => handleStoreOrder()}
-              >
-                Lưu trữ đơn
-              </Button>
+              {currentOrder?.status === 1 ? (
+                <Button
+                  style={{
+                    height: "45px",
+                    paddingLeft: "16px",
+                    paddingRight: "16px",
+                    marginRight: "4%",
+                  }}
+                  color="primary"
+                  variant="contained"
+                  onClick={() => handleStoreOrder()}
+                >
+                  Lưu trữ đơn
+                </Button>
+              ) : (
+                <></>
+              )}
 
               {currentOrder?.status === 4 ? (
                 <Button

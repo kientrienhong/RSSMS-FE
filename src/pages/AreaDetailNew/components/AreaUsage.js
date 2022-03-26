@@ -12,6 +12,7 @@ export default function AreaUsage({ detailFloor }) {
           width: "100%",
           height: "auto",
           alignItems: "center",
+          justifyContent: "flex-start",
         }}
       >
         <p
@@ -62,8 +63,8 @@ export default function AreaUsage({ detailFloor }) {
   return (
     <Card
       sx={{
-        width: "30%",
-        height: "40%",
+        width: "20%",
+        height: "30%",
         display: "flex",
         flexDirection: "column",
         marginRight: "3%",

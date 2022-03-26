@@ -87,10 +87,11 @@ function AreaDetailNew({
         floorHeight: space.floors[0].height,
         floorLength: space.floors[0].length,
       });
+      setIsEdit(true);
     } else {
       setCurrentSpace({ type: 0 });
+      setIsEdit(false);
     }
-    setCurrentSpace(space);
 
     setIsOpenSelfStorage(true);
   };
@@ -134,7 +135,6 @@ function AreaDetailNew({
   };
 
   const handleDeleteSpace = async (id) => {
-    console.log(id);
     try {
       await deleteSpace(id, userState.idToken);
       setCurrentSpace({});
@@ -156,6 +156,8 @@ function AreaDetailNew({
       let storageTemp = await getStorageDetail(storageId, userState.idToken);
 
       setStorage(storageTemp.data);
+      let area = await getDetailArea(areaId, userState.idToken);
+      setArea(area.data);
       let response = await getListSpace(
         searchName,
         page,
@@ -165,8 +167,6 @@ function AreaDetailNew({
       );
       setListShelves(response.data.data);
 
-      let area = await getDetailArea(areaId, userState.idToken);
-      setArea(area.data);
       setTotalPage(response.data.metadata.totalPage);
       hideLoading();
     } catch (e) {
@@ -274,7 +274,7 @@ function AreaDetailNew({
             if (area.type === 1) {
               handleOpenSpace({}, false);
             } else {
-              handleOpenSelfStorage({}, false);
+              handleOpenSelfStorage({ type: 0 }, false);
             }
           }}
         >

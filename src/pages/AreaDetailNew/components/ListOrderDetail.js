@@ -12,6 +12,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import FirstPageIcon from "@mui/icons-material/FirstPage";
+import moment from "moment";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
@@ -95,6 +96,7 @@ const listHeaderName = [
   "Trạng thái",
   "Thời gian hết hạn",
   "Kích thước thật",
+  "Hành động",
 ];
 
 const mapListTableHeader = (listHeader) => (
@@ -254,7 +256,7 @@ function ListOrderDetail({
                     )
                   }
                 >
-                  {row.returnDate}
+                  {moment(new Date(row.returnDate)).format("DD/MM/YYYY")}
                 </TableCell>
                 <TableCell
                   style={{ color: "black" }}
@@ -266,7 +268,22 @@ function ListOrderDetail({
                     )
                   }
                 >
-                  {row.width}m x {row.length}m x {row.height}
+                  {row.width}m x {row.length}m x {row.height}m
+                </TableCell>
+                <TableCell>
+                  <Button
+                    style={{
+                      height: "45px",
+                      paddingLeft: "16px",
+                      paddingRight: "16px",
+                    }}
+                    onClick={async () => {}}
+                    color="primary"
+                    variant="contained"
+                    type="submit"
+                  >
+                    Di chuyển
+                  </Button>
                 </TableCell>
               </TableRow>
             );

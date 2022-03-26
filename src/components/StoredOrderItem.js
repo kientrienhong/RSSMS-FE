@@ -17,12 +17,9 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { formatCurrency } from "../utils/FormatCurrency";
 
 export default function StoredOrderItem({
-  expanded,
-  id,
   handleChangeRadio,
   selectedValue,
   storedOrder,
-  handleChange,
 }) {
   const mapImage = (list) => {
     return list.map((e) => (
@@ -110,11 +107,7 @@ export default function StoredOrderItem({
     : styleAccordition;
 
   return (
-    <Accordion
-      sx={styleAccordition}
-      expanded={expanded === id}
-      onChange={handleChange(id)}
-    >
+    <Accordion sx={styleAccordition}>
       <AccordionSummary
         sx={{
           display: "flex",
@@ -127,7 +120,7 @@ export default function StoredOrderItem({
         aria-controls="panel1bh-content"
         id="panel1bh-header"
       >
-        {selectedValue ? (
+        {handleChangeRadio ? (
           <Radio
             value={storedOrder.id}
             checked={selectedValue === storedOrder.id.toString()}
