@@ -31,8 +31,8 @@ export default function OrderDetail({ choosenProduct, duration, order }) {
       sum += e.price * e.quantity;
     });
 
-    if (order.additionalFee) {
-      sum += order.additionalFee;
+    if (order?.additionalFee) {
+      sum += order?.additionalFee;
     }
     return (
       <Box
@@ -167,14 +167,14 @@ export default function OrderDetail({ choosenProduct, duration, order }) {
           }}
         >
           <Typography variant="h2" style={{ marginBottom: "3%", width: "50%" }}>
-            {order.additionalFeeDescription}
+            {order?.additionalFeeDescription}
           </Typography>
           <Typography
             variant="h2"
             color="primary"
             style={{ marginBottom: "3%", width: "50%", textAlign: "right" }}
           >
-            {formatCurrency(order.additionalFee, "đ")}
+            {formatCurrency(order?.additionalFee, "đ")}
           </Typography>
         </Box>
       </Box>
@@ -342,7 +342,7 @@ export default function OrderDetail({ choosenProduct, duration, order }) {
       {mapListDetailOthers(choosenProduct.accessory)}
       <Divider />
       {buildTotalEachPartPrice("accessory")}
-      {order.additionalFee !== 0 ? buildAdditionPrice() : <></>}
+      {order?.additionalFee !== 0 ? buildAdditionPrice() : <></>}
       {buildTotalPrice()}
     </Box>
   );

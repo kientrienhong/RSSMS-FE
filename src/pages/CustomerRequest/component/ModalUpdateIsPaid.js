@@ -76,7 +76,7 @@ function ModalUpdateIsPaid({
             marginLeft: "2.5%",
           }}
         >
-          Detail Extension Order Request
+          Chi tiết yêu cầu gia hạn đơn
         </Typography>
         <Box
           sx={{
@@ -92,16 +92,19 @@ function ModalUpdateIsPaid({
               textAlign: "left",
             }}
           >
-            Order information
+            Thông tin đơn hàng
           </Typography>
-          {buildInformation("Id:", `#${currentRequest?.id}`)}
-          {buildInformation("Order Id:", `#${currentRequest?.orderId}`)}
+          {buildInformation("Mã yêu cầu:", `#${currentRequest?.id}`)}
+          {buildInformation("Mã đơn:", `#${currentRequest?.orderId}`)}
 
           {buildInformation(
-            "Old return date:",
+            "Ngày kết thúc trước khi gia hạn:",
             `${requestDetail?.oldReturnDate}`
           )}
-          {buildInformation("New return date:", `${requestDetail?.returnDate}`)}
+          {buildInformation(
+            "Ngày kết thúc sau khi gia hạn:",
+            `${requestDetail?.returnDate}`
+          )}
           {/* {buildInformation(
             "Total price:",
             `${formatCurrency(requestDetail?.totalPrice, " VND")}`
@@ -140,10 +143,13 @@ function ModalUpdateIsPaid({
           onClick={async () => {
             try {
               showLoading();
+              let test = checked;
               const response = await updateIsPaidRequest(
                 currentRequest.id,
+                checked,
                 userState.idToken
               );
+
               showSnackbar("success", "Update success");
             } catch (error) {
               console.log(error?.response);

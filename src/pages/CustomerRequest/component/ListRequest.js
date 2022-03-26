@@ -162,7 +162,6 @@ function ListRequest({
         {mapListTableHeader(listHeaderName)}
         <TableBody>
           {listRequest?.map((row, index) => {
-            console.log(row);
             return (
               <TableRow key={row.id}>
                 <TableCell

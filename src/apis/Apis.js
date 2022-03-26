@@ -751,11 +751,12 @@ export const updateNotification = async (listNotification, token) => {
   return response;
 };
 
-export const updateIsPaidRequest = async (idRequest, token) => {
+export const updateIsPaidRequest = async (idRequest, isPaid, token) => {
   const response = await axios.put(
     `https://localhost:44304/api/v1/requests/${idRequest.toString()}`,
     {
       id: idRequest,
+      isPaid: isPaid,
     },
     { headers: { Authorization: `Bearer ${token}` } }
   );
