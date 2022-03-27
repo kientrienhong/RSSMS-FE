@@ -1,9 +1,23 @@
 import React from "react";
-import { Box, Checkbox, Button, Avatar } from "@material-ui/core";
+import { Box, Checkbox, Button, Avatar, Typography } from "@material-ui/core";
 import { getOrderById, getRequestDetail } from "../../../apis/Apis";
 import { connect } from "react-redux";
-
+import { styled } from "@mui/material/styles";
+import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 import * as action from "../../../redux/action/action";
+import moment from "moment";
+const HtmlTooltip = styled(({ className, ...props }) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: "#f5f5f9",
+    color: "rgba(0, 0, 0, 0.87)",
+    maxWidth: 220,
+    zIndex: "99999999999999999999 !important",
+    fontSize: theme.typography.pxToRem(12),
+    border: "1px solid #dadde9",
+  },
+}));
 
 function Schedule({
   schedule,
@@ -55,6 +69,43 @@ function Schedule({
       }
     }
   }
+
+  const buildToolTipStaff = () => {
+    if (schedule?.listStaffDelivery) {
+      console.log(schedule?.listStaffDelivery);
+      return schedule.listStaffDelivery.map((e, index) => (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+          }}
+        >
+          <Box
+            sx={{
+              marginRight: "8px",
+            }}
+          >
+            <Avatar
+              src={e?.imageUrl}
+              sx={{
+                width: 80,
+                height: 80,
+              }}
+            />
+          </Box>
+          <Box>
+            <Typography color="black" variant="h5">
+              Tên: {e.name}
+            </Typography>
+            <p>SĐT: {e.phone}</p>
+            <p>
+              Ngày Sinh: {moment(new Date(e.birthdate)).format("DD/MM/YYYY")}
+            </p>
+          </Box>
+        </Box>
+      ));
+    }
+  };
 
   const buildListAvatar = () => {
     if (schedule?.listStaffDelivery) {
@@ -113,25 +164,48 @@ function Schedule({
           }}
         >
           <p style={{ display: "inline-block", margin: 0 }}>
-            {/* {schedule.orderId === undefined ? "Order: #" : "Request: #"} */}
             Tên khách: {schedule.customerName}
           </p>
           <p style={{ display: "inline-block", margin: 0 }}>
-            {/* {schedule.orderId === undefined ? "Order: #" : "Request: #"} */}
             Địa chỉ: {schedule.deliveryAddress}
           </p>
         </Box>
-
-        <Box
-          sx={{
-            width: "70%",
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "flex-end",
-          }}
-        >
-          {buildListAvatar()}
-        </Box>
+        {schedule?.listStaffDelivery ? (
+          <HtmlTooltip
+            title={
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                {buildToolTipStaff()}
+              </Box>
+            }
+          >
+            <Box
+              sx={{
+                width: "70%",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "flex-end",
+              }}
+            >
+              {buildListAvatar()}
+            </Box>
+          </HtmlTooltip>
+        ) : (
+          <Box
+            sx={{
+              width: "70%",
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "flex-end",
+            }}
+          >
+            {buildListAvatar()}
+          </Box>
+        )}
       </Box>
       <Box
         sx={{

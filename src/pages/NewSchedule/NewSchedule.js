@@ -217,7 +217,6 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
           endOfWeek.toISOString().split("T")[0],
           userState.idToken
         );
-        console.log(responseRequest);
         responseRequest.data.data.forEach((e) => {
           handleFormatRequestSchedule(new Date(e.scheduleDay), result, e);
         });
