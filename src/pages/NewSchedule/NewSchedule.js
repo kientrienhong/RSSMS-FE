@@ -126,16 +126,22 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
   };
 
   const handleFormatRequestSchedule = (date, result, request) => {
+    console.log(request);
     let currentDate = Object.keys(result)?.find((e) => {
       if (e === date.toLocaleDateString("en-US")) {
         return true;
       }
     });
 
-    result[currentDate].listSchedule
+    let indexFound = result[currentDate].listSchedule
       .get(request["scheduleTime"])
-      .push({ ...request, isDelivery: true });
-    result[currentDate].amountNotAssignStaff += 1;
+      .findIndex((e) => e.id === request.requestId);
+
+    result[currentDate].listSchedule.get(request["scheduleTime"])[
+      indexFound
+    ].listStaffDelivery = request.users;
+
+    result[currentDate].amountNotAssignStaff -= 1;
   };
 
   const mapListNote = () =>
@@ -163,11 +169,11 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
     ));
 
   const getData = async (startOfWeek, endOfWeek, currentSchedule) => {
+    let result = {};
+    let currentIndexDateLocal = 0;
     try {
       showLoading();
       let currStr = new Date().toLocaleDateString("en-US");
-      let result = {};
-      let currentIndexDateLocal = 0;
       currentSchedule = new Date(currentSchedule).toLocaleDateString("en-US");
       if (startOfWeek.toLocaleDateString("en-US") === currStr) {
         setCurrentIndexDate(0);
@@ -196,18 +202,19 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
       setListDateAWeek(listDateAWeekTemp);
 
       let response = await getRequestToScheduleNew(
-        startOfWeek.toISOString().split("T")[0],
+        addDays(startOfWeek, 1).toISOString().split("T")[0],
         endOfWeek.toISOString().split("T")[0],
         userState.idToken
       );
-      response?.data?.data.forEach((e) => {
-        handleFormatDate(new Date(e.deliveryDate), result, e);
-      });
-
+      response?.data?.data
+        .filter((e) => e.typeOrder === 1 && e.isCustomerDelivery === false)
+        .forEach((e) => {
+          handleFormatDate(new Date(e.deliveryDate), result, e);
+        });
       try {
         let responseRequest = await getSchedule(
-          startOfWeek.toISOString(),
-          endOfWeek.toISOString(),
+          startOfWeek.toISOString().split("T")[0],
+          endOfWeek.toISOString().split("T")[0],
           userState.idToken
         );
         console.log(responseRequest);
@@ -216,63 +223,22 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
         });
       } catch (error) {
         console.log(error.response);
+      } finally {
+        console.log(result);
       }
-      // console.log(result);
-      // try {
-      //   let responseSchedule = await getSchedule(
-      //     startOfWeek.toISOString().split("T")[0],
-      //     endOfWeek.toISOString().split("T")[0],
-      //     userState.idToken
-      //   );
-
-      //   if (responseSchedule.data.data) {
-      //     responseSchedule.data.data.forEach((schedule) => {
-      //       Object.keys(result).forEach((resultKey) => {
-      //         for (const entry of result[resultKey].listSchedule?.entries()) {
-      //           if (entry[1]?.length > 0) {
-      //             let index = -1;
-      //             console.log(entry[1]);
-      //             console.log(schedule);
-      //             if (schedule.requestId) {
-      //               index = entry[1].findIndex((order) => {
-      //                 return (
-      //                   order.orderId === schedule.orderId &&
-      //                   order.id === schedule.requestId
-      //                 );
-      //               });
-      //             } else {
-      //               index = entry[1].findIndex(
-      //                 (order) => order.id === schedule.orderId
-      //               );
-      //             }
-
-      //             if (index !== -1) {
-      //               result[resultKey].listSchedule.get(entry[0])[index] = {
-      //                 ...result[resultKey].listSchedule.get(entry[0])[index],
-      //                 listStaffDelivery: schedule.users,
-      //               };
-      //               result[resultKey].amountNotAssignStaff -= 1;
-      //             }
-      //           }
-      //         }
-      //       });
-      //     });
-      setListScheduleWholeWeek(result);
-      setListScheduleCurrentDate(
-        result[Object.keys(result)[currentIndexDateLocal]]
-      );
-      //   }
-      // } catch (exception) {
-      //   console.log(exception.response);
-      //   setListScheduleWholeWeek(result);
-      //   setListScheduleCurrentDate(
-      //     result[Object.keys(result)[currentIndexDateLocal]]
-      //   );
-      // }
+      // response?.data?.data
+      //   .filter((e) => e.typeOrder === 1)
+      //   .forEach((e) => {
+      //     handleFormatDate(new Date(e.deliveryDate), result, e);
+      //   });
     } catch (e) {
       console.log(e);
     } finally {
       hideLoading();
+      setListScheduleWholeWeek(result);
+      setListScheduleCurrentDate(
+        result[Object.keys(result)[currentIndexDateLocal]]
+      );
     }
   };
 

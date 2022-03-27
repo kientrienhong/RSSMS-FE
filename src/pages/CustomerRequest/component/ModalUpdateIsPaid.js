@@ -125,7 +125,7 @@ function ModalUpdateIsPaid({
                 fontWeight: "bold",
               }}
             >
-              Is paid:
+              Đã thanh toán:
             </Typography>
             <Checkbox
               checked={checked}

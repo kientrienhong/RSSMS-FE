@@ -14,7 +14,6 @@ function Schedule({
   handleOpenAssignTime,
   userState,
 }) {
-  console.log(schedule);
   let foundSameStorage = false;
   let indexFound = listSelectedOrder?.findIndex((e) => {
     if (e.storageId === schedule.storageId) {
@@ -92,7 +91,7 @@ function Schedule({
         justifyContent: "space-between",
         alignItems: "center",
         height: "150px",
-        width: onChangeCheckBox !== undefined ? "225px" : "320px",
+        width: onChangeCheckBox !== undefined ? "335px" : "320px",
         marginRight: "3%",
         padding: "8px",
         borderRadius: "4px",
@@ -110,15 +109,16 @@ function Schedule({
           sx={{
             display: "flex",
             flexDirection: "column",
+            width: "70%",
           }}
         >
           <p style={{ display: "inline-block", margin: 0 }}>
             {/* {schedule.orderId === undefined ? "Order: #" : "Request: #"} */}
-            {schedule.customerName}
+            Tên khách: {schedule.customerName}
           </p>
           <p style={{ display: "inline-block", margin: 0 }}>
             {/* {schedule.orderId === undefined ? "Order: #" : "Request: #"} */}
-            {schedule.deliveryAddress}
+            Địa chỉ: {schedule.deliveryAddress}
           </p>
         </Box>
 
@@ -146,7 +146,7 @@ function Schedule({
           sx={{
             display: "flex",
             flexDirection: "row",
-            width: "70%",
+            width: "100%",
             justifyContent: "start",
             alignItems: "center",
           }}
@@ -161,6 +161,7 @@ function Schedule({
             display: "flex",
             flexDirection: "row",
             width: "30%",
+            justifyContent: "flex-end",
             alignItems: "center !important",
           }}
         >

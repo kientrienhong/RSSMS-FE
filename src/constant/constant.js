@@ -88,6 +88,7 @@ export const LIST_STATUS_REQUEST = [
   { name: "Đã hủy" },
   { name: "Đang xử lý" },
   { name: "Đã xử lý" },
+  { name: "Đã hoàn thành" },
 ];
 
 export const LIST_STATUS = [

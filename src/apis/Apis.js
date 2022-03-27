@@ -429,6 +429,22 @@ export const deleteSpace = async (id, token) => {
 };
 
 export const createOrder = async (order, token) => {
+  console.log({
+    customerId: order.customerId,
+    deliveryAddress: order.deliveryAddress,
+    addressReturn: order.addressReturn,
+    totalPrice: order.totalPrice,
+    typeOrder: order.typeOrder,
+    deliveryTime: order.deliveryTime,
+    isPaid: order.isPaid,
+    note: order.note,
+    type: 1,
+    returnDate: order.returnDate,
+    paymentMethod: order.paymentMethod,
+    isUserDelivery: order.isUserDelivery,
+    deliveryDate: order.deliveryDate,
+    requestDetails: order.listProduct,
+  });
   const response = await axios.post(
     `https://localhost:44304/api/v1/requests`,
     {
@@ -485,9 +501,6 @@ export const getOrder = async (
 };
 
 export const getSchedule = async (dateStart, dateEnd, token) => {
-  console.log(
-    `https://localhost:44304/api/v1/schedules?DateFrom=${dateStart}&DateTo=${dateEnd}&page=1&size=-1`
-  );
   let response = await axios.get(
     `https://localhost:44304/api/v1/schedules?DateFrom=${dateStart}&DateTo=${dateEnd}&page=1&size=-1`,
     { headers: { Authorization: `Bearer ${token}` } }
@@ -504,7 +517,7 @@ export const assignSchedule = async (
   let response = await axios.post(
     `https://localhost:44304/api/v1/schedules`,
     {
-      scheduleDay: new Date(scheduleDay).toISOString(),
+      scheduleDay: scheduleDay,
       schedules: listOrder,
       userIds: userIds,
     },
@@ -731,9 +744,7 @@ export const getRequestToSchedule = async (dayFrom, dayTo, token) => {
 
 export const getRequestToScheduleNew = async (dayFrom, dayTo, token) => {
   const response = await axios.get(
-    `https://localhost:44304/api/v1/requests?FromDate=${new Date(
-      dayFrom
-    ).toISOString()}&ToDate=${new Date(dayTo).toISOString()}&RequestTypes=1`,
+    `https://localhost:44304/api/v1/requests?FromDate=${dayFrom}&ToDate=${dayTo}&RequestTypes=1&RequestTypes=4`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
   return response;
