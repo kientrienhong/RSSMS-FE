@@ -366,7 +366,8 @@ function ListOrder({
         <TableBody>
           {listOrder?.map((row, index) => {
             let typeOrder = ORDER_TYPE[row.typeOrder];
-            let status = ORDER_STATUS[row.status];
+            let status = ORDER_STATUS[row.status]?.name;
+            let color = ORDER_STATUS[row.status]?.color;
             return (
               <TableRow key={row.id}>
                 <TableCell
@@ -437,7 +438,7 @@ function ListOrder({
                   />
                 </TableCell>
                 <TableCell
-                  style={{ color: "black" }}
+                  style={{ color: color, fontWeight: "bold" }}
                   onClick={(e) => {
                     handleOpen(true);
 

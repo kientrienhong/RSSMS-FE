@@ -181,7 +181,12 @@ function ListRequest({
                 <TableCell style={{ color: "black" }}>
                   {LIST_TYPE_REQUEST[row.type].name}
                 </TableCell>
-                <TableCell style={{ color: "black" }}>
+                <TableCell
+                  style={{
+                    color: LIST_STATUS_REQUEST[row.status].color,
+                    fontWeight: "bold",
+                  }}
+                >
                   {LIST_STATUS_REQUEST[row.status].name}
                 </TableCell>
                 <TableCell style={{ color: "black" }}>

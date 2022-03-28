@@ -224,6 +224,8 @@ function CustomerRequest({
         handleClose={handleCloseIsPaid}
         currentRequest={currentRequest}
         requestDetail={requestDetail}
+        getData={getData}
+        page={page}
       />
       <RequestModal
         open={openOrderModal}

@@ -85,10 +85,10 @@ export const LIST_TYPE_REQUEST = [
 ];
 
 export const LIST_STATUS_REQUEST = [
-  { name: "Đã hủy" },
-  { name: "Đang xử lý" },
-  { name: "Đã xử lý" },
-  { name: "Đã hoàn thành" },
+  { name: "Đã hủy", color: style.PRIMARY_SEMANTIC_RED },
+  { name: "Đang xử lý", color: style.PRIMARY_PURPLE },
+  { name: "Đã xử lý", color: style.PRIMARY_BLUE },
+  { name: "Đã hoàn thành", color: style.SECOND_SEMANTIC_GREEN },
 ];
 
 export const LIST_STATUS = [
@@ -102,12 +102,12 @@ export const LIST_STATUS = [
 ];
 
 export const ORDER_STATUS = {
-  0: "Đã hủy",
-  1: "Đang vận chuyển",
-  2: "Đã lưu kho",
-  5: "Đã quá hạn",
-  6: "Hoàn tất",
-  7: "Đang vận chuyển",
+  0: { name: "Đã hủy", color: style.PRIMARY_SEMANTIC_RED },
+  1: { name: "Đang vận chuyển", color: style.PRIMARY_BLUE },
+  2: { name: "Đã lưu kho", color: style.SECOND_SEMANTIC_GREEN },
+  5: { name: "Đã quá hạn", color: style.PRIMARY_SEMANTIC_RED },
+  6: { name: "Hoàn thành", color: style.SECOND_SEMANTIC_GREEN },
+  7: { name: "Đang vận chuyển", color: style.PRIMARY_BLUE },
 };
 
 export const LIST_UNIT = [
