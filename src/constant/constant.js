@@ -15,7 +15,7 @@ export const ROLE_USER = {
   Manager: 2,
   Customer: 3,
   "Delivery Staff": 4,
-  "Office staff": 5,
+  "Office Staff": 5,
 };
 
 export const TYPE_AREA = {

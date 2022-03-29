@@ -105,5 +105,11 @@ export const LIST_SIDE_BAR_OFFICE_STAFF = (idStorage) => {
       icon: undefined,
       reactIcon: <FaFileInvoiceDollar />,
     },
+    {
+      href: "/app/customer_request",
+      title: "Khách hàng yêu cầu",
+      icon: undefined,
+      reactIcon: <GoClippy />,
+    },
   ];
 };
