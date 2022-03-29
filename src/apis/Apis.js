@@ -23,6 +23,24 @@ export const getListStaff = async (storageId, token) => {
   }
 };
 
+export const getListDeliveryStaff = async (
+  storageId,
+  scheduleDay,
+  scheduleTime,
+  roleName,
+  token
+) => {
+  console.log(
+    `https://localhost:44304/api/v1/accounts/staffs?storageId=${storageId}&roleName=${roleName}&scheduleDay=${scheduleDay}&${scheduleTime}`
+  );
+  return await axios.get(
+    `https://localhost:44304/api/v1/accounts/staffs?storageId=${storageId}&roleName=${roleName}&scheduleDay=${scheduleDay}&${scheduleTime}`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
+};
+
 export const getListUser = async (
   name,
   page,

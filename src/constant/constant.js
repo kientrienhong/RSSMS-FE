@@ -56,9 +56,8 @@ export const BOX_SIZE = {
 };
 
 export const TYPE_SCHEDULE = [
-  { name: "Yêu cầu trả đơn", color: style.PRIMARY_PURPLE },
+  { name: "Lịch trả hàng", color: style.PRIMARY_PURPLE },
   { name: "Lịch giao hàng", color: style.SECOND_BLUE },
-  { name: "Lịch trả hàng", color: style.PRIMARY_BLUE },
   { name: "Có nhân viên hủy lịch", color: style.PRIMARY_SEMANTIC_RED },
 ];
 

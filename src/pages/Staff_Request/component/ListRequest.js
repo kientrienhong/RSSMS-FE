@@ -16,6 +16,7 @@ import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 import { Button, TableHead } from "@material-ui/core";
+import moment from "moment";
 import { makeStyles } from "@material-ui/styles";
 import ConfirmModal from "../../../components/ConfirmModal";
 import { deleteUser } from "../../../apis/Apis";
@@ -185,6 +186,7 @@ function ListRequest({
         {mapListTableHeader(listHeaderName)}
         <TableBody>
           {listRequest?.map((row, index) => {
+            console.log(row);
             return (
               <TableRow key={row.id}>
                 <TableCell
@@ -212,9 +214,7 @@ function ListRequest({
                   style={{ color: "black" }}
                   onClick={(e) => handleClickRow(row, setRequest, handleOpen)}
                 >
-                  {new Date(row?.schedules[0]?.scheduleDay).toLocaleDateString(
-                    "en-US"
-                  )}
+                  {moment(new Date(row?.cancelDate)).format("DD/MM/YYYY")}
                 </TableCell>
                 <TableCell
                   style={{ color: "black", width: "45%" }}
@@ -227,9 +227,7 @@ function ListRequest({
                     onClick={async () => {
                       navigate(
                         "/app/schedule/" +
-                          new Date(
-                            row?.schedules[0]?.scheduleDay
-                          ).toISOString(),
+                          new Date(row?.cancelDate).toISOString(),
                         {
                           replace: false,
                         }

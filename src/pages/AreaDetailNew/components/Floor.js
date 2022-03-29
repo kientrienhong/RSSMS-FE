@@ -107,6 +107,7 @@ function Floor({
                 setDetailFloor(response.data);
                 handleOpen(shelf);
               } catch (error) {
+                console.log(error.response);
               } finally {
                 hideLoading();
               }

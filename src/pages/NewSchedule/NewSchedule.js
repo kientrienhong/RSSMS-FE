@@ -10,11 +10,10 @@ import { LIST_TIME, TYPE_SCHEDULE } from "../../constant/constant";
 import RequestModal from "../../components/RequestModal";
 import { isDateAfter, isDateBefore } from "../../utils/DateUtils";
 import {
-  getOrder,
-  getListUser,
   getSchedule,
   getRequestToSchedule,
   getRequestToScheduleNew,
+  getListDeliveryStaff,
 } from "../../apis/Apis";
 import { TYPE_REQUEST_DELIVERY_TAKE } from "../../constant/constant";
 import ScheduleArea from "./components/ScheduleArea";
@@ -205,8 +204,13 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
         endOfWeek.toISOString().split("T")[0],
         userState.idToken
       );
+      console.log(response);
       response?.data?.data
-        .filter((e) => e.typeOrder === 1 && e.isCustomerDelivery === false)
+        .filter(
+          (e) =>
+            (e.typeOrder === 1 && e.isCustomerDelivery === false) ||
+            e.type === 4
+        )
         .forEach((e) => {
           handleFormatDate(new Date(e.deliveryDate), result, e);
         });
@@ -310,7 +314,7 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
           }
         });
 
-        listSelectedTime = listSelectedTime.join("&DeliveryTimes=");
+        listSelectedTime = listSelectedTime.join("&deliveryTimes=");
         let storageId;
 
         if (listSelectedOrder?.length > 0) {
@@ -319,25 +323,23 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
 
         try {
           showLoading();
-          let listUserNotAssigned = await getListUser(
-            "",
-            1,
-            -1,
-            userState.idToken,
+          let listUserNotAssigned = await getListDeliveryStaff(
             storageId,
             listDateAWeek[currentIndexDate].toISOString(),
-            `&DeliveryTimes=${listSelectedTime}`,
-            "Delivery Staff"
+            `&deliveryTimes=${listSelectedTime}`,
+            "Delivery Staff",
+            userState.idToken
           );
+          console.log(listUserNotAssigned);
           setListShowStaffUnAssigned(
-            listUserNotAssigned.data.data.length === 0
+            listUserNotAssigned.data.length === 0
               ? []
-              : listUserNotAssigned.data.data
+              : listUserNotAssigned.data
           );
           setListStaffUnAssigned(
-            listUserNotAssigned.data.data.length === 0
+            listUserNotAssigned.data.length === 0
               ? []
-              : listUserNotAssigned.data.data
+              : listUserNotAssigned.data
           );
           setListStaffAssigned(listSelectedOrder[0]?.listStaffDelivery ?? []);
           setListShowStaffAssigned(
