@@ -70,7 +70,7 @@ function ModalCancelDetail({
             marginLeft: "2.5%",
           }}
         >
-          Detail Cancel Order Request
+          Chi tiết yêu cầu hủy đơn
         </Typography>
         <Box
           sx={{
@@ -78,16 +78,6 @@ function ModalCancelDetail({
             flexDirection: "column",
           }}
         >
-          <Typography
-            color="black"
-            variant="h2"
-            style={{
-              marginTop: "2%",
-              textAlign: "left",
-            }}
-          >
-            Order information
-          </Typography>
           {buildInformation("Id:", `#${requestDetail?.id}`)}
           {/* {buildInformation("Created date:", `${requestDetail?.createdDate}`)} */}
           {buildInformation("Note: ", `${requestDetail?.note}`)}

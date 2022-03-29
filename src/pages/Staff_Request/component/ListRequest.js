@@ -94,8 +94,8 @@ TablePaginationActions.propTypes = {
 
 const listHeaderName = [
   "Mã",
-  "Tên khách hàng",
-  "Số điện thoại khách",
+  "Tên nhân viên",
+  "Số điện thoại nhân viên",
   "Lịch giao",
   "Ghi chú",
   "Hành động",
