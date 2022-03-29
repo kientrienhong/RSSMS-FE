@@ -124,19 +124,19 @@ export default function OrderDetail({ choosenProduct, duration, order }) {
             variant="h2"
             style={{ marginBottom: "3%", marginRight: "8%" }}
           >
-            {e.name}
+            {e?.name}
           </Typography>
           <Typography
             variant="h3"
             color="primary"
             style={{ marginBottom: "3%" }}
           >
-            X {e.quantity}
+            X {e?.quantity}
           </Typography>
         </Box>
 
         <Typography variant="h2" color="primary" style={{ marginBottom: "3%" }}>
-          {formatCurrency(e.price * e.quantity, "đ")}
+          {formatCurrency(e?.price * e?.quantity, "đ")}
         </Typography>
       </Box>
     ));
@@ -230,77 +230,83 @@ export default function OrderDetail({ choosenProduct, duration, order }) {
   const mapListDetailProduct = (listProduct) => {
     let months = Math.ceil(duration / 30);
 
-    return listProduct.map((e) => (
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <HtmlTooltip
-          title={
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-              }}
-            >
+    return listProduct.map((e) => {
+      return (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <HtmlTooltip
+            title={
               <Box
                 sx={{
-                  marginRight: "8px",
+                  display: "flex",
+                  flexDirection: "row",
                 }}
               >
-                <img src={e?.imageUrl} width="80" height="80" alt={e.name} />
+                <Box
+                  sx={{
+                    marginRight: "8px",
+                  }}
+                >
+                  <img src={e?.imageUrl} width="80" height="80" alt={e.name} />
+                </Box>
+                <Box>
+                  <Typography color="black" variant="h5">
+                    Mô tả đồ khách hàng sẽ gửi
+                  </Typography>
+                  <p>{e.note}</p>
+                </Box>
               </Box>
-              <Box>
-                <Typography color="black" variant="h5">
-                  Mô tả đồ khách hàng sẽ gửi
-                </Typography>
-                <p>{e.note}</p>
-              </Box>
-            </Box>
-          }
-        >
-          <Box
-            sx={{
-              width: "40%",
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-            }}
+            }
           >
-            <Typography
-              variant="h2"
-              style={{ marginBottom: "3%", marginRight: "8%" }}
+            <Box
+              sx={{
+                width: "40%",
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
             >
-              {e.name}
-              <img
-                src="/img/info.png"
-                alt="edit"
-                style={{
-                  cursor: "pointer",
-                  width: "18px",
-                  height: "18px",
-                  marginLeft: "8px",
-                }}
-              />
-            </Typography>
-            <Typography
-              variant="h3"
-              color="primary"
-              style={{ marginBottom: "3%" }}
-            >
-              X {e.quantity}
-            </Typography>
-          </Box>
-        </HtmlTooltip>
-        <Typography variant="h2" color="primary" style={{ marginBottom: "3%" }}>
-          {formatCurrency(e.price * e.quantity * months, "đ")}
-        </Typography>
-      </Box>
-    ));
+              <Typography
+                variant="h2"
+                style={{ marginBottom: "3%", marginRight: "8%" }}
+              >
+                {e.name}
+                <img
+                  src="/img/info.png"
+                  alt="edit"
+                  style={{
+                    cursor: "pointer",
+                    width: "18px",
+                    height: "18px",
+                    marginLeft: "8px",
+                  }}
+                />
+              </Typography>
+              <Typography
+                variant="h3"
+                color="primary"
+                style={{ marginBottom: "3%" }}
+              >
+                X {e.quantity}
+              </Typography>
+            </Box>
+          </HtmlTooltip>
+          <Typography
+            variant="h2"
+            color="primary"
+            style={{ marginBottom: "3%" }}
+          >
+            {formatCurrency(e?.price * e?.quantity * months, "đ")}
+          </Typography>
+        </Box>
+      );
+    });
   };
 
   return (
@@ -342,7 +348,7 @@ export default function OrderDetail({ choosenProduct, duration, order }) {
       {mapListDetailOthers(choosenProduct.accessory)}
       <Divider />
       {buildTotalEachPartPrice("accessory")}
-      {order?.additionalFee !== 0 ? buildAdditionPrice() : <></>}
+      {order?.additionalFee ? buildAdditionPrice() : <></>}
       {buildTotalPrice()}
     </Box>
   );

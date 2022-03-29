@@ -126,7 +126,6 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
   };
 
   const handleFormatRequestSchedule = (date, result, request) => {
-    console.log(request);
     let currentDate = Object.keys(result)?.find((e) => {
       if (e === date.toLocaleDateString("en-US")) {
         return true;
@@ -139,7 +138,7 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
 
     result[currentDate].listSchedule.get(request["scheduleTime"])[
       indexFound
-    ].listStaffDelivery = request.users;
+    ].listStaffDelivery = request.accounts;
 
     result[currentDate].amountNotAssignStaff -= 1;
   };

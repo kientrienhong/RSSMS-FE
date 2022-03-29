@@ -727,7 +727,7 @@ export const getStaffRequest = async (name, page, size, type, token) => {
 
 export const getCustomerRequest = async (name, page, size, token) => {
   const response = await axios.get(
-    `https://localhost:44304/api/v1/requests?RequestTypes=1&RequestTypes=2&RequestTypes=3&page=${page}&size=${size}`,
+    `https://localhost:44304/api/v1/requests?RequestTypes=1&RequestTypes=2&RequestTypes=3&RequestTypes=4&page=${page}&size=${size}`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
 
@@ -736,7 +736,7 @@ export const getCustomerRequest = async (name, page, size, token) => {
 
 export const getRequestToSchedule = async (dayFrom, dayTo, token) => {
   const response = await axios.get(
-    `https://localhost:44304/api/v1/requests?FromDate=${dayFrom}&ToDate=${dayTo}&RequestTypes=2`,
+    `https://localhost:44304/api/v1/requests?FromDate=${dayFrom}&ToDate=${dayTo}&RequestTypes=2&RequestTypes=4`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
   return response;
