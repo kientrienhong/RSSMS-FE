@@ -436,9 +436,6 @@ function RequestModal({
               flexDirection: "column",
             }}
           >
-            <Typography color="black" variant="h2" sx={{ marginBottom: "4%" }}>
-              Thông tin hóa đơn
-            </Typography>
             <Box
               sx={{
                 display: "flex",

@@ -213,6 +213,10 @@ function AreaDetailNew({
       <SelfStorageModal
         currentSpace={currentSpace}
         setCurrentSpace={setCurrentSpace}
+        isEdit={isEdit}
+        areaId={area.id}
+        searchName={searchName}
+        getData={getData}
         open={isOpenSelfStorage}
         handleClose={handleCloseSelfStorage}
       />
@@ -288,7 +292,6 @@ function AreaDetailNew({
           display: "flex",
           width: "95%",
           height: "80%",
-          overflowY: "scroll",
           margin: "1% 2%",
           padding: "1%",
           flexDirection: "column",
@@ -331,6 +334,8 @@ function AreaDetailNew({
               flexDirection: "column",
               height: "100%",
               width: "70%",
+              overflowY: "scroll",
+
               justifyContent: "flex-start",
             }}
           >

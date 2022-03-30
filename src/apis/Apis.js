@@ -420,6 +420,15 @@ export const createSpace = async (space, areaId, token) => {
 };
 
 export const updateShelf = async (id, space, token) => {
+  console.log({
+    id: id,
+    type: space.type,
+    name: space.name,
+    numberOfFloor: space.numberOfFloor ?? 1,
+    floorWidth: space.floorWidth,
+    floorLength: space.floorLength,
+    floorHeight: space.floorHeight,
+  });
   let result = await axios.put(
     `https://localhost:44304/api/v1/spaces/${id}`,
     {

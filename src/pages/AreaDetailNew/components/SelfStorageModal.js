@@ -53,10 +53,10 @@ export default function SelfStorageModal({
             isEdit={isEdit}
             currentSpace={currentSpace}
             setCurrentSpace={setCurrentSpace}
+            searchName={searchName}
             getData={getData}
             page={page}
             areaId={areaId}
-            searchName={searchName}
             handleClose={handleClose}
           />
         </Box>

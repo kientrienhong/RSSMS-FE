@@ -21,10 +21,18 @@ function FormSelfStorage({
   listSelfStorage,
   userState,
 }) {
-  const { handleSubmit, control } = useForm();
+  console.log(currentSpace);
+  const { handleSubmit, control, reset } = useForm();
   const [error, setError] = useState({});
 
-  useEffect(() => {}, [currentSpace]);
+  useEffect(() => {
+    reset({
+      floorWidth: currentSpace?.floorWidth,
+      floorHeight: currentSpace?.floorHeight,
+      floorLength: currentSpace?.floorLength,
+      name: currentSpace.name,
+    });
+  }, [currentSpace]);
 
   const onHandleEditShelf = async (data) => {
     try {
@@ -33,13 +41,13 @@ function FormSelfStorage({
       const shelf = {
         type: 2,
         name: data.name,
-        width: parseInt(data.width),
-        height: parseInt(data.height),
-        length: parseInt(data.length),
+        floorWidth: parseInt(data.floorWidth),
+        floorLength: parseInt(data.floorLength),
+        floorHeight: parseInt(data.floorHeight),
       };
       await updateShelf(currentSpace.id, shelf, userState.idToken);
       await getData(searchName, page, 4);
-      showSnackbar("success", "Update storage success");
+      showSnackbar("success", "Cập nhật kho thành công");
       handleClose();
     } catch (e) {
       console.log(e.response);
@@ -56,13 +64,13 @@ function FormSelfStorage({
       const shelf = {
         type: 2,
         name: data.name,
-        width: parseInt(data.width),
-        height: parseInt(data.height),
-        length: parseInt(data.length),
+        floorWidth: parseInt(data.floorWidth),
+        floorLength: parseInt(data.floorLength),
+        floorHeight: parseInt(data.floorHeight),
       };
       await createSpace(shelf, areaId, userState.idToken);
       await getData(searchName, page, 4);
-      showSnackbar("success", "Create storage success");
+      showSnackbar("success", "Tạo kho thành công");
       handleClose();
     } catch (e) {
       console.log(e.response);
@@ -136,9 +144,9 @@ function FormSelfStorage({
                 message: "*Vui lòng nhập đúng chiều dài",
               },
             }}
-            name="length"
+            name="floorLength"
             label="Chiều dài (m)"
-            userInfo={currentSpace?.length}
+            userInfo={currentSpace?.floorLength}
           />
         </Grid>
         <Grid item xs={4}>
@@ -151,9 +159,9 @@ function FormSelfStorage({
                 message: "*Vui lòng nhập đúng chiều rộng",
               },
             }}
-            name="width"
+            name="floorWidth"
             label="Chiều rộng (m)"
-            userInfo={currentSpace?.width}
+            userInfo={currentSpace?.floorWidth}
           />
         </Grid>
         <Grid item xs={4}>
@@ -166,9 +174,9 @@ function FormSelfStorage({
                 message: "*Vui lòng nhập đúng chiều cao",
               },
             }}
-            name="height"
+            name="floorHeight"
             label="Chiều cao (m)"
-            userInfo={currentSpace?.height}
+            userInfo={currentSpace?.floorHeight}
           />
         </Grid>
       </Grid>

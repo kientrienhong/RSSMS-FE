@@ -13,6 +13,7 @@ import {
 } from "@material-ui/core";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Floor from "./Floor";
+import { LIST_SPACE_TYPE } from "../../../constant/constant";
 
 export default function Shelf({
   handleOpen,
@@ -71,7 +72,18 @@ export default function Shelf({
             marginRight: "1%",
           }}
         >
-          {shelf.name}
+          <Typography
+            sx={{
+              margin: 0,
+              fontWeight: "bold",
+              display: "inline-block",
+              color: LIST_SPACE_TYPE[shelf.type].color,
+            }}
+          >
+            {LIST_SPACE_TYPE[shelf.type].name}
+          </Typography>
+
+          {`  |  ${shelf.name}`}
         </Typography>
         <Typography
           sx={{

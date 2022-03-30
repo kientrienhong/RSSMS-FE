@@ -68,6 +68,12 @@ export const AREA_SIZE = {
   3: "3m2",
 };
 
+export const LIST_SPACE_TYPE = [
+  { name: "Kệ", color: style.PRIMARY_BLUE },
+  { name: "Diện tích", color: style.PRIMARY_PURPLE },
+  { name: "Kho", color: style.PRIMARY_BLUE },
+];
+
 export const LIST_PRODUCT_MANAGE_TYPE = [
   "Kho",
   "Phụ kiện",

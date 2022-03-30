@@ -60,10 +60,11 @@ function FormHandy({
 
   useEffect(() => {
     reset({
-      floorWidth: currentSpace.width,
-      floorHeight: currentSpace.height,
-      floorLength: currentSpace.length,
+      floorWidth: currentSpace.floorWidth,
+      floorHeight: currentSpace.floorHeight,
+      floorLength: currentSpace.floorLength,
       name: currentSpace.name,
+      numberOfFloor: currentSpace?.floorLength,
     });
   }, [currentSpace]);
 
