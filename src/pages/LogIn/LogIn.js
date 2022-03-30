@@ -89,7 +89,7 @@ function LogIn(props) {
           >
             <img
               alt="logo"
-              style={{ margin: "5% 0%", width: "100px", height: "100px" }}
+              style={{ margin: "5% 0%", width: "300px", height: "100px" }}
               src={process.env.PUBLIC_URL + "/img/logo.png"}
               className="nav__log-in__img"
             ></img>

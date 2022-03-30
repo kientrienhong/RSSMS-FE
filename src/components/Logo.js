@@ -3,7 +3,7 @@ const Logo = (props) => (
     alt="Logo"
     src={process.env.PUBLIC_URL + "/img/logo.png"}
     {...props}
-    width="40px"
+    width="120px"
     height="40px"
   />
 );
