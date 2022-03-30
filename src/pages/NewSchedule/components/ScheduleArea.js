@@ -7,6 +7,7 @@ export default function ScheduleArea({
   handleOpen,
   onChangeCheckBox,
   listSelectedOrder,
+  handleOpenOrderModal,
 }) {
   const mapListSchedule = (mapListSchedule) =>
     mapListSchedule?.map((e, index) => (
@@ -15,6 +16,7 @@ export default function ScheduleArea({
         key={index}
         setCurrentOrder={setCurrentOrder}
         handleOpen={handleOpen}
+        handleOpenOrderModal={handleOpenOrderModal}
         onChangeCheckBox={onChangeCheckBox}
         listSelectedOrder={listSelectedOrder}
       />

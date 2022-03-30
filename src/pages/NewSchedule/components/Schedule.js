@@ -27,6 +27,7 @@ function Schedule({
   listSelectedOrder,
   handleOpenAssignTime,
   userState,
+  handleOpenOrderModal,
 }) {
   let foundSameStorage = false;
   let indexFound = listSelectedOrder?.findIndex((e) => {
@@ -72,7 +73,6 @@ function Schedule({
 
   const buildToolTipStaff = () => {
     if (schedule?.listStaffDelivery) {
-      console.log(schedule?.listStaffDelivery);
       return schedule.listStaffDelivery.map((e, index) => (
         <Box
           sx={{
@@ -265,12 +265,21 @@ function Schedule({
           <img
             onClick={async () => {
               try {
-                const orderDetail = await getRequestDetail(
-                  schedule.id,
-                  userState.idToken
-                );
-                setCurrentOrder(orderDetail.data);
-                handleOpen();
+                if (schedule.type === 4) {
+                  const orderDetail = await getOrderById(
+                    schedule.orderId,
+                    userState.idToken
+                  );
+                  setCurrentOrder(orderDetail.data);
+                  handleOpenOrderModal();
+                } else {
+                  const orderDetail = await getRequestDetail(
+                    schedule.id,
+                    userState.idToken
+                  );
+                  setCurrentOrder(orderDetail.data);
+                  handleOpen();
+                }
               } catch (error) {
                 console.log(error);
               }

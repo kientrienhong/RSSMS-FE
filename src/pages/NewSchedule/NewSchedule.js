@@ -8,10 +8,8 @@ import ListDateComponent from "./components/ListDateComponent";
 import ListItemSidebar from "./components/ListItemSidebar";
 import { LIST_TIME, TYPE_SCHEDULE } from "../../constant/constant";
 import RequestModal from "../../components/RequestModal";
-import { isDateAfter, isDateBefore } from "../../utils/DateUtils";
 import {
   getSchedule,
-  getRequestToSchedule,
   getRequestToScheduleNew,
   getListDeliveryStaff,
 } from "../../apis/Apis";
@@ -19,9 +17,8 @@ import { TYPE_REQUEST_DELIVERY_TAKE } from "../../constant/constant";
 import ScheduleArea from "./components/ScheduleArea";
 import { useParams } from "react-router-dom";
 
-import ListUnassignOrderModal from "./components/ListUnassignOrderModal";
-import OrderAssignTimeModal from "./components/OrderAssignTimeModal";
 import OrderAssignModal from "./components/OrderAssignModal";
+import OrderModal from "../../components/OrderModal";
 function NewSchedule({ showLoading, hideLoading, userState }) {
   const [listShowStaffAssigned, setListShowStaffAssigned] = React.useState([]);
   const [listShowStaffUnAssigned, setListShowStaffUnAssigned] = React.useState(
@@ -36,13 +33,11 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
   const [currentOrder, setCurrentOrder] = useState({});
   const [open, setOpen] = useState(false);
   const [openAssignStaff, setOpenAssignStaff] = useState(false);
-  const [openAssignTime, setOpenAssignTime] = useState(false);
+  const [openOrderModal, setOpenOrderModal] = useState(false);
   const { handleSubmit, control, watch, reset } = useForm();
   const [startOfWeek, setStartOfWeek] = React.useState();
   const [endOfWeek, setEndOfWeek] = React.useState();
-  const [openAssignReturnTime, setOpenAssignReturnTime] = useState(false);
-  const [listOrderNotAssignedReturnTime, setListOrderNotAssignedReturnTime] =
-    React.useState([]);
+  React.useState([]);
   const [listScheduleWholeWeek, setListScheduleWholeWeek] = useState([]);
   const [listScheduleCurrentDate, setListScheduleCurrentDate] = useState([]);
   function addDays(date, days) {
@@ -51,28 +46,20 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
     return result;
   }
 
+  const handleOpenOrderModal = () => {
+    setOpenOrderModal(true);
+  };
+
+  const handleCloseOrderModal = () => {
+    setOpenOrderModal(false);
+  };
+
   const handleOpenAssignStaff = () => {
     setOpenAssignStaff(true);
   };
 
   const handleCloseAssignStaff = () => {
     setOpenAssignStaff(false);
-  };
-
-  const handleOpenAssignTime = () => {
-    setOpenAssignTime(true);
-  };
-
-  const handleCloseAssignTime = () => {
-    setOpenAssignTime(false);
-  };
-
-  const handleOpenAssignReturnTime = () => {
-    setOpenAssignReturnTime(true);
-  };
-
-  const handleCloseAssignReturnTime = () => {
-    setOpenAssignReturnTime(false);
   };
 
   const handleOpen = () => {
@@ -234,7 +221,7 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
       //     handleFormatDate(new Date(e.deliveryDate), result, e);
       //   });
     } catch (e) {
-      console.log(e);
+      console.log(e.response);
     } finally {
       hideLoading();
       setListScheduleWholeWeek(result);
@@ -427,7 +414,18 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
         handleChangeSearchAssigned={handleChangeSearchAssigned}
         handleChangeSearchUnAssigned={handleChangeSearchUnAssigned}
       />
-
+      <OrderModal
+        open={openOrderModal}
+        reset={reset}
+        handleClose={handleCloseOrderModal}
+        handleSubmit={handleSubmit}
+        control={control}
+        currentOrder={currentOrder}
+        // getData={getData}
+        page={1}
+        searchId={""}
+        isView={userState.roleName === "Admin"}
+      />
       <RequestModal
         open={open}
         handleClose={handleClose}
@@ -493,6 +491,7 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
         <ScheduleArea
           listGroup={listScheduleCurrentDate}
           setCurrentOrder={setCurrentOrder}
+          handleOpenOrderModal={handleOpenOrderModal}
           handleOpen={handleOpen}
           onChangeCheckBox={onChangeCheckBox}
           listSelectedOrder={listSelectedOrder}
