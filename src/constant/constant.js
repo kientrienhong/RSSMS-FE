@@ -94,6 +94,8 @@ export const LIST_STATUS_REQUEST = [
   { name: "Đang xử lý", color: style.PRIMARY_PURPLE },
   { name: "Đã xử lý", color: style.PRIMARY_BLUE },
   { name: "Đã hoàn thành", color: style.SECOND_SEMANTIC_GREEN },
+  { name: "Đang vận chuyển", color: style.SECOND_SEMANTIC_GREEN },
+  { name: "Khách không có mặt", color: style.PRIMARY_SEMANTIC_RED },
 ];
 
 export const LIST_STATUS = [

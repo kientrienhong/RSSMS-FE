@@ -1,9 +1,6 @@
 import React from "react";
 import {
   Box,
-  Button,
-  InputAdornment,
-  IconButton,
   TextField,
   Accordion,
   Typography,
@@ -15,7 +12,7 @@ import {
 } from "@material-ui/core";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { formatCurrency } from "../utils/FormatCurrency";
-
+import { ACCESSSORY_TYPE, SERVICE_TYPE } from "../constant/constant";
 export default function StoredOrderItem({
   handleChangeRadio,
   selectedValue,
@@ -199,7 +196,13 @@ export default function StoredOrderItem({
           >
             Các dịch vụ đi kèm
           </Typography>
-          {mapAdditionService(storedOrder.orderDetailServices)}
+          {mapAdditionService(
+            storedOrder.orderDetailServices.filter(
+              (e) =>
+                e.serviceType === ACCESSSORY_TYPE ||
+                e.serviceType === SERVICE_TYPE
+            )
+          )}
         </Box>
       </AccordionDetails>
     </Accordion>

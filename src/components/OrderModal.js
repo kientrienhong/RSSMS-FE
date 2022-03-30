@@ -1,18 +1,5 @@
 import React from "react";
-import {
-  Box,
-  Modal,
-  Tabs,
-  Tab,
-  Typography,
-  TextField,
-  FormControlLabel,
-  Checkbox,
-  Grid,
-  Button,
-  RadioGroup,
-  Radio,
-} from "@material-ui/core";
+import { Box, Modal, Tabs, Tab } from "@material-ui/core";
 import TabPanel from "./TabPanel";
 
 import InformationOrder from "./InformationOrder";
@@ -42,7 +29,6 @@ export default function OrderModal({
   page,
   searchId,
 }) {
-  console.log(currentOrder);
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -78,7 +64,7 @@ export default function OrderModal({
             }}
           >
             <Tab label="Thông tin đơn" />
-            <Tab label="Đồ đạc" />
+            {currentOrder?.type === 1 ? <Tab label="Đồ đạc" /> : <></>}
             {currentOrder?.orderHistoryExtensions?.length > 0 ? (
               <Tab label="Lịch sử gia hạn" />
             ) : (
@@ -90,6 +76,9 @@ export default function OrderModal({
           value={value}
           index={0}
           style={{
+            width: "100%",
+          }}
+          sx={{
             width: "100%",
           }}
         >
@@ -104,9 +93,23 @@ export default function OrderModal({
             searchId={searchId}
           />
         </TabPanel>
-        <TabPanel value={value} index={1}>
-          <ItemTab listOrderDetail={currentOrder?.orderDetails} />{" "}
-        </TabPanel>
+        {currentOrder?.type === 1 ? (
+          <TabPanel
+            value={value}
+            index={1}
+            style={{
+              width: "100%",
+            }}
+            sx={{
+              width: "100%",
+            }}
+          >
+            <ItemTab listOrderDetail={currentOrder?.orderDetails} />{" "}
+          </TabPanel>
+        ) : (
+          <></>
+        )}
+
         {currentOrder?.orderHistoryExtensions?.length > 0 ? (
           <TabPanel value={value} index={2}>
             <ListInfoHistoryExtension
