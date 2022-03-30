@@ -57,7 +57,7 @@ export default function SelfStorageMainTab({
           <Tab label="Area Items" {...a11yProps(1)} />
         </Tabs>
       </Box>
-      <Box sx={{ height: "90%" }}>
+      <Box sx={{ height: "90%", width: "100%" }}>
         <TabPanel value={tabIndex} index={0}>
           <BoxTab
             choosenProduct={choosenProduct}

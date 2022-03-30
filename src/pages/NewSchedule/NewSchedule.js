@@ -427,24 +427,7 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
         handleChangeSearchAssigned={handleChangeSearchAssigned}
         handleChangeSearchUnAssigned={handleChangeSearchUnAssigned}
       />
-      <ListUnassignOrderModal
-        open={openAssignReturnTime}
-        listUnassignOrder={listOrderNotAssignedReturnTime}
-        handleClose={handleCloseAssignReturnTime}
-        setCurrentOrder={setCurrentOrder}
-        handleOpenDetailOrder={handleOpen}
-        handleOpenAssignTime={handleOpenAssignTime}
-      />
-      <OrderAssignTimeModal
-        getData={getData}
-        order={currentOrder}
-        startOfWeek={startOfWeek}
-        listOrderNotAssignedReturnTime={listOrderNotAssignedReturnTime}
-        setListOrderNotAssignedReturnTime={setListOrderNotAssignedReturnTime}
-        endOfWeek={endOfWeek}
-        open={openAssignTime}
-        handleClose={handleCloseAssignTime}
-      />
+
       <RequestModal
         open={open}
         handleClose={handleClose}
@@ -463,10 +446,12 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
       />
       <Box
         sx={{
-          margin: "1% 4%",
+          margin: "1% 0%",
+          marginLeft: "15%",
           display: "flex",
-          width: "90%",
-          justifyContent: "right",
+          width: "80%",
+          flexDirection: "row",
+          justifyContent: "space-between",
           alignItems: "center",
         }}
       >
@@ -479,26 +464,6 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
         >
           {mapListNote()}
         </Box>
-        <Badge
-          color="error"
-          badgeContent={listOrderNotAssignedReturnTime?.length}
-        >
-          <Button
-            style={{
-              height: "45px",
-              paddingLeft: "16px",
-              paddingRight: "16px",
-            }}
-            onClick={async () => {
-              handleOpenAssignReturnTime();
-            }}
-            color="success"
-            variant="contained"
-            type="submit"
-          >
-            Unassign return time order
-          </Button>
-        </Badge>
 
         <Button
           style={{
@@ -515,7 +480,7 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
           variant="contained"
           type="submit"
         >
-          Assign Delivery Staff
+          Phân lịch cho nhân viên
         </Button>
       </Box>
       <Box

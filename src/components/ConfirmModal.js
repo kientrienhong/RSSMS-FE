@@ -18,6 +18,7 @@ function ConfirmModal({
   hideLoading,
   showSnackbar,
   msg,
+  msgTitle,
 }) {
   return (
     <Modal
@@ -44,7 +45,7 @@ function ConfirmModal({
             marginLeft: "2.5%",
           }}
         >
-          Bạn đã chắc chắn?
+          {msgTitle ? msgTitle : "Bạn đã chắc chắn?"}
         </Typography>
         <Box
           sx={{

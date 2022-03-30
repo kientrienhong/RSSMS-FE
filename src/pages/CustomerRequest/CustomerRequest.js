@@ -14,12 +14,19 @@ import ListRequest from "./component/ListRequest";
 import { useForm } from "react-hook-form";
 import * as action from "../../redux/action/action";
 import { connect } from "react-redux";
-import { getCustomerRequest, getRequestDetail } from "../../apis/Apis";
+import {
+  getCustomerRequest,
+  getRequestDetail,
+  assignOrder,
+} from "../../apis/Apis";
+import { useNavigate } from "react-router";
+
 import ModalCancelDetail from "./component/ModalCancelDetail";
 import ModalReturnItem from "./component/ModalReturnItem";
 import ModalUpdateIsPaid from "./component/ModalUpdateIsPaid";
 import AssignOrderModal from "./component/AssignOrderModal";
 import RequestModal from "../../components/RequestModal";
+import ConfirmModal from "../../components/ConfirmModal";
 
 function CustomerRequest({
   showLoading,
@@ -39,6 +46,28 @@ function CustomerRequest({
   const [openAssignOrder, setOpenAssignOrder] = useState(false);
   const [openOrderModal, setOpenOrderModal] = useState(false);
   const { handleSubmit, control, reset } = useForm();
+  const [openAssign, setOpenAssign] = useState(false);
+  const navigate = useNavigate();
+
+  const handleOpenAssign = () => {
+    setOpenAssign(true);
+  };
+
+  const handleCloseAssign = () => {
+    setOpenAssign(false);
+  };
+
+  const handleAssignOrder = async (id) => {
+    try {
+      showLoading();
+
+      await assignOrder(id, userState.storageId, userState.idToken);
+      handleCloseAssign();
+      await getData("", page, 8, userState.idToken);
+    } finally {
+      hideLoading();
+    }
+  };
 
   useEffect(() => {
     try {
@@ -174,11 +203,26 @@ function CustomerRequest({
         py: 3,
       }}
     >
-      <AssignOrderModal
-        open={openAssignOrder}
-        handleClose={handleCloseAssignOrder}
-        currentId={request.id}
-      />
+      {userState.roleName === "Manager" ? (
+        <AssignOrderModal
+          open={openAssignOrder}
+          handleClose={handleCloseAssignOrder}
+          currentId={request.id}
+        />
+      ) : (
+        <ConfirmModal
+          open={openAssign}
+          handleClose={handleCloseAssign}
+          onHandleYes={handleAssignOrder}
+          id={request?.id}
+          showLoading={showLoading}
+          hideLoading={hideLoading}
+          showSnackbar={showSnackbar}
+          msg="Xử lý đơn thành công"
+          msgTitle="Bạn có muốn phân đơn này vào kho của mình?"
+        />
+      )}
+
       <Box
         sx={{
           marginLeft: "2%",
@@ -206,6 +250,21 @@ function CustomerRequest({
           }}
         />
         <Box sx={{ width: "2%" }} />
+        <Button
+          style={{
+            height: "45px",
+            paddingLeft: "16px",
+            paddingRight: "16px",
+            marginLeft: "2%",
+          }}
+          color="primary"
+          variant="contained"
+          onClick={(e) => {
+            navigate("/orders/makingOrder");
+          }}
+        >
+          Tạo yêu cầu tạo đơn
+        </Button>
       </Box>
       <ModalReturnItem
         open={openReturnItem}
@@ -252,6 +311,7 @@ function CustomerRequest({
           handleOpenOrderModal={handleOpenOrderModal}
           totalRequest={totalRequest}
           getData={getData}
+          handleOpenAssign={handleOpenAssign}
           handleOpenAssignOrder={handleOpenAssignOrder}
         />
       </Card>

@@ -75,8 +75,7 @@ function InputInforModal({
       let orderTemp = {};
 
       if (order.type === 0) {
-        // let dateStart = new Date(order.dateStart);
-        let dateStart = moment(order.dateStart).toDate();
+        let dateStart = new Date(order.dateStart);
 
         // Storage order
         let returnDate = new Date(
@@ -101,13 +100,12 @@ function InputInforModal({
         };
       } else {
         // door - to - door  order
-        let returnDate = moment(order.dateDelivery).toDate();
+        let returnDate = new Date(order.dateDelivery);
         returnDate = new Date(
           returnDate.setDate(returnDate.getDate() + order.duration)
         );
         // let dateStart = Date.parse(order.dateDelivery);
-
-        console.log(order);
+        console.log(returnDate);
         orderTemp = {
           customerId: user.id,
           deliveryAddress: data.deliveryAddress,
@@ -125,6 +123,7 @@ function InputInforModal({
           listProduct: listProduct,
         };
       }
+
       await createOrder(orderTemp, userState.idToken);
       navigate("/app/customer_request", { replace: true });
       showSnackbar("success", "Tạo yêu cầu thành công!");

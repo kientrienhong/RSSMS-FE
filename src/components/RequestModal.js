@@ -84,7 +84,6 @@ function RequestModal({
   userState,
   isView,
 }) {
-  console.log(currentOrder);
   const [returnAddress, setReturnAddress] = useState();
   const [deliveryAddress, setDeliveryAddress] = useState();
   const [timeDelivery, setTimeDelivery] = useState();
@@ -174,11 +173,6 @@ function RequestModal({
       if (currentOrder?.deliveryDate !== undefined) {
         let date = new Date(currentOrder?.deliveryDate);
         if (date) {
-          // if (currentOrder?.typeOrder === 0) {
-          //   date.setMonth(date.getMonth() + currentDuration);
-          // } else {
-          //   date.setDate(date.getDate() + currentDuration);
-          // }
           setDateReturn(date.toISOString().split("T")[0]);
         }
       }
@@ -655,16 +649,6 @@ function RequestModal({
               </Typography>
             </Box>
 
-            {/* <TextField
-              id="date"
-              onChange={handleChaneReturnDate}
-              type="date"
-              defaultValue={dateReturn}
-              sx={{ width: 220, marginBottom: "16px" }}
-              InputLabelProps={{
-                shrink: true,
-              }}
-            /> */}
             {currentOrder?.typeOrder === 0 ? null : (
               <Box
                 sx={{

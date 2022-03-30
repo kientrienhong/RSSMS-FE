@@ -169,25 +169,6 @@ function Order({
         ) : (
           <></>
         )}
-        {userState.roleName !== "Admin" ? (
-          <Button
-            style={{
-              height: "45px",
-              paddingLeft: "16px",
-              paddingRight: "16px",
-              marginLeft: "2%",
-            }}
-            color="primary"
-            variant="contained"
-            onClick={(e) => {
-              navigate("/orders/makingOrder");
-            }}
-          >
-            Tạo đơn
-          </Button>
-        ) : (
-          <></>
-        )}
       </Box>
       <Card
         variant="outlined"

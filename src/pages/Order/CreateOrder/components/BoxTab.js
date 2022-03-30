@@ -65,6 +65,7 @@ export default function BoxTab({
         alignItems: "flex-start",
         justifyContent: "flex-start",
         marginTop: "2.5%",
+        width: "100%",
       }}
     >
       <Typography

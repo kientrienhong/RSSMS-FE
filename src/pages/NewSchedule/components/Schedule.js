@@ -160,14 +160,36 @@ function Schedule({
           sx={{
             display: "flex",
             flexDirection: "column",
-            width: "70%",
+            width: "80%",
           }}
         >
           <p style={{ display: "inline-block", margin: 0 }}>
-            Tên khách: {schedule.customerName}
+            <p
+              style={{
+                fontWeight: "bold",
+                display: "inline-block",
+                margin: "0",
+                marginRight: "2px",
+                marginBottom: "1%",
+              }}
+            >
+              Tên khách:
+            </p>
+            {schedule.customerName}
           </p>
           <p style={{ display: "inline-block", margin: 0 }}>
-            Địa chỉ: {schedule.deliveryAddress}
+            <p
+              style={{
+                fontWeight: "bold",
+                display: "inline-block",
+                margin: "0",
+                marginRight: "2px",
+              }}
+            >
+              Địa chỉ:
+            </p>
+
+            {schedule.deliveryAddress}
           </p>
         </Box>
         {schedule?.listStaffDelivery ? (
@@ -195,16 +217,7 @@ function Schedule({
             </Box>
           </HtmlTooltip>
         ) : (
-          <Box
-            sx={{
-              width: "70%",
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "flex-end",
-            }}
-          >
-            {buildListAvatar()}
-          </Box>
+          <></>
         )}
       </Box>
       <Box
@@ -226,6 +239,16 @@ function Schedule({
           }}
         >
           <p style={{ display: "block", margin: "0" }}>
+            <p
+              style={{
+                fontWeight: "bold",
+                display: "inline-block",
+                margin: 0,
+                marginRight: "2px",
+              }}
+            >
+              Tên kho:
+            </p>{" "}
             {schedule.storageName}
           </p>
         </Box>

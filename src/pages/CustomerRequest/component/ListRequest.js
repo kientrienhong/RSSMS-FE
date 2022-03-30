@@ -139,6 +139,7 @@ function ListRequest({
   userState,
   handleOpenAssignOrder,
   handleOpenOrderModal,
+  handleOpenAssign,
 }) {
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   // Avoid a layout jump when reaching the last page with empty rows.
@@ -225,7 +226,11 @@ function ListRequest({
                     <Button
                       onClick={() => {
                         setRequest(row);
-                        handleOpenAssignOrder();
+                        if (userState.roleName === "Manager") {
+                          handleOpenAssignOrder();
+                        } else {
+                          handleOpenAssign();
+                        }
                       }}
                       style={{
                         height: "45px",

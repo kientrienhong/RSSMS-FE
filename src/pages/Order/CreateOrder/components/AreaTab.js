@@ -15,7 +15,7 @@ export default function AreaTab({
 }) {
   const mapLitsItemNote = (listData, setListData) => {
     return listData?.map((e, index) => (
-      <Grid item xs={6} key={index}>
+      <Grid item xs={4} key={index}>
         <ItemNote
           product={e}
           image={e?.imageUrl}
@@ -37,7 +37,7 @@ export default function AreaTab({
 
   const mapListItemsToGrid = (listData, setListData) => {
     return listData.map((e, index) => (
-      <Grid item xs={6} key={index}>
+      <Grid item xs={4} key={index}>
         <Item
           type={e.type}
           image={e?.imageUrl}
@@ -64,6 +64,7 @@ export default function AreaTab({
         alignItems: "flex-start",
         justifyContent: "flex-start",
         marginTop: "2.5%",
+        width: "100%",
       }}
     >
       <Typography
