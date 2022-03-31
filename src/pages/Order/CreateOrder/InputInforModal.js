@@ -91,7 +91,7 @@ function InputInforModal({
           isPaid: false,
           note: data.note,
           paymentMethod: null,
-          isUserDelivery: null,
+          isCustomerDelivery: true,
           deliveryDate: order.dateStart,
           returnDate: returnDate.toISOString(),
           deliveryTime: null,
@@ -116,7 +116,7 @@ function InputInforModal({
           isPaid: false,
           returnDate: returnDate.toISOString(),
           paymentMethod: null,
-          isUserDelivery: order.isCustomerDelivery,
+          isCustomerDelivery: order.isCustomerDelivery,
           deliveryDate: order.dateDelivery,
           deliveryTime: order.timeDelivery.name,
           duration: order.duration,
@@ -195,7 +195,7 @@ function InputInforModal({
           Tìm kiếm tài khoản
         </Typography>
         <TextField
-          label="Phone"
+          label="Số điện thoại"
           sx={{
             width: "80%",
             marginTop: "1%",

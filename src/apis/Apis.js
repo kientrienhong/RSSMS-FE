@@ -456,22 +456,6 @@ export const deleteSpace = async (id, token) => {
 };
 
 export const createOrder = async (order, token) => {
-  console.log({
-    customerId: order.customerId,
-    deliveryAddress: order.deliveryAddress,
-    addressReturn: order.addressReturn,
-    totalPrice: order.totalPrice,
-    typeOrder: order.typeOrder,
-    deliveryTime: order.deliveryTime,
-    isPaid: order.isPaid,
-    note: order.note,
-    type: 1,
-    returnDate: order.returnDate,
-    paymentMethod: order.paymentMethod,
-    isUserDelivery: order.isUserDelivery,
-    deliveryDate: order.deliveryDate,
-    requestDetails: order.listProduct,
-  });
   const response = await axios.post(
     `https://localhost:44304/api/v1/requests`,
     {
@@ -486,7 +470,7 @@ export const createOrder = async (order, token) => {
       type: 1,
       returnDate: order.returnDate,
       paymentMethod: order.paymentMethod,
-      isUserDelivery: order.isUserDelivery,
+      isCustomerDelivery: order.isCustomerDelivery,
       deliveryDate: order.deliveryDate,
       requestDetails: order.listProduct,
     },

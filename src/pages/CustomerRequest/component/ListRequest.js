@@ -249,25 +249,27 @@ function ListRequest({
                   ) : (
                     <></>
                   )}
-                  {row.type !== STATUS_REQUEST_PROCESSED &&
-                    row.type !== STATUS_REQUEST_DELIVERING}
-                  <Button
-                    onClick={() => {
-                      setRequest(row);
-                      setUpdateStatus(STATUS_REQUEST_CUSTOMER_ABSENT);
-                      handleOpenUpdateRequest();
-                    }}
-                    style={{
-                      height: "45px",
-                      paddingLeft: "16px",
-                      paddingRight: "16px",
-                      marginRight: "4%",
-                    }}
-                    color="error"
-                    variant="outlined"
-                  >
-                    Báo cáo
-                  </Button>
+                  {row.status === STATUS_REQUEST_DELIVERING ? (
+                    <Button
+                      onClick={() => {
+                        setRequest(row);
+                        setUpdateStatus(STATUS_REQUEST_CUSTOMER_ABSENT);
+                        handleOpenUpdateRequest();
+                      }}
+                      style={{
+                        height: "45px",
+                        paddingLeft: "16px",
+                        paddingRight: "16px",
+                        marginRight: "4%",
+                      }}
+                      color="error"
+                      variant="outlined"
+                    >
+                      Báo cáo
+                    </Button>
+                  ) : (
+                    <></>
+                  )}
                 </TableCell>
               </TableRow>
             );

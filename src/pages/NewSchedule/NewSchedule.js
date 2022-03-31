@@ -191,13 +191,8 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
         endOfWeek.toISOString().split("T")[0],
         userState.idToken
       );
-      console.log(response);
       response?.data?.data
-        .filter(
-          (e) =>
-            (e.typeOrder === 1 && e.isCustomerDelivery === false) ||
-            e.type === 4
-        )
+        .filter((e) => e.isCustomerDelivery === false)
         .forEach((e) => {
           handleFormatDate(new Date(e.deliveryDate), result, e);
         });
