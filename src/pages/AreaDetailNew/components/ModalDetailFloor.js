@@ -29,26 +29,32 @@ export default function ModalDetailFloor({
       onClose={handleClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
-      sx={{}}
     >
       <Box
         sx={{
-          ...styleModal,
           display: "flex",
-          alignItems: "center",
-          flexDirection: "row",
-          justifyContent: "flex-start",
+          flexDirection: "column",
         }}
       >
-        <AreaUsage detailFloor={detailFloor} />
-        <ListOrderDetail
-          listOrderDetail={detailFloor.orderDetails}
-          handleOpenOrderDetail={handleOpenOrderDetail}
-          setCurrentOrderDetail={setCurrentOrderDetail}
-          page={1}
-          detailFloor={detailFloor}
-          totalOrderDetail={3}
-        />
+        <Box
+          sx={{
+            ...styleModal,
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "row",
+            justifyContent: "flex-start",
+          }}
+        >
+          <AreaUsage detailFloor={detailFloor} />
+          <ListOrderDetail
+            listOrderDetail={detailFloor.orderDetails}
+            handleOpenOrderDetail={handleOpenOrderDetail}
+            setCurrentOrderDetail={setCurrentOrderDetail}
+            page={1}
+            detailFloor={detailFloor}
+            totalOrderDetail={3}
+          />
+        </Box>
       </Box>
     </Modal>
   );

@@ -93,9 +93,7 @@ function LogIn(props) {
               src={process.env.PUBLIC_URL + "/img/logo.png"}
               className="nav__log-in__img"
             ></img>
-            <Typography color="primary" variant="h1" style={{ margin: "4%" }}>
-              Đăng nhập
-            </Typography>
+
             <Box sx={style.boxTextField}>
               <Typography variant="h3" style={{ marginBottom: "4%" }}>
                 Email

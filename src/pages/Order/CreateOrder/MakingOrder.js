@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Alert, Box, Snackbar } from "@material-ui/core";
 import { BsBoxSeam } from "react-icons/bs";
 import { FaWarehouse } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+
 import SelfStorageMainTab from "./SelfStorageMainTab";
 import SelfStorageOrderInfo from "./components/SelfStorageOrderInfo";
 import DoorToDoorMainTab from "./DoorToDoorMainTab";
@@ -21,6 +23,8 @@ function MakingOrder({
   msgSnackbar,
   closeSnackbar,
 }) {
+  let navigate = useNavigate();
+
   const [listStorages, setListStorages] = useState([]);
 
   const [listAccessory, setListAccessory] = useState([]);
@@ -165,6 +169,21 @@ function MakingOrder({
           {msgSnackbar}
         </Alert>
       </Snackbar>
+      <img
+        src="/img/arrowLeft.png"
+        alt="backButton"
+        width="40px"
+        height="40px"
+        style={{
+          position: "fixed",
+          top: "50px",
+          left: "50px",
+          cursor: "pointer",
+        }}
+        onClick={() => {
+          navigate(-1);
+        }}
+      />
       <Box
         sx={{
           width: "10%",
@@ -231,6 +250,7 @@ function MakingOrder({
             setListAreas={setListAreas}
             setListAccessory={setListAccessory}
             choosenProduct={choosenProduct}
+            setResetQuantity={setResetQuantity}
           />
         )}
       </Box>

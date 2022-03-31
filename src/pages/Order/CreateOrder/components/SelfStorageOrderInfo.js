@@ -287,6 +287,7 @@ function SelfStorageOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
+        marginRight: "5%",
       }}
     >
       <Typography variant="h2" style={{ marginBottom: "3%" }}>

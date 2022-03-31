@@ -81,6 +81,14 @@ export const LIST_PRODUCT_MANAGE_TYPE = [
   "Gửi theo diện tích",
 ];
 
+export const LIST_STATUS_OF_ORDER_DETAIL = [
+  { name: "Đang được gỡ xuống", color: "#000" },
+  {
+    name: "Đang trong quá trình đặt lên kệ",
+    color: style.PRIMARY_SEMANTIC_GREEN,
+  },
+];
+
 export const LIST_TYPE_REQUEST = [
   { name: "Hủy lịch giao hàng" },
   { name: "Tạo đơn" },
