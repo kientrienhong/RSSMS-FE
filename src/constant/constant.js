@@ -94,9 +94,16 @@ export const LIST_STATUS_REQUEST = [
   { name: "Đang xử lý", color: style.PRIMARY_PURPLE },
   { name: "Đã xử lý", color: style.PRIMARY_BLUE },
   { name: "Đã hoàn thành", color: style.SECOND_SEMANTIC_GREEN },
-  { name: "Đang vận chuyển", color: style.SECOND_SEMANTIC_GREEN },
+  { name: "Đang vận chuyển", color: style.PRIMARY_BROWN },
   { name: "Khách không có mặt", color: style.PRIMARY_SEMANTIC_RED },
 ];
+
+export const STATUS_REQUEST_CANCEL = 0;
+export const STATUS_REQUEST_PROCESSING = 1;
+export const STATUS_REQUEST_PROCESSED = 2;
+export const STATUS_REQUEST_FINISHED = 3;
+export const STATUS_REQUEST_DELIVERING = 4;
+export const STATUS_REQUEST_CUSTOMER_ABSENT = 5;
 
 export const LIST_STATUS = [
   { label: "Đã hủy", value: 0 },

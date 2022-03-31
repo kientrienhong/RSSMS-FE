@@ -20,9 +20,10 @@ import { makeStyles } from "@material-ui/styles";
 import {
   LIST_TYPE_REQUEST,
   LIST_STATUS_REQUEST,
+  STATUS_REQUEST_CUSTOMER_ABSENT,
+  STATUS_REQUEST_PROCESSED,
+  STATUS_REQUEST_DELIVERING,
 } from "../../../constant/constant";
-import ConfirmModal from "../../../components/ConfirmModal";
-import { deleteUser } from "../../../apis/Apis";
 import { connect } from "react-redux";
 import { getRequestDetail } from "../../../apis/Apis";
 function TablePaginationActions(props) {
@@ -140,6 +141,8 @@ function ListRequest({
   handleOpenAssignOrder,
   handleOpenOrderModal,
   handleOpenAssign,
+  setUpdateStatus,
+  handleOpenUpdateRequest,
 }) {
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   // Avoid a layout jump when reaching the last page with empty rows.
@@ -246,6 +249,25 @@ function ListRequest({
                   ) : (
                     <></>
                   )}
+                  {row.type !== STATUS_REQUEST_PROCESSED &&
+                    row.type !== STATUS_REQUEST_DELIVERING}
+                  <Button
+                    onClick={() => {
+                      setRequest(row);
+                      setUpdateStatus(STATUS_REQUEST_CUSTOMER_ABSENT);
+                      handleOpenUpdateRequest();
+                    }}
+                    style={{
+                      height: "45px",
+                      paddingLeft: "16px",
+                      paddingRight: "16px",
+                      marginRight: "4%",
+                    }}
+                    color="error"
+                    variant="outlined"
+                  >
+                    Báo cáo
+                  </Button>
                 </TableCell>
               </TableRow>
             );

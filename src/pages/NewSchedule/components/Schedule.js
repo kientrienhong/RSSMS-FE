@@ -249,7 +249,7 @@ function Schedule({
             >
               Tên kho:
             </p>{" "}
-            {schedule.storageName}
+            {schedule?.storageName ? schedule?.storageName : "Chưa được phân"}
           </p>
         </Box>
 

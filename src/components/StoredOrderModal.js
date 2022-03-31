@@ -315,7 +315,7 @@ function StoredOrderModal({
                         marginBottom: "1%",
                       }}
                     >
-                      Name Product
+                      Tên dịch vụ
                     </Typography>
                   </Box>
                   <Box sx={{ width: "60%" }}>
@@ -326,7 +326,7 @@ function StoredOrderModal({
                         marginBottom: "1%",
                       }}
                     >
-                      Position
+                      Vị trí
                     </Typography>
                   </Box>
                   <Box sx={{ width: "10%" }}>
@@ -337,7 +337,7 @@ function StoredOrderModal({
                         marginBottom: "1%",
                       }}
                     >
-                      Action
+                      Hành động
                     </Typography>
                   </Box>
                 </Box>
@@ -371,7 +371,7 @@ function StoredOrderModal({
                   color="primary"
                   variant="contained"
                 >
-                  Place
+                  Đặt vào
                 </Button>
                 <Button
                   style={{
@@ -384,7 +384,7 @@ function StoredOrderModal({
                   color="success"
                   variant="contained"
                 >
-                  Submit
+                  Xác nhận
                 </Button>
                 <Button
                   style={{
@@ -396,7 +396,7 @@ function StoredOrderModal({
                   color="error"
                   variant="outlined"
                 >
-                  Cancel storing order
+                  Hủy lưu trữ đơn
                 </Button>
               </Box>
             </Box>

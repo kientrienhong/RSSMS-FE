@@ -5,7 +5,7 @@ export const SECOND_SEMANTIC_GREEN = "#00993C";
 export const PRIMARY_SEMANTIC_RED = "#FF615F";
 export const PRIMARY_SEMANTIC_ORANGE = "#FF7C33";
 export const PRIMARY_PURPLE = "#8099FF";
-
+export const PRIMARY_BROWN = "#E3A663";
 export const STYLE_MODAL = {
   position: "absolute",
   top: "50%",

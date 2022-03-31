@@ -18,6 +18,7 @@ import {
   getCustomerRequest,
   getRequestDetail,
   assignOrder,
+  updateRequestWithNote,
 } from "../../apis/Apis";
 import { useNavigate } from "react-router";
 
@@ -27,6 +28,7 @@ import ModalUpdateIsPaid from "./component/ModalUpdateIsPaid";
 import AssignOrderModal from "./component/AssignOrderModal";
 import RequestModal from "../../components/RequestModal";
 import ConfirmModal from "../../components/ConfirmModal";
+import UpdateRequestModal from "../../components/UpdateRequestModal";
 
 function CustomerRequest({
   showLoading,
@@ -45,10 +47,19 @@ function CustomerRequest({
   const [openIsPaid, setOpenIsPaid] = useState(false);
   const [openAssignOrder, setOpenAssignOrder] = useState(false);
   const [openOrderModal, setOpenOrderModal] = useState(false);
+  const [openUpdateRequest, setOpenUpdateRequest] = useState(false);
+  const [updateStatus, setUpdateStatus] = useState(-1);
   const { handleSubmit, control, reset } = useForm();
   const [openAssign, setOpenAssign] = useState(false);
   const navigate = useNavigate();
 
+  const handleOpenUpdateRequest = () => {
+    setOpenUpdateRequest(true);
+  };
+
+  const handleCloseUpdateRequest = () => {
+    setOpenUpdateRequest(false);
+  };
   const handleOpenAssign = () => {
     setOpenAssign(true);
   };
@@ -160,6 +171,27 @@ function CustomerRequest({
     firstCall();
   }, []);
 
+  const handleSubmitReport = async (data) => {
+    try {
+      showLoading();
+      const response = await updateRequestWithNote(
+        updateStatus,
+        data.note,
+        request?.id,
+        userState.idToken
+      );
+
+      console.log(response);
+      await getData("", page, 8);
+      handleCloseUpdateRequest();
+      setUpdateStatus(-1);
+    } catch (error) {
+      console.log(error.response);
+    } finally {
+      hideLoading();
+    }
+  };
+
   useEffect(() => {
     const firstCall = async () => {
       if (currentRequest === undefined) {
@@ -266,6 +298,12 @@ function CustomerRequest({
           Tạo yêu cầu tạo đơn
         </Button>
       </Box>
+      <UpdateRequestModal
+        open={openUpdateRequest}
+        handleClose={handleCloseUpdateRequest}
+        title={"Báo cáo khách vắng mặt"}
+        onSubmit={handleSubmitReport}
+      />
       <ModalReturnItem
         open={openReturnItem}
         handleClose={handleCloseReturnItem}
@@ -308,9 +346,11 @@ function CustomerRequest({
           listRequest={listRequest}
           page={page}
           setPage={setPage}
+          setUpdateStatus={setUpdateStatus}
           handleOpenOrderModal={handleOpenOrderModal}
           totalRequest={totalRequest}
           getData={getData}
+          handleOpenUpdateRequest={handleOpenUpdateRequest}
           handleOpenAssign={handleOpenAssign}
           handleOpenAssignOrder={handleOpenAssignOrder}
         />

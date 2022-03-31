@@ -682,6 +682,25 @@ export const createProduct = async (product, token) => {
   return response;
 };
 
+export const updateRequestWithNote = async (status, note, idRequest, token) => {
+  console.log({
+    id: idRequest,
+    description: note,
+    status: status,
+  });
+
+  const response = await axios.put(
+    `https://localhost:44304/api/v1/requests/${idRequest}`,
+    {
+      id: idRequest,
+      description: note,
+      status: status,
+    },
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+  return response;
+};
+
 export const updateProduct = async (product, id, imageUrl, token) => {
   let object;
   if (imageUrl === "") {
