@@ -20,6 +20,8 @@ import { Button, TableHead } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import ConfirmModal from "../../../components/ConfirmModal";
 import { connect } from "react-redux";
+import * as action from "../../../redux/action/action";
+
 function TablePaginationActions(props) {
   const theme = useTheme();
   const { count, page, rowsPerPage, onPageChange } = props;
@@ -134,6 +136,9 @@ function ListOrderDetail({
   getData,
   userState,
   handleOpenOrderDetail,
+  addMovingProduct,
+  detailFloor,
+  showSnackbar,
 }) {
   const classes = useStyles();
 
@@ -277,7 +282,13 @@ function ListOrderDetail({
                       paddingLeft: "16px",
                       paddingRight: "16px",
                     }}
-                    onClick={async () => {}}
+                    onClick={async () => {
+                      addMovingProduct(row, detailFloor);
+                      showSnackbar(
+                        "success",
+                        "Gỡ món hàng xuống kệ thành công"
+                      );
+                    }}
                     color="primary"
                     variant="contained"
                     type="submit"
@@ -318,4 +329,13 @@ const mapStateToProps = (state) => ({
   userState: state.information.user,
 });
 
-export default connect(mapStateToProps, null)(ListOrderDetail);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
+
+    addMovingProduct: (orderDetail, oldFloorId) =>
+      dispatch(action.addMovingProduct(orderDetail, oldFloorId)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ListOrderDetail);

@@ -18,6 +18,8 @@ export default function StoredOrderItem({
   selectedValue,
   storedOrder,
 }) {
+  console.log(storedOrder);
+  console.log(selectedValue);
   const mapImage = (list) => {
     return list.map((e) => (
       <Box
@@ -120,7 +122,7 @@ export default function StoredOrderItem({
         {handleChangeRadio ? (
           <Radio
             value={storedOrder.id}
-            checked={selectedValue === storedOrder.id.toString()}
+            checked={selectedValue == storedOrder.id}
             name="radio-buttons"
             onChange={handleChangeRadio}
             inputProps={{ "aria-label": "B" }}

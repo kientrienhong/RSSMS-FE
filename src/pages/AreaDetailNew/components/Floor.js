@@ -21,7 +21,7 @@ function Floor({
 }) {
   let additionUsage = 0;
 
-  placingProducts?.floors.forEach((e) => {
+  placingProducts?.floors?.forEach((e) => {
     if (e.floorId === floor.id) {
       additionUsage += e.width * e.height * e.length;
     }

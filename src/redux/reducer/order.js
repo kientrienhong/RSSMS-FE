@@ -20,6 +20,7 @@ const initialState = {
   isLoadingRequest: false,
   isLoadingOrder: false,
   moveBox: undefined,
+
   isMoveOrderDetail: false,
   currentPositionViewOrderId: -1,
 };
@@ -47,7 +48,7 @@ const order = (state = initialState, action) => {
 
       let quantity = 0;
       storedOrderTemp.products.forEach((e) => {
-        quantity += e.amount;
+        quantity++;
       });
 
       storedOrderTemp.totalQuantity = quantity;
@@ -57,6 +58,55 @@ const order = (state = initialState, action) => {
         placingProducts: placingProductsTemp,
       };
     }
+
+    case ActionType.ADD_MOVING_PRODUCT: {
+      let storedOrderTemp = { ...state.storedOrder };
+      storedOrderTemp.orderId = 1;
+      storedOrderTemp.products.push({
+        ...action.payload.orderDetail,
+        oldFloorId: action.payload.oldFloorId,
+      });
+      storedOrderTemp.totalQuantity++;
+      return {
+        ...state,
+        storedOrder: storedOrderTemp,
+        isMoveOrderDetail: true,
+      };
+    }
+
+    // case ActionType.PLACING_MOVING_PRODUCT: {
+    //   let placingProductTemp = { ...state.placingProducts };
+    //   let storedOrderTemp = { ...state.storedOrder };
+
+    //   let foundProduct = storedOrderTemp.products.find((e) => {
+    //     return e.id.toString() == action.payload.idOrderDetail;
+    //   });
+    //   foundProduct.amount--;
+    //   foundProduct.isPlaced = true;
+    //   storedOrderTemp.totalQuantity--;
+
+    //   placingProductTemp.orderId = storedOrderTemp.orderId;
+    //   placingProductTemp.floors.push({
+    //     idItemPlacing: placingProductTemp.floors.length,
+    //     areaName: state.currentFloor.areaName,
+    //     shelfName: state.currentFloor.shelfName,
+    //     floorName: state.currentFloor.name,
+    //     floorId: state.currentFloor.id,
+    //     storageName: state.currentFloor.storageName,
+    //     areaId: state.currentFloor.areaId,
+    //     width: action.payload.infoProduct.width,
+    //     length: action.payload.infoProduct.length,
+    //     height: action.payload.infoProduct.height,
+    //     storageId: state.currentFloor.storageId,
+    //     nameProduct: action.payload.nameProduct,
+    //     idOrderDetail: action.payload.idOrderDetail,
+    //   });
+    //   return {
+    //     ...state,
+    //     placingProducts: placingProductTemp,
+    //     storedOrder: storedOrderTemp,
+    //   };
+    // }
 
     case ActionType.SET_UP_CURRENT_FLOOR: {
       state.currentFloor = action.payload;
@@ -94,6 +144,7 @@ const order = (state = initialState, action) => {
         floors: [],
         typeOrder: -1,
       };
+      state.isMoveOrderDetail = false;
       return { ...state };
     }
 
@@ -133,6 +184,7 @@ const order = (state = initialState, action) => {
         storageId: state.currentFloor.storageId,
         nameProduct: action.payload.nameProduct,
         idOrderDetail: action.payload.idOrderDetail,
+        oldFloorId: foundProduct.oldFloorId,
       });
       return {
         ...state,

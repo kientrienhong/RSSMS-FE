@@ -201,3 +201,23 @@ export const changeMoveOrderDetail = () => {
     type: ActionType.CHANGE_MOVE_ORDER_DETAIL,
   };
 };
+
+export const addMovingProduct = (orderDetail, oldFloorId) => {
+  return {
+    type: ActionType.ADD_MOVING_PRODUCT,
+    payload: {
+      orderDetail: orderDetail,
+      oldFloorId: oldFloorId,
+    },
+  };
+};
+
+export const placeMovingProduct = (orderDetail, newFloorId) => {
+  return {
+    type: ActionType.PLACING_MOVING_PRODUCT,
+    payload: {
+      orderDetail: orderDetail,
+      newFloorId: newFloorId,
+    },
+  };
+};

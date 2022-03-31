@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Modal, Grid, Radio, Typography, Button } from "@material-ui/core";
 import { connect } from "react-redux";
 import * as action from "../redux/action/action";
-import { placeBoxes } from "../apis/Apis";
+import { placeBoxes, moveOrderDetail } from "../apis/Apis";
 import { useNavigate } from "react-router";
 import { STYLE_MODAL } from "../constant/style";
 import StoredOrderItem from "./StoredOrderItem";
@@ -37,6 +37,7 @@ function StoredOrderModal({
   userState,
   cancelStoreOrder,
   currentFloor,
+  isMoveOrderDetail,
 }) {
   const [selectedValue, setSelectedValue] = React.useState("");
   const [error, setError] = React.useState();
@@ -52,12 +53,6 @@ function StoredOrderModal({
 
   const buildRadioSelect = () => {
     return storedOrder?.products?.map((e, index) => {
-      let eventTemp = {
-        target: {
-          value: e.id.toString(),
-        },
-      };
-
       return (
         <StoredOrderItem
           expanded={expanded}
@@ -72,7 +67,7 @@ function StoredOrderModal({
   };
 
   const buildListPlacingProduct = () => {
-    return placingProducts?.floors.map((e) => (
+    return placingProducts?.floors?.map((e) => (
       <Box
         sx={{
           display: "flex",
@@ -125,8 +120,20 @@ function StoredOrderModal({
     });
     try {
       showLoading();
-      await placeBoxes(placingProducts, userState.idToken);
-      showSnackbar("success", "Save placing success");
+      if (isMoveOrderDetail) {
+        let requestDate = placingProducts?.floors?.map((e) => {
+          return {
+            orderDetailId: e.idOrderDetail,
+            floorId: e.floorId,
+            oldFloorId: e.oldFloorId.id,
+          };
+        });
+        let response = await moveOrderDetail(requestDate, userState.idToken);
+        console.log(response);
+      } else {
+        await placeBoxes(placingProducts, userState.idToken);
+      }
+      showSnackbar("success", "Thao tác thành công");
       emptyPlacedProduct();
       handleClose();
       changeIsLoadShelf();
@@ -144,7 +151,7 @@ function StoredOrderModal({
     }
 
     let foundOrderDetail = storedOrder?.products?.find(
-      (e) => e.id.toString() === selectedValue
+      (e) => e.id == selectedValue
     );
 
     if (foundOrderDetail.isPlaced) {
@@ -180,24 +187,6 @@ function StoredOrderModal({
       setError("Kích thước không phù hợp hoặc không còn chỗ");
       return;
     }
-    // if (
-    //   foundOrderDetail.productId.toString() === currentBox.productId.toString()
-    // ) {
-    //   if (foundOrderDetail?.amount === 0) {
-    // setError("There is no product to place");
-    // return;
-    //   }
-    // placeProductToShelf({
-    //   idOrderDetail: foundOrderDetail.id,
-    //   idProduct: foundOrderDetail.productId,
-    //   nameProduct: foundOrderDetail.productName,
-    // });
-    // setError("");
-    // showSnackbar("success", "Place product success");
-    // handleClose();
-    // } else {
-    //   setError("You must choose right product to place");
-    // }
   };
 
   const onHandlePlace = () => {
@@ -410,6 +399,7 @@ function StoredOrderModal({
 const mapStateToProps = (state) => ({
   currentFloor: state.order.currentFloor,
   placingProducts: state.order.placingProducts,
+  isMoveOrderDetail: state.order.isMoveOrderDetail,
   userState: state.information.user,
 });
 

@@ -683,12 +683,6 @@ export const createProduct = async (product, token) => {
 };
 
 export const updateRequestWithNote = async (status, note, idRequest, token) => {
-  console.log({
-    id: idRequest,
-    description: note,
-    status: status,
-  });
-
   const response = await axios.put(
     `https://localhost:44304/api/v1/requests/${idRequest}`,
     {
@@ -814,6 +808,18 @@ export const updateIsPaidRequest = async (idRequest, isPaid, token) => {
     {
       id: idRequest,
       isPaid: isPaid,
+    },
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+
+  return response;
+};
+
+export const moveOrderDetail = async (listMoveBox, token) => {
+  const response = await axios.put(
+    `https://localhost:44304/api/v1/orders/assign to another floor`,
+    {
+      orderDetailAssignFloor: listMoveBox,
     },
     { headers: { Authorization: `Bearer ${token}` } }
   );

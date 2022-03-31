@@ -22,6 +22,7 @@ export default function ModalDetailFloor({
   handleOpenOrderDetail,
   setCurrentOrderDetail,
 }) {
+  console.log(detailFloor);
   return (
     <Modal
       open={open}
@@ -45,6 +46,7 @@ export default function ModalDetailFloor({
           handleOpenOrderDetail={handleOpenOrderDetail}
           setCurrentOrderDetail={setCurrentOrderDetail}
           page={1}
+          detailFloor={detailFloor}
           totalOrderDetail={3}
         />
       </Box>

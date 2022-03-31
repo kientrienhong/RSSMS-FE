@@ -80,7 +80,6 @@ function InformationOrder({
   userState,
   isView,
 }) {
-  console.log(currentOrder);
   const [returnAddress, setReturnAddress] = useState();
   const [deliveryAddress, setDeliveryAddress] = useState();
   const [timeDelivery, setTimeDelivery] = useState();
@@ -126,8 +125,8 @@ function InformationOrder({
   const handleStoreOrder = () => {
     storeOrder(currentOrder);
     showSnackbar("success", "Store order success");
-    if (userState.roleName === "Office staff") {
-      navigate(`/app/storages/${userState.staffManageStorages[0].storageId}`, {
+    if (userState.roleName === "Office Staff") {
+      navigate(`/app/storages/${userState.storageId}`, {
         replace: true,
       });
     } else {
