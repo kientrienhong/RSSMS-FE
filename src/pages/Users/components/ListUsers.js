@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { useTheme } from "@mui/material/styles";
+import {useTheme} from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -15,14 +15,14 @@ import FirstPageIcon from "@mui/icons-material/FirstPage";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
-import { Button, TableHead } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
+import {Button, TableHead} from "@material-ui/core";
+import {makeStyles} from "@material-ui/styles";
 import ConfirmModal from "../../../components/ConfirmModal";
-import { deleteUser } from "../../../apis/Apis";
-import { connect } from "react-redux";
+import {deleteUser} from "../../../apis/Apis";
+import {connect} from "react-redux";
 function TablePaginationActions(props) {
   const theme = useTheme();
-  const { count, page, rowsPerPage, onPageChange } = props;
+  const {count, page, rowsPerPage, onPageChange} = props;
 
   const handleFirstPageButtonClick = (event) => {
     onPageChange(event, 0);
@@ -41,7 +41,7 @@ function TablePaginationActions(props) {
   };
 
   return (
-    <Box sx={{ flexShrink: 0, ml: 2.5 }}>
+    <Box sx={{flexShrink: 0, ml: 2.5}}>
       <IconButton
         onClick={handleFirstPageButtonClick}
         disabled={page === 0}
@@ -100,7 +100,7 @@ const listHeaderName = [
 
 const mapListTableHeader = (listHeader) => (
   <TableHead>
-    <TableRow sx={{ color: "black" }}>
+    <TableRow sx={{color: "black"}}>
       {listHeader.map((e) => (
         <TableCell>{e}</TableCell>
       ))}
@@ -192,7 +192,7 @@ function ListUsers({
 
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+      <Table sx={{minWidth: 500}} aria-label="custom pagination table">
         <ConfirmModal
           open={open}
           handleClose={handleClose}
@@ -205,49 +205,32 @@ function ListUsers({
           {listUser.map((row, index) => {
             return (
               <TableRow key={row.id}>
-                <TableCell
-                  component="th"
-                  scope="row"
-                  style={{ color: "black" }}
-                  onClick={(e) =>
-                    handleClickRow(row, setUser, handleOpen, reset)
-                  }
-                >
+                <TableCell component="th" scope="row" style={{color: "black"}}>
                   {row.name}
                 </TableCell>
-                <TableCell
-                  style={{ color: "black" }}
-                  onClick={(e) =>
-                    handleClickRow(row, setUser, handleOpen, reset)
-                  }
-                >
-                  {row.email}
-                </TableCell>
-                <TableCell
-                  style={{ color: "black" }}
-                  onClick={(e) =>
-                    handleClickRow(row, setUser, handleOpen, reset)
-                  }
-                >
-                  {row.phone}
-                </TableCell>
-                <TableCell
-                  style={{ color: "black" }}
-                  onClick={(e) =>
-                    handleClickRow(row, setUser, handleOpen, reset)
-                  }
-                >
+                <TableCell style={{color: "black"}}>{row.email}</TableCell>
+                <TableCell style={{color: "black"}}>{row.phone}</TableCell>
+                <TableCell style={{color: "black"}}>
                   {/* {row?.staffManageStorages[0]?.storageName} */}
                 </TableCell>
-                <TableCell
-                  style={{ color: "black" }}
-                  onClick={(e) =>
-                    handleClickRow(row, setUser, handleOpen, reset)
-                  }
-                >
-                  {row.roleName}
-                </TableCell>
-                <TableCell style={{ color: "black" }}>
+                <TableCell style={{color: "black"}}>{row.roleName}</TableCell>
+                <TableCell style={{color: "black"}}>
+                  <Button
+                    onClick={async () => {
+                      handleClickRow(row, setUser, handleOpen, reset);
+                    }}
+                    style={{
+                      height: "45px",
+                      paddingLeft: "16px",
+                      paddingRight: "16px",
+                      marginRight: "4%",
+                    }}
+                    color="success"
+                    variant="contained"
+                    type="submit"
+                  >
+                    Xem thêm
+                  </Button>
                   <Button
                     className={classes.button}
                     onClick={() => {

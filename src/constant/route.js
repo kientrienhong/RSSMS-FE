@@ -1,8 +1,8 @@
-import { FaWarehouse, FaFileInvoiceDollar } from "react-icons/fa";
-import { VscTag } from "react-icons/vsc";
-import { GrSchedule } from "react-icons/gr";
-import { User as UserIcon, Users as UsersIcon } from "react-feather";
-import { GoClippy } from "react-icons/go";
+import {FaWarehouse, FaFileInvoiceDollar} from "react-icons/fa";
+import {VscTag} from "react-icons/vsc";
+import {GrSchedule} from "react-icons/gr";
+import {User as UserIcon, Users as UsersIcon} from "react-feather";
+import {GoClippy} from "react-icons/go";
 
 export const LIST_SIDE_BAR_ADMIN = [
   {
@@ -85,14 +85,14 @@ export const LIST_SIDE_BAR_OFFICE_STAFF = (idStorage) => {
       icon: UserIcon,
       title: "Tài khoản cá nhân",
     },
-    // {
-    //   href: "/app/users",
-    //   icon: UsersIcon,
-    //   title: "Users",
-    // },
+    {
+      href: "/app/users",
+      icon: UsersIcon,
+      title: "Tài khoản",
+    },
     {
       href:
-        idStorage !== undefined
+        idStorage !== undefined && idStorage !== null
           ? `/app/storages/${idStorage}`
           : "/app/not_storage",
       title: "Kho",

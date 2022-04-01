@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Modal, Tabs, Tab } from "@material-ui/core";
+import {Box, Modal, Tabs, Tab} from "@material-ui/core";
 import TabPanel from "./TabPanel";
 
 import InformationOrder from "./InformationOrder";

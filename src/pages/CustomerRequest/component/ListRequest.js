@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { useTheme } from "@mui/material/styles";
+import {useTheme} from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -15,8 +15,8 @@ import FirstPageIcon from "@mui/icons-material/FirstPage";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
-import { Button, TableHead } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
+import {Button, TableHead} from "@material-ui/core";
+import {makeStyles} from "@material-ui/styles";
 import {
   LIST_TYPE_REQUEST,
   LIST_STATUS_REQUEST,
@@ -24,11 +24,13 @@ import {
   STATUS_REQUEST_PROCESSED,
   STATUS_REQUEST_DELIVERING,
 } from "../../../constant/constant";
-import { connect } from "react-redux";
-import { getRequestDetail } from "../../../apis/Apis";
+import {connect} from "react-redux";
+import {getRequestDetail} from "../../../apis/Apis";
+import * as action from "../../../redux/action/action";
+
 function TablePaginationActions(props) {
   const theme = useTheme();
-  const { count, page, rowsPerPage, onPageChange } = props;
+  const {count, page, rowsPerPage, onPageChange} = props;
 
   const handleFirstPageButtonClick = (event) => {
     onPageChange(event, 0);
@@ -47,7 +49,7 @@ function TablePaginationActions(props) {
   };
 
   return (
-    <Box sx={{ flexShrink: 0, ml: 2.5 }}>
+    <Box sx={{flexShrink: 0, ml: 2.5}}>
       <IconButton
         onClick={handleFirstPageButtonClick}
         disabled={page === 0}
@@ -106,7 +108,7 @@ const listHeaderName = [
 
 const mapListTableHeader = (listHeader) => (
   <TableHead>
-    <TableRow sx={{ color: "black" }}>
+    <TableRow sx={{color: "black"}}>
       {listHeader?.map((e) => (
         <TableCell>{e}</TableCell>
       ))}
@@ -143,6 +145,7 @@ function ListRequest({
   handleOpenAssign,
   setUpdateStatus,
   handleOpenUpdateRequest,
+  showSnackbar,
 }) {
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   // Avoid a layout jump when reaching the last page with empty rows.
@@ -162,27 +165,23 @@ function ListRequest({
 
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+      <Table sx={{minWidth: 500}} aria-label="custom pagination table">
         {mapListTableHeader(listHeaderName)}
         <TableBody>
           {listRequest?.map((row, index) => {
             return (
               <TableRow key={row.id}>
-                <TableCell
-                  component="th"
-                  scope="row"
-                  style={{ color: "black" }}
-                >
+                <TableCell component="th" scope="row" style={{color: "black"}}>
                   {row.id}
                 </TableCell>
-                <TableCell style={{ color: "black" }}>
+                <TableCell style={{color: "black"}}>
                   {row.customerName}
                 </TableCell>
-                <TableCell style={{ color: "black" }}>
+                <TableCell style={{color: "black"}}>
                   {row.customerPhone}
                 </TableCell>
 
-                <TableCell style={{ color: "black" }}>
+                <TableCell style={{color: "black"}}>
                   {LIST_TYPE_REQUEST[row.type].name}
                 </TableCell>
                 <TableCell
@@ -193,7 +192,7 @@ function ListRequest({
                 >
                   {LIST_STATUS_REQUEST[row.status].name}
                 </TableCell>
-                <TableCell style={{ color: "black" }}>
+                <TableCell style={{color: "black"}}>
                   <Button
                     onClick={async () => {
                       const response = await getRequestDetail(
@@ -228,6 +227,17 @@ function ListRequest({
                   {row.type === 1 && row.status === 1 ? (
                     <Button
                       onClick={() => {
+                        if (
+                          userState.storageId === null &&
+                          userState.roleName === "Office Staff"
+                        ) {
+                          showSnackbar(
+                            "error",
+                            "Bạn chưa được phân vào bất kì kho nào"
+                          );
+                          return;
+                        }
+
                         setRequest(row);
                         if (userState.roleName === "Manager") {
                           handleOpenAssignOrder();
@@ -303,5 +313,9 @@ function ListRequest({
 const mapStateToProps = (state) => ({
   userState: state.information.user,
 });
-
-export default connect(mapStateToProps, null)(ListRequest);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(ListRequest);

@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { useTheme } from "@mui/material/styles";
+import {useTheme} from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -15,17 +15,17 @@ import FirstPageIcon from "@mui/icons-material/FirstPage";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
-import { Button, TableHead } from "@material-ui/core";
+import {Button, TableHead} from "@material-ui/core";
 import moment from "moment";
-import { makeStyles } from "@material-ui/styles";
+import {makeStyles} from "@material-ui/styles";
 import ConfirmModal from "../../../components/ConfirmModal";
-import { deleteUser } from "../../../apis/Apis";
-import { connect } from "react-redux";
-import { useNavigate } from "react-router-dom";
-
+import {deleteUser} from "../../../apis/Apis";
+import {connect} from "react-redux";
+import {useNavigate} from "react-router-dom";
+import {LIST_TYPE_REQUEST} from "../../../constant/constant";
 function TablePaginationActions(props) {
   const theme = useTheme();
-  const { count, page, rowsPerPage, onPageChange } = props;
+  const {count, page, rowsPerPage, onPageChange} = props;
 
   const handleFirstPageButtonClick = (event) => {
     onPageChange(event, 0);
@@ -44,7 +44,7 @@ function TablePaginationActions(props) {
   };
 
   return (
-    <Box sx={{ flexShrink: 0, ml: 2.5 }}>
+    <Box sx={{flexShrink: 0, ml: 2.5}}>
       <IconButton
         onClick={handleFirstPageButtonClick}
         disabled={page === 0}
@@ -96,6 +96,7 @@ const listHeaderName = [
   "Mã",
   "Tên nhân viên",
   "Số điện thoại nhân viên",
+  "Loại yêu cầu",
   "Lịch giao",
   "Ghi chú",
   "Hành động",
@@ -103,7 +104,7 @@ const listHeaderName = [
 
 const mapListTableHeader = (listHeader) => (
   <TableHead>
-    <TableRow sx={{ color: "black" }}>
+    <TableRow sx={{color: "black"}}>
       {listHeader?.map((e) => (
         <TableCell>{e}</TableCell>
       ))}
@@ -182,7 +183,7 @@ function ListRequest({
 
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+      <Table sx={{minWidth: 500}} aria-label="custom pagination table">
         {mapListTableHeader(listHeaderName)}
         <TableBody>
           {listRequest?.map((row, index) => {
@@ -192,37 +193,42 @@ function ListRequest({
                 <TableCell
                   component="th"
                   scope="row"
-                  style={{ color: "black", width: "5%" }}
+                  style={{color: "black", width: "5%"}}
                   onClick={(e) => handleClickRow(row, setRequest, handleOpen)}
                 >
                   {row?.id}
                 </TableCell>
                 <TableCell
-                  style={{ color: "black", width: "10%" }}
+                  style={{color: "black", width: "10%"}}
                   onClick={(e) => handleClickRow(row, setRequest, handleOpen)}
                 >
                   {row?.deliveryStaffName}
                 </TableCell>
                 <TableCell
-                  style={{ color: "black", width: "10%" }}
+                  style={{color: "black", width: "10%"}}
                   onClick={(e) => handleClickRow(row, setRequest, handleOpen)}
                 >
                   {row?.deliveryStaffPhone}
                 </TableCell>
-
                 <TableCell
-                  style={{ color: "black" }}
+                  style={{color: "black", width: "20%"}}
+                  onClick={(e) => handleClickRow(row, setRequest, handleOpen)}
+                >
+                  {LIST_TYPE_REQUEST[row?.type].name}
+                </TableCell>
+                <TableCell
+                  style={{color: "black"}}
                   onClick={(e) => handleClickRow(row, setRequest, handleOpen)}
                 >
                   {moment(new Date(row?.cancelDate)).format("DD/MM/YYYY")}
                 </TableCell>
                 <TableCell
-                  style={{ color: "black", width: "45%" }}
+                  style={{color: "black", width: "25%"}}
                   onClick={(e) => handleClickRow(row, setRequest, handleOpen)}
                 >
                   {row?.note}
                 </TableCell>
-                <TableCell style={{ color: "black" }}>
+                <TableCell style={{color: "black"}}>
                   <Button
                     onClick={async () => {
                       navigate(
@@ -243,7 +249,7 @@ function ListRequest({
                     variant="contained"
                     type="submit"
                   >
-                    Go to schedule
+                    Xem lịch đã hủy
                   </Button>
                 </TableCell>
               </TableRow>

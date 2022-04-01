@@ -1,9 +1,9 @@
 import React from "react";
-import { STYLE_MODAL } from "../../../constant/style";
+import {STYLE_MODAL} from "../../../constant/style";
 import ListStaff from "../../Storage/components/ListStaff";
-import { Box, Modal, Button, Typography } from "@material-ui/core";
-import { connect } from "react-redux";
-import { assignSchedule } from "../../../apis/Apis";
+import {Box, Modal, Button, Typography} from "@material-ui/core";
+import {connect} from "react-redux";
+import {assignSchedule} from "../../../apis/Apis";
 
 import * as action from "../../../redux/action/action";
 const styleModal = STYLE_MODAL;
@@ -71,10 +71,10 @@ function OrderAssignModal({
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
       style={{
-        height: "50%",
+        height: "auto",
         width: "86%",
       }}
-      sx={{ left: "7%", top: "25%", zIndex: "9999999 !important" }}
+      sx={{left: "7%", top: "0%", zIndex: "9999999 !important"}}
     >
       <Box
         sx={{
@@ -83,7 +83,7 @@ function OrderAssignModal({
           justifyContent: "flex-start",
           flexDirection: "column",
           width: "80%",
-          height: "90vh",
+          height: "auto",
         }}
       >
         <Box
@@ -97,7 +97,7 @@ function OrderAssignModal({
           <ListStaff
             listStaff={listShowStaffAssigned}
             isAssigned={true}
-            name="Staffs belong to this storage"
+            name="Số nhân viên được phân công"
             addAssignStaff={addAssignStaff}
             removeAssignStaff={removeAssignStaff}
             onHandleSearch={handleChangeSearchAssigned}
@@ -105,7 +105,7 @@ function OrderAssignModal({
           <ListStaff
             listStaff={listShowStaffUnAssigned}
             isAssigned={false}
-            name="Staffs are not assigned yet"
+            name="Số nhân viên chưa được phân công"
             addAssignStaff={addAssignStaff}
             removeAssignStaff={removeAssignStaff}
             onHandleSearch={handleChangeSearchUnAssigned}
@@ -118,6 +118,7 @@ function OrderAssignModal({
             display: "flex",
             flexDirection: "row",
             justifyContent: "center",
+            alignItems: "center",
           }}
         >
           <Button
@@ -125,13 +126,25 @@ function OrderAssignModal({
               height: "45px",
               paddingLeft: "16px",
               paddingRight: "16px",
-              marginTop: "8px",
             }}
             onClick={assignOrder}
             color="primary"
             variant="contained"
           >
-            Submit
+            Xác nhận
+          </Button>
+          <Button
+            style={{
+              height: "45px",
+              paddingLeft: "16px",
+              paddingRight: "16px",
+              marginLeft: "3%",
+            }}
+            onClick={handleClose}
+            color="error"
+            variant="outlined"
+          >
+            Đóng
           </Button>
         </Box>
       </Box>

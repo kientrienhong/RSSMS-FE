@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, {useRef, useEffect} from "react";
 import {
   Box,
   InputAdornment,
@@ -11,7 +11,7 @@ import {
 } from "@material-ui/core";
 import SearchIcon from "@mui/icons-material/Search";
 import ListStorage from "./components/ListStorage";
-import { useForm } from "react-hook-form";
+import {useForm} from "react-hook-form";
 import CustomInput from "../../components/CustomInput";
 import ProductButton from "../Order/CreateOrder/components/ProductButton";
 import {
@@ -23,15 +23,15 @@ import {
   assignListStaffToStorage,
   getListStaff,
 } from "../../apis/Apis";
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 import * as action from "../../redux/action/action";
-import { storageFirebase } from "../../firebase/firebase";
+import {storageFirebase} from "../../firebase/firebase";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import ListStaff from "./components/ListStaff";
-import { STYLE_MODAL } from "../../constant/style";
+import {STYLE_MODAL} from "../../constant/style";
 import AssignStaffModal from "./components/AssignStaffModal";
-import { getBase64 } from "../../utils/convertImage";
+import {getBase64} from "../../utils/convertImage";
 let inputFile;
 const styleModal = {
   ...STYLE_MODAL,
@@ -52,7 +52,7 @@ const handleOnclickImage = () => {
   inputFile.current.click();
 };
 
-const styleInput = { marginRight: "2.5%", marginLeft: "2.5%" };
+const styleInput = {marginRight: "2.5%", marginLeft: "2.5%"};
 
 const buildInputFileImage = (storage) => {
   return (
@@ -81,7 +81,7 @@ const buildInputFileImage = (storage) => {
         />
       ) : (
         <img
-          style={{ height: "400px", width: "100%" }}
+          style={{height: "400px", width: "100%"}}
           src={storage?.imageUrl}
           alt="avatar"
         />
@@ -112,7 +112,7 @@ function Storages(props) {
     handleSubmit,
     reset,
     control,
-    formState: { errors },
+    formState: {errors},
   } = useForm();
   const [error, setError] = React.useState({});
   const [listStorages, setListStorages] = React.useState([]);
@@ -120,7 +120,7 @@ function Storages(props) {
   const [listStaffUnAssigned, setListStaffUnAssigned] = React.useState([]);
   const [isEdit, setEdit] = React.useState(false);
   const [storage, setStorage] = React.useState({
-    images: [{ id: null, url: null }],
+    images: [{id: null, url: null}],
   });
   const [page, setPage] = React.useState(1);
 
@@ -130,7 +130,7 @@ function Storages(props) {
 
   const handleCloseAssignStaff = () => {
     setOpenAssignStaff(false);
-    setStorage({ avatarFile: undefined, images: [{ id: null, url: null }] });
+    setStorage({avatarFile: undefined, images: [{id: null, url: null}]});
     reset();
   };
 
@@ -251,7 +251,7 @@ function Storages(props) {
       } else {
         setStorage({
           avatarFile: undefined,
-          images: [{ id: null, url: null }],
+          images: [{id: null, url: null}],
         });
         reset();
       }
@@ -317,7 +317,7 @@ function Storages(props) {
       if (!storage.avatarFile) {
         setError({
           ...error,
-          avatarFile: { message: "Vui lòng thêm hình ảnh" },
+          avatarFile: {message: "Vui lòng thêm hình ảnh"},
         });
         hideLoading();
 
@@ -400,6 +400,7 @@ function Storages(props) {
       }
     } catch (error) {
       console.log(error);
+      hideLoading();
     }
   };
 
@@ -454,7 +455,7 @@ function Storages(props) {
   };
   const handleClose = () => {
     setOpen(false);
-    setStorage({ avatarFile: undefined, images: [{ id: null, url: null }] });
+    setStorage({avatarFile: undefined, images: [{id: null, url: null}]});
     reset();
   };
 
@@ -483,7 +484,7 @@ function Storages(props) {
         avatarFile: event.target.files[0],
       });
     } else {
-      setError({ avatarFile: { message: "Vui lòng chọn tập tin hình ảnh" } });
+      setError({avatarFile: {message: "Vui lòng chọn tập tin hình ảnh"}});
     }
   };
 
@@ -536,35 +537,35 @@ function Storages(props) {
           name="fileImage"
           ref={inputFile}
           onChange={(e) => onChangeInputFile(e, setStorage, storage)}
-          style={{ display: "none" }}
+          style={{display: "none"}}
         />
         <Typography
           color="black"
           variant="h2"
-          style={{ marginTop: "1%", marginLeft: "3%" }}
+          style={{marginTop: "1%", marginLeft: "3%"}}
         >
           Thông tin kho
         </Typography>
-        <Box sx={{ ...styleBoxInput, marginTop: "16px" }}>
+        <Box sx={{...styleBoxInput, marginTop: "16px"}}>
           <CustomInput
             control={control}
             rules={{
               required: "*Vui lòng nhập",
             }}
-            styles={{ width: "400px" }}
+            styles={{width: "400px"}}
             name="name"
             label="Tên"
             userInfo={storage.name}
             inlineStyle={styleInput}
           />
         </Box>
-        <Box sx={{ ...styleBoxInput }}>
+        <Box sx={{...styleBoxInput}}>
           <CustomInput
             control={control}
             rules={{
               required: "*Vui lòng nhập",
             }}
-            styles={{ width: "400px" }}
+            styles={{width: "400px"}}
             name="address"
             label="Địa chỉ"
             userInfo={storage.address}
@@ -574,11 +575,11 @@ function Storages(props) {
         <Typography
           color="black"
           variant="h2"
-          style={{ marginTop: "8%", marginLeft: "3%", marginBottom: "2%" }}
+          style={{marginTop: "8%", marginLeft: "3%", marginBottom: "2%"}}
         >
           Thông tin kích thước kho
         </Typography>
-        <Box sx={{ ...styleBoxInput, marginTop: "5%" }}>
+        <Box sx={{...styleBoxInput, marginTop: "5%"}}>
           <CustomInput
             control={control}
             rules={{
@@ -588,7 +589,7 @@ function Storages(props) {
                 message: "*Vui lòng nhập đúng chiều rộng",
               },
             }}
-            styles={{ width: "120px" }}
+            styles={{width: "120px"}}
             name="width"
             label="Chiều rộng (m)"
             userInfo={storage.width}
@@ -603,7 +604,7 @@ function Storages(props) {
                 message: "*Vui lòng nhập đúng chiều dài",
               },
             }}
-            styles={{ width: "120px" }}
+            styles={{width: "120px"}}
             name="length"
             label="Chiều dài (m)"
             userInfo={storage.length}
@@ -618,7 +619,7 @@ function Storages(props) {
                 message: "*Vui lòng nhập chiều cao",
               },
             }}
-            styles={{ width: "120px" }}
+            styles={{width: "120px"}}
             name="height"
             label="Chiều cao (m)"
             userInfo={storage.height}
@@ -690,7 +691,7 @@ function Storages(props) {
             flexDirection: "column",
           }}
         >
-          <Box sx={{ height: "90%" }}>
+          <Box sx={{height: "90%"}}>
             <Box
               sx={{
                 width: "100%",
@@ -758,7 +759,7 @@ function Storages(props) {
           }}
           onChange={(e) => onHandleSearch(e)}
           InputProps={{
-            style: { height: "45px", backgroundColor: "white" },
+            style: {height: "45px", backgroundColor: "white"},
             startAdornment: (
               <InputAdornment>
                 <IconButton>

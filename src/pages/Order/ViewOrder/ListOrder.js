@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { useTheme } from "@mui/material/styles";
+import {useTheme} from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -15,25 +15,20 @@ import FirstPageIcon from "@mui/icons-material/FirstPage";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
-import {
-  Checkbox,
-  FormControlLabel,
-  Modal,
-  Typography,
-} from "@material-ui/core";
-import { Button, TableHead } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
-import { useForm } from "react-hook-form";
-import { connect } from "react-redux";
+import {Checkbox, FormControlLabel, Modal, Typography} from "@material-ui/core";
+import {Button, TableHead} from "@material-ui/core";
+import {makeStyles} from "@material-ui/styles";
+import {useForm} from "react-hook-form";
+import {connect} from "react-redux";
 import * as action from "../../../redux/action/action";
-import { getOrderById, cancelOrder, assignOrder } from "../../../apis/Apis";
+import {getOrderById, cancelOrder, assignOrder} from "../../../apis/Apis";
 import CustomAreaInput from "../../../components/CustomAreaInput";
-import { ORDER_STATUS, ORDER_TYPE } from "../../../constant/constant";
+import {ORDER_STATUS, ORDER_TYPE} from "../../../constant/constant";
 import AssignOrderModal from "./AssignOrderModal";
 import ConfirmModal from "../../../components/ConfirmModal";
 function TablePaginationActions(props) {
   const theme = useTheme();
-  const { count, page, rowsPerPage, onPageChange } = props;
+  const {count, page, rowsPerPage, onPageChange} = props;
 
   const handleFirstPageButtonClick = (event) => {
     onPageChange(event, 0);
@@ -52,7 +47,7 @@ function TablePaginationActions(props) {
   };
 
   return (
-    <Box sx={{ flexShrink: 0, ml: 2.5 }}>
+    <Box sx={{flexShrink: 0, ml: 2.5}}>
       <IconButton
         onClick={handleFirstPageButtonClick}
         disabled={page === 0}
@@ -103,7 +98,7 @@ TablePaginationActions.propTypes = {
 const listHeaderName = [
   "Mã",
   "Tên khách hàng",
-  "Số điện thoại khách hàng",
+  "SĐT khách hàng",
   "Địa chỉ giao hàng",
   "Loại đơn",
   "Đã thanh toán",
@@ -113,7 +108,7 @@ const listHeaderName = [
 
 const mapListTableHeader = (listHeader, userState) => (
   <TableHead>
-    <TableRow sx={{ color: "black" }}>
+    <TableRow sx={{color: "black"}}>
       {listHeader.map((e) => {
         if (userState.roleName === "Admin") {
           if (e === "Action") {
@@ -171,7 +166,7 @@ function ListOrder({
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   const [open, setOpen] = React.useState(false);
   const [currentId, setCurrentId] = React.useState(-1);
-  const { handleSubmit, control } = useForm();
+  const {handleSubmit, control} = useForm();
   const [openAssign, setOpenAssign] = React.useState(false);
   const handleConfirmOpen = () => {
     setOpen(true);
@@ -256,7 +251,7 @@ function ListOrder({
             flexDirection: "column",
           }}
         >
-          <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
+          <form onSubmit={handleSubmit(onSubmit)} style={{width: "100%"}}>
             <Typography
               color="black"
               variant="h2"
@@ -273,7 +268,7 @@ function ListOrder({
               rules={{
                 required: "*Vui lòng nhập",
               }}
-              styles={{ width: "550px" }}
+              styles={{width: "550px"}}
               name="reason"
               label="Lý do"
               userInfo={""}
@@ -340,7 +335,7 @@ function ListOrder({
 
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+      <Table sx={{minWidth: 500}} aria-label="custom pagination table">
         {buildModalCancelOrder()}
         {mapListTableHeader(listHeaderName, userState)}
         {userState.roleName === "Manager" ? (
@@ -373,63 +368,21 @@ function ListOrder({
                 <TableCell
                   component="th"
                   scope="row"
-                  style={{ color: "black" }}
-                  onClick={(e) => {
-                    handleOpen(true);
-
-                    handleClickRow(row);
-                  }}
+                  style={{color: "black", width: "10%"}}
                 >
                   {row.name}
                 </TableCell>
-                <TableCell
-                  style={{ color: "black" }}
-                  onClick={(e) => {
-                    handleOpen(true);
-
-                    handleClickRow(row);
-                  }}
-                >
+                <TableCell style={{color: "black"}}>
                   {row.customerName}
                 </TableCell>
-                <TableCell
-                  style={{ color: "black" }}
-                  onClick={(e) => {
-                    handleOpen(true);
-
-                    handleClickRow(row);
-                  }}
-                >
+                <TableCell style={{color: "black"}}>
                   {row.customerPhone}
                 </TableCell>
-                <TableCell
-                  style={{ color: "black" }}
-                  onClick={(e) => {
-                    handleOpen(true);
-
-                    handleClickRow(row);
-                  }}
-                >
+                <TableCell style={{color: "black"}}>
                   {row.deliveryAddress}
                 </TableCell>
-                <TableCell
-                  style={{ color: "black" }}
-                  onClick={(e) => {
-                    handleOpen(true);
-
-                    handleClickRow(row);
-                  }}
-                >
-                  {typeOrder}
-                </TableCell>
-                <TableCell
-                  style={{ color: "black" }}
-                  onClick={(e) => {
-                    handleOpen(true);
-
-                    handleClickRow(row);
-                  }}
-                >
+                <TableCell style={{color: "black"}}>{typeOrder}</TableCell>
+                <TableCell style={{color: "black", width: "10%"}}>
                   <FormControlLabel
                     value="isPaid"
                     control={<Checkbox checked={row.isPaid} disabled={true} />}
@@ -437,18 +390,28 @@ function ListOrder({
                     labelPlacement="Is Paid"
                   />
                 </TableCell>
-                <TableCell
-                  style={{ color: color, fontWeight: "bold" }}
-                  onClick={(e) => {
-                    handleOpen(true);
-
-                    handleClickRow(row);
-                  }}
-                >
+                <TableCell style={{color: color, fontWeight: "bold"}}>
                   {status}
                 </TableCell>
                 {userState.roleName !== "Admin" ? (
-                  <TableCell style={{ color: "black" }}>
+                  <TableCell style={{color: "black"}}>
+                    <Button
+                      onClick={async () => {
+                        handleClickRow(row);
+                        handleOpen(true);
+                      }}
+                      style={{
+                        height: "45px",
+                        paddingLeft: "16px",
+                        paddingRight: "16px",
+                        marginBottom: "4%",
+                      }}
+                      color="success"
+                      variant="contained"
+                      type="submit"
+                    >
+                      Xem thêm
+                    </Button>
                     {row.status === 0 ? null : (
                       <Box
                         sx={{

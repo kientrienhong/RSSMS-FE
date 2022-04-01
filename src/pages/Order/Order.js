@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import {
   Box,
   Button,
@@ -8,12 +8,12 @@ import {
   Card,
 } from "@material-ui/core";
 import SearchIcon from "@mui/icons-material/Search";
-import { useNavigate } from "react-router";
+import {useNavigate} from "react-router";
 import ListOrder from "./ViewOrder/ListOrder";
-import { useForm } from "react-hook-form";
-import { connect } from "react-redux";
+import {useForm} from "react-hook-form";
+import {connect} from "react-redux";
 import * as action from "../../redux/action/action";
-import { getOrder } from "../../apis/Apis";
+import {getOrder} from "../../apis/Apis";
 
 import ProductButton from "./CreateOrder/components/ProductButton";
 import OrderModal from "../../components/OrderModal";
@@ -23,9 +23,10 @@ function Order({
   hideLoading,
   storedOrder,
   userState,
+  showSnackbar,
 }) {
   const navigate = useNavigate();
-  const { handleSubmit, reset, control } = useForm();
+  const {handleSubmit, reset, control} = useForm();
 
   const [currentOrder, setCurrentOrder] = useState();
   const [open, setOpen] = useState(false);
@@ -60,6 +61,13 @@ function Order({
       setTotalOrder(list.data.metadata.total);
     } catch (error) {
       console.log(error.response);
+      if (error?.response?.data?.error) {
+        if (
+          error?.response?.data?.error?.message === "Unrecognized Guid format."
+        ) {
+          navigate("/app/not_storage");
+        }
+      }
     } finally {
       hideLoading();
     }
@@ -150,7 +158,7 @@ function Order({
           }}
           onChange={handleChangeSearchId}
           InputProps={{
-            style: { height: "45px", backgroundColor: "white" },
+            style: {height: "45px", backgroundColor: "white"},
             startAdornment: (
               <InputAdornment>
                 <IconButton>
@@ -173,7 +181,7 @@ function Order({
       <Card
         variant="outlined"
         color="#FFF"
-        sx={{ marginLeft: "2%", marginRight: "2%" }}
+        sx={{marginLeft: "2%", marginRight: "2%"}}
       >
         <ListOrder
           listOrder={listOrder}

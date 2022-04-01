@@ -63,7 +63,7 @@ function Floor({
             display: "flex",
             alignItems: "center",
             flexDirection: "column",
-            justifyContent: "space-around",
+            justifyContent: "center",
           }}
         >
           <Button
@@ -72,6 +72,7 @@ function Floor({
               paddingLeft: "16px",
               paddingRight: "16px",
               width: "100%",
+              marginBottom: "8%",
             }}
             color="primary"
             variant="contained"
@@ -114,19 +115,6 @@ function Floor({
             }}
           >
             Xem thêm
-          </Button>
-          <Button
-            style={{
-              height: "32px",
-              paddingLeft: "16px",
-              paddingRight: "16px",
-              width: "100%",
-            }}
-            color="error"
-            variant="contained"
-            onClick={() => {}}
-          >
-            Xóa
           </Button>
         </Box>
       </Box>

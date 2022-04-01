@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import {
   Box,
   IconButton,
@@ -11,16 +11,16 @@ import {
 } from "@material-ui/core";
 import SearchIcon from "@mui/icons-material/Search";
 import ListRequest from "./component/ListRequest";
-import { useForm } from "react-hook-form";
+import {useForm} from "react-hook-form";
 import * as action from "../../redux/action/action";
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 import {
   getCustomerRequest,
   getRequestDetail,
   assignOrder,
   updateRequestWithNote,
 } from "../../apis/Apis";
-import { useNavigate } from "react-router";
+import {useNavigate} from "react-router";
 
 import ModalCancelDetail from "./component/ModalCancelDetail";
 import ModalReturnItem from "./component/ModalReturnItem";
@@ -49,7 +49,7 @@ function CustomerRequest({
   const [openOrderModal, setOpenOrderModal] = useState(false);
   const [openUpdateRequest, setOpenUpdateRequest] = useState(false);
   const [updateStatus, setUpdateStatus] = useState(-1);
-  const { handleSubmit, control, reset } = useForm();
+  const {handleSubmit, control, reset} = useForm();
   const [openAssign, setOpenAssign] = useState(false);
   const navigate = useNavigate();
 
@@ -271,7 +271,7 @@ function CustomerRequest({
           }}
           onChange={(e) => {}}
           InputProps={{
-            style: { height: "45px", backgroundColor: "white" },
+            style: {height: "45px", backgroundColor: "white"},
             startAdornment: (
               <InputAdornment>
                 <IconButton>
@@ -281,7 +281,7 @@ function CustomerRequest({
             ),
           }}
         />
-        <Box sx={{ width: "2%" }} />
+        <Box sx={{width: "2%"}} />
         <Button
           style={{
             height: "45px",
@@ -295,7 +295,7 @@ function CustomerRequest({
             navigate("/orders/makingOrder");
           }}
         >
-          Tạo yêu cầu tạo đơn
+          Tạo yêu cầu đặt đơn
         </Button>
       </Box>
       <UpdateRequestModal
@@ -335,7 +335,7 @@ function CustomerRequest({
       <Card
         variant="outlined"
         color="#FFF"
-        sx={{ marginLeft: "2%", marginRight: "2%" }}
+        sx={{marginLeft: "2%", marginRight: "2%"}}
       >
         <ListRequest
           setRequest={setRequest}
