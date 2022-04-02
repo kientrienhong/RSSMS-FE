@@ -138,7 +138,7 @@ function FormHandy({
         container
         spacing={2}
         sx={{
-          width: "70%",
+          width: "90%",
           marginTop: "1%",
         }}
       >
@@ -210,7 +210,7 @@ function FormHandy({
             rules={{
               required: "*Vui lòng nhập",
               pattern: {
-                value: /^\+?(0|[1-9]\d*)$/,
+                value: /^[1-9]+[0-9]*$/,
                 message: "*Vui lòng nhập đúng số tầng",
               },
             }}

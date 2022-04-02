@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, {useEffect, useRef} from "react";
 import {
   Box,
   Card,
@@ -14,7 +14,7 @@ import {
   FormControlLabel,
   Radio,
 } from "@material-ui/core";
-import { MALE, FEMALE, OTHER_GENDER } from "../../constant/constant";
+import {MALE, FEMALE, OTHER_GENDER} from "../../constant/constant";
 
 import SearchIcon from "@mui/icons-material/Search";
 import ListUsers from "./components/ListUsers";
@@ -25,13 +25,13 @@ import {
   updateUser,
   getListRole,
 } from "../../apis/Apis";
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 import * as action from "../../redux/action/action";
-import { Controller, useForm } from "react-hook-form";
+import {Controller, useForm} from "react-hook-form";
 import CustomInput from "../../components/CustomInput";
-import { STYLE_MODAL } from "../../constant/style";
+import {STYLE_MODAL} from "../../constant/style";
 import CustomSelect from "../../components/CustomSelect";
-import { getBase64 } from "../../utils/convertImage";
+import {getBase64} from "../../utils/convertImage";
 let inputFile;
 const styleModal = {
   ...STYLE_MODAL,
@@ -73,11 +73,11 @@ const onChangeInputFile = (event, setUser, user, setError) => {
     });
     setError();
   } else {
-    setError({ message: "Vui lòng chọn tập tin hình ảnh!" });
+    setError({message: "Vui lòng chọn tập tin hình ảnh!"});
   }
 };
 
-const styleInput = { marginRight: "2.5%", marginLeft: "2.5%" };
+const styleInput = {marginRight: "2.5%", marginLeft: "2.5%"};
 
 const buildModal = (
   user,
@@ -94,7 +94,8 @@ const buildModal = (
   gender,
   handleChangeGender,
   setError,
-  mapListRoleUser
+  mapListRoleUser,
+  refSelect
 ) => {
   return (
     <Modal
@@ -119,7 +120,7 @@ const buildModal = (
             name="fileImage"
             ref={inputFile}
             onChange={(e) => onChangeInputFile(e, setUser, user, setError)}
-            style={{ display: "none" }}
+            style={{display: "none"}}
           />
           <Box
             sx={{
@@ -139,11 +140,11 @@ const buildModal = (
           <Typography
             color="black"
             variant="h2"
-            style={{ marginTop: "2%", textAlign: "left", marginLeft: "2.5%" }}
+            style={{marginTop: "2%", textAlign: "left", marginLeft: "2.5%"}}
           >
             Thông tin tài khoản
           </Typography>
-          <Box sx={{ ...styleBoxInput, marginTop: "2%" }}>
+          <Box sx={{...styleBoxInput, marginTop: "2%"}}>
             <CustomInput
               control={control}
               rules={{
@@ -154,7 +155,7 @@ const buildModal = (
                   message: "*Vui lòng mail đúng",
                 },
               }}
-              styles={{ width: "240px" }}
+              styles={{width: "240px"}}
               name="email"
               label="Email"
               disabled={isEdit}
@@ -163,8 +164,8 @@ const buildModal = (
             />
             <CustomInput
               control={control}
-              rules={{ required: "*Vui lòng nhập" }}
-              styles={{ width: "240px" }}
+              rules={{required: "*Vui lòng nhập"}}
+              styles={{width: "240px"}}
               name="name"
               label="Họ và tên"
               userInfo={user.name}
@@ -179,18 +180,18 @@ const buildModal = (
                   message: "*Vui lòng nhập đúng số điện thoại",
                 },
               }}
-              styles={{ width: "240px" }}
+              styles={{width: "240px"}}
               name="phone"
               label="Số điện thoại"
               userInfo={user.phone}
               inlineStyle={styleInput}
             />
           </Box>
-          <Box sx={{ ...styleBoxInput, alignItems: "center" }}>
+          <Box sx={{...styleBoxInput, alignItems: "center"}}>
             <CustomInput
               control={control}
-              rules={{ required: "*Vui lòng nhập" }}
-              styles={{ width: "370px" }}
+              rules={{required: "*Vui lòng nhập"}}
+              styles={{width: "370px"}}
               name="address"
               label="Địa chỉ"
               userInfo={user.address}
@@ -276,7 +277,7 @@ const buildModal = (
                   rules={{
                     required: "*Vui lòng nhập",
                   }}
-                  styles={{ width: "240px" }}
+                  styles={{width: "240px"}}
                   name="birthdate"
                   type="date"
                   userInfo={
@@ -308,10 +309,7 @@ const buildModal = (
                 <Controller
                   name="password"
                   control={control}
-                  render={({
-                    field: { onChange, value },
-                    fieldState: { error },
-                  }) => {
+                  render={({field: {onChange, value}, fieldState: {error}}) => {
                     return (
                       <TextField
                         label="Mật khẩu"
@@ -319,7 +317,7 @@ const buildModal = (
                         inputRef={password}
                         value={value}
                         style={styleInput}
-                        inputProps={{ width: "280px" }}
+                        inputProps={{width: "280px"}}
                         onChange={onChange}
                         userInfo={""}
                         error={!!error}
@@ -353,7 +351,7 @@ const buildModal = (
                       );
                     },
                   }}
-                  styles={{ width: "280px" }}
+                  styles={{width: "280px"}}
                   name="confirmPassword"
                   label="Xác nhận mật khẩu"
                   type="password"
@@ -383,7 +381,7 @@ const buildModal = (
                   rules={{
                     required: "*Vui lòng nhập",
                   }}
-                  styles={{ width: "240px" }}
+                  styles={{width: "240px"}}
                   name="birthdate"
                   type="date"
                   userInfo={
@@ -407,7 +405,7 @@ const buildModal = (
             }}
           >
             {isEdit === false ? (
-              <Box sx={styleBoxComboBox}>
+              <Box sx={styleBoxComboBox} ref={refSelect}>
                 <Typography
                   color="black"
                   variant="h2"
@@ -483,6 +481,8 @@ const buildModal = (
 };
 
 function Users(props) {
+  let refSelect = useRef(null);
+
   const [page, setPage] = React.useState(1);
   const [searchName, setSearchName] = React.useState("");
   const [totalUser, setTotalUser] = React.useState(0);
@@ -494,12 +494,12 @@ function Users(props) {
     reset,
     control,
     watch,
-    formState: { errors },
+    formState: {errors},
   } = useForm();
   let password = useRef({});
   password.current = watch("password", "");
 
-  const { showLoading, hideLoading, showSnackbar, userState } = props;
+  const {showLoading, hideLoading, showSnackbar, userState} = props;
 
   const handleChangeGender = (event) => {
     setGender(parseInt(event.target.value));
@@ -537,7 +537,7 @@ function Users(props) {
     let dob = new Date(data.birthdate);
     let currentYear = new Date();
     if (dob > currentYear) {
-      setError({ message: "Vui lòng nhập ngày sau ngày hôm nay" });
+      setError({message: "Vui lòng nhập ngày sau ngày hôm nay"});
       return;
     } else if (currentYear.getFullYear() - dob.getFullYear() < 18) {
       setError({
@@ -616,13 +616,14 @@ function Users(props) {
   const onHandleCreateUser = async (data) => {
     let dob = new Date(data.birthdate);
     let currentYear = new Date();
-    if (dob > currentYear) {
-      setError({ message: "Vui lòng nhập ngày sau ngày hôm nay" });
-      return;
-    } else if (currentYear.getFullYear() - dob.getFullYear() < 18) {
-      setError({
-        message: "\nVui lòng nhập ngày sinh lớn hơn 18 tuổi",
-      });
+    if (currentYear.getFullYear() - dob.getFullYear() < 18) {
+      if (
+        refSelect?.current?.children[1]?.children[0]?.children[0]
+          ?.textContent !== "Customer"
+      )
+        setError({
+          message: "\nVui lòng nhập ngày sinh lớn hơn 18 tuổi",
+        });
       return;
     }
 
@@ -730,7 +731,7 @@ function Users(props) {
 
   const [listUser, setListUser] = React.useState([]);
   const [isEdit, setEdit] = React.useState(false);
-  const [user, setUser] = React.useState({ images: [{ id: null, url: null }] });
+  const [user, setUser] = React.useState({images: [{id: null, url: null}]});
   const [gender, setGender] = React.useState(user.gender ?? MALE);
 
   const mapListRoleUser = () => {
@@ -745,7 +746,7 @@ function Users(props) {
   };
   const handleClose = () => {
     setOpen(false);
-    setUser({ avatarFile: undefined, images: [{ id: null, url: null }] });
+    setUser({avatarFile: undefined, images: [{id: null, url: null}]});
     setError({});
     reset();
   };
@@ -772,7 +773,8 @@ function Users(props) {
         gender,
         handleChangeGender,
         setError,
-        mapListRoleUser
+        mapListRoleUser,
+        refSelect
       )}
       <Box
         sx={{
@@ -790,7 +792,7 @@ function Users(props) {
           }}
           onChange={(e) => onHandleSearch(e)}
           InputProps={{
-            style: { height: "45px", backgroundColor: "white" },
+            style: {height: "45px", backgroundColor: "white"},
             startAdornment: (
               <InputAdornment>
                 <IconButton>
@@ -800,13 +802,13 @@ function Users(props) {
             ),
           }}
         />
-        <Box sx={{ width: "2%" }} />
+        <Box sx={{width: "2%"}} />
         <Button
-          style={{ height: "45px", paddingLeft: "16px", paddingRight: "16px" }}
+          style={{height: "45px", paddingLeft: "16px", paddingRight: "16px"}}
           color="primary"
           variant="contained"
           onClick={(e) => {
-            setUser({ images: [{ id: null, url: null }] });
+            setUser({images: [{id: null, url: null}]});
             handleOpen(false);
           }}
         >
@@ -816,7 +818,7 @@ function Users(props) {
       <Card
         variant="outlined"
         color="#FFF"
-        sx={{ marginLeft: "2%", marginRight: "2%" }}
+        sx={{marginLeft: "2%", marginRight: "2%"}}
       >
         {listUser.length > 0 ? (
           <ListUsers

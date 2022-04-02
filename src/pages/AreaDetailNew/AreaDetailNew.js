@@ -158,8 +158,10 @@ function AreaDetailNew({
       let storageTemp = await getStorageDetail(storageId, userState.idToken);
 
       setStorage(storageTemp.data);
+      setArea({type: 1, id: "1"});
       let area = await getDetailArea(areaId, userState.idToken);
-      setArea(area.data);
+      // setArea(area.data);
+
       let response = await getListSpace(
         searchName,
         page,
