@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import {
   Box,
   Button,
@@ -10,9 +10,9 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import ProductButton from "../Order/CreateOrder/components/ProductButton";
 
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 import * as action from "../../redux/action/action";
-import { useParams } from "react-router-dom";
+import {useParams} from "react-router-dom";
 import {
   getStorageDetail,
   getListSpace,
@@ -20,12 +20,8 @@ import {
   deleteSpace,
 } from "../../apis/Apis";
 import ModalDetailFloor from "./components/ModalDetailFloor";
-import {
-  AREA_TYPE,
-  BOX_TYPE,
-  SELF_STORAGE_TYPE,
-} from "../../constant/constant";
-import { TYPE_AREA, TYPE_SHELF } from "../../constant/constant";
+import {AREA_TYPE, BOX_TYPE, SELF_STORAGE_TYPE} from "../../constant/constant";
+import {TYPE_AREA, TYPE_SHELF} from "../../constant/constant";
 import AreaUsage from "./components/AreaUsage";
 import Shelf from "./components/Shelf";
 import ListShelf from "./components/ListShelf";
@@ -42,7 +38,7 @@ function AreaDetailNew({
   userState,
   isLoadingShelf,
 }) {
-  const { storageId, areaId } = useParams();
+  const {storageId, areaId} = useParams();
   const [storage, setStorage] = useState({});
   const [area, setArea] = useState({});
   const [searchName, setSearchName] = useState("");
@@ -61,7 +57,7 @@ function AreaDetailNew({
   const [detailFloor, setDetailFloor] = useState({});
   const [currentOrderDetail, setCurrentOrderDetail] = useState({});
   const [openOrderDetail, setOpenOrderDetail] = useState(false);
-
+  const [isView, setIsView] = useState(false);
   const handleOpenOrderDetail = () => {
     setOpenOrderDetail(true);
   };
@@ -79,7 +75,7 @@ function AreaDetailNew({
     setIsOpenConfirm(false);
   };
 
-  const handleOpenSelfStorage = (space, isEdit) => {
+  const handleOpenSelfStorage = (space, isEdit, isView) => {
     if (isEdit) {
       setCurrentSpace({
         ...space,
@@ -88,9 +84,11 @@ function AreaDetailNew({
         floorLength: space.floors[0].length,
       });
       setIsEdit(true);
+      setIsView(isView);
     } else {
-      setCurrentSpace({ type: 0 });
+      setCurrentSpace({type: 0});
       setIsEdit(false);
+      setIsView(isView);
     }
 
     setIsOpenSelfStorage(true);
@@ -99,11 +97,14 @@ function AreaDetailNew({
   const handleCloseSelfStorage = (space, isEdit) => {
     setCurrentSpace({});
     setIsEdit(false);
+    setIsView(false);
     setIsOpenSelfStorage(false);
   };
 
-  const handleOpenSpace = (space, isEdit) => {
+  const handleOpenSpace = (space, isEdit, isView) => {
     setIsEdit(isEdit);
+    setIsView(isView);
+
     if (isEdit) {
       setCurrentSpace({
         ...space,
@@ -112,7 +113,7 @@ function AreaDetailNew({
         floorLength: space.floors[0].length,
       });
     } else {
-      setCurrentSpace({ type: 0 });
+      setCurrentSpace({type: 0});
     }
     setIsOpenSpace(true);
   };
@@ -121,6 +122,7 @@ function AreaDetailNew({
     setCurrentSpace({});
     setIsEdit(false);
     setIsOpenSpace(false);
+    setIsView(false);
   };
 
   const handleOpenDetailFloor = (space) => {
@@ -165,9 +167,27 @@ function AreaDetailNew({
         areaId,
         userState.idToken
       );
-      setListShelves(response.data.data);
+      // setListShelves([
+      //   {
+      //     id: "1",
+      //     name: "Kệ 1",
+      //     type: 0,
+      //     floors: [
+      //       {
+      //         id: "11",
+      //         name: "Tầng trệt",
+      //         usage: 8,
+      //         width: 2,
+      //         height: 2,
+      //         length: 2,
+      //       },
+      //     ],
+      //   },
+      // ]);
 
       setTotalPage(response.data.metadata.totalPage);
+      setTotalPage(2);
+
       hideLoading();
     } catch (e) {
       console.log(e);
@@ -200,7 +220,7 @@ function AreaDetailNew({
         open={isOpenConfirm}
         handleClose={handleCloseConfirm}
         onHandleYes={handleDeleteSpace}
-        id={currentSpace.id}
+        id={currentSpace?.id}
         msg={"Xóa không gian thành công!"}
       />{" "}
       <ModalDetailFloor
@@ -214,7 +234,8 @@ function AreaDetailNew({
         currentSpace={currentSpace}
         setCurrentSpace={setCurrentSpace}
         isEdit={isEdit}
-        areaId={area.id}
+        isView={isView}
+        areaId={area?.id}
         searchName={searchName}
         getData={getData}
         open={isOpenSelfStorage}
@@ -227,7 +248,8 @@ function AreaDetailNew({
         open={isOpenSpace}
         handleClose={handleCloseSpace}
         isEdit={isEdit}
-        areaId={area.id}
+        areaId={area?.id}
+        isView={isView}
         searchName={searchName}
         isHandy={isHandy}
         setIsHandy={setIsHandy}
@@ -247,7 +269,7 @@ function AreaDetailNew({
           }}
           // onChange={(e) => onHandleSearch(e)}
           InputProps={{
-            style: { height: "45px", backgroundColor: "white" },
+            style: {height: "45px", backgroundColor: "white"},
             startAdornment: (
               <InputAdornment>
                 <IconButton>
@@ -278,7 +300,7 @@ function AreaDetailNew({
             if (area.type === 1) {
               handleOpenSpace({}, false);
             } else {
-              handleOpenSelfStorage({ type: 0 }, false);
+              handleOpenSelfStorage({type: 0}, false);
             }
           }}
         >

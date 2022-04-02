@@ -354,7 +354,7 @@ function ListOrder({
             showLoading={showLoading}
             hideLoading={hideLoading}
             showSnackbar={showSnackbar}
-            msg="Assign order success"
+            msg="Xử lý đơn thành công"
           />
         )}
 
@@ -386,7 +386,7 @@ function ListOrder({
                   <FormControlLabel
                     value="isPaid"
                     control={<Checkbox checked={row.isPaid} disabled={true} />}
-                    label="Is Paid"
+                    label="Đã thanh toán"
                     labelPlacement="Is Paid"
                   />
                 </TableCell>

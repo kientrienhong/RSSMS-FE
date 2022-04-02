@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {Box, Button, TextField, Typography} from "@material-ui/core";
 import {connect} from "react-redux";
 import {useNavigate} from "react-router-dom";
@@ -41,6 +41,15 @@ function LogIn(props) {
       props.hideLoading();
     }
   };
+
+  useEffect(() => {
+    const loggedInUser = localStorage.getItem("user");
+    if (loggedInUser) {
+      navigate("/app/account", {replace: true});
+      const foundUser = JSON.parse(loggedInUser);
+      props.setUpUser(foundUser);
+    }
+  }, []);
 
   const handleOnChange = (e, value) => {
     let inputTemp = {...input};

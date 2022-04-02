@@ -11,9 +11,9 @@ import {
 import Shelf from "./Shelf";
 import FormHandy from "./FormHandy";
 import FormUnwieldy from "./FormUnwieldy";
-import { TYPE_SHELF } from "../../../constant/constant";
+import {TYPE_SHELF} from "../../../constant/constant";
 
-import { STYLE_MODAL } from "../../../constant/style";
+import {STYLE_MODAL} from "../../../constant/style";
 const styleModal = {
   ...STYLE_MODAL,
   width: "50%",
@@ -31,6 +31,7 @@ export default function ModalSpace({
   searchName,
   isHandy,
   setIsHandy,
+  isView,
 }) {
   const handleChangeRadioButton = (event) => {
     if (event.target.value === "0") {
@@ -85,6 +86,7 @@ export default function ModalSpace({
             areaId={areaId}
             searchName={searchName}
             handleClose={handleClose}
+            isView={isView}
           />
         ) : (
           <FormUnwieldy
@@ -96,6 +98,7 @@ export default function ModalSpace({
             areaId={areaId}
             searchName={searchName}
             handleClose={handleClose}
+            isView={isView}
           />
         )}
       </Box>

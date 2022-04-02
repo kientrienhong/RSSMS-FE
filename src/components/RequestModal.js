@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import {
   Box,
   Modal,
@@ -13,16 +13,16 @@ import {
 } from "@material-ui/core";
 import TagSelection from "../pages/Order/CreateOrder/components/TagSelection";
 import CustomInput from "./CustomInput";
-import { MenuItem, Select, FormControl } from "@material-ui/core";
+import {MenuItem, Select, FormControl} from "@material-ui/core";
 import OrderDetail from "./OrderDetail";
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 import * as action from "../redux/action/action";
 import ListInfoHistoryExtension from "./ListInfoHistoryExtension";
-import { updateOrder } from "../apis/Apis";
-import { useNavigate } from "react-router";
-import { PRODUCT_TYPE, LIST_STATUS, LIST_TIME } from "../constant/constant";
+import {updateOrder} from "../apis/Apis";
+import {useNavigate} from "react-router";
+import {PRODUCT_TYPE, LIST_STATUS, LIST_TIME} from "../constant/constant";
 import ListPositionStored from "./ListPositionStored";
-import { Controller } from "react-hook-form";
+import {Controller} from "react-hook-form";
 import CustomSelect from "./CustomSelect";
 
 const styleModal = {
@@ -134,7 +134,7 @@ function RequestModal({
         replace: true,
       });
     } else {
-      navigate("/app/storages", { replace: true });
+      navigate("/app/storages", {replace: true});
     }
     handleClose();
   };
@@ -224,7 +224,7 @@ function RequestModal({
       showLoading();
       await updateOrder(
         currentOrder.id,
-        { ...currentOrder, status: 7 },
+        {...currentOrder, status: 7},
         userState.idToken
       );
       await getData(searchId, page, 8, userState.idToken);
@@ -247,54 +247,6 @@ function RequestModal({
     let currentDate = new Date(dateReturn);
     let newDate = new Date(currentDate.setMonth(currentDate.getMonth() + 1));
     setDateReturn(newDate.toLocaleDateString("en-US"));
-  };
-
-  const handleChaneReturnDate = (e) => {
-    setDateReturn(e.target.value);
-    if (dateDelivery !== undefined || dateReturn !== undefined) {
-      let parseDateReturn = new Date(e.target.value);
-      let parseDateDelivery = new Date(dateDelivery);
-      let diffTime = parseDateReturn.getTime() - parseDateDelivery.getTime();
-      let diffDays = diffTime / (1000 * 3600 * 24);
-      setDuration(diffDays);
-    }
-  };
-
-  const buildPosition = () => {
-    return currentOrder?.orderDetails?.map((e) => (
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          width: "100%",
-        }}
-      >
-        <Box
-          sx={{
-            width: "20%",
-          }}
-        >
-          <Typography color="black" variant="h4" style={{ margin: "4%" }}>
-            {e.sizeType}
-          </Typography>
-        </Box>
-        <Box
-          sx={{
-            width: "80%",
-          }}
-        >
-          <Typography
-            color="black"
-            variant="h4"
-            style={{ margin: "4%", textAlign: "right" }}
-          >
-            {e.areaName} / {e.shelfName}
-          </Typography>
-        </Box>
-      </Box>
-    ));
   };
 
   const mapListTime = (time, setTime, setIsCutomer) =>
@@ -324,7 +276,7 @@ function RequestModal({
         <Typography color="black" variant="h2">
           {title}
         </Typography>
-        <p style={{ fontSize: "18px" }}>{value}</p>
+        <p style={{fontSize: "18px"}}>{value}</p>
       </Box>
     );
   };
@@ -472,13 +424,6 @@ function RequestModal({
                 justifyContent: "space-between",
               }}
             >
-              <Typography
-                color="black"
-                variant="h2"
-                sx={{ marginBottom: "2%", marginTop: "4%" }}
-              >
-                Đã thanh toán
-              </Typography>
               <FormControlLabel
                 value="isPaid"
                 control={
@@ -487,21 +432,21 @@ function RequestModal({
                     onChange={handleChangeCheckBoxIsPaid}
                   />
                 }
-                label="Is paid"
+                label="Đã thanh toán"
                 labelPlacement="Is paid"
               />
             </Box>
             <Typography
               color="black"
               variant="h3"
-              sx={{ marginBottom: "2%", marginTop: "4%" }}
+              sx={{marginBottom: "2%", marginTop: "4%"}}
             >
               Địa chỉ lấy hàng:
             </Typography>
             <CustomInput
               control={control}
               rules={{}}
-              styles={{ width: "300px" }}
+              styles={{width: "300px"}}
               name="deliveryAddress"
               label="Địa chỉ lấy hàng"
               disabled={isView}
@@ -511,14 +456,14 @@ function RequestModal({
             <Typography
               color="black"
               variant="h3"
-              sx={{ marginBottom: "2%", marginTop: "4%" }}
+              sx={{marginBottom: "2%", marginTop: "4%"}}
             >
               Địa chỉ trả hàng:
             </Typography>
             <CustomInput
               control={control}
               rules={{}}
-              styles={{ width: "300px", display: "block" }}
+              styles={{width: "300px", display: "block"}}
               name="returnAddress"
               label="Địa chỉ trả hàng"
               disabled={isView}
@@ -535,25 +480,25 @@ function RequestModal({
               <Typography
                 color="black"
                 variant="h2"
-                sx={{ marginBottom: "4%", marginTop: "4%" }}
+                sx={{marginBottom: "4%", marginTop: "4%"}}
               >
                 Thời gian
               </Typography>
             </Box>
-            <Typography color="black" variant="h3" sx={{ marginBottom: "2%" }}>
+            <Typography color="black" variant="h3" sx={{marginBottom: "2%"}}>
               {currentOrder?.typeOrder === 0 ? "Ngày bắt đầu" : "Ngày lấy đơn"}
             </Typography>
             <Controller
               name={"dateDelivery"}
               control={control}
-              render={({ field: { onChange, value } }) => {
+              render={({field: {onChange, value}}) => {
                 return (
                   <TextField
                     type="date"
                     disabled={isView}
                     defaultValue={value}
                     onChange={onChange}
-                    sx={{ width: 220, marginBottom: "16px" }}
+                    sx={{width: 220, marginBottom: "16px"}}
                     InputLabelProps={{
                       shrink: true,
                     }}
@@ -600,7 +545,7 @@ function RequestModal({
                   marginBottom: "6%",
                 }}
               >
-                <Typography variant="h2" style={{ marginBottom: "3%" }}>
+                <Typography variant="h2" style={{marginBottom: "3%"}}>
                   Thời hạn (tháng)
                 </Typography>
                 <Box
@@ -628,11 +573,7 @@ function RequestModal({
                 justifyContent: "space-between",
               }}
             >
-              <Typography
-                color="black"
-                variant="h3"
-                sx={{ marginBottom: "2%" }}
-              >
+              <Typography color="black" variant="h3" sx={{marginBottom: "2%"}}>
                 {currentOrder?.typeOrder === 0
                   ? "Ngày kết thúc"
                   : "Ngày trả hàng"}
@@ -640,7 +581,7 @@ function RequestModal({
               <Typography
                 color="primary"
                 variant="h3"
-                sx={{ marginBottom: "2%", textAlign: "right" }}
+                sx={{marginBottom: "2%", textAlign: "right"}}
               >
                 {new Date(currentOrder?.returnDate).toLocaleDateString("en-US")}
               </Typography>
@@ -654,11 +595,7 @@ function RequestModal({
                   marginBottom: "2%",
                 }}
               >
-                <Typography
-                  color="black"
-                  variant="h3"
-                  sx={{ marginRight: "2%" }}
-                >
+                <Typography color="black" variant="h3" sx={{marginRight: "2%"}}>
                   Thời hạn:
                 </Typography>
                 <Typography color="primary" variant="h3">
@@ -686,7 +623,7 @@ function RequestModal({
                       onChange={handleChangeCheckBoxCustomerReturn}
                     />
                   }
-                  label="Khách tự vẫn chuyến trả đồ"
+                  label="Khách tự vận chuyến trả đồ"
                   labelPlacement="Customer return by themselves"
                 />
               </Box>
@@ -695,7 +632,7 @@ function RequestModal({
             <Typography
               color="black"
               variant="h3"
-              sx={{ marginBottom: "2%", marginTop: "4%" }}
+              sx={{marginBottom: "2%", marginTop: "4%"}}
             >
               Phương thức thanh toán
             </Typography>
@@ -731,11 +668,11 @@ function RequestModal({
                 <Typography
                   color="black"
                   variant="h3"
-                  sx={{ marginBottom: "2%", marginTop: "4%" }}
+                  sx={{marginBottom: "2%", marginTop: "4%"}}
                 >
                   Lý do
                 </Typography>
-                <p style={{ color: "red" }}>{currentOrder?.rejectedReason}</p>
+                <p style={{color: "red"}}>{currentOrder?.rejectedReason}</p>
               </Box>
             ) : null}
           </Box>
@@ -751,7 +688,7 @@ function RequestModal({
             <Typography
               color="black"
               variant="h2"
-              sx={{ marginBottom: "4%", marginTop: "4%" }}
+              sx={{marginBottom: "4%", marginTop: "4%"}}
             >
               Chi tiết đơn hàng
             </Typography>

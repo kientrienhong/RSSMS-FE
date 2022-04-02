@@ -13,7 +13,7 @@ import {
 } from "@material-ui/core";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Floor from "./Floor";
-import { LIST_SPACE_TYPE } from "../../../constant/constant";
+import {LIST_SPACE_TYPE} from "../../../constant/constant";
 
 export default function Shelf({
   handleOpen,
@@ -60,6 +60,7 @@ export default function Shelf({
           flexDirection: "row",
           alignItems: "center",
           width: "100%",
+          height: "64px",
         }}
         expandIcon={<ExpandMoreIcon />}
         aria-controls="panel1bh-content"
@@ -67,7 +68,7 @@ export default function Shelf({
       >
         <Typography
           sx={{
-            width: "35%",
+            width: "25%",
             margin: 0,
             marginRight: "1%",
           }}
@@ -87,7 +88,7 @@ export default function Shelf({
         </Typography>
         <Typography
           sx={{
-            width: "35%",
+            width: "30%",
 
             marginRight: "1%",
           }}
@@ -105,15 +106,34 @@ export default function Shelf({
           }}
           onClick={() => {
             if (area.type === 1) {
-              handleOpenSpace(shelf, true);
+              handleOpenSpace(shelf, true, false);
             } else {
-              handleOpenSelfStorage(shelf, true);
+              handleOpenSelfStorage(shelf, true, false);
             }
           }}
           color="primary"
           variant="contained"
         >
           Chỉnh sửa
+        </Button>
+        <Button
+          style={{
+            height: "32px",
+            paddingLeft: "16px",
+            paddingRight: "16px",
+            marginRight: "1%",
+          }}
+          onClick={() => {
+            if (area.type === 1) {
+              handleOpenSpace(shelf, true, true);
+            } else {
+              handleOpenSelfStorage(shelf, true, true);
+            }
+          }}
+          color="success"
+          variant="contained"
+        >
+          Xem thêm
         </Button>
         <Button
           onClick={() => {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useState} from "react";
 import PropTypes from "prop-types";
 import {
   AppBar,
@@ -15,9 +15,9 @@ import MenuIcon from "@material-ui/icons/Menu";
 import NotificationsIcon from "@material-ui/icons/NotificationsOutlined";
 import InputIcon from "@material-ui/icons/Input";
 import Logo from "./Logo";
-import { useNavigate } from "react-router";
-import { STYLE_MODAL } from "../constant/style";
-import { connect } from "react-redux";
+import {useNavigate} from "react-router";
+import {STYLE_MODAL} from "../constant/style";
+import {connect} from "react-redux";
 import * as action from "../apis/Apis";
 const DashboardNavbar = ({
   onMobileNavOpen,
@@ -97,7 +97,8 @@ const DashboardNavbar = ({
               }}
               onClick={async () => {
                 try {
-                  navigate("/", { replace: true });
+                  await localStorage.removeItem("user");
+                  navigate("/", {replace: true});
                 } catch (error) {
                   console.log(error);
                 } finally {
@@ -127,7 +128,7 @@ const DashboardNavbar = ({
 
       <Toolbar>
         <Logo />
-        <Box sx={{ flexGrow: 1 }} />
+        <Box sx={{flexGrow: 1}} />
 
         <Hidden xlDown>
           <IconButton color="primary" size="large">

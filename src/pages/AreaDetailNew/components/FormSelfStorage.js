@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { Typography, Box, Button, Grid } from "@material-ui/core";
+import React, {useState, useEffect} from "react";
+import {useForm} from "react-hook-form";
+import {Typography, Box, Button, Grid} from "@material-ui/core";
 import CustomInput from "../../../components/CustomInput";
 import CustomAreaInput from "../../../components/CustomAreaInput";
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 import * as action from "../../../redux/action/action";
-import { createSpace, updateShelf } from "../../../apis/Apis";
+import {createSpace, updateShelf} from "../../../apis/Apis";
 function FormSelfStorage({
   isEdit,
   currentSpace,
@@ -20,9 +20,9 @@ function FormSelfStorage({
   handleClose,
   listSelfStorage,
   userState,
+  isView,
 }) {
-  console.log(currentSpace);
-  const { handleSubmit, control, reset } = useForm();
+  const {handleSubmit, control, reset} = useForm();
   const [error, setError] = useState({});
 
   useEffect(() => {
@@ -51,7 +51,7 @@ function FormSelfStorage({
       handleClose();
     } catch (e) {
       console.log(e.response);
-      setError({ msg: e.response.data.error.message });
+      setError({msg: e.response.data.error.message});
     } finally {
       hideLoading();
     }
@@ -75,7 +75,7 @@ function FormSelfStorage({
     } catch (e) {
       console.log(e.response);
       if (e?.response?.data?.error?.message)
-        setError({ msg: e.response.data.error.message });
+        setError({msg: e.response.data.error.message});
     } finally {
       hideLoading();
     }
@@ -106,23 +106,24 @@ function FormSelfStorage({
           marginTop: "2%",
         }}
       >
-        <Typography color="black" variant="h2" sx={{ textAlign: "left" }}>
+        <Typography color="black" variant="h2" sx={{textAlign: "left"}}>
           Tên
         </Typography>
         <CustomInput
           control={control}
-          rules={{ required: "*Vui lòng nhập" }}
-          styles={{ width: "400px" }}
+          rules={{required: "*Vui lòng nhập"}}
+          styles={{width: "400px"}}
           name="name"
           label="Tên"
+          disabled={isView}
           userInfo={currentSpace?.name}
-          inlineStyle={{ marginTop: "2%" }}
+          inlineStyle={{marginTop: "2%"}}
         />
       </Box>
       <Typography
         color="black"
         variant="h2"
-        sx={{ textAlign: "left", marginTop: "4%" }}
+        sx={{textAlign: "left", marginTop: "4%"}}
       >
         Kích thước
       </Typography>
@@ -145,6 +146,7 @@ function FormSelfStorage({
               },
             }}
             name="floorLength"
+            disabled={isView}
             label="Chiều dài (m)"
             userInfo={currentSpace?.floorLength}
           />
@@ -160,6 +162,7 @@ function FormSelfStorage({
               },
             }}
             name="floorWidth"
+            disabled={isView}
             label="Chiều rộng (m)"
             userInfo={currentSpace?.floorWidth}
           />
@@ -175,6 +178,7 @@ function FormSelfStorage({
               },
             }}
             name="floorHeight"
+            disabled={isView}
             label="Chiều cao (m)"
             userInfo={currentSpace?.floorHeight}
           />
@@ -182,9 +186,7 @@ function FormSelfStorage({
       </Grid>
 
       {error?.submit?.msg ? (
-        <p style={{ textAlign: "center", color: "red" }}>
-          {error?.submit?.msg}
-        </p>
+        <p style={{textAlign: "center", color: "red"}}>{error?.submit?.msg}</p>
       ) : null}
       <Box
         sx={{
@@ -195,16 +197,21 @@ function FormSelfStorage({
           marginTop: "4%",
         }}
       >
-        <Button
-          color="primary"
-          type="submit"
-          variant="contained"
-          sx={{
-            marginRight: "8px",
-          }}
-        >
-          Xác nhận
-        </Button>
+        {isView ? (
+          <></>
+        ) : (
+          <Button
+            color="primary"
+            type="submit"
+            variant="contained"
+            sx={{
+              marginRight: "8px",
+            }}
+          >
+            Xác nhận
+          </Button>
+        )}
+
         <Button
           color="error"
           onClick={() => {

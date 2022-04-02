@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
+import React, {useState, useEffect} from "react";
+import {useForm} from "react-hook-form";
 import {
   Typography,
   Box,
@@ -12,9 +12,9 @@ import {
   Grid,
 } from "@material-ui/core";
 import CustomInput from "../../../components/CustomInput";
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 import * as action from "../../../redux/action/action";
-import { createSpace, updateShelf } from "../../../apis/Apis";
+import {createSpace, updateShelf} from "../../../apis/Apis";
 
 function FormHandy({
   isEdit,
@@ -29,8 +29,10 @@ function FormHandy({
   searchName,
   handleClose,
   userState,
+  isView,
 }) {
-  const { handleSubmit, control, reset } = useForm();
+  console.log("dkjsadkajshd", isView);
+  const {handleSubmit, control, reset} = useForm();
 
   const [error, setError] = useState({});
 
@@ -52,7 +54,7 @@ function FormHandy({
       handleClose();
     } catch (e) {
       console.log(e.response);
-      setError({ submit: { msg: e.response.data.error.message } });
+      setError({submit: {msg: e.response.data.error.message}});
     } finally {
       hideLoading();
     }
@@ -85,7 +87,7 @@ function FormHandy({
       handleClose();
     } catch (e) {
       console.log(e.response);
-      setError({ submit: { msg: e.response.data.error.message } });
+      setError({submit: {msg: e.response.data.error.message}});
     } finally {
       hideLoading();
     }
@@ -111,23 +113,24 @@ function FormHandy({
           marginTop: "2%",
         }}
       >
-        <Typography color="black" variant="h2" sx={{ textAlign: "left" }}>
+        <Typography color="black" variant="h2" sx={{textAlign: "left"}}>
           Tên
         </Typography>
         <CustomInput
           control={control}
-          rules={{ required: "*Vui lòng nhập" }}
-          styles={{ width: "400px" }}
+          rules={{required: "*Vui lòng nhập"}}
+          styles={{width: "400px"}}
           name="name"
           label="Tên"
+          disabled={isView}
           userInfo={currentSpace?.name}
-          inlineStyle={{ marginTop: "2%" }}
+          inlineStyle={{marginTop: "2%"}}
         />
       </Box>
       <Typography
         color="black"
         variant="h2"
-        sx={{ textAlign: "left", marginTop: "2%" }}
+        sx={{textAlign: "left", marginTop: "2%"}}
       >
         Kích thước của 1 tầng
       </Typography>
@@ -149,6 +152,7 @@ function FormHandy({
                 message: "*Vui lòng nhập đúng chiều dài",
               },
             }}
+            disabled={isView}
             name="floorLength"
             label="Chiều dài (m)"
             userInfo={currentSpace?.floorLength}
@@ -164,6 +168,7 @@ function FormHandy({
                 message: "*Vui lòng nhập đúng chiều rộng",
               },
             }}
+            disabled={isView}
             name="floorWidth"
             label="Chiều rộng (m)"
             userInfo={currentSpace?.floorWidth}
@@ -179,6 +184,7 @@ function FormHandy({
                 message: "*Vui lòng nhập đúng chiều cao",
               },
             }}
+            disabled={isView}
             name="floorHeight"
             label="Chiều cao (m)"
             userInfo={currentSpace?.floorHeight}
@@ -195,8 +201,8 @@ function FormHandy({
           marginTop: "2%",
         }}
       >
-        <Box sx={{ width: "60%", display: "flex", flexDirection: "column" }}>
-          <Typography color="black" variant="h2" sx={{ textAlign: "left" }}>
+        <Box sx={{width: "60%", display: "flex", flexDirection: "column"}}>
+          <Typography color="black" variant="h2" sx={{textAlign: "left"}}>
             Số tầng của kệ
           </Typography>
           <CustomInput
@@ -208,17 +214,16 @@ function FormHandy({
                 message: "*Vui lòng nhập đúng số tầng",
               },
             }}
+            disabled={isView}
             name="numberOfFloor"
             label="Số tầng của kệ"
             userInfo={currentSpace?.numberOfFloor}
-            inlineStyle={{ marginTop: "3%", width: "180px" }}
+            inlineStyle={{marginTop: "3%", width: "180px"}}
           />
         </Box>
       </Box>
       {error?.submit?.msg ? (
-        <p style={{ textAlign: "center", color: "red" }}>
-          {error?.submit?.msg}
-        </p>
+        <p style={{textAlign: "center", color: "red"}}>{error?.submit?.msg}</p>
       ) : null}
       <Box
         sx={{
@@ -229,16 +234,21 @@ function FormHandy({
           marginTop: "16px",
         }}
       >
-        <Button
-          color="primary"
-          type="submit"
-          variant="contained"
-          sx={{
-            marginRight: "8px",
-          }}
-        >
-          Xác nhận
-        </Button>
+        {isView ? (
+          <></>
+        ) : (
+          <Button
+            color="primary"
+            type="submit"
+            variant="contained"
+            sx={{
+              marginRight: "8px",
+            }}
+          >
+            Xác nhận
+          </Button>
+        )}
+
         <Button
           color="error"
           onClick={() => {

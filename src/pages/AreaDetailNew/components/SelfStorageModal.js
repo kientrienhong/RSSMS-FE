@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import {
   Box,
   Button,
@@ -8,7 +8,7 @@ import {
   Modal,
 } from "@material-ui/core";
 
-import { STYLE_MODAL } from "../../../constant/style";
+import {STYLE_MODAL} from "../../../constant/style";
 import FormSelfStorage from "./FormSelfStorage";
 
 const styleModal = {
@@ -24,6 +24,7 @@ export default function SelfStorageModal({
   areaId,
   page,
   getData,
+  isView,
   searchName,
 }) {
   return (
@@ -57,6 +58,7 @@ export default function SelfStorageModal({
             getData={getData}
             page={page}
             areaId={areaId}
+            isView={isView}
             handleClose={handleClose}
           />
         </Box>

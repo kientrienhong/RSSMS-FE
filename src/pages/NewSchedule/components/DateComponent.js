@@ -22,7 +22,6 @@ export default function DateComponent({
     .toString()
     .split(", ");
   let splitedDate = splitedDateSchedule[1]?.split("/");
-  console.log(splitedDate);
   return (
     <Badge
       color="error"

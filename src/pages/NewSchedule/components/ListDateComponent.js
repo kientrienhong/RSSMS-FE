@@ -45,7 +45,7 @@ export default function ListDateComponent({
   return (
     <Box
       sx={{
-        margin: "0% 4% 0% 14%",
+        margin: "0% 4% 0% 3%",
         display: "flex",
         width: "90%",
         justifyContent: "space-between",

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
+import React, {useState, useEffect} from "react";
+import {useForm} from "react-hook-form";
 import {
   Typography,
   Box,
@@ -13,10 +13,10 @@ import {
 import CustomInput from "../../../components/CustomInput";
 import CustomAreaInput from "../../../components/CustomAreaInput";
 
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 import * as action from "../../../redux/action/action";
-import { createSpace, updateShelf } from "../../../apis/Apis";
-const styleInput = { marginRight: "5%" };
+import {createSpace, updateShelf} from "../../../apis/Apis";
+const styleInput = {marginRight: "5%"};
 
 function FormUnwieldy({
   isEdit,
@@ -31,8 +31,9 @@ function FormUnwieldy({
   searchName,
   handleClose,
   userState,
+  isView,
 }) {
-  const { handleSubmit, control, reset } = useForm();
+  const {handleSubmit, control, reset} = useForm();
 
   const [error, setError] = useState({});
 
@@ -53,7 +54,7 @@ function FormUnwieldy({
       handleClose();
     } catch (e) {
       console.log(e.response);
-      setError({ msg: e.response.data.error.message });
+      setError({msg: e.response.data.error.message});
     } finally {
       hideLoading();
     }
@@ -76,7 +77,7 @@ function FormUnwieldy({
       handleClose();
     } catch (e) {
       console.log(e.response);
-      setError({ msg: e.response.data.error.message });
+      setError({msg: e.response.data.error.message});
     } finally {
       hideLoading();
     }
@@ -91,7 +92,6 @@ function FormUnwieldy({
   };
 
   useEffect(() => {
-    console.log(currentSpace);
     reset({
       floorWidth: currentSpace.width,
       floorHeight: currentSpace.height,
@@ -112,23 +112,24 @@ function FormUnwieldy({
           marginTop: "2%",
         }}
       >
-        <Typography color="black" variant="h2" sx={{ textAlign: "left" }}>
+        <Typography color="black" variant="h2" sx={{textAlign: "left"}}>
           Tên
         </Typography>
         <CustomInput
           control={control}
-          rules={{ required: "*Vui lòng nhập" }}
-          styles={{ width: "400px" }}
+          rules={{required: "*Vui lòng nhập"}}
+          styles={{width: "400px"}}
           name="name"
           label="Tên"
+          disabled={isView}
           userInfo={currentSpace?.name}
-          inlineStyle={{ marginTop: "2%" }}
+          inlineStyle={{marginTop: "2%"}}
         />
       </Box>
       <Typography
         color="black"
         variant="h2"
-        sx={{ textAlign: "left", marginTop: "2%" }}
+        sx={{textAlign: "left", marginTop: "2%"}}
       >
         Kích thước
       </Typography>
@@ -150,6 +151,7 @@ function FormUnwieldy({
                 message: "*Vui lòng nhập đúng chiều dài",
               },
             }}
+            disabled={isView}
             name="floorLength"
             label="Chiều dài (m)"
             userInfo={currentSpace?.floorLength}
@@ -166,6 +168,7 @@ function FormUnwieldy({
               },
             }}
             name="floorWidth"
+            disabled={isView}
             label="Chiều rộng (m)"
             userInfo={currentSpace?.floorWidth}
           />
@@ -181,6 +184,7 @@ function FormUnwieldy({
               },
             }}
             name="floorHeight"
+            disabled={isView}
             label="Chiều cao (m)"
             userInfo={currentSpace?.floorHeight}
           />
@@ -188,9 +192,7 @@ function FormUnwieldy({
       </Grid>
 
       {error?.submit?.msg ? (
-        <p style={{ textAlign: "center", color: "red" }}>
-          {error?.submit?.msg}
-        </p>
+        <p style={{textAlign: "center", color: "red"}}>{error?.submit?.msg}</p>
       ) : null}
       <Box
         sx={{
@@ -201,16 +203,21 @@ function FormUnwieldy({
           marginTop: "16px",
         }}
       >
-        <Button
-          color="primary"
-          type="submit"
-          variant="contained"
-          sx={{
-            marginRight: "8px",
-          }}
-        >
-          Xác nhận
-        </Button>
+        {isView ? (
+          <></>
+        ) : (
+          <Button
+            color="primary"
+            type="submit"
+            variant="contained"
+            sx={{
+              marginRight: "8px",
+            }}
+          >
+            Xác nhận
+          </Button>
+        )}
+
         <Button
           color="error"
           onClick={() => {
