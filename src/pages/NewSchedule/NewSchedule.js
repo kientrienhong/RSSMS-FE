@@ -1,32 +1,32 @@
-import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
+import React, {useState, useEffect} from "react";
+import {connect} from "react-redux";
 import * as action from "../../redux/action/action";
-import { Box, Typography, Button, Badge } from "@material-ui/core";
+import {Box, Typography, Button, Badge} from "@material-ui/core";
 import moment from "moment";
-import { useForm } from "react-hook-form";
+import {useForm} from "react-hook-form";
 import ListDateComponent from "./components/ListDateComponent";
 import ListItemSidebar from "./components/ListItemSidebar";
-import { LIST_TIME, TYPE_SCHEDULE } from "../../constant/constant";
+import {LIST_TIME, TYPE_SCHEDULE} from "../../constant/constant";
 import RequestModal from "../../components/RequestModal";
 import {
   getSchedule,
   getRequestToScheduleNew,
   getListDeliveryStaff,
 } from "../../apis/Apis";
-import { TYPE_REQUEST_DELIVERY_TAKE } from "../../constant/constant";
+import {TYPE_REQUEST_DELIVERY_TAKE} from "../../constant/constant";
 import ScheduleArea from "./components/ScheduleArea";
-import { useParams } from "react-router-dom";
+import {useParams} from "react-router-dom";
 
 import OrderAssignModal from "./components/OrderAssignModal";
 import OrderModal from "../../components/OrderModal";
-function NewSchedule({ showLoading, hideLoading, userState }) {
+function NewSchedule({showLoading, hideLoading, userState}) {
   const [listShowStaffAssigned, setListShowStaffAssigned] = React.useState([]);
   const [listShowStaffUnAssigned, setListShowStaffUnAssigned] = React.useState(
     []
   );
   const [listStaffAssigned, setListStaffAssigned] = React.useState([]);
   const [listStaffUnAssigned, setListStaffUnAssigned] = React.useState([]);
-  const { scheduleDate } = useParams();
+  const {scheduleDate} = useParams();
   const [listDateAWeek, setListDateAWeek] = useState([]);
   const [currentIndexDate, setCurrentIndexDate] = useState(-1);
   const [listSelectedOrder, setListSelectedOrder] = useState([]);
@@ -34,7 +34,7 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
   const [open, setOpen] = useState(false);
   const [openAssignStaff, setOpenAssignStaff] = useState(false);
   const [openOrderModal, setOpenOrderModal] = useState(false);
-  const { handleSubmit, control, watch, reset } = useForm();
+  const {handleSubmit, control, watch, reset} = useForm();
   const [startOfWeek, setStartOfWeek] = React.useState();
   const [endOfWeek, setEndOfWeek] = React.useState();
   React.useState([]);
@@ -75,14 +75,14 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
     let indexFound = listSelectedOrderTemp.findIndex((e) => {
       if (e["deliveryTime"] === schedule["deliveryTime"]) {
         if (schedule.id === e.id) {
-          schedule = { ...schedule, isSelected: false };
+          schedule = {...schedule, isSelected: false};
           return true;
         }
       }
     });
     if (value) {
       if (indexFound === -1) {
-        schedule = { ...schedule, isSelected: true };
+        schedule = {...schedule, isSelected: true};
         listSelectedOrderTemp.push(schedule);
       }
       setListSelectedOrder(listSelectedOrderTemp);
@@ -97,11 +97,11 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
 
   const handleFormatDate = (date, result, order) => {
     if (order.type === TYPE_REQUEST_DELIVERY_TAKE) {
-      order = { ...order, isDelivery: true };
+      order = {...order, isDelivery: true};
     } else {
-      order = { ...order, isDelivery: false };
+      order = {...order, isDelivery: false};
     }
-    order = { ...order, isSelected: false };
+    order = {...order, isSelected: false};
     let currentDate = Object.keys(result)?.find((e) => {
       if (e === date.toLocaleDateString("en-US")) {
         return true;
@@ -210,11 +210,6 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
       } finally {
         console.log(result);
       }
-      // response?.data?.data
-      //   .filter((e) => e.typeOrder === 1)
-      //   .forEach((e) => {
-      //     handleFormatDate(new Date(e.deliveryDate), result, e);
-      //   });
     } catch (e) {
       console.log(e.response);
     } finally {
@@ -363,6 +358,13 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
         });
         let startOfWeekLocal = currentMoment.startOf("week").toDate();
         let endOfWeekLocal = currentMoment.endOf("week").toDate();
+        // let testISOStartMoment = startOfWeekLocal.toISOString();
+        // let testISOEndMoment = endOfWeekLocal.toISOString();
+        // console.log(testISOStartMoment, testISOEndMoment);
+
+        // let testISOStart = new Date(currentMoment.startOf("week"));
+        // let testISOEnd = new Date(currentMoment.endOf("week"));
+        // console.log(testISOStart.toISOString(), testISOEnd.toISOString());
 
         setStartOfWeek(startOfWeekLocal);
         setEndOfWeek(endOfWeekLocal);
@@ -382,6 +384,10 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
     };
     firstCall();
   }, []);
+
+  useEffect(() => {
+    let result = getData(startOfWeek, endOfWeek, scheduleDate);
+  }, [startOfWeek, endOfWeek]);
 
   return (
     <Box
@@ -436,6 +442,8 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
         setListScheduleCurrentDate={setListScheduleCurrentDate}
         listDateAWeek={listDateAWeek}
         setCurrentIndexDate={setCurrentIndexDate}
+        setEndOfWeek={setEndOfWeek}
+        setStartOfWeek={setStartOfWeek}
       />
       <Box
         sx={{
