@@ -1,14 +1,14 @@
 import React from "react";
-import { Box, Checkbox, Button, Avatar, Typography } from "@material-ui/core";
-import { getOrderById, getRequestDetail } from "../../../apis/Apis";
-import { connect } from "react-redux";
-import { styled } from "@mui/material/styles";
-import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
+import {Box, Checkbox, Button, Avatar, Typography} from "@material-ui/core";
+import {getOrderById, getRequestDetail} from "../../../apis/Apis";
+import {connect} from "react-redux";
+import {styled} from "@mui/material/styles";
+import Tooltip, {tooltipClasses} from "@mui/material/Tooltip";
 import * as action from "../../../redux/action/action";
 import moment from "moment";
-const HtmlTooltip = styled(({ className, ...props }) => (
-  <Tooltip {...props} classes={{ popper: className }} />
-))(({ theme }) => ({
+const HtmlTooltip = styled(({className, ...props}) => (
+  <Tooltip {...props} classes={{popper: className}} />
+))(({theme}) => ({
   [`& .${tooltipClasses.tooltip}`]: {
     backgroundColor: "#f5f5f9",
     color: "rgba(0, 0, 0, 0.87)",
@@ -29,8 +29,11 @@ function Schedule({
   userState,
   handleOpenOrderModal,
 }) {
+  let isFoundInListSelectedOrder = listSelectedOrder?.findIndex((e) => {
+    return schedule.id === e.id;
+  });
   let foundSameStorage = false;
-  let indexFound = listSelectedOrder?.findIndex((e) => {
+  let indexFoundSameTime = listSelectedOrder?.findIndex((e) => {
     if (e.storageId === schedule.storageId) {
       foundSameStorage = true;
     }
@@ -163,7 +166,7 @@ function Schedule({
             width: "80%",
           }}
         >
-          <p style={{ display: "inline-block", margin: 0 }}>
+          <p style={{display: "inline-block", margin: 0}}>
             <p
               style={{
                 fontWeight: "bold",
@@ -177,7 +180,7 @@ function Schedule({
             </p>
             {schedule.customerName}
           </p>
-          <p style={{ display: "inline-block", margin: 0 }}>
+          <p style={{display: "inline-block", margin: 0}}>
             <p
               style={{
                 fontWeight: "bold",
@@ -238,7 +241,7 @@ function Schedule({
             alignItems: "center",
           }}
         >
-          <p style={{ display: "block", margin: "0" }}>
+          <p style={{display: "block", margin: "0"}}>
             <p
               style={{
                 fontWeight: "bold",
@@ -295,14 +298,18 @@ function Schedule({
           />
           {onChangeCheckBox !== undefined ? (
             <Checkbox
+              checked={
+                isFoundInListSelectedOrder !== -1 &&
+                listSelectedOrder.length > 0
+              }
               disabled={
-                indexFound !== -1 ||
+                indexFoundSameTime !== -1 ||
                 (!foundSameStorage && listSelectedOrder.length > 0) ||
                 (listSelectedOrder.length > 0 && !isSameListStaff)
               }
               onChange={(val) => onChangeCheckBox(schedule, val.target.checked)}
               color="success"
-              inputProps={{ "aria-label": "controlled" }}
+              inputProps={{"aria-label": "controlled"}}
             />
           ) : (
             <Button

@@ -90,7 +90,6 @@ function NewSchedule({showLoading, hideLoading, userState}) {
       if (indexFound !== -1) {
         listSelectedOrderTemp.splice(indexFound, 1);
       }
-
       setListSelectedOrder(listSelectedOrderTemp);
     }
   };
