@@ -11,15 +11,13 @@ import {
   Radio,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { formatCurrency } from "../utils/FormatCurrency";
-import { ACCESSSORY_TYPE, SERVICE_TYPE } from "../constant/constant";
+import {formatCurrency} from "../utils/FormatCurrency";
+import {ACCESSSORY_TYPE, SERVICE_TYPE} from "../constant/constant";
 export default function StoredOrderItem({
   handleChangeRadio,
   selectedValue,
   storedOrder,
 }) {
-  console.log(storedOrder);
-  console.log(selectedValue);
   const mapImage = (list) => {
     return list.map((e) => (
       <Box
@@ -56,37 +54,52 @@ export default function StoredOrderItem({
   };
 
   const mapAdditionService = (list) => {
-    return list.map((e) => (
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          width: "100%",
-        }}
-      >
-        <img src={e.serviceUrl} width="80" height="80" alt="imaged" />
+    if (list?.length > 0) {
+      return list.map((e) => (
         <Box
           sx={{
             display: "flex",
-            flexDirection: "column",
+            flexDirection: "row",
             width: "100%",
           }}
         >
-          <Typography
-            color="black"
-            variant="h3"
-            style={{
-              marginTop: "2%",
-              textAlign: "left",
-              marginLeft: "2.5%",
+          <img src={e.serviceUrl} width="80" height="80" alt="imaged" />
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              width: "100%",
             }}
           >
-            {e.serviceName} x {e.amount}
-          </Typography>
-          <p>{formatCurrency(e.price, " đ")}</p>
+            <Typography
+              color="black"
+              variant="h3"
+              style={{
+                marginTop: "2%",
+                textAlign: "left",
+                marginLeft: "2.5%",
+              }}
+            >
+              {e.serviceName} x {e.amount}
+            </Typography>
+            <p>{formatCurrency(e.price, " đ")}</p>
+          </Box>
         </Box>
-      </Box>
-    ));
+      ));
+    } else {
+      return (
+        <p
+          color="black"
+          variant="h3"
+          style={{
+            marginTop: "2%",
+            textAlign: "center",
+          }}
+        >
+          (Trống)
+        </p>
+      );
+    }
   };
 
   let styleAccordition = {
@@ -125,7 +138,7 @@ export default function StoredOrderItem({
             checked={selectedValue == storedOrder.id}
             name="radio-buttons"
             onChange={handleChangeRadio}
-            inputProps={{ "aria-label": "B" }}
+            inputProps={{"aria-label": "B"}}
           />
         ) : (
           <></>

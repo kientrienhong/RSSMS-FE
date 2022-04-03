@@ -91,6 +91,7 @@ export default function OrderModal({
             getData={getData}
             page={page}
             searchId={searchId}
+            isOrder={true}
           />
         </TabPanel>
         {currentOrder?.type === 1 ? (

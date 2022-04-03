@@ -1,28 +1,28 @@
-import React, { useState, useEffect } from "react";
-import { Box } from "@material-ui/core";
+import React, {useState, useEffect} from "react";
+import {Box} from "@material-ui/core";
 import SectionProduct from "./components/SectionProduct";
 import ProductModal from "./components/ProductModal";
-import { LIST_PRODUCT_MANAGE_TYPE } from "../../constant/constant";
-import { getProduct, deleteProduct } from "../../apis/Apis";
-import { connect } from "react-redux";
+import {LIST_PRODUCT_MANAGE_TYPE} from "../../constant/constant";
+import {getProduct, deleteProduct} from "../../apis/Apis";
+import {connect} from "react-redux";
 import * as action from "../../redux/action/action";
-import { useForm } from "react-hook-form";
+import {useForm} from "react-hook-form";
 
 import ConfirmModal from "../../components/ConfirmModal";
-function Products({ showLoading, hideLoading, showSnackbar, userState }) {
+function Products({showLoading, hideLoading, showSnackbar, userState}) {
   const [open, setOpen] = useState(false);
   const [openConfirm, setOpenConfirm] = useState(false);
   const {
     handleSubmit,
     control,
     reset,
-    formState: { errors },
+    formState: {errors},
   } = useForm();
 
   const [isEdit, setIsEdit] = useState(false);
   const [typeProduct, setTypeProduct] = useState(-1);
   const [currentProduct, setCurrentProduct] = useState({
-    images: [{ id: null, url: null }],
+    images: [{id: null, url: null}],
   });
   const [listProduct, setListProduct] = useState([]);
   const handleOpen = (isEdit, index) => {
@@ -36,7 +36,7 @@ function Products({ showLoading, hideLoading, showSnackbar, userState }) {
     setTypeProduct(-1);
     reset();
     setCurrentProduct({
-      images: [{ id: null, url: null }],
+      images: [{id: null, url: null}],
     });
   };
 
@@ -71,7 +71,7 @@ function Products({ showLoading, hideLoading, showSnackbar, userState }) {
     try {
       await deleteProduct(id, userState.idToken);
       setCurrentProduct({
-        images: [{ id: null, url: null }],
+        images: [{id: null, url: null}],
       });
       await getData();
       showSnackbar("success", "Xóa dịch vụ thành công!");
@@ -114,7 +114,7 @@ function Products({ showLoading, hideLoading, showSnackbar, userState }) {
         showLoading={showLoading}
         hideLoading={hideLoading}
         showSnackbar={showSnackbar}
-        msg="Delete product success"
+        msg="Xóa dịch vụ thành công"
       />
       <ProductModal
         handleClose={handleClose}

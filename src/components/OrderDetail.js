@@ -1,12 +1,12 @@
 import React from "react";
-import { Box, Divider, Typography } from "@material-ui/core";
-import { formatCurrency } from "../utils/FormatCurrency";
-import { styled } from "@mui/material/styles";
-import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
+import {Box, Divider, Typography} from "@material-ui/core";
+import {formatCurrency} from "../utils/FormatCurrency";
+import {styled} from "@mui/material/styles";
+import Tooltip, {tooltipClasses} from "@mui/material/Tooltip";
 
-const HtmlTooltip = styled(({ className, ...props }) => (
-  <Tooltip {...props} classes={{ popper: className }} />
-))(({ theme }) => ({
+const HtmlTooltip = styled(({className, ...props}) => (
+  <Tooltip {...props} classes={{popper: className}} />
+))(({theme}) => ({
   [`& .${tooltipClasses.tooltip}`]: {
     backgroundColor: "#f5f5f9",
     color: "rgba(0, 0, 0, 0.87)",
@@ -17,7 +17,12 @@ const HtmlTooltip = styled(({ className, ...props }) => (
   },
 }));
 
-export default function OrderDetail({ choosenProduct, duration, order }) {
+export default function OrderDetail({
+  choosenProduct,
+  duration,
+  order,
+  isOrder,
+}) {
   const buildTotalPrice = () => {
     let months = Math.ceil(duration / 30);
     let sum = 0;
@@ -45,10 +50,10 @@ export default function OrderDetail({ choosenProduct, duration, order }) {
           marginBottom: "4%",
         }}
       >
-        <Typography variant="h2" color="black" style={{ marginBottom: "3%" }}>
+        <Typography variant="h2" color="black" style={{marginBottom: "3%"}}>
           Tổng đơn
         </Typography>
-        <Typography variant="h2" color="primary" style={{ marginBottom: "3%" }}>
+        <Typography variant="h2" color="primary" style={{marginBottom: "3%"}}>
           {formatCurrency(sum, " đ")}
         </Typography>
       </Box>
@@ -63,7 +68,7 @@ export default function OrderDetail({ choosenProduct, duration, order }) {
           quantity: 1,
         };
       },
-      { price: 0, quantity: 1 }
+      {price: 0, quantity: 1}
     );
 
     let totalNum =
@@ -89,13 +94,13 @@ export default function OrderDetail({ choosenProduct, duration, order }) {
         >
           <Typography
             variant="h2"
-            style={{ marginBottom: "3%", marginRight: "8%" }}
+            style={{marginBottom: "3%", marginRight: "8%"}}
           >
             Tổng
           </Typography>
         </Box>
 
-        <Typography variant="h2" color="primary" style={{ marginBottom: "3%" }}>
+        <Typography variant="h2" color="primary" style={{marginBottom: "3%"}}>
           {formatCurrency(parseInt(totalNum), "đ")}
         </Typography>
       </Box>
@@ -122,20 +127,16 @@ export default function OrderDetail({ choosenProduct, duration, order }) {
         >
           <Typography
             variant="h2"
-            style={{ marginBottom: "3%", marginRight: "8%" }}
+            style={{marginBottom: "3%", marginRight: "8%"}}
           >
             {e?.name}
           </Typography>
-          <Typography
-            variant="h3"
-            color="primary"
-            style={{ marginBottom: "3%" }}
-          >
+          <Typography variant="h3" color="primary" style={{marginBottom: "3%"}}>
             X {e?.quantity}
           </Typography>
         </Box>
 
-        <Typography variant="h2" color="primary" style={{ marginBottom: "3%" }}>
+        <Typography variant="h2" color="primary" style={{marginBottom: "3%"}}>
           {formatCurrency(e?.price * e?.quantity, "đ")}
         </Typography>
       </Box>
@@ -153,7 +154,7 @@ export default function OrderDetail({ choosenProduct, duration, order }) {
       >
         <Typography
           variant="h2"
-          style={{ marginBottom: "3%", marginRight: "8%" }}
+          style={{marginBottom: "3%", marginRight: "8%"}}
         >
           Chi phí thêm
         </Typography>
@@ -166,13 +167,13 @@ export default function OrderDetail({ choosenProduct, duration, order }) {
             marginTop: "1%",
           }}
         >
-          <Typography variant="h2" style={{ marginBottom: "3%", width: "50%" }}>
+          <Typography variant="h2" style={{marginBottom: "3%", width: "50%"}}>
             {order?.additionalFeeDescription}
           </Typography>
           <Typography
             variant="h2"
             color="primary"
-            style={{ marginBottom: "3%", width: "50%", textAlign: "right" }}
+            style={{marginBottom: "3%", width: "50%", textAlign: "right"}}
           >
             {formatCurrency(order?.additionalFee, "đ")}
           </Typography>
@@ -190,7 +191,7 @@ export default function OrderDetail({ choosenProduct, duration, order }) {
           quantity: 1,
         };
       },
-      { price: 0, quantity: 1 }
+      {price: 0, quantity: 1}
     );
     let totalNum =
       isNaN(parseInt(total?.price)) === true ? 0 : parseInt(total?.price);
@@ -214,13 +215,13 @@ export default function OrderDetail({ choosenProduct, duration, order }) {
         >
           <Typography
             variant="h2"
-            style={{ marginBottom: "3%", marginRight: "8%" }}
+            style={{marginBottom: "3%", marginRight: "8%"}}
           >
             Tổng
           </Typography>
         </Box>
 
-        <Typography variant="h2" color="primary" style={{ marginBottom: "3%" }}>
+        <Typography variant="h2" color="primary" style={{marginBottom: "3%"}}>
           {formatCurrency(parseInt(totalNum), "đ")}
         </Typography>
       </Box>
@@ -231,38 +232,15 @@ export default function OrderDetail({ choosenProduct, duration, order }) {
     let months = Math.ceil(duration / 30);
 
     return listProduct.map((e) => {
-      return (
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <HtmlTooltip
-            title={
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                }}
-              >
-                <Box
-                  sx={{
-                    marginRight: "8px",
-                  }}
-                >
-                  <img src={e?.imageUrl} width="80" height="80" alt={e.name} />
-                </Box>
-                <Box>
-                  <Typography color="black" variant="h5">
-                    Mô tả đồ khách hàng sẽ gửi
-                  </Typography>
-                  <p>{e.note}</p>
-                </Box>
-              </Box>
-            }
+      if (isOrder) {
+        return (
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
           >
             <Box
               sx={{
@@ -274,43 +252,114 @@ export default function OrderDetail({ choosenProduct, duration, order }) {
             >
               <Typography
                 variant="h2"
-                style={{ marginBottom: "3%", marginRight: "8%" }}
+                style={{marginBottom: "3%", marginRight: "8%"}}
               >
                 {e.name}
-                <img
-                  src="/img/info.png"
-                  alt="edit"
-                  style={{
-                    cursor: "pointer",
-                    width: "18px",
-                    height: "18px",
-                    marginLeft: "8px",
-                  }}
-                />
               </Typography>
               <Typography
                 variant="h3"
                 color="primary"
-                style={{ marginBottom: "3%" }}
+                style={{marginBottom: "3%"}}
               >
                 X {e.quantity}
               </Typography>
             </Box>
-          </HtmlTooltip>
-          <Typography
-            variant="h2"
-            color="primary"
-            style={{ marginBottom: "3%" }}
+            <Typography
+              variant="h2"
+              color="primary"
+              style={{marginBottom: "3%"}}
+            >
+              {formatCurrency(e?.price * e?.quantity * months, "đ")}
+            </Typography>
+          </Box>
+        );
+      } else {
+        return (
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
           >
-            {formatCurrency(e?.price * e?.quantity * months, "đ")}
-          </Typography>
-        </Box>
-      );
+            <HtmlTooltip
+              title={
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      marginRight: "8px",
+                    }}
+                  >
+                    <img
+                      src={e?.imageUrl}
+                      width="80"
+                      height="80"
+                      alt={e.name}
+                    />
+                  </Box>
+                  <Box>
+                    <Typography color="black" variant="h5">
+                      Mô tả đồ khách hàng sẽ gửi
+                    </Typography>
+                    <p>{e.note}</p>
+                  </Box>
+                </Box>
+              }
+            >
+              <Box
+                sx={{
+                  width: "40%",
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <Typography
+                  variant="h2"
+                  style={{marginBottom: "3%", marginRight: "8%"}}
+                >
+                  {e.name}
+                  <img
+                    src="/img/info.png"
+                    alt="edit"
+                    style={{
+                      cursor: "pointer",
+                      width: "18px",
+                      height: "18px",
+                      marginLeft: "8px",
+                    }}
+                  />
+                </Typography>
+                <Typography
+                  variant="h3"
+                  color="primary"
+                  style={{marginBottom: "3%"}}
+                >
+                  X {e.quantity}
+                </Typography>
+              </Box>
+            </HtmlTooltip>
+            <Typography
+              variant="h2"
+              color="primary"
+              style={{marginBottom: "3%"}}
+            >
+              {formatCurrency(e?.price * e?.quantity * months, "đ")}
+            </Typography>
+          </Box>
+        );
+      }
     });
   };
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
+    <Box sx={{display: "flex", flexDirection: "column", width: "100%"}}>
       <Box
         sx={{
           display: "flex",
@@ -318,10 +367,10 @@ export default function OrderDetail({ choosenProduct, duration, order }) {
           justifyContent: "space-between",
         }}
       >
-        <Typography variant="h2" style={{ marginBottom: "3%" }}>
+        <Typography variant="h2" style={{marginBottom: "3%"}}>
           Dịch vụ
         </Typography>
-        <Typography variant="h2" style={{ marginBottom: "3%" }}>
+        <Typography variant="h2" style={{marginBottom: "3%"}}>
           Giá tiền
         </Typography>
       </Box>
@@ -337,10 +386,10 @@ export default function OrderDetail({ choosenProduct, duration, order }) {
           marginTop: "4%",
         }}
       >
-        <Typography variant="h2" style={{ marginBottom: "3%" }}>
+        <Typography variant="h2" style={{marginBottom: "3%"}}>
           Phụ kiện
         </Typography>
-        <Typography variant="h2" style={{ marginBottom: "3%" }}>
+        <Typography variant="h2" style={{marginBottom: "3%"}}>
           Giá tiền
         </Typography>
       </Box>

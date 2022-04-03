@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import StoredOrderItem from "./StoredOrderItem";
-import { Grid, Typography, Box } from "@material-ui/core";
+import {Grid, Typography, Box} from "@material-ui/core";
 import {
   AREA_TYPE,
   BOX_TYPE,
@@ -8,7 +8,7 @@ import {
   ACCESSSORY_TYPE,
 } from "../constant/constant";
 
-export default function ItemTab({ listOrderDetail }) {
+export default function ItemTab({listOrderDetail}) {
   const [expanded, setExpanded] = React.useState(false);
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -18,25 +18,30 @@ export default function ItemTab({ listOrderDetail }) {
       .filter((e) => e.serviceType === AREA_TYPE || e.serviceType === BOX_TYPE)
       .map((e, index) => (
         <Grid item xs={6} key={index}>
-          <Typography
-            color="black"
-            variant="h2"
-            style={{
-              textAlign: "left",
-              marginBottom: "2.5%",
-            }}
-          >
-            Vị trí món đồ:
-            <p
+          {e.storageName ? (
+            <Typography
+              color="black"
+              variant="h2"
               style={{
-                fontWeight: "normal",
-                display: "inline-block",
-                marginLeft: "2%",
+                textAlign: "left",
+                marginBottom: "2.5%",
               }}
             >
-              {e.storageName} - {e.areaName} - {e.floorName}
-            </p>
-          </Typography>
+              Vị trí món đồ:
+              <p
+                style={{
+                  fontWeight: "normal",
+                  display: "inline-block",
+                  marginLeft: "2%",
+                }}
+              >
+                {e.storageName} - {e.areaName} - {e.floorName}
+              </p>
+            </Typography>
+          ) : (
+            <></>
+          )}
+
           <StoredOrderItem
             expanded={expanded}
             id={index}
@@ -94,6 +99,7 @@ export default function ItemTab({ listOrderDetail }) {
         variant="h2"
         style={{
           textAlign: "left",
+          marginBottom: "2%",
         }}
       >
         Sản phẩm lưu kho:

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import {
   Box,
   Modal,
@@ -13,10 +13,10 @@ import {
   RadioGroup,
   Radio,
 } from "@material-ui/core";
-import { Controller } from "react-hook-form";
+import {Controller} from "react-hook-form";
 import CustomInput from "./CustomInput";
 import TagSelection from "../pages/Order/CreateOrder/components/TagSelection";
-import { MenuItem, Select, FormControl } from "@material-ui/core";
+import {MenuItem, Select, FormControl} from "@material-ui/core";
 import ListPositionStored from "./ListPositionStored";
 import {
   PRODUCT_TYPE,
@@ -27,10 +27,10 @@ import {
   ACCESSSORY_TYPE,
   SERVICE_TYPE,
 } from "../constant/constant";
-import { useNavigate } from "react-router";
-import { updateOrder } from "../apis/Apis";
+import {useNavigate} from "react-router";
+import {updateOrder} from "../apis/Apis";
 
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 import * as action from "../redux/action/action";
 import OrderDetail from "./OrderDetail";
 import ListInfoHistoryExtension from "./ListInfoHistoryExtension";
@@ -88,7 +88,7 @@ function InformationOrder({
   const [dateDelivery, setDateDelivery] = useState();
   const [dateReturn, setDateReturn] = useState();
   const [statusOrder, setStatusOrder] = useState();
-  const [isPaid, setIsPaid] = useState();
+  const [isPaid, setIsPaid] = useState(false);
   const [isCustomerDelivery, setIsCustomerDelivery] = useState();
   const [isCustomerReturn, setIsCustomerReturn] = useState();
   const [paymentMethod, setPaymentMethod] = useState(0);
@@ -107,13 +107,6 @@ function InformationOrder({
     setTimeDelivery({});
   };
 
-  const handleChangeCheckBoxIsPaid = (event) => {
-    if (isView === true) {
-      return;
-    }
-    setIsPaid(event.target.checked);
-  };
-
   const handleChangeCheckBoxCustomerReturn = (event) => {
     if (isView === true) {
       return;
@@ -130,19 +123,18 @@ function InformationOrder({
         replace: true,
       });
     } else {
-      navigate("/app/storages", { replace: true });
+      navigate("/app/storages", {replace: true});
     }
     handleClose();
   };
 
   useEffect(() => {
     if (currentOrder) {
-      console.log(currentOrder);
       setReturnAddress(currentOrder?.addressReturn);
       setDeliveryAddress(currentOrder?.deliveryAddress);
 
       setDateDelivery(currentOrder?.deliveryDate?.split("T")[0]);
-
+      setIsPaid(currentOrder?.isPaid);
       setTimeDelivery({
         name: currentOrder?.deliveryTime,
         isAvailable: true,
@@ -159,12 +151,12 @@ function InformationOrder({
         setDuration(currentOrder?.durationDays);
         currentDuration = currentOrder?.durationDays;
       }
-      setIsPaid(currentOrder?.isPaid);
-      setIsCustomerDelivery(currentOrder?.isUserDelivery);
+      setIsCustomerDelivery(currentOrder?.isCustomerDelivery);
       reset({
         deliveryAddress: currentOrder.deliveryAddress,
         returnAddress: currentOrder.returnAddress,
         dateDelivery: currentOrder.deliveryDate?.split("T")[0],
+        isPaid: currentOrder.isPaid,
       });
       setDuration(currentDuration);
       if (currentOrder?.deliveryDate !== undefined) {
@@ -221,23 +213,6 @@ function InformationOrder({
     }
   };
 
-  const handleReturnItem = async () => {
-    try {
-      showLoading();
-      await updateOrder(
-        currentOrder.id,
-        { ...currentOrder, status: 7 },
-        userState.idToken
-      );
-      await getData(searchId, page, 8, userState.idToken);
-      handleClose();
-      showSnackbar("success", "Return order success");
-    } catch (error) {
-    } finally {
-      hideLoading();
-    }
-  };
-
   const handleOnClickPlus = (event) => {
     event.preventDefault();
     if (isView === true) {
@@ -249,54 +224,6 @@ function InformationOrder({
     let currentDate = new Date(dateReturn);
     let newDate = new Date(currentDate.setMonth(currentDate.getMonth() + 1));
     setDateReturn(newDate.toLocaleDateString("en-US"));
-  };
-
-  const handleChaneReturnDate = (e) => {
-    setDateReturn(e.target.value);
-    if (dateDelivery !== undefined || dateReturn !== undefined) {
-      let parseDateReturn = new Date(e.target.value);
-      let parseDateDelivery = new Date(dateDelivery);
-      let diffTime = parseDateReturn.getTime() - parseDateDelivery.getTime();
-      let diffDays = diffTime / (1000 * 3600 * 24);
-      setDuration(diffDays);
-    }
-  };
-
-  const buildPosition = () => {
-    return currentOrder?.orderDetails?.map((e) => (
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          width: "100%",
-        }}
-      >
-        <Box
-          sx={{
-            width: "20%",
-          }}
-        >
-          <Typography color="black" variant="h4" style={{ margin: "4%" }}>
-            {e.sizeType}
-          </Typography>
-        </Box>
-        <Box
-          sx={{
-            width: "80%",
-          }}
-        >
-          <Typography
-            color="black"
-            variant="h4"
-            style={{ margin: "4%", textAlign: "right" }}
-          >
-            {e.areaName} / {e.shelfName}
-          </Typography>
-        </Box>
-      </Box>
-    ));
   };
 
   const mapListTime = (time, setTime, setIsCutomer) =>
@@ -326,7 +253,7 @@ function InformationOrder({
         <Typography color="black" variant="h2">
           {title}
         </Typography>
-        <p style={{ fontSize: "18px" }}>{value}</p>
+        <p style={{fontSize: "18px"}}>{value}</p>
       </Box>
     );
   };
@@ -420,7 +347,7 @@ function InformationOrder({
         paymentMethod: paymentMethod,
         addressReturn: data.returnAddress,
         status: currentOrder?.status,
-        isPaid: isPaid,
+        isPaid: data.isPaid,
       };
       await updateOrder(orderTemp.id, orderTemp, userState.idToken);
       await getData(searchId, page, 8, userState.idToken);
@@ -464,7 +391,7 @@ function InformationOrder({
             flexDirection: "column",
           }}
         >
-          <Typography color="black" variant="h2" sx={{ marginBottom: "4%" }}>
+          <Typography color="black" variant="h2" sx={{marginBottom: "4%"}}>
             Thông tin hóa đơn
           </Typography>
           <Box
@@ -500,39 +427,36 @@ function InformationOrder({
             sx={{
               display: "flex",
               flexDirection: "row",
-              justifyContent: "space-between",
+              justifyContent: "flex-start",
             }}
           >
-            <Typography
-              color="black"
-              variant="h2"
-              sx={{ marginBottom: "2%", marginTop: "4%" }}
+            <p
+              style={{
+                maginRight: "1%",
+              }}
             >
               Đã thanh toán
-            </Typography>
-            <FormControlLabel
-              value="isPaid"
-              control={
-                <Checkbox
-                  checked={isPaid}
-                  onChange={handleChangeCheckBoxIsPaid}
-                />
-              }
-              label="Is paid"
-              labelPlacement="Is paid"
+            </p>
+            <Controller
+              control={control}
+              name="isPaid"
+              defaultValue={isPaid}
+              render={({field: {onChange, onBlur, value, name, ref}}) => (
+                <Checkbox checked={value} onChange={onChange} />
+              )}
             />
           </Box>
           <Typography
             color="black"
             variant="h3"
-            sx={{ marginBottom: "2%", marginTop: "4%" }}
+            sx={{marginBottom: "2%", marginTop: "4%"}}
           >
             Địa chỉ lấy hàng:
           </Typography>
           <CustomInput
             control={control}
             rules={{}}
-            styles={{ width: "300px" }}
+            styles={{width: "300px"}}
             name="deliveryAddress"
             label="Địa chỉ lấy hàng"
             disabled={isView}
@@ -542,14 +466,14 @@ function InformationOrder({
           <Typography
             color="black"
             variant="h3"
-            sx={{ marginBottom: "2%", marginTop: "4%" }}
+            sx={{marginBottom: "2%", marginTop: "4%"}}
           >
             Địa chỉ trả hàng:
           </Typography>
           <CustomInput
             control={control}
             rules={{}}
-            styles={{ width: "300px", display: "block" }}
+            styles={{width: "300px", display: "block"}}
             name="returnAddress"
             label="Địa chỉ trả hàng"
             disabled={isView}
@@ -566,25 +490,26 @@ function InformationOrder({
             <Typography
               color="black"
               variant="h2"
-              sx={{ marginBottom: "4%", marginTop: "4%" }}
+              sx={{marginBottom: "4%", marginTop: "4%"}}
             >
               Thời gian
             </Typography>
           </Box>
-          <Typography color="black" variant="h3" sx={{ marginBottom: "2%" }}>
+          <Typography color="black" variant="h3" sx={{marginBottom: "2%"}}>
             {currentOrder?.typeOrder === 0 ? "Ngày bắt đầu" : "Ngày lấy đơn"}
           </Typography>
           <Controller
             name={"dateDelivery"}
             control={control}
-            render={({ field: { onChange, value } }) => {
+            defaultValue={dateDelivery}
+            render={({field: {onChange, value}}) => {
               return (
                 <TextField
                   type="date"
                   disabled={isView}
-                  defaultValue={value}
+                  value={value}
                   onChange={onChange}
-                  sx={{ width: 220, marginBottom: "16px" }}
+                  sx={{width: 220, marginBottom: "16px"}}
                   InputLabelProps={{
                     shrink: true,
                   }}
@@ -631,7 +556,7 @@ function InformationOrder({
                 marginBottom: "6%",
               }}
             >
-              <Typography variant="h2" style={{ marginBottom: "3%" }}>
+              <Typography variant="h2" style={{marginBottom: "3%"}}>
                 Thời hạn (tháng)
               </Typography>
               <Box
@@ -659,7 +584,7 @@ function InformationOrder({
               justifyContent: "space-between",
             }}
           >
-            <Typography color="black" variant="h3" sx={{ marginBottom: "2%" }}>
+            <Typography color="black" variant="h3" sx={{marginBottom: "2%"}}>
               {currentOrder?.typeOrder === 0
                 ? "Ngày kết thúc"
                 : "Ngày trả hàng"}
@@ -667,7 +592,7 @@ function InformationOrder({
             <Typography
               color="primary"
               variant="h3"
-              sx={{ marginBottom: "2%", textAlign: "right" }}
+              sx={{marginBottom: "2%", textAlign: "right"}}
             >
               {new Date(currentOrder?.returnDate).toLocaleDateString("en-US")}
             </Typography>
@@ -691,7 +616,7 @@ function InformationOrder({
                 marginBottom: "2%",
               }}
             >
-              <Typography color="black" variant="h3" sx={{ marginRight: "2%" }}>
+              <Typography color="black" variant="h3" sx={{marginRight: "2%"}}>
                 Thời hạn:
               </Typography>
               <Typography color="primary" variant="h3">
@@ -728,7 +653,7 @@ function InformationOrder({
           <Typography
             color="black"
             variant="h3"
-            sx={{ marginBottom: "2%", marginTop: "4%" }}
+            sx={{marginBottom: "2%", marginTop: "4%"}}
           >
             Phương thức thanh toán
           </Typography>
@@ -764,11 +689,11 @@ function InformationOrder({
               <Typography
                 color="black"
                 variant="h3"
-                sx={{ marginBottom: "2%", marginTop: "4%" }}
+                sx={{marginBottom: "2%", marginTop: "4%"}}
               >
                 Lý do
               </Typography>
-              <p style={{ color: "red" }}>{currentOrder?.rejectedReason}</p>
+              <p style={{color: "red"}}>{currentOrder?.rejectedReason}</p>
             </Box>
           ) : null}
         </Box>
@@ -784,7 +709,7 @@ function InformationOrder({
           <Typography
             color="black"
             variant="h2"
-            sx={{ marginBottom: "4%", marginTop: "4%" }}
+            sx={{marginBottom: "4%", marginTop: "4%"}}
           >
             Chi tiết đơn hàng
           </Typography>
@@ -792,6 +717,7 @@ function InformationOrder({
             choosenProduct={formatToChosenProduct()}
             duration={duration}
             order={currentOrder}
+            isOrder={true}
           />
 
           {currentOrder?.orderDetails?.boxDetails != null ? (
@@ -847,22 +773,6 @@ function InformationOrder({
               ) : (
                 <></>
               )}
-
-              {currentOrder?.status === 4 ? (
-                <Button
-                  style={{
-                    height: "45px",
-                    paddingLeft: "16px",
-                    paddingRight: "16px",
-                    marginRight: "4%",
-                  }}
-                  color="primary"
-                  variant="contained"
-                  onClick={() => handleReturnItem()}
-                >
-                  Trả đơn
-                </Button>
-              ) : null}
 
               {currentOrder?.status !== 0 && currentOrder?.status !== 1 ? (
                 userState.roleName !== "Admin" ? (

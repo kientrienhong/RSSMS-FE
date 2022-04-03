@@ -695,6 +695,7 @@ function RequestModal({
             <OrderDetail
               choosenProduct={formatToChosenProduct()}
               duration={duration}
+              isOrder={false}
             />
 
             {currentOrder?.orderHistoryExtensions?.length > 0 ? (
