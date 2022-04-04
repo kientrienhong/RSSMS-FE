@@ -3,6 +3,7 @@ import {VscTag} from "react-icons/vsc";
 import {GrSchedule} from "react-icons/gr";
 import {User as UserIcon, Users as UsersIcon} from "react-feather";
 import {GoClippy} from "react-icons/go";
+import {BsTrashFill} from "react-icons/bs";
 
 export const LIST_SIDE_BAR_ADMIN = [
   {
@@ -38,6 +39,12 @@ export const LIST_SIDE_BAR_ADMIN = [
     icon: undefined,
     title: "Đơn hàng",
     reactIcon: <FaFileInvoiceDollar />,
+  },
+  {
+    href: "/app/liquidateOrder",
+    icon: undefined,
+    title: "Đơn hàng đã thanh lý",
+    reactIcon: <BsTrashFill />,
   },
   {
     href: "/app/staff_request",
@@ -83,6 +90,12 @@ export const LIST_SIDE_BAR_MANAGER = [
     reactIcon: <FaFileInvoiceDollar />,
   },
   {
+    href: "/app/liquidateOrder",
+    icon: undefined,
+    title: "Đơn hàng đã thanh lý",
+    reactIcon: <BsTrashFill />,
+  },
+  {
     href: "/app/staff_request",
     title: "Nhân viên yêu cầu",
     icon: undefined,
@@ -122,6 +135,12 @@ export const LIST_SIDE_BAR_OFFICE_STAFF = (idStorage) => {
       title: "Đơn hàng",
       icon: undefined,
       reactIcon: <FaFileInvoiceDollar />,
+    },
+    {
+      href: "/app/liquidateOrder",
+      icon: undefined,
+      title: "Đơn hàng đã thanh lý",
+      reactIcon: <BsTrashFill />,
     },
     {
       href: "/app/customer_request",
