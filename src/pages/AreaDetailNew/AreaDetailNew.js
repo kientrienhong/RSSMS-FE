@@ -137,8 +137,8 @@ function AreaDetailNew({
   };
 
   const handleDeleteSpace = async (id) => {
+    await deleteSpace(id, userState.idToken);
     try {
-      await deleteSpace(id, userState.idToken);
       setCurrentSpace({});
       await getData();
       showSnackbar("success", "Xóa không gian thành công!");

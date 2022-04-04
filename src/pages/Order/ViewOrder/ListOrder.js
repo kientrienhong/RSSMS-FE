@@ -160,14 +160,15 @@ function ListOrder({
   showSnackbar,
   userState,
   currentOrder,
+  handleUpdateOrderOpen,
 }) {
   const classes = useStyles();
-
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   const [open, setOpen] = React.useState(false);
   const [currentId, setCurrentId] = React.useState(-1);
   const {handleSubmit, control} = useForm();
   const [openAssign, setOpenAssign] = React.useState(false);
+
   const handleConfirmOpen = () => {
     setOpen(true);
   };
@@ -393,8 +394,27 @@ function ListOrder({
                 <TableCell style={{color: color, fontWeight: "bold"}}>
                   {status}
                 </TableCell>
+
                 {userState.roleName !== "Admin" ? (
                   <TableCell style={{color: "black"}}>
+                    {row.status === 1 || row.status === 0 ? null : (
+                      <Button
+                        onClick={async () => {
+                          await handleClickRow(row);
+                          handleUpdateOrderOpen();
+                        }}
+                        style={{
+                          height: "45px",
+                          paddingLeft: "16px",
+                          paddingRight: "16px",
+                          marginBottom: "4%",
+                        }}
+                        color="primary"
+                        variant="contained"
+                      >
+                        Cập nhật
+                      </Button>
+                    )}
                     <Button
                       onClick={async () => {
                         handleClickRow(row);
@@ -405,6 +425,7 @@ function ListOrder({
                         paddingLeft: "16px",
                         paddingRight: "16px",
                         marginBottom: "4%",
+                        marginLeft: "2%",
                       }}
                       color="success"
                       variant="contained"
@@ -412,24 +433,6 @@ function ListOrder({
                     >
                       Xem thêm
                     </Button>
-                    {row.status === 0 ? null : (
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexDirection: "row",
-                        }}
-                      >
-                        <Button
-                          className={classes.button}
-                          onClick={() => {
-                            setCurrentId(row.id);
-                            handleConfirmOpen();
-                          }}
-                        >
-                          Hủy
-                        </Button>
-                      </Box>
-                    )}
                   </TableCell>
                 ) : (
                   <></>

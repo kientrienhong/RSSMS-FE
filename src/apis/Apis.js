@@ -584,6 +584,19 @@ export const updateOrder = async (id, order, token) => {
   return response;
 };
 
+export const updateStatusOrder = async (id, status, token) => {
+  const response = await axios.put(
+    `https://localhost:44304/api/v1/orders/${id}`,
+    {
+      id: id,
+      status: status,
+    },
+    {headers: {Authorization: `Bearer ${token}`}}
+  );
+
+  return response;
+};
+
 export const placeBoxes = async (placingProducts, token) => {
   const boxesId = placingProducts.floors.map((e) => {
     return {

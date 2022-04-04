@@ -163,17 +163,13 @@ function ListUsers({
   };
   const handleDeleteUser = async (id) => {
     let response;
-    try {
-      response = await deleteUser(id, userState.idToken);
-      if (listUser.length === 1) {
-        if (page !== 1) {
-          setPage(page - 1);
-        }
+    response = await deleteUser(id, userState.idToken);
+    if (listUser.length === 1) {
+      if (page !== 1) {
+        setPage(page - 1);
       }
-      await getData(searchName, page, 8);
-    } catch (error) {
-      console.log(error);
     }
+    await getData(searchName, page, 8);
 
     return response;
   };

@@ -70,6 +70,12 @@ export const AREA_SIZE = {
   3: "3m2",
 };
 
+export const LIST_STATUS_ORDER_SELECT = [
+  {name: "Đã lưu kho", value: 2},
+  {name: "Đang thanh lý", value: 5},
+  {name: "Đã thanh lý", value: 7},
+];
+
 export const LIST_SPACE_TYPE = [
   {name: "Kệ", color: style.PRIMARY_BLUE},
   {name: "Diện tích", color: style.PRIMARY_PURPLE},
@@ -126,7 +132,7 @@ export const ORDER_STATUS = {
   2: {name: "Đã lưu kho", color: style.SECOND_SEMANTIC_GREEN},
   3: {name: "Sắp quá hạn", color: style.PRIMARY_SEMANTIC_RED},
   4: {name: "Đã quá hạn", color: style.PRIMARY_SEMANTIC_RED},
-  5: {name: "Đang thanh lý", color: style.PRIMARY_SEMANTIC_RED},
+  5: {name: "Đang thanh lý", color: style.PRIMARY_SEMANTIC_ORANGE},
   6: {name: "Hoàn thành", color: style.SECOND_SEMANTIC_GREEN},
   7: {name: "Đã thanh lý", color: style.PRIMARY_SEMANTIC_RED},
 };

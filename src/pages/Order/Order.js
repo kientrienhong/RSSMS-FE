@@ -14,6 +14,7 @@ import {useForm} from "react-hook-form";
 import {connect} from "react-redux";
 import * as action from "../../redux/action/action";
 import {getOrder} from "../../apis/Apis";
+import UpdateOrderModal from "../../components/UpdateOrderModal";
 
 import ProductButton from "./CreateOrder/components/ProductButton";
 import OrderModal from "../../components/OrderModal";
@@ -25,6 +26,8 @@ function Order({
   userState,
   showSnackbar,
 }) {
+  const [openUpdateOrder, setOpenUpdateOrder] = React.useState(false);
+
   const navigate = useNavigate();
   const {handleSubmit, reset, control} = useForm();
 
@@ -34,6 +37,15 @@ function Order({
   const [page, setPage] = useState(1);
   const [totalOrder, setTotalOrder] = useState(0);
   const [searchId, setSearchId] = useState("");
+
+  const handleUpdateOrderOpen = () => {
+    setOpenUpdateOrder(true);
+  };
+
+  const handleUpdateOrderClose = () => {
+    setOpenUpdateOrder(false);
+  };
+
   const onHandleOpen = () => {
     setOpen(true);
   };
@@ -129,6 +141,14 @@ function Order({
         py: 3,
       }}
     >
+      <UpdateOrderModal
+        open={openUpdateOrder}
+        handleClose={handleUpdateOrderClose}
+        currentOrder={currentOrder}
+        getData={getData}
+        page={page}
+        searchId={searchId}
+      />
       <OrderModal
         open={open}
         reset={reset}
@@ -192,6 +212,7 @@ function Order({
           setOrder={setCurrentOrder}
           getData={getData}
           reset={reset}
+          handleUpdateOrderOpen={handleUpdateOrderOpen}
           setListOrder={setListOrder}
           setPage={setPage}
           currentOrder={currentOrder}

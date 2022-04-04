@@ -1,14 +1,14 @@
-import React, { useState } from "react";
-import { Box, Card, Typography, Button } from "@material-ui/core";
+import React, {useState} from "react";
+import {Box, Card, Typography, Button} from "@material-ui/core";
 import RowArea from "./RowArea";
 import ModalArea from "./ModalArea";
-import { useForm } from "react-hook-form";
-import { connect } from "react-redux";
+import {useForm} from "react-hook-form";
+import {connect} from "react-redux";
 import * as action from "../../redux/action/action";
 import ConfirmModal from "../../components/ConfirmModal";
-import { createArea, deleteArea, updateArea, getArea } from "../../apis/Apis";
-import { TYPE_AREA } from "../../constant/constant";
-import { ErrorHandle } from "../../utils/ErrorHandle";
+import {createArea, deleteArea, updateArea, getArea} from "../../apis/Apis";
+import {TYPE_AREA} from "../../constant/constant";
+import {ErrorHandle} from "../../utils/ErrorHandle";
 
 function AreaList({
   listArea,
@@ -23,7 +23,7 @@ function AreaList({
     handleSubmit,
     control,
     reset,
-    formState: { errors },
+    formState: {errors},
   } = useForm();
 
   const mapListToview = (
@@ -137,9 +137,8 @@ function AreaList({
   };
 
   const onHandleDeleteArea = async (id) => {
+    await deleteArea(id, userState.idToken);
     try {
-      showLoading();
-      await deleteArea(id, userState.idToken);
       let listAreaTemp = await getArea(storageId, userState.idToken);
       setListArea(listAreaTemp.data.data);
       showSnackbar("success", "Xóa khu vực thành công!");
@@ -150,9 +149,6 @@ function AreaList({
       } else {
         throw error;
       }
-    } finally {
-      hideLoading();
-      handleClose();
     }
   };
 

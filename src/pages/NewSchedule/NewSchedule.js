@@ -191,7 +191,7 @@ function NewSchedule({showLoading, hideLoading, userState}) {
         userState.idToken
       );
       response?.data?.data
-        .filter((e) => e.isCustomerDelivery === false)
+        .filter((e) => e.isCustomerDelivery === false && e.typeOrder === 1)
         .forEach((e) => {
           handleFormatDate(new Date(e.deliveryDate), result, e);
         });

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import {
   Box,
   Modal,
@@ -8,9 +8,9 @@ import {
   Radio,
   Grid,
 } from "@material-ui/core";
-import { STYLE_MODAL } from "../../../constant/style";
-import { connect } from "react-redux";
-import { getListStorage, assignOrder } from "../../../apis/Apis";
+import {STYLE_MODAL} from "../../../constant/style";
+import {connect} from "react-redux";
+import {getListStorage, assignOrder} from "../../../apis/Apis";
 
 import * as action from "../../../redux/action/action";
 function AssignOrderModal({
@@ -96,6 +96,7 @@ function AssignOrderModal({
             justifyContent: "center",
             alignItems: "center",
             marginBottom: "8%",
+            height: "auto",
             cursor: "pointer",
           }}
           key={e.id}
@@ -146,7 +147,7 @@ function AssignOrderModal({
             checked={selectedValue === e.id.toString()}
             name="radio-buttons"
             onChange={handleChange}
-            inputProps={{ "aria-label": "B" }}
+            inputProps={{"aria-label": "B"}}
           />
         </Card>
       );
@@ -185,7 +186,7 @@ function AssignOrderModal({
           </Grid>
         </Box>
         {error?.length > 0 ? (
-          <p style={{ color: "red", textAlign: "center" }}>{error}</p>
+          <p style={{color: "red", textAlign: "center"}}>{error}</p>
         ) : null}
         <Box
           sx={{

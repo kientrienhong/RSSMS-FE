@@ -624,32 +624,6 @@ function InformationOrder({
               </Typography>
             </Box>
           )}
-          {currentOrder?.typeOrder === 0 ? null : (
-            <Box>
-              <Grid
-                container
-                spacing={2}
-                sx={{
-                  width: "98%",
-                  marginBottom: "3%",
-                }}
-              >
-                {mapListTime(timeReturn, setTimeReturn, setIsCustomerReturn)}
-              </Grid>
-              <FormControlLabel
-                value="isCustomerReturn"
-                control={
-                  <Checkbox
-                    checked={isCustomerReturn}
-                    onChange={handleChangeCheckBoxCustomerReturn}
-                  />
-                }
-                label="Khách tự vẫn chuyến trả đồ"
-                labelPlacement="Customer return by themselves"
-              />
-            </Box>
-          )}
-
           <Typography
             color="black"
             variant="h3"

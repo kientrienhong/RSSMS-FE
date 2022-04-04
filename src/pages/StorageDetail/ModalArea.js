@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import CustomInput from "../../components/CustomInput";
 import CustomAreaInput from "../../components/CustomAreaInput";
-import { STYLE_MODAL } from "../../constant/style";
+import {STYLE_MODAL} from "../../constant/style";
 import CustomSelect from "../../components/CustomSelect";
 
 export default function ModalArea({
@@ -22,7 +22,7 @@ export default function ModalArea({
   isEdit,
   errors,
 }) {
-  const styleInput = { marginRight: "2.5%" };
+  const styleInput = {marginRight: "2.5%"};
 
   const styleModal = {
     ...STYLE_MODAL,
@@ -49,24 +49,24 @@ export default function ModalArea({
           {isEdit === true ? "Cập nhật khu vực" : "Tạo khu vực"}
         </Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Box sx={{ marginTop: "16px" }}>
+          <Box sx={{marginTop: "16px"}}>
             <CustomInput
               control={control}
               rules={{
                 required: "*Vui lòng nhập",
               }}
-              styles={{ width: "400px" }}
+              styles={{width: "400px"}}
               name="name"
               label="Tên"
               userInfo={currentArea.name}
-              inlineStyle={{ ...styleInput, marginBottom: "4%" }}
+              inlineStyle={{...styleInput, marginBottom: "4%"}}
             />
             <CustomAreaInput
               control={control}
               rules={{
                 required: "*Vui lòng nhập",
               }}
-              styles={{ width: "400px" }}
+              styles={{width: "400px"}}
               name="description"
               label="Mô tả"
               userInfo={currentArea.description}
@@ -93,7 +93,7 @@ export default function ModalArea({
                   name="length"
                   label="Chiều dài (m)"
                   userInfo={currentArea?.length}
-                  inlineStyle={{ ...styleInput, marginBottom: "4%" }}
+                  inlineStyle={{...styleInput, marginBottom: "4%"}}
                 />
               </Grid>
               <Grid item xs={4}>
@@ -109,7 +109,7 @@ export default function ModalArea({
                   name="width"
                   label="Chiều rộng (m)"
                   userInfo={currentArea?.width}
-                  inlineStyle={{ ...styleInput, marginBottom: "4%" }}
+                  inlineStyle={{...styleInput, marginBottom: "4%"}}
                 />
               </Grid>
               <Grid item xs={4}>
@@ -125,7 +125,7 @@ export default function ModalArea({
                   name="height"
                   label="Chiều cao (m)"
                   userInfo={currentArea?.height}
-                  inlineStyle={{ ...styleInput, marginBottom: "4%" }}
+                  inlineStyle={{...styleInput, marginBottom: "4%"}}
                 />
               </Grid>
             </Grid>
@@ -174,12 +174,23 @@ export default function ModalArea({
             sx={{
               width: "100%",
               display: "flex",
+              flexDirection: "row",
               justifyContent: "center",
               marginTop: "16px",
             }}
           >
             <Button color="primary" type="submit" variant="contained">
               Xác nhận
+            </Button>
+            <Button
+              color="error"
+              onClick={() => handleClose()}
+              variant="outlined"
+              style={{
+                marginLeft: "2%",
+              }}
+            >
+              Đóng
             </Button>
           </Box>
         </form>

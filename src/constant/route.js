@@ -28,10 +28,28 @@ export const LIST_SIDE_BAR_ADMIN = [
     reactIcon: <FaWarehouse />,
   },
   {
+    href: "/app/schedule",
+    title: "Lịch giao hàng",
+    icon: undefined,
+    reactIcon: <GrSchedule />,
+  },
+  {
     href: "/app/orders",
     icon: undefined,
     title: "Đơn hàng",
     reactIcon: <FaFileInvoiceDollar />,
+  },
+  {
+    href: "/app/staff_request",
+    title: "Nhân viên yêu cầu",
+    icon: undefined,
+    reactIcon: <GoClippy />,
+  },
+  {
+    href: "/app/customer_request",
+    title: "Khách hàng yêu cầu",
+    icon: undefined,
+    reactIcon: <GoClippy />,
   },
 ];
 
