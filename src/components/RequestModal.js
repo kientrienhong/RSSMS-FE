@@ -326,7 +326,6 @@ function RequestModal({
   const onSubmit = async (data) => {
     try {
       showLoading();
-      console.log(data);
       const orderTemp = {
         id: currentOrder.id,
         isUserDelivery: isCustomerDelivery,

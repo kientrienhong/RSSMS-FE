@@ -1,8 +1,8 @@
 import React from "react";
-import { Box, Modal, Button, Typography } from "@material-ui/core";
-import { connect } from "react-redux";
+import {Box, Modal, Button, Typography} from "@material-ui/core";
+import {connect} from "react-redux";
 import * as action from "../redux/action/action";
-import { STYLE_MODAL } from "../constant/style";
+import {STYLE_MODAL} from "../constant/style";
 const styleModal = {
   ...STYLE_MODAL,
 
@@ -66,10 +66,14 @@ function ConfirmModal({
             onClick={async () => {
               try {
                 showLoading();
+                console.log(onHandleYes);
                 let response = await onHandleYes(id);
+                console.log(response);
                 handleClose();
                 showSnackbar("success", msg);
               } catch (error) {
+                console.log(error);
+
                 console.log(error?.response);
                 showSnackbar("error", error?.response?.data?.error?.message);
               } finally {

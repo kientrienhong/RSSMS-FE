@@ -1,8 +1,8 @@
 import React from "react";
-import { Box, Card, Typography } from "@material-ui/core";
+import {Box, Card, Typography} from "@material-ui/core";
 import CircularProgressWithLabel from "../../AreaDetailNew/components/CircularProgressWithLabel";
 
-export default function AreaUsage({ detailFloor }) {
+export default function AreaUsage({detailFloor}) {
   const buildNameValue = (name, value) => {
     return (
       <Box
@@ -26,7 +26,7 @@ export default function AreaUsage({ detailFloor }) {
         <Typography
           color="black"
           variant="h2"
-          sx={{ textAlign: "center", marginBottom: "16px" }}
+          sx={{textAlign: "center", marginBottom: "16px"}}
         >
           {value}
         </Typography>
@@ -36,7 +36,7 @@ export default function AreaUsage({ detailFloor }) {
 
   const buildProductUsage = (usage) => {
     return (
-      <Box sx={{ display: "flex", flexDirection: "column" }}>
+      <Box sx={{display: "flex", flexDirection: "column"}}>
         <CircularProgressWithLabel
           value={usage}
           width="80px"
@@ -77,9 +77,9 @@ export default function AreaUsage({ detailFloor }) {
       <Typography
         color="black"
         variant="h2"
-        sx={{ textAlign: "left", marginBottom: "16px" }}
+        sx={{textAlign: "left", marginBottom: "16px"}}
       >
-        Usage
+        Tình trạng
       </Typography>
       {buildProductUsage(detailFloor?.usage)}
     </Card>

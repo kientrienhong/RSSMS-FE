@@ -12,7 +12,7 @@ import {
 import {STYLE_MODAL} from "../../../constant/style";
 import CustomInput from "../../../components/CustomInput";
 import CustomAreaInput from "../../../components/CustomAreaInput";
-import {LIST_UNIT} from "../../../constant/constant";
+import {LIST_UNIT, ACCESSSORY_TYPE} from "../../../constant/constant";
 import {connect} from "react-redux";
 import * as action from "../../../redux/action/action";
 import {createProduct, updateProduct} from "../../../apis/Apis";
@@ -46,6 +46,7 @@ function ProductModal({
   userState,
   errors,
 }) {
+  console.log(typeProduct);
   const [unit, setUnit] = useState("");
   const [error, setError] = useState({});
   const buildDropDown = (listSizeStorage) =>
@@ -68,9 +69,9 @@ function ProductModal({
       price: parseInt(data.price),
       description: data.description,
       type: typeProduct,
-      width: data.width,
-      height: data.height,
-      length: data.length,
+      width: data.width ? data.width : "0",
+      height: data.height ? data.height : "0",
+      length: data.length ? data.length : "0",
       unit: data.unit,
       tooltip: data.tooltip,
       image: {
@@ -121,9 +122,9 @@ function ProductModal({
       price: parseInt(data.price),
       description: data.description,
       type: typeProduct,
-      width: data.width,
-      height: data.height,
-      length: data.length,
+      width: data.width ? data.width : "0",
+      height: data.height ? data.height : "0",
+      length: data.length ? data.length : "0",
       unit: data.unit,
       tooltip: data.tooltip,
       image: {
@@ -291,59 +292,63 @@ function ProductModal({
                   inlineStyle={{...styleInput}}
                 />
               </Box>
-              <Box
-                sx={{
-                  ...styleBoxInput,
-                  marginTop: "5%",
-                  justifyContent: "flex-start",
-                }}
-              >
-                <CustomInput
-                  control={control}
-                  rules={{
-                    required: "*Vui lòng nhập",
-                    pattern: {
-                      value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
-                      message: "*Vui lòng nhập đúng chiều rộng",
-                    },
+              {typeProduct !== ACCESSSORY_TYPE ? (
+                <Box
+                  sx={{
+                    ...styleBoxInput,
+                    marginTop: "5%",
+                    justifyContent: "flex-start",
                   }}
-                  styles={{width: "120px"}}
-                  name="width"
-                  label="Chiều rộng (m)"
-                  userInfo={currentProduct?.width}
-                  inlineStyle={styleInput}
-                />
-                <CustomInput
-                  control={control}
-                  rules={{
-                    required: "*Vui lòng nhập",
-                    pattern: {
-                      value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
-                      message: "*Vui lòng nhập đúng chiều dài",
-                    },
-                  }}
-                  styles={{width: "120px"}}
-                  name="length"
-                  label="Chiều dài (m)"
-                  userInfo={currentProduct?.length}
-                  inlineStyle={styleInput}
-                />
-                <CustomInput
-                  control={control}
-                  rules={{
-                    required: "*Vui lòng nhập",
-                    pattern: {
-                      value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
-                      message: "*Vui lòng nhập đúng chiều cao",
-                    },
-                  }}
-                  styles={{width: "120px"}}
-                  name="height"
-                  label="Chiều cao (m)"
-                  userInfo={currentProduct?.height}
-                  inlineStyle={styleInput}
-                />
-              </Box>
+                >
+                  <CustomInput
+                    control={control}
+                    rules={{
+                      required: "*Vui lòng nhập",
+                      pattern: {
+                        value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
+                        message: "*Vui lòng nhập đúng chiều rộng",
+                      },
+                    }}
+                    styles={{width: "120px"}}
+                    name="width"
+                    label="Chiều rộng (m)"
+                    userInfo={currentProduct?.width}
+                    inlineStyle={styleInput}
+                  />
+                  <CustomInput
+                    control={control}
+                    rules={{
+                      required: "*Vui lòng nhập",
+                      pattern: {
+                        value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
+                        message: "*Vui lòng nhập đúng chiều dài",
+                      },
+                    }}
+                    styles={{width: "120px"}}
+                    name="length"
+                    label="Chiều dài (m)"
+                    userInfo={currentProduct?.length}
+                    inlineStyle={styleInput}
+                  />
+                  <CustomInput
+                    control={control}
+                    rules={{
+                      required: "*Vui lòng nhập",
+                      pattern: {
+                        value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
+                        message: "*Vui lòng nhập đúng chiều cao",
+                      },
+                    }}
+                    styles={{width: "120px"}}
+                    name="height"
+                    label="Chiều cao (m)"
+                    userInfo={currentProduct?.height}
+                    inlineStyle={styleInput}
+                  />
+                </Box>
+              ) : (
+                <></>
+              )}
 
               <CustomAreaInput
                 control={control}

@@ -281,22 +281,6 @@ function CustomerRequest({
             ),
           }}
         />
-        <Box sx={{width: "2%"}} />
-        <Button
-          style={{
-            height: "45px",
-            paddingLeft: "16px",
-            paddingRight: "16px",
-            marginLeft: "2%",
-          }}
-          color="primary"
-          variant="contained"
-          onClick={(e) => {
-            navigate("/orders/makingOrder");
-          }}
-        >
-          Tạo yêu cầu đặt đơn
-        </Button>
       </Box>
       <UpdateRequestModal
         open={openUpdateRequest}

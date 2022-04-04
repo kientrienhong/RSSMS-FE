@@ -42,7 +42,10 @@ function StoredOrderModal({
   isMoveOrderDetail,
 }) {
   const [selectedValue, setSelectedValue] = React.useState("");
-  const [error, setError] = React.useState();
+  const [error, setError] = React.useState({
+    placing: "",
+    submit: "",
+  });
   const navigate = useNavigate();
   const [expanded, setExpanded] = React.useState(false);
   const handleChange = (panel) => (event, isExpanded) => {
@@ -115,7 +118,7 @@ function StoredOrderModal({
 
   const onHandleSubmit = async () => {
     if (storedOrder.totalQuantity > 0) {
-      setError("Vui lòng đặt hết hàng hóa lên kệ");
+      setError({...error, submit: "Vui lòng đặt hết hàng hóa lên kệ"});
       return;
     }
     // storedOrder.products.forEach((e) => {
@@ -139,6 +142,10 @@ function StoredOrderModal({
       } else {
         await placeBoxes(placingProducts, userState.idToken);
       }
+      setError({
+        placing: "",
+        submits: "",
+      });
       showSnackbar("success", "Thao tác thành công");
       emptyPlacedProduct();
       handleClose();
@@ -152,7 +159,7 @@ function StoredOrderModal({
 
   const handlePlaceBox = () => {
     if (selectedValue === "") {
-      setError("Vui lòng chọn hàng hóa đặt vào kệ");
+      setError({...error, placing: "Vui lòng chọn hàng hóa đặt vào kệ"});
       return;
     }
 
@@ -182,7 +189,10 @@ function StoredOrderModal({
         currentFloor.typeShelf === TYPE_SHELF.Unweildy
       )
     ) {
-      setError("Vui lòng đặt hàng hóa phù hợp với loại không gian");
+      setError({
+        ...error,
+        placing: "Vui lòng đặt hàng hóa phù hợp với loại không gian",
+      });
       return;
     }
 
@@ -209,7 +219,10 @@ function StoredOrderModal({
         infoProduct: foundOrderDetail,
         orderDetail: foundOrderDetail,
       });
-      setError("");
+      setError({
+        placing: "",
+        submits: "",
+      });
       showSnackbar("success", "Đặt hàng lên kệ thành công");
     } else {
       setError("Kích thước không phù hợp hoặc không còn chỗ");
@@ -269,6 +282,7 @@ function StoredOrderModal({
                 width: "60%",
                 display: "flex",
                 marginRight: "3%",
+                height: "80%",
                 flexDirection: "column",
                 justifyContent: "flex-start",
                 alignItems: "flex-start",
@@ -283,9 +297,69 @@ function StoredOrderModal({
               >
                 Tất cả các sản phẩm trong đơn
               </Typography>
-              <Grid container spacing={2}>
-                {buildRadioSelect(storedOrder?.product)}
-              </Grid>
+              <Box
+                sx={{
+                  height: "346px",
+                }}
+              >
+                <Grid container spacing={2}>
+                  {buildRadioSelect(storedOrder?.product)}
+                </Grid>
+              </Box>
+              {isView === true ? null : (
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    width: "100%",
+                    marginTop: "16px",
+                    justifyContent: "center",
+                  }}
+                >
+                  {error?.placing?.length > 0 ? (
+                    <p style={{color: "red", textAlign: "center"}}>
+                      {error?.placing}
+                    </p>
+                  ) : null}
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      width: "100%",
+                      marginTop: "16px",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Button
+                      style={{
+                        height: "45px",
+                        paddingLeft: "16px",
+                        paddingRight: "16px",
+                        marginRight: "16px",
+                      }}
+                      onClick={() => onHandlePlace()}
+                      color="primary"
+                      variant="contained"
+                    >
+                      Đặt vào
+                    </Button>
+                    <Button
+                      style={{
+                        height: "45px",
+                        paddingLeft: "16px",
+                        paddingRight: "16px",
+                      }}
+                      onClick={() => handleClose()}
+                      color="error"
+                      variant="outlined"
+                    >
+                      Đóng
+                    </Button>
+                  </Box>
+                </Box>
+              )}
             </Box>
             <Box
               sx={{
@@ -360,36 +434,29 @@ function StoredOrderModal({
                 </Box>
                 {buildListPlacingProduct()}
               </Box>
-            </Box>
-          </Box>
-          {isView === true ? null : (
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                width: "100%",
-                marginTop: "16px",
-              }}
-            >
-              {error?.length > 0 ? (
-                <p style={{color: "red", textAlign: "center"}}>{error}</p>
-              ) : null}
-
-              <Box sx={{display: "flex", flexDirection: "row"}}>
-                <Button
-                  style={{
-                    height: "45px",
-                    paddingLeft: "16px",
-                    paddingRight: "16px",
-                    marginRight: "16px",
-                  }}
-                  onClick={() => onHandlePlace()}
-                  color="primary"
-                  variant="contained"
-                >
-                  Đặt vào
-                </Button>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  width: "100%",
+                }}
+              >
+                {error?.submit?.length > 0 ? (
+                  <p style={{color: "red", textAlign: "center"}}>
+                    {error?.submit}
+                  </p>
+                ) : null}
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  width: "100%",
+                  marginTop: "2%",
+                  justifyContent: "center",
+                }}
+              >
                 <Button
                   style={{
                     height: "45px",
@@ -417,7 +484,7 @@ function StoredOrderModal({
                 </Button>
               </Box>
             </Box>
-          )}
+          </Box>
         </Box>
       )}
     </Modal>

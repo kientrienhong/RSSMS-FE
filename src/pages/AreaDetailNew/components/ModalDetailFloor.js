@@ -57,19 +57,61 @@ function ModalDetailFloor({
             ...styleModal,
             display: "flex",
             alignItems: "center",
-            flexDirection: "row",
+            flexDirection: "column",
             justifyContent: "flex-start",
           }}
         >
-          <AreaUsage detailFloor={uiDetailFloor} />
-          <ListOrderDetail
-            listOrderDetail={detailFloor.orderDetails}
-            handleOpenOrderDetail={handleOpenOrderDetail}
-            setCurrentOrderDetail={setCurrentOrderDetail}
-            page={1}
-            detailFloor={detailFloor}
-            totalOrderDetail={3}
-          />
+          <Typography
+            color="black"
+            variant="h2"
+            sx={{textAlign: "left", marginBottom: "4%"}}
+          >
+            Thông tin chi tiết của kệ
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              width: "100%",
+              justifyContent: "flex-start",
+            }}
+          >
+            <AreaUsage detailFloor={uiDetailFloor} />
+            {detailFloor?.orderDetails?.length > 0 ? (
+              <ListOrderDetail
+                listOrderDetail={detailFloor?.orderDetails}
+                handleOpenOrderDetail={handleOpenOrderDetail}
+                setCurrentOrderDetail={setCurrentOrderDetail}
+                page={1}
+                detailFloor={detailFloor}
+                totalOrderDetail={3}
+              />
+            ) : (
+              <Typography
+                color="black"
+                variant="h2"
+                sx={{textAlign: "left", marginBottom: "4%"}}
+              >
+                Chưa có hàng hóa trên kệ
+              </Typography>
+            )}
+          </Box>
+          <Button
+            style={{
+              height: "45px",
+              width: "10%",
+              paddingLeft: "16px",
+              paddingRight: "16px",
+              marginTop: "2%",
+            }}
+            color="error"
+            onClick={() => {
+              handleClose();
+            }}
+            variant="outlined"
+          >
+            Đóng
+          </Button>
         </Box>
       </Box>
     </Modal>

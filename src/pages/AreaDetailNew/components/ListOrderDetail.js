@@ -211,7 +211,10 @@ function ListOrderDetail({
 
   return (
     <TableContainer component={Paper}>
-      <Table sx={{minWidth: 500}} aria-label="custom pagination table">
+      <Table
+        sx={{minWidth: 500, maxHeight: 800}}
+        aria-label="custom pagination table"
+      >
         {mapListTableHeader(listHeaderName)}
         <TableBody>
           {listPlacingProducts.map((row, index) => {
