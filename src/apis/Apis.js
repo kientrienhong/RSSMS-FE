@@ -33,9 +33,6 @@ export const getListDeliveryStaff = async (
   roleName,
   token
 ) => {
-  console.log(
-    `https://localhost:44304/api/v1/accounts/staffs?storageId=${storageId}&roleName=${roleName}&scheduleDay=${scheduleDay}&${scheduleTime}`
-  );
   return await axios.get(
     `https://localhost:44304/api/v1/accounts/staffs?storageId=${storageId}&roleName=${roleName}&scheduleDay=${scheduleDay}&${scheduleTime}`,
     {
@@ -396,15 +393,6 @@ export const getListSpace = async (name, page, size, areaId, token) => {
 };
 
 export const createSpace = async (space, areaId, token) => {
-  console.log({
-    areaId: areaId,
-    type: space.type,
-    name: space.name,
-    floorWidth: space.floorWidth,
-    floorLength: space.floorLength,
-    floorHeight: space.floorHeight,
-    numberOfFloor: space.numberOfFloor ?? 1,
-  });
   let result = await axios.post(
     `https://localhost:44304/api/v1/spaces`,
     {
@@ -423,15 +411,6 @@ export const createSpace = async (space, areaId, token) => {
 };
 
 export const updateShelf = async (id, space, token) => {
-  console.log({
-    id: id,
-    type: space.type,
-    name: space.name,
-    numberOfFloor: space.numberOfFloor ?? 1,
-    floorWidth: space.floorWidth,
-    floorLength: space.floorLength,
-    floorHeight: space.floorHeight,
-  });
   let result = await axios.put(
     `https://localhost:44304/api/v1/spaces/${id}`,
     {

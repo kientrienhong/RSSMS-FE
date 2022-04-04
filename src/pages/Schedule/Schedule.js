@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import {
   Inject,
   ScheduleComponent,
@@ -8,15 +8,15 @@ import {
   ViewsDirective,
   Agenda,
 } from "@syncfusion/ej2-react-schedule";
-import { Grid, Box, Typography, Modal } from "@material-ui/core";
+import {Grid, Box, Typography, Modal} from "@material-ui/core";
 import Order from "./component/Order";
 import OrderAssignModal from "./component/OrderAssignModal";
 import OrderAssignTimeModal from "./component/OrderAssignTimeModal";
 
 import OrderReturnDate from "./component/OrderReturnDate";
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 import * as action from "../../redux/action/action";
-import { getOrder, getListUser, getSchedule } from "../../apis/Apis";
+import {getOrder, getListUser, getSchedule} from "../../apis/Apis";
 import moment from "moment";
 import {
   isDateBefore,
@@ -24,14 +24,14 @@ import {
   getTimeStart,
   getTimeEnd,
 } from "../../utils/DateUtils";
-import { STYLE_MODAL } from "../../constant/style";
+import {STYLE_MODAL} from "../../constant/style";
 
 const styleModal = {
   ...STYLE_MODAL,
   width: "80%",
 };
 
-function Shedule({ showLoading, hideLoading, userState }) {
+function Shedule({showLoading, hideLoading, userState}) {
   const [listShowStaffAssigned, setListShowStaffAssigned] = React.useState([]);
   const [listShowStaffUnAssigned, setListShowStaffUnAssigned] = React.useState(
     []
@@ -183,7 +183,6 @@ function Shedule({ showLoading, hideLoading, userState }) {
               };
             });
           });
-          console.log(result);
           setListSchedule(result);
         }
       } catch (exception) {
@@ -204,7 +203,7 @@ function Shedule({ showLoading, hideLoading, userState }) {
     listOrder?.map((e, index) => (
       <Grid item xs={3} key={index}>
         <Order
-          order={{ ...props, order: e }}
+          order={{...props, order: e}}
           setCurrentListSchedule={setCurrentListSchedule}
           handleOpen={handleOpen}
           setCurrentOrder={setCurrentOrder}
@@ -307,9 +306,9 @@ function Shedule({ showLoading, hideLoading, userState }) {
     }
 
     if (value === "returnTime") {
-      order = { ...order, isDelivery: false };
+      order = {...order, isDelivery: false};
     } else {
-      order = { ...order, isDelivery: true };
+      order = {...order, isDelivery: true};
     }
 
     let time = order[value].split("-");
@@ -487,7 +486,7 @@ function Shedule({ showLoading, hideLoading, userState }) {
   return (
     <Box>
       {listOrderNotAssignedReturnTime.length > 0 ? (
-        <Box sx={{ marginBottom: "4%" }}>
+        <Box sx={{marginBottom: "4%"}}>
           <Typography
             color="black"
             variant="h2"

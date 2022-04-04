@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import {
   Box,
   TextField,
@@ -15,18 +15,18 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import CustomInput from "../../../components/CustomInput";
 import CustomAreaInput from "../../../components/CustomAreaInput";
-import { connect } from "react-redux";
-import { useForm } from "react-hook-form";
-import { findUserByPhone } from "../../../apis/Apis";
+import {connect} from "react-redux";
+import {useForm} from "react-hook-form";
+import {findUserByPhone} from "../../../apis/Apis";
 import * as action from "../../../redux/action/action";
-import { createOrder } from "../../../apis/Apis";
+import {createOrder} from "../../../apis/Apis";
 import LoadingPage from "../../Loading/LoadingPage";
-import { useNavigate } from "react-router";
-import { STYLE_MODAL } from "../../../constant/style";
+import {useNavigate} from "react-router";
+import {STYLE_MODAL} from "../../../constant/style";
 import moment from "moment";
 
-const styleInput = { marginRight: "2.5%", backgroundColor: "white" };
-const styleModal = { ...STYLE_MODAL, overflow: "hidden", overflowY: "scroll" };
+const styleInput = {marginRight: "2.5%", backgroundColor: "white"};
+const styleModal = {...STYLE_MODAL, overflow: "hidden", overflowY: "scroll"};
 
 function InputInforModal({
   order,
@@ -39,7 +39,7 @@ function InputInforModal({
 }) {
   const navigate = useNavigate();
 
-  const { handleSubmit, control, setValue } = useForm();
+  const {handleSubmit, control, setValue} = useForm();
   const [returnAddressChoice, setReturnAddressChoice] = useState(0);
   const [phone, setPhone] = useState("");
   const [user, setUser] = useState();
@@ -105,7 +105,6 @@ function InputInforModal({
           returnDate.setDate(returnDate.getDate() + order.duration)
         );
         // let dateStart = Date.parse(order.dateDelivery);
-        console.log(returnDate);
         orderTemp = {
           customerId: user.id,
           deliveryAddress: data.deliveryAddress,
@@ -125,7 +124,7 @@ function InputInforModal({
       }
 
       await createOrder(orderTemp, userState.idToken);
-      navigate("/app/customer_request", { replace: true });
+      navigate("/app/customer_request", {replace: true});
       showSnackbar("success", "Tạo yêu cầu thành công!");
     } catch (e) {
       console.log(e);
@@ -190,7 +189,7 @@ function InputInforModal({
         <Typography
           color="primary"
           variant="h2"
-          style={{ marginTop: "2%", textAlign: "left" }}
+          style={{marginTop: "2%", textAlign: "left"}}
         >
           Tìm kiếm tài khoản
         </Typography>
@@ -219,18 +218,18 @@ function InputInforModal({
         <Typography
           color="primary"
           variant="h2"
-          style={{ marginTop: "2%", textAlign: "left" }}
+          style={{marginTop: "2%", textAlign: "left"}}
         >
           Thông tin khách hàng
         </Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Box sx={{ display: "flex", flexDirection: "row", marginTop: "2%" }}>
+          <Box sx={{display: "flex", flexDirection: "row", marginTop: "2%"}}>
             <CustomInput
               control={control}
               rules={{
                 required: "*Vui lòng nhập",
               }}
-              styles={{ width: "320px" }}
+              styles={{width: "320px"}}
               name="name"
               label={user?.name ? "" : "Tên"}
               userInfo={user?.name}
@@ -243,7 +242,7 @@ function InputInforModal({
               rules={{
                 required: "*Vui lòng nhập",
               }}
-              styles={{ width: "320px" }}
+              styles={{width: "320px"}}
               name="email"
               label={user?.email ? "" : "Email"}
               userInfo={user?.email}
@@ -255,7 +254,7 @@ function InputInforModal({
               rules={{
                 required: "*Vui lòng nhập",
               }}
-              styles={{ width: "120px" }}
+              styles={{width: "120px"}}
               name="phone"
               label={user?.phone ? "" : "Số điện thoại"}
               inlineStyle={styleInput}
@@ -278,7 +277,7 @@ function InputInforModal({
               <CustomInput
                 control={control}
                 rules={ruleOfDeliveryAddress}
-                styles={{ width: "320px" }}
+                styles={{width: "320px"}}
                 name="deliveryAddress"
                 label="Địa chỉ lấy đồ"
                 disabled={false}
@@ -341,7 +340,7 @@ function InputInforModal({
                 rules={{
                   required: "*Vui lòng nhập",
                 }}
-                styles={{ width: "320px" }}
+                styles={{width: "320px"}}
                 name="returnAddress"
                 label="Địa chỉ trả hàng"
                 disabled={false}
@@ -354,17 +353,17 @@ function InputInforModal({
           <Typography
             color="primary"
             variant="h2"
-            style={{ marginTop: "2%", textAlign: "left", marginBottom: "2%" }}
+            style={{marginTop: "2%", textAlign: "left", marginBottom: "2%"}}
           >
             Ghi chú
           </Typography>
           <CustomAreaInput
             control={control}
-            rules={{ required: "*Vui lòng nhập" }}
-            styles={{ width: "560px" }}
+            rules={{required: "*Vui lòng nhập"}}
+            styles={{width: "560px"}}
             name="note"
             label=""
-            inlineStyle={{ ...styleInput }}
+            inlineStyle={{...styleInput}}
           />
           <Box
             sx={{

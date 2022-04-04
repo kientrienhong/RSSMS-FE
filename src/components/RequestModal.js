@@ -141,7 +141,6 @@ function RequestModal({
 
   useEffect(() => {
     if (currentOrder) {
-      console.log(currentOrder);
       setReturnAddress(currentOrder?.addressReturn);
       setDeliveryAddress(currentOrder?.deliveryAddress);
 

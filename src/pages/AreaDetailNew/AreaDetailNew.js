@@ -20,7 +20,7 @@ import {
   deleteSpace,
 } from "../../apis/Apis";
 import ModalDetailFloor from "./components/ModalDetailFloor";
-import {AREA_TYPE, BOX_TYPE, SELF_STORAGE_TYPE} from "../../constant/constant";
+import {AREA_TYPE, SELF_STORAGE_TYPE} from "../../constant/constant";
 import {TYPE_AREA, TYPE_SHELF} from "../../constant/constant";
 import AreaUsage from "./components/AreaUsage";
 import Shelf from "./components/Shelf";
@@ -167,23 +167,7 @@ function AreaDetailNew({
         areaId,
         userState.idToken
       );
-      // setListShelves([
-      //   {
-      //     id: "1",
-      //     name: "Kệ 1",
-      //     type: 0,
-      //     floors: [
-      //       {
-      //         id: "11",
-      //         name: "Tầng trệt",
-      //         usage: 8,
-      //         width: 2,
-      //         height: 2,
-      //         length: 2,
-      //       },
-      //     ],
-      //   },
-      // ]);
+
       setListShelves(response.data.data);
       setTotalPage(response.data.metadata.totalPage);
       setTotalPage(2);
@@ -222,7 +206,7 @@ function AreaDetailNew({
         onHandleYes={handleDeleteSpace}
         id={currentSpace?.id}
         msg={"Xóa không gian thành công!"}
-      />{" "}
+      />
       <ModalDetailFloor
         detailFloor={detailFloor}
         open={openDetailFloor}

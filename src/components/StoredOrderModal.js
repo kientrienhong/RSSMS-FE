@@ -138,7 +138,6 @@ function StoredOrderModal({
           };
         });
         let response = await moveOrderDetail(requestDate, userState.idToken);
-        console.log(response);
       } else {
         await placeBoxes(placingProducts, userState.idToken);
       }
@@ -171,9 +170,6 @@ function StoredOrderModal({
       setError("Hàng hóa này đã được đạt trên kệ");
       return;
     }
-
-    console.log(foundOrderDetail.serviceType);
-    console.log(currentFloor.typeShelf);
 
     if (
       !(

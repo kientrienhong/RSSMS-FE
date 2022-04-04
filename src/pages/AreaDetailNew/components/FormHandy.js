@@ -31,7 +31,6 @@ function FormHandy({
   userState,
   isView,
 }) {
-  console.log("dkjsadkajshd", isView);
   const {handleSubmit, control, reset} = useForm();
 
   const [error, setError] = useState({});

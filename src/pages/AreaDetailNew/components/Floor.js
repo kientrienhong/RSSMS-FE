@@ -75,7 +75,6 @@ function Floor({
             color="primary"
             variant="contained"
             onClick={() => {
-              console.log(shelf);
               setUpCurrentFloor({
                 ...floor,
                 shelfName: shelf.name,

@@ -147,7 +147,6 @@ function CustomerRequest({
         size,
         userState.idToken
       );
-      console.log(list);
       setListRequest(list.data.data);
       setTotalRequest(list.data.metadata.total);
     } catch (error) {

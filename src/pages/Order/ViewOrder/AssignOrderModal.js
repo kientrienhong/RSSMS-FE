@@ -65,7 +65,6 @@ function AssignOrderModal({
           -1,
           userState.idToken
         );
-        console.log(listStorageTemp);
         setListStorage(listStorageTemp.data.data);
       } catch (error) {
         console.log(error);

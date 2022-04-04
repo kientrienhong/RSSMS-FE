@@ -46,7 +46,6 @@ function ProductModal({
   userState,
   errors,
 }) {
-  console.log(typeProduct);
   const [unit, setUnit] = useState("");
   const [error, setError] = useState({});
   const buildDropDown = (listSizeStorage) =>

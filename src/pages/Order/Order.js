@@ -138,7 +138,7 @@ function Order({
     <Box
       sx={{
         backgroundColor: "background.default",
-        height: "auto",
+        height: "100vh",
         py: 3,
       }}
     >

@@ -1,29 +1,23 @@
 import "./App.css";
 import route from "./routing/route";
-import { ThemeProvider } from "@material-ui/core";
+import {ThemeProvider} from "@material-ui/core";
 import theme from "./theme";
-import { messaging } from "./firebase/firebase";
-import { usePopup, DialogType, ToastPosition } from "react-custom-popup";
-import { connect } from "react-redux";
+import {messaging} from "./firebase/firebase";
+import {usePopup, DialogType, ToastPosition} from "react-custom-popup";
+import {connect} from "react-redux";
 import * as action from "./redux/action/action";
 
-import { useRoutes } from "react-router-dom";
+import {useRoutes} from "react-router-dom";
 function App(props) {
-  const { showToast } = usePopup();
+  const {showToast} = usePopup();
 
   const content = useRoutes(route);
   messaging.onMessage((payload) => {
-    console.log(payload);
     if (!payload?.notification) {
       return;
     }
     props.changeIsLoadOrder();
-    console.log({
-      createdDate: new Date().toISOString(),
-      id: payload.data.NotiId,
-      description: payload.notification.body,
-      isRead: false,
-    });
+
     props.addNotification({
       createdDate: new Date().toISOString(),
       id: parseInt(payload.data.NotiId),

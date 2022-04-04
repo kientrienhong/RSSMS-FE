@@ -66,9 +66,7 @@ function ConfirmModal({
             onClick={async () => {
               try {
                 showLoading();
-                console.log(onHandleYes);
                 let response = await onHandleYes(id);
-                console.log(response);
                 handleClose();
                 showSnackbar("success", msg);
               } catch (error) {

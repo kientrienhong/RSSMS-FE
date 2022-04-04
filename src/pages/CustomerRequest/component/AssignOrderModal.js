@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import {
   Box,
   Modal,
@@ -8,9 +8,9 @@ import {
   Radio,
   Grid,
 } from "@material-ui/core";
-import { STYLE_MODAL } from "../../../constant/style";
-import { connect } from "react-redux";
-import { getListStorage, assignOrder } from "../../../apis/Apis";
+import {STYLE_MODAL} from "../../../constant/style";
+import {connect} from "react-redux";
+import {getListStorage, assignOrder} from "../../../apis/Apis";
 
 import * as action from "../../../redux/action/action";
 function AssignOrderModal({
@@ -46,6 +46,8 @@ function AssignOrderModal({
       changeIsLoadRequest();
       handleClose();
     } catch (e) {
+      setError(e?.response?.data?.error?.message);
+
       console.log(e.response);
     } finally {
       hideLoading();
@@ -65,11 +67,9 @@ function AssignOrderModal({
           -1,
           userState.idToken
         );
-        console.log(listStorageTemp);
         setListStorage(listStorageTemp.data.data);
       } catch (error) {
-        console.log(error);
-        setError(error.response.data.message);
+        setError(error?.response?.data?.error?.message);
       } finally {
         hideLoading();
       }
@@ -146,7 +146,7 @@ function AssignOrderModal({
             checked={selectedValue === e.id.toString()}
             name="radio-buttons"
             onChange={handleChange}
-            inputProps={{ "aria-label": "B" }}
+            inputProps={{"aria-label": "B"}}
           />
         </Card>
       );
@@ -164,7 +164,7 @@ function AssignOrderModal({
         sx={{
           ...STYLE_MODAL,
           width: "80%",
-          height: "90%",
+          height: "70%",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -185,13 +185,14 @@ function AssignOrderModal({
           </Grid>
         </Box>
         {error?.length > 0 ? (
-          <p style={{ color: "red", textAlign: "center" }}>{error}</p>
+          <p style={{color: "red", textAlign: "center"}}>{error}</p>
         ) : null}
         <Box
           sx={{
             display: "flex",
             justifyContent: "center",
             flexDirection: "row",
+            width: "100%",
             marginTop: "32px",
           }}
         >

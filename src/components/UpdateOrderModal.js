@@ -50,7 +50,6 @@ function UpdateOrderModal({
     } finally {
       hideLoading();
     }
-    console.log(data);
   };
   const buildDropDown = (listSizeStorage) =>
     listSizeStorage.map((e) => <MenuItem value={e.value}>{e.name}</MenuItem>);

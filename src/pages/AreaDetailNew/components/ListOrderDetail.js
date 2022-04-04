@@ -181,7 +181,6 @@ function ListOrderDetail({
       return true;
     });
   }
-  console.log(listOrderDetail);
   listPlacingProducts = listPlacingProducts.concat(listOrderDetail);
 
   const [rowsPerPage, setRowsPerPage] = React.useState(8);

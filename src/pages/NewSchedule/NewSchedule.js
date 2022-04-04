@@ -207,7 +207,6 @@ function NewSchedule({showLoading, hideLoading, userState}) {
       } catch (error) {
         console.log(error.response);
       } finally {
-        console.log(result);
       }
     } catch (e) {
       console.log(e.response);
@@ -306,7 +305,6 @@ function NewSchedule({showLoading, hideLoading, userState}) {
             "Delivery Staff",
             userState.idToken
           );
-          console.log(listUserNotAssigned);
           setListShowStaffUnAssigned(
             listUserNotAssigned.data.length === 0
               ? []
@@ -357,13 +355,6 @@ function NewSchedule({showLoading, hideLoading, userState}) {
         });
         let startOfWeekLocal = currentMoment.startOf("week").toDate();
         let endOfWeekLocal = currentMoment.endOf("week").toDate();
-        // let testISOStartMoment = startOfWeekLocal.toISOString();
-        // let testISOEndMoment = endOfWeekLocal.toISOString();
-        // console.log(testISOStartMoment, testISOEndMoment);
-
-        // let testISOStart = new Date(currentMoment.startOf("week"));
-        // let testISOEnd = new Date(currentMoment.endOf("week"));
-        // console.log(testISOStart.toISOString(), testISOEnd.toISOString());
 
         setStartOfWeek(startOfWeekLocal);
         setEndOfWeek(endOfWeekLocal);

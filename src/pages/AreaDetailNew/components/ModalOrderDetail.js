@@ -1,6 +1,6 @@
 import React from "react";
-import { Box, Typography, Card, Grid, Modal } from "@material-ui/core";
-import { STYLE_MODAL } from "../../../constant/style";
+import {Box, Typography, Card, Grid, Modal} from "@material-ui/core";
+import {STYLE_MODAL} from "../../../constant/style";
 
 const styleModal = {
   ...STYLE_MODAL,
@@ -12,7 +12,6 @@ export default function ModalOrderDetail({
   open,
   handleClose,
 }) {
-  console.log(currentOrderDetail);
   const mapListImage = (listImage) => {
     return listImage?.map((e, index) => (
       <Grid item xs={6} key={index}>
