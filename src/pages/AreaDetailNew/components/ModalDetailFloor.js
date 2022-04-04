@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import {
   Box,
   Button,
@@ -8,21 +8,37 @@ import {
   Typography,
   Modal,
 } from "@material-ui/core";
-import { STYLE_MODAL } from "../../../constant/style";
+import {STYLE_MODAL} from "../../../constant/style";
 import AreaUsage from "./AreaUsage";
 import ListOrderDetail from "./ListOrderDetail";
+import {connect} from "react-redux";
 const styleModal = {
   ...STYLE_MODAL,
   width: "90%",
 };
-export default function ModalDetailFloor({
+function ModalDetailFloor({
   open,
   handleClose,
   detailFloor,
   handleOpenOrderDetail,
   setCurrentOrderDetail,
+  placingProducts,
 }) {
-  console.log(detailFloor);
+  let additionUsed = 0;
+  placingProducts?.floors?.forEach((e) => {
+    if (e.floorId === detailFloor.id) {
+      additionUsed += e.width * e.height * e.length;
+    }
+  });
+
+  let additionUsage =
+    ((additionUsed + detailFloor.used) / detailFloor.available) * 100;
+  let uiDetailFloor = {
+    ...detailFloor,
+    usage: additionUsage + detailFloor.usage,
+    used: additionUsed + detailFloor.used,
+    available: detailFloor.available,
+  };
   return (
     <Modal
       open={open}
@@ -45,7 +61,7 @@ export default function ModalDetailFloor({
             justifyContent: "flex-start",
           }}
         >
-          <AreaUsage detailFloor={detailFloor} />
+          <AreaUsage detailFloor={uiDetailFloor} />
           <ListOrderDetail
             listOrderDetail={detailFloor.orderDetails}
             handleOpenOrderDetail={handleOpenOrderDetail}
@@ -59,3 +75,9 @@ export default function ModalDetailFloor({
     </Modal>
   );
 }
+
+const mapStateToProps = (state) => ({
+  placingProducts: state.order.placingProducts,
+});
+
+export default connect(mapStateToProps, null)(ModalDetailFloor);

@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { useTheme } from "@mui/material/styles";
+import {useTheme} from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -16,15 +16,16 @@ import moment from "moment";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
-import { Button, TableHead } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
+import {Button, TableHead} from "@material-ui/core";
+import {makeStyles} from "@material-ui/styles";
 import ConfirmModal from "../../../components/ConfirmModal";
-import { connect } from "react-redux";
+import {LIST_STATUS_OF_ORDER_DETAIL} from "../../../constant/constant";
+import {connect} from "react-redux";
 import * as action from "../../../redux/action/action";
 
 function TablePaginationActions(props) {
   const theme = useTheme();
-  const { count, page, rowsPerPage, onPageChange } = props;
+  const {count, page, rowsPerPage, onPageChange} = props;
 
   const handleFirstPageButtonClick = (event) => {
     onPageChange(event, 0);
@@ -43,7 +44,7 @@ function TablePaginationActions(props) {
   };
 
   return (
-    <Box sx={{ flexShrink: 0, ml: 2.5 }}>
+    <Box sx={{flexShrink: 0, ml: 2.5}}>
       <IconButton
         onClick={handleFirstPageButtonClick}
         disabled={page === 0}
@@ -103,7 +104,7 @@ const listHeaderName = [
 
 const mapListTableHeader = (listHeader) => (
   <TableHead>
-    <TableRow sx={{ color: "black" }}>
+    <TableRow sx={{color: "black"}}>
       {listHeader.map((e) => (
         <TableCell>{e}</TableCell>
       ))}
@@ -139,8 +140,49 @@ function ListOrderDetail({
   addMovingProduct,
   detailFloor,
   showSnackbar,
+  placingProducts,
+  isMoveOrderDetail,
+  storedOrder,
 }) {
-  const classes = useStyles();
+  let listPlacingProducts = [];
+
+  if (isMoveOrderDetail) {
+    listOrderDetail = listOrderDetail?.map((e) => {
+      let indexFound = storedOrder?.products?.findIndex((ele) => {
+        return ele.id === e.id;
+      });
+
+      if (indexFound !== -1) {
+        return {...e, orderStatus: 0};
+      }
+
+      return e;
+    });
+  }
+
+  if (placingProducts) {
+    placingProducts?.floors?.forEach((e) => {
+      if (e.floorId === detailFloor.id) {
+        listPlacingProducts.push(e);
+      }
+    });
+  }
+
+  if (isMoveOrderDetail) {
+    listOrderDetail = listOrderDetail?.filter((e) => {
+      let indexFound = placingProducts?.floors?.findIndex((ele) => {
+        return ele.idOrderDetail === e.id;
+      });
+
+      if (indexFound !== -1) {
+        return false;
+      }
+
+      return true;
+    });
+  }
+  console.log(listOrderDetail);
+  listPlacingProducts = listPlacingProducts.concat(listOrderDetail);
 
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   const [open, setOpen] = React.useState(false);
@@ -151,21 +193,7 @@ function ListOrderDetail({
   const handleClose = () => {
     setOpen(false);
   };
-  const handleDeleteUser = async (id) => {
-    // let response;
-    // try {
-    //   response = await deleteUser(id, userState.idToken);
-    //   if (listUser.length === 1) {
-    //     if (page !== 1) {
-    //       setPage(page - 1);
-    //     }
-    //   }
-    //   await getData(searchName, page, 8);
-    // } catch (error) {
-    //   console.log(error);
-    // }
-    // return response;
-  };
+
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page - 1 > 0
@@ -183,23 +211,16 @@ function ListOrderDetail({
 
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
-        {/* <ConfirmModal
-          open={open}
-          handleClose={handleClose}
-          onHandleYes={handleDeleteUser}
-          id={currentId}
-          msg={"Xóa tài khoản thành công!"}
-        /> */}
+      <Table sx={{minWidth: 500}} aria-label="custom pagination table">
         {mapListTableHeader(listHeaderName)}
         <TableBody>
-          {listOrderDetail.map((row, index) => {
+          {listPlacingProducts.map((row, index) => {
             return (
               <TableRow key={row.id}>
                 <TableCell
                   component="th"
                   scope="row"
-                  style={{ color: "black" }}
+                  style={{color: "black"}}
                   onClick={(e) =>
                     handleClickRow(
                       row,
@@ -211,7 +232,7 @@ function ListOrderDetail({
                   {row.orderName}
                 </TableCell>
                 <TableCell
-                  style={{ color: "black" }}
+                  style={{color: "black"}}
                   onClick={(e) =>
                     handleClickRow(
                       row,
@@ -228,7 +249,7 @@ function ListOrderDetail({
                   />
                 </TableCell>
                 <TableCell
-                  style={{ color: "black" }}
+                  style={{color: "black"}}
                   onClick={(e) =>
                     handleClickRow(
                       row,
@@ -240,7 +261,9 @@ function ListOrderDetail({
                   {row.customerName}
                 </TableCell>
                 <TableCell
-                  style={{ color: "black" }}
+                  style={{
+                    color: LIST_STATUS_OF_ORDER_DETAIL[row.orderStatus].color,
+                  }}
                   onClick={(e) =>
                     handleClickRow(
                       row,
@@ -249,10 +272,10 @@ function ListOrderDetail({
                     )
                   }
                 >
-                  {row.orderStatus}
+                  {LIST_STATUS_OF_ORDER_DETAIL[row.orderStatus].name}
                 </TableCell>
                 <TableCell
-                  style={{ color: "black" }}
+                  style={{color: "black"}}
                   onClick={(e) =>
                     handleClickRow(
                       row,
@@ -264,7 +287,7 @@ function ListOrderDetail({
                   {moment(new Date(row.returnDate)).format("DD/MM/YYYY")}
                 </TableCell>
                 <TableCell
-                  style={{ color: "black" }}
+                  style={{color: "black"}}
                   onClick={(e) =>
                     handleClickRow(
                       row,
@@ -276,25 +299,29 @@ function ListOrderDetail({
                   {row.width}m x {row.length}m x {row.height}m
                 </TableCell>
                 <TableCell>
-                  <Button
-                    style={{
-                      height: "45px",
-                      paddingLeft: "16px",
-                      paddingRight: "16px",
-                    }}
-                    onClick={async () => {
-                      addMovingProduct(row, detailFloor);
-                      showSnackbar(
-                        "success",
-                        "Gỡ món hàng xuống kệ thành công"
-                      );
-                    }}
-                    color="primary"
-                    variant="contained"
-                    type="submit"
-                  >
-                    Di chuyển
-                  </Button>
+                  {row.orderStatus === 2 ? (
+                    <Button
+                      style={{
+                        height: "45px",
+                        paddingLeft: "16px",
+                        paddingRight: "16px",
+                      }}
+                      onClick={async () => {
+                        addMovingProduct(row, detailFloor);
+                        showSnackbar(
+                          "success",
+                          "Gỡ món hàng xuống kệ thành công"
+                        );
+                      }}
+                      color="primary"
+                      variant="contained"
+                      type="submit"
+                    >
+                      Di chuyển
+                    </Button>
+                  ) : (
+                    <></>
+                  )}
                 </TableCell>
               </TableRow>
             );
@@ -327,6 +354,10 @@ function ListOrderDetail({
 
 const mapStateToProps = (state) => ({
   userState: state.information.user,
+
+  placingProducts: state.order.placingProducts,
+  isMoveOrderDetail: state.order.isMoveOrderDetail,
+  storedOrder: state.order.storedOrder,
 });
 
 const mapDispatchToProps = (dispatch) => {

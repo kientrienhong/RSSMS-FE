@@ -1,10 +1,12 @@
 import React from "react";
-import { Box, Modal, Grid, Radio, Typography, Button } from "@material-ui/core";
-import { connect } from "react-redux";
+import {Box, Modal, Grid, Radio, Typography, Button} from "@material-ui/core";
+import {connect} from "react-redux";
 import * as action from "../redux/action/action";
-import { placeBoxes, moveOrderDetail } from "../apis/Apis";
-import { useNavigate } from "react-router";
-import { STYLE_MODAL } from "../constant/style";
+import {placeBoxes, moveOrderDetail} from "../apis/Apis";
+import {useNavigate} from "react-router";
+import {STYLE_MODAL} from "../constant/style";
+import {TYPE_SHELF} from "../constant/constant";
+
 import StoredOrderItem from "./StoredOrderItem";
 const styleModal = STYLE_MODAL;
 
@@ -76,10 +78,10 @@ function StoredOrderModal({
         }}
         key={e.nameProduct}
       >
-        <Box sx={{ width: "30%" }}>
+        <Box sx={{width: "30%"}}>
           <p>{e.nameProduct}</p>
         </Box>
-        <Box sx={{ width: "60%" }}>
+        <Box sx={{width: "60%"}}>
           <Typography
             sx={{
               cursor: "pointer !important",
@@ -94,7 +96,7 @@ function StoredOrderModal({
             {e.areaName} / {e.shelfName} / {e.floorName}
           </Typography>
         </Box>
-        <Box sx={{ width: "10%" }}>
+        <Box sx={{width: "10%"}}>
           <img
             src="/img/minus.png"
             alt="minus"
@@ -112,12 +114,16 @@ function StoredOrderModal({
   };
 
   const onHandleSubmit = async () => {
-    storedOrder.products.forEach((e) => {
-      if (e.amount > 0) {
-        setError("Vui lòng đặt hết hàng hóa lên kệ");
-        return;
-      }
-    });
+    if (storedOrder.totalQuantity > 0) {
+      setError("Vui lòng đặt hết hàng hóa lên kệ");
+      return;
+    }
+    // storedOrder.products.forEach((e) => {
+    //   if (e.amount > 0) {
+    //     setError("Vui lòng đặt hết hàng hóa lên kệ");
+    //     return;
+    //   }
+    // });
     try {
       showLoading();
       if (isMoveOrderDetail) {
@@ -159,6 +165,27 @@ function StoredOrderModal({
       return;
     }
 
+    console.log(foundOrderDetail.serviceType);
+    console.log(currentFloor.typeShelf);
+
+    if (
+      !(
+        foundOrderDetail.serviceType === 2 &&
+        currentFloor.typeShelf === TYPE_SHELF.Hanldy
+      ) &&
+      !(
+        foundOrderDetail.serviceType === 0 &&
+        currentFloor.typeShelf === TYPE_SHELF["Self-storage"]
+      ) &&
+      !(
+        foundOrderDetail.serviceType === 3 &&
+        currentFloor.typeShelf === TYPE_SHELF.Unweildy
+      )
+    ) {
+      setError("Vui lòng đặt hàng hóa phù hợp với loại không gian");
+      return;
+    }
+
     const availableSpace =
       currentFloor.width *
       currentFloor.height *
@@ -180,6 +207,7 @@ function StoredOrderModal({
         idOrderDetail: foundOrderDetail.id,
         nameProduct: foundOrderDetail.serviceName,
         infoProduct: foundOrderDetail,
+        orderDetail: foundOrderDetail,
       });
       setError("");
       showSnackbar("success", "Đặt hàng lên kệ thành công");
@@ -296,7 +324,7 @@ function StoredOrderModal({
                     flexDirection: "row",
                   }}
                 >
-                  <Box sx={{ width: "30%" }}>
+                  <Box sx={{width: "30%"}}>
                     <Typography
                       color="black"
                       variant="h3"
@@ -307,7 +335,7 @@ function StoredOrderModal({
                       Tên dịch vụ
                     </Typography>
                   </Box>
-                  <Box sx={{ width: "60%" }}>
+                  <Box sx={{width: "60%"}}>
                     <Typography
                       color="black"
                       variant="h3"
@@ -318,7 +346,7 @@ function StoredOrderModal({
                       Vị trí
                     </Typography>
                   </Box>
-                  <Box sx={{ width: "10%" }}>
+                  <Box sx={{width: "10%"}}>
                     <Typography
                       color="black"
                       variant="h3"
@@ -345,10 +373,10 @@ function StoredOrderModal({
               }}
             >
               {error?.length > 0 ? (
-                <p style={{ color: "red", textAlign: "center" }}>{error}</p>
+                <p style={{color: "red", textAlign: "center"}}>{error}</p>
               ) : null}
 
-              <Box sx={{ display: "flex", flexDirection: "row" }}>
+              <Box sx={{display: "flex", flexDirection: "row"}}>
                 <Button
                   style={{
                     height: "45px",

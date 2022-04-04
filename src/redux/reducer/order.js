@@ -29,11 +29,11 @@ const order = (state = initialState, action) => {
   switch (action.type) {
     case ActionType.SET_UP_ORDER: {
       state.order = action.payload;
-      return { ...state };
+      return {...state};
     }
 
     case ActionType.STORE_ORDER: {
-      let storedOrderTemp = { ...state.storedOrder };
+      let storedOrderTemp = {...state.storedOrder};
       let placingProductsTemp = {
         orderId: -1,
         floors: [],
@@ -56,11 +56,12 @@ const order = (state = initialState, action) => {
         ...state,
         storedOrder: storedOrderTemp,
         placingProducts: placingProductsTemp,
+        order: action.payload,
       };
     }
 
     case ActionType.ADD_MOVING_PRODUCT: {
-      let storedOrderTemp = { ...state.storedOrder };
+      let storedOrderTemp = {...state.storedOrder};
       storedOrderTemp.orderId = 1;
       storedOrderTemp.products.push({
         ...action.payload.orderDetail,
@@ -74,63 +75,29 @@ const order = (state = initialState, action) => {
       };
     }
 
-    // case ActionType.PLACING_MOVING_PRODUCT: {
-    //   let placingProductTemp = { ...state.placingProducts };
-    //   let storedOrderTemp = { ...state.storedOrder };
-
-    //   let foundProduct = storedOrderTemp.products.find((e) => {
-    //     return e.id.toString() == action.payload.idOrderDetail;
-    //   });
-    //   foundProduct.amount--;
-    //   foundProduct.isPlaced = true;
-    //   storedOrderTemp.totalQuantity--;
-
-    //   placingProductTemp.orderId = storedOrderTemp.orderId;
-    //   placingProductTemp.floors.push({
-    //     idItemPlacing: placingProductTemp.floors.length,
-    //     areaName: state.currentFloor.areaName,
-    //     shelfName: state.currentFloor.shelfName,
-    //     floorName: state.currentFloor.name,
-    //     floorId: state.currentFloor.id,
-    //     storageName: state.currentFloor.storageName,
-    //     areaId: state.currentFloor.areaId,
-    //     width: action.payload.infoProduct.width,
-    //     length: action.payload.infoProduct.length,
-    //     height: action.payload.infoProduct.height,
-    //     storageId: state.currentFloor.storageId,
-    //     nameProduct: action.payload.nameProduct,
-    //     idOrderDetail: action.payload.idOrderDetail,
-    //   });
-    //   return {
-    //     ...state,
-    //     placingProducts: placingProductTemp,
-    //     storedOrder: storedOrderTemp,
-    //   };
-    // }
-
     case ActionType.SET_UP_CURRENT_FLOOR: {
       state.currentFloor = action.payload;
-      return { ...state };
+      return {...state};
     }
 
     case ActionType.SET_CURRENT_BOX: {
       state.currentBox = action.payload;
-      return { ...state };
+      return {...state};
     }
 
     case ActionType.CHANGE_IS_LOAD_SHELF: {
       state.isLoadingShelf = !state.isLoadingShelf;
-      return { ...state };
+      return {...state};
     }
 
     case ActionType.CHANGE_IS_LOAD_STORAGE: {
       state.isLoadingStorage = !state.isLoadingStorage;
-      return { ...state };
+      return {...state};
     }
 
     case ActionType.CHANGE_IS_LOAD_ORDER: {
       state.isLoadingOrder = !state.isLoadingOrder;
-      return { ...state };
+      return {...state};
     }
 
     case ActionType.EMPTY_PRODUCT: {
@@ -145,22 +112,22 @@ const order = (state = initialState, action) => {
         typeOrder: -1,
       };
       state.isMoveOrderDetail = false;
-      return { ...state };
+      return {...state};
     }
 
     case ActionType.CHANGE_IS_LOAD_REQUEST: {
       state.isLoadingRequest = !state.isLoadingRequest;
-      return { ...state };
+      return {...state};
     }
 
     case ActionType.SET_CURRENT_VIEW_ORDER_ID: {
       state.currentPositionViewOrderId = action.payload;
-      return { ...state };
+      return {...state};
     }
 
     case ActionType.PLACE_PRODUCT_TO_SHELF: {
-      let placingProductTemp = { ...state.placingProducts };
-      let storedOrderTemp = { ...state.storedOrder };
+      let placingProductTemp = {...state.placingProducts};
+      let storedOrderTemp = {...state.storedOrder};
 
       let foundProduct = storedOrderTemp.products.find((e) => {
         return e.id.toString() == action.payload.idOrderDetail;
@@ -168,6 +135,21 @@ const order = (state = initialState, action) => {
       foundProduct.amount--;
       foundProduct.isPlaced = true;
       storedOrderTemp.totalQuantity--;
+      let customerName = "";
+      let customerPhone = "";
+      let orderName = "";
+      let returnDate = "";
+      if (state.isMoveOrderDetail) {
+        customerName = foundProduct.customerName;
+        customerPhone = foundProduct.customerPhone;
+        orderName = foundProduct.orderName;
+        returnDate = foundProduct.returnDate;
+      } else {
+        customerName = state.order.customerName;
+        customerPhone = state.order.customerPhone;
+        orderName = state.order.name;
+        returnDate = state.order.returnDate;
+      }
 
       placingProductTemp.orderId = storedOrderTemp.orderId;
       placingProductTemp.floors.push({
@@ -183,8 +165,14 @@ const order = (state = initialState, action) => {
         height: action.payload.infoProduct.height,
         storageId: state.currentFloor.storageId,
         nameProduct: action.payload.nameProduct,
+        orderStatus: 1,
         idOrderDetail: action.payload.idOrderDetail,
         oldFloorId: foundProduct.oldFloorId,
+        images: foundProduct.images,
+        customerName: customerName,
+        customerPhone: customerPhone,
+        orderName: orderName,
+        returnDate: returnDate,
       });
       return {
         ...state,
@@ -195,12 +183,12 @@ const order = (state = initialState, action) => {
 
     case ActionType.CHANGE_MOVE_ORDER_DETAIL: {
       state.isMoveOrderDetail = !state.isMoveOrderDetail;
-      return { ...state };
+      return {...state};
     }
 
     case ActionType.REMOVE_PLACED_PRODUCT: {
-      let placingProductTemp = { ...state.placingProducts };
-      let storedOrderTemp = { ...state.storedOrder };
+      let placingProductTemp = {...state.placingProducts};
+      let storedOrderTemp = {...state.storedOrder};
       let foundProduct = storedOrderTemp.products.find(
         (e) => e.id.toString() === action.payload.idOrderDetail
       );
@@ -231,12 +219,12 @@ const order = (state = initialState, action) => {
         shelfType: action.payload.shelfType,
         sizeType: action.payload.sizeType,
       };
-      return { ...state };
+      return {...state};
     }
 
     case ActionType.EMPTY_MOVE_BOX: {
       state.moveBox = undefined;
-      return { ...state };
+      return {...state};
     }
 
     case ActionType.CANCEL_STORE_ORDER: {
@@ -250,12 +238,14 @@ const order = (state = initialState, action) => {
         orderId: -1,
         boxes: [],
       };
-      return { ...state };
+
+      state.order = {};
+      return {...state};
     }
 
     case ActionType.REMOVE_PLACING_STORAGE: {
-      let placingProductTemp = { ...state.placingProducts };
-      let storedOrderTemp = { ...state.storedOrder };
+      let placingProductTemp = {...state.placingProducts};
+      let storedOrderTemp = {...state.storedOrder};
       let indexCurrentProduct = placingProductTemp.boxes.findIndex(
         (e) => e.idStorage === action.payload.id
       );
@@ -281,12 +271,12 @@ const order = (state = initialState, action) => {
 
     case ActionType.SET_UP_CURRENT_STORAGE: {
       state.currentStorage = action.payload;
-      return { ...state };
+      return {...state};
     }
 
     case ActionType.PLACING_STORAGE: {
-      let placingProductTemp = { ...state.placingProducts };
-      let storedOrderTemp = { ...state.storedOrder };
+      let placingProductTemp = {...state.placingProducts};
+      let storedOrderTemp = {...state.storedOrder};
       let foundProduct = storedOrderTemp.products.find((e) => {
         return e.productId.toString() === action.payload.idProduct;
       });
@@ -308,7 +298,7 @@ const order = (state = initialState, action) => {
     }
 
     default: {
-      return { ...state };
+      return {...state};
     }
   }
 };

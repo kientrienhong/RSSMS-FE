@@ -1,9 +1,9 @@
 import React from "react";
-import { Box, Button, Typography, Grid } from "@material-ui/core";
+import {Box, Button, Typography, Grid} from "@material-ui/core";
 import CircularProgressWithLabel from "./CircularProgressWithLabel";
 import * as action from "../../../redux/action/action";
-import { getDetailFloor } from "../../../apis/Apis";
-import { connect } from "react-redux";
+import {getDetailFloor} from "../../../apis/Apis";
+import {connect} from "react-redux";
 
 function Floor({
   floor,
@@ -20,14 +20,12 @@ function Floor({
   userState,
 }) {
   let additionUsage = 0;
-
   placingProducts?.floors?.forEach((e) => {
     if (e.floorId === floor.id) {
       additionUsage += e.width * e.height * e.length;
     }
   });
-  additionUsage =
-    (additionUsage / (floor.width * floor.height * floor.length)) * 100;
+  additionUsage = ((additionUsage + floor.used) / floor.available) * 100;
   return (
     <Grid>
       <Box
@@ -53,7 +51,7 @@ function Floor({
           <Typography
             color="black"
             variant="h2"
-            sx={{ textAlign: "center", marginTop: "16px" }}
+            sx={{textAlign: "center", marginTop: "16px"}}
           >
             {floor.name}
           </Typography>
@@ -77,12 +75,14 @@ function Floor({
             color="primary"
             variant="contained"
             onClick={() => {
+              console.log(shelf);
               setUpCurrentFloor({
                 ...floor,
                 shelfName: shelf.name,
                 areaName: area.name,
                 storageName: storage.name,
                 storageId: storage.id,
+                typeShelf: shelf.type,
               });
               openStoredOrderModal();
             }}
@@ -108,6 +108,7 @@ function Floor({
                 setDetailFloor(response.data);
                 handleOpen(shelf);
               } catch (error) {
+                console.log(error);
                 console.log(error.response);
               } finally {
                 hideLoading();

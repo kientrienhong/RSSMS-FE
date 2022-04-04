@@ -29,6 +29,13 @@ export const TYPE_SHELF = {
   "Self-storage": 2,
 };
 
+export const LIST_PRODUCT_MANAGE_TYPE = [
+  "Kho",
+  "Phụ kiện",
+  "Gửi theo loại",
+  "Gửi theo diện tích",
+];
+
 export const STORAGE_STATUS = {
   0: {color: "#04BFFE", name: "Rented"},
   1: {color: "#99E5FE", name: "Available"},
@@ -69,30 +76,23 @@ export const LIST_SPACE_TYPE = [
   {name: "Kho", color: style.PRIMARY_BLUE},
 ];
 
-export const LIST_PRODUCT_MANAGE_TYPE = [
-  "Kho",
-  "Phụ kiện",
-  "Gửi theo loại",
-  "Gửi theo diện tích",
-];
-
 export const LIST_STATUS_OF_ORDER_DETAIL = [
-  {name: "Đang được gỡ xuống", color: "#000"},
+  {name: "Đang được gỡ xuống", color: style.PRIMARY_BROWN},
   {
     name: "Đang trong quá trình đặt lên kệ",
     color: style.PRIMARY_SEMANTIC_GREEN,
   },
   {
     name: "Đã đặt lên kệ",
-    color: style.PRIMARY_SEMANTIC_GREEN,
+    color: style.PRIMARY_BLUE,
   },
   {
     name: "Sắp hết hạn",
-    color: style.PRIMARY_SEMANTIC_GREEN,
+    color: style.PRIMARY_SEMANTIC_ORANGE,
   },
   {
     name: "Đã hết hạn",
-    color: style.PRIMARY_SEMANTIC_GREEN,
+    color: style.PRIMARY_SEMANTIC_RED,
   },
 ];
 
