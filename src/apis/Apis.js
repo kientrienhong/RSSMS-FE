@@ -505,10 +505,17 @@ export const getOrder = async (
       );
     }
   } else {
-    response = await axios.get(
-      `https://localhost:44304/api/v1/orders?Id=${id}&page=${page}&size=${size}`,
-      {headers: {Authorization: `Bearer ${token}`}}
-    );
+    if (listFilterOrder === undefined) {
+      response = await axios.get(
+        `https://localhost:44304/api/v1/orders?Id=${id}&page=${page}&size=${size}`,
+        {headers: {Authorization: `Bearer ${token}`}}
+      );
+    } else {
+      response = await axios.get(
+        `https://localhost:44304/api/v1/orders?${listFilterOrder}&Id=${id}&page=${page}&size=${size}`,
+        {headers: {Authorization: `Bearer ${token}`}}
+      );
+    }
   }
 
   return response;

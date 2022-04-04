@@ -321,23 +321,36 @@ function CustomerRequest({
         color="#FFF"
         sx={{marginLeft: "2%", marginRight: "2%"}}
       >
-        <ListRequest
-          setRequest={setRequest}
-          setCurrentRequest={setCurrentRequest}
-          handleOpenIsPaid={handleOpenIsPaid}
-          handleOpenReturnItem={handleOpenReturnItem}
-          handleOpenCancelOrder={handleOpenCancelOrder}
-          listRequest={listRequest}
-          page={page}
-          setPage={setPage}
-          setUpdateStatus={setUpdateStatus}
-          handleOpenOrderModal={handleOpenOrderModal}
-          totalRequest={totalRequest}
-          getData={getData}
-          handleOpenUpdateRequest={handleOpenUpdateRequest}
-          handleOpenAssign={handleOpenAssign}
-          handleOpenAssignOrder={handleOpenAssignOrder}
-        />
+        {listRequest.length > 0 ? (
+          <ListRequest
+            setRequest={setRequest}
+            setCurrentRequest={setCurrentRequest}
+            handleOpenIsPaid={handleOpenIsPaid}
+            handleOpenReturnItem={handleOpenReturnItem}
+            handleOpenCancelOrder={handleOpenCancelOrder}
+            listRequest={listRequest}
+            page={page}
+            setPage={setPage}
+            setUpdateStatus={setUpdateStatus}
+            handleOpenOrderModal={handleOpenOrderModal}
+            totalRequest={totalRequest}
+            getData={getData}
+            handleOpenUpdateRequest={handleOpenUpdateRequest}
+            handleOpenAssign={handleOpenAssign}
+            handleOpenAssignOrder={handleOpenAssignOrder}
+          />
+        ) : (
+          <Typography
+            color="black"
+            variant="h5"
+            style={{
+              textAlign: "center",
+              margin: "2% 0",
+            }}
+          >
+            Không tìm yêu cầu nào
+          </Typography>
+        )}
       </Card>
     </Box>
   );

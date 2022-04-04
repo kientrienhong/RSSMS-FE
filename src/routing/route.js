@@ -114,7 +114,7 @@ const routes = [
         element: (
           <ProtectTemplate
             Component={NewSchedule}
-            permission={[Object.keys(ROLE_USER)[1]]}
+            permission={[Object.keys(ROLE_USER)[1], Object.keys(ROLE_USER)[0]]}
           >
             <NewSchedule />
           </ProtectTemplate>
@@ -125,7 +125,7 @@ const routes = [
         element: (
           <ProtectTemplate
             Component={NewSchedule}
-            permission={[Object.keys(ROLE_USER)[1]]}
+            permission={[Object.keys(ROLE_USER)[1], Object.keys(ROLE_USER)[0]]}
           >
             <NewSchedule />
           </ProtectTemplate>
@@ -136,7 +136,7 @@ const routes = [
         element: (
           <ProtectTemplate
             Component={StaffRequest}
-            permission={[Object.keys(ROLE_USER)[1]]}
+            permission={[Object.keys(ROLE_USER)[1], Object.keys(ROLE_USER)[0]]}
           >
             <StaffRequest />
           </ProtectTemplate>
@@ -147,7 +147,11 @@ const routes = [
         element: (
           <ProtectTemplate
             Component={CustomerRequest}
-            permission={[Object.keys(ROLE_USER)[1], Object.keys(ROLE_USER)[4]]}
+            permission={[
+              Object.keys(ROLE_USER)[1],
+              Object.keys(ROLE_USER)[4],
+              Object.keys(ROLE_USER)[0],
+            ]}
           >
             <CustomerRequest />
           </ProtectTemplate>
@@ -199,21 +203,7 @@ const routes = [
   },
   {
     path: "/",
-    children: [
-      {element: <LogIn />},
-      {path: "404", element: <NotFound />},
-      {
-        path: "orders/makingOrder",
-        element: (
-          <ProtectTemplate
-            Component={MakingOrder}
-            permission={[Object.keys(ROLE_USER)[1], Object.keys(ROLE_USER)[4]]}
-          >
-            <MakingOrder />
-          </ProtectTemplate>
-        ),
-      },
-    ],
+    children: [{element: <LogIn />}, {path: "404", element: <NotFound />}],
   },
 ];
 

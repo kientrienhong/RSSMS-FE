@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import {
   Box,
   IconButton,
@@ -11,12 +11,12 @@ import {
 } from "@material-ui/core";
 import SearchIcon from "@mui/icons-material/Search";
 import ListRequest from "./component/ListRequest";
-import { useForm } from "react-hook-form";
+import {useForm} from "react-hook-form";
 import * as action from "../../redux/action/action";
 
-import { connect } from "react-redux";
-import { getStaffRequest } from "../../apis/Apis";
-function StaffRequest({ showLoading, hideLoading, showSnackbar, userState }) {
+import {connect} from "react-redux";
+import {getStaffRequest} from "../../apis/Apis";
+function StaffRequest({showLoading, hideLoading, showSnackbar, userState}) {
   const [listRequest, setListRequest] = useState([]);
   const [totalRequest, setTotalRequest] = useState(0);
   const [open, setOpen] = useState(false);
@@ -103,7 +103,7 @@ function StaffRequest({ showLoading, hideLoading, showSnackbar, userState }) {
           }}
           onChange={(e) => {}}
           InputProps={{
-            style: { height: "45px", backgroundColor: "white" },
+            style: {height: "45px", backgroundColor: "white"},
             startAdornment: (
               <InputAdornment>
                 <IconButton>
@@ -114,22 +114,35 @@ function StaffRequest({ showLoading, hideLoading, showSnackbar, userState }) {
           }}
         />
 
-        <Box sx={{ width: "2%" }} />
+        <Box sx={{width: "2%"}} />
       </Box>
       <Card
         variant="outlined"
         color="#FFF"
-        sx={{ marginLeft: "2%", marginRight: "2%" }}
+        sx={{marginLeft: "2%", marginRight: "2%"}}
       >
-        <ListRequest
-          setRequest={setRequest}
-          handleOpen={handleOpen}
-          listRequest={listRequest}
-          page={page}
-          setPage={setPage}
-          totalRequest={totalRequest}
-          getData={getData}
-        />
+        {listRequest.length > 0 ? (
+          <ListRequest
+            setRequest={setRequest}
+            handleOpen={handleOpen}
+            listRequest={listRequest}
+            page={page}
+            setPage={setPage}
+            totalRequest={totalRequest}
+            getData={getData}
+          />
+        ) : (
+          <Typography
+            color="black"
+            variant="h5"
+            style={{
+              textAlign: "center",
+              margin: "2% 0",
+            }}
+          >
+            Không tìm yêu cầu nào
+          </Typography>
+        )}
       </Card>
     </Box>
   );

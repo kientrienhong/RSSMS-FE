@@ -6,6 +6,7 @@ import {
   IconButton,
   TextField,
   Card,
+  Typography,
 } from "@material-ui/core";
 import SearchIcon from "@mui/icons-material/Search";
 import ListOrder from "./components/ListOrder";
@@ -185,20 +186,33 @@ function Liquidatedorder({
         color="#FFF"
         sx={{marginLeft: "2%", marginRight: "2%"}}
       >
-        <ListOrder
-          listOrder={listOrder}
-          searchId={searchId}
-          page={page}
-          totalOrder={totalOrder}
-          handleOpen={onHandleOpen}
-          setOrder={setCurrentOrder}
-          getData={getData}
-          reset={reset}
-          handleUpdateOrderOpen={handleUpdateOrderOpen}
-          setListOrder={setListOrder}
-          setPage={setPage}
-          currentOrder={currentOrder}
-        />
+        {listOrder.length > 0 ? (
+          <ListOrder
+            listOrder={listOrder}
+            searchId={searchId}
+            page={page}
+            totalOrder={totalOrder}
+            handleOpen={onHandleOpen}
+            setOrder={setCurrentOrder}
+            getData={getData}
+            reset={reset}
+            handleUpdateOrderOpen={handleUpdateOrderOpen}
+            setListOrder={setListOrder}
+            setPage={setPage}
+            currentOrder={currentOrder}
+          />
+        ) : (
+          <Typography
+            color="black"
+            variant="h5"
+            style={{
+              textAlign: "center",
+              margin: "2% 0",
+            }}
+          >
+            Không tìm thấy đơn hàng
+          </Typography>
+        )}
       </Card>
     </Box>
   );
