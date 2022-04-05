@@ -159,6 +159,7 @@ function AreaDetailNew({
 
       setStorage(storageTemp.data);
       let area = await getDetailArea(areaId, userState.idToken);
+      console.log(area);
       setArea(area.data);
       let response = await getListSpace(
         searchName,
@@ -267,7 +268,6 @@ function AreaDetailNew({
           imgUrl={"/img/product.png"}
           quantity={storedOrder?.totalQuantity}
           isView={false}
-          // getData={getData}
           name={searchName}
           page={page}
         />

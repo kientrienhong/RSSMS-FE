@@ -19,13 +19,6 @@ function Floor({
   setDetailFloor,
   userState,
 }) {
-  let additionUsage = 0;
-  placingProducts?.floors?.forEach((e) => {
-    if (e.floorId === floor.id) {
-      additionUsage += e.width * e.height * e.length;
-    }
-  });
-  additionUsage = ((additionUsage + floor.used) / floor.available) * 100;
   return (
     <Grid>
       <Box
@@ -47,7 +40,7 @@ function Floor({
             alignItems: "center",
           }}
         >
-          <CircularProgressWithLabel value={floor.usage + additionUsage} />
+          <CircularProgressWithLabel value={floor.usage} />
           <Typography
             color="black"
             variant="h2"

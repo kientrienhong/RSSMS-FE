@@ -17,9 +17,7 @@ import {LIST_SPACE_TYPE} from "../../../constant/constant";
 
 export default function Shelf({
   handleOpen,
-  expanded,
   id,
-  handleChange,
   shelf,
   area,
   storage,
@@ -50,8 +48,6 @@ export default function Shelf({
         marginBottom: "4%",
         width: "100%",
       }}
-      expanded={expanded === id}
-      onChange={handleChange(id)}
     >
       <AccordionSummary
         sx={{

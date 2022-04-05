@@ -77,24 +77,14 @@ function ModalDetailFloor({
             }}
           >
             <AreaUsage detailFloor={uiDetailFloor} />
-            {detailFloor?.orderDetails?.length > 0 ? (
-              <ListOrderDetail
-                listOrderDetail={detailFloor?.orderDetails}
-                handleOpenOrderDetail={handleOpenOrderDetail}
-                setCurrentOrderDetail={setCurrentOrderDetail}
-                page={1}
-                detailFloor={detailFloor}
-                totalOrderDetail={3}
-              />
-            ) : (
-              <Typography
-                color="black"
-                variant="h2"
-                sx={{textAlign: "left", marginBottom: "4%"}}
-              >
-                Chưa có hàng hóa trên kệ
-              </Typography>
-            )}
+            <ListOrderDetail
+              listOrderDetail={detailFloor?.orderDetails}
+              handleOpenOrderDetail={handleOpenOrderDetail}
+              setCurrentOrderDetail={setCurrentOrderDetail}
+              page={1}
+              detailFloor={detailFloor}
+              totalOrderDetail={3}
+            />
           </Box>
           <Button
             style={{

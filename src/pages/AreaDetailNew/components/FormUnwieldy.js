@@ -6,17 +6,18 @@ import {
   Button,
   FormControl,
   MenuItem,
-  TextField,
   Select,
-  FormHelperText,
   Grid,
+  FormHelperText,
 } from "@material-ui/core";
 import CustomInput from "../../../components/CustomInput";
+import CustomAreaInput from "../../../components/CustomAreaInput";
+
 import {connect} from "react-redux";
 import * as action from "../../../redux/action/action";
 import {createSpace, updateShelf} from "../../../apis/Apis";
-
-function FormSpace({
+import CustomSelect from "../../../components/CustomSelect";
+function FormUnwieldy({
   isEdit,
   currentSpace,
   setCurrentSpace,
@@ -30,63 +31,67 @@ function FormSpace({
   handleClose,
   userState,
   isView,
+  listAreas,
 }) {
-  const {handleSubmit, control, reset} = useForm();
-
+  console.log(listAreas);
+  const {
+    handleSubmit,
+    control,
+    reset,
+    formState: {errors},
+  } = useForm();
+  const [currentIdService, setCurrentIdService] = useState(
+    listAreas?.find((e) => {
+      return (
+        e.width === currentSpace.floorWidth &&
+        e.length === currentSpace.floorLength &&
+        e.height === currentSpace.floorHeight
+      );
+    })?.id
+  );
   const [error, setError] = useState({});
 
-  const onHandleCreateShelf = async (data, areaId) => {
+  const onHandleEditShelf = async (data) => {
     try {
       showLoading();
+
       const shelf = {
         type: currentSpace.type,
         name: data.name,
-        floorWidth: parseFloat(data.floorWidth),
-        floorHeight: parseFloat(data.floorHeight),
-        floorLength: parseFloat(data.floorLength),
-        numberOfFloor: parseInt(data.numberOfFloor),
+        floorWidth: parseInt(data.floorWidth),
+        floorHeight: parseInt(data.floorHeight),
+        floorLength: parseInt(data.floorLength),
       };
-      await createSpace(shelf, areaId, userState.idToken);
+      let test = await updateShelf(currentSpace.id, shelf, userState.idToken);
       await getData(searchName, page, 4);
-      showSnackbar("success", "Tạo không gian thành công");
-      setError({});
+      showSnackbar("success", "Update shelf success");
       handleClose();
     } catch (e) {
       console.log(e.response);
-      setError({submit: {msg: e.response.data.error.message}});
+      setError({msg: e.response.data.error.message});
     } finally {
       hideLoading();
     }
   };
 
-  useEffect(() => {
-    reset({
-      floorWidth: currentSpace.floorWidth,
-      floorHeight: currentSpace.floorHeight,
-      floorLength: currentSpace.floorLength,
-      name: currentSpace.name,
-      numberOfFloor: currentSpace?.floors?.length,
-    });
-  }, [currentSpace]);
-
-  const onHandleEditShelf = async (data) => {
+  const onHandleCreateShelf = async (data, areaId) => {
     try {
       showLoading();
+
       const shelf = {
         type: currentSpace.type,
         name: data.name,
-        floorWidth: parseFloat(data.floorWidth),
-        floorHeight: parseFloat(data.floorHeight),
-        floorLength: parseFloat(data.floorLength),
-        numberOfFloor: parseInt(data.numberOfFloor),
+        floorWidth: parseInt(data.floorWidth),
+        floorHeight: parseInt(data.floorHeight),
+        floorLength: parseInt(data.floorLength),
       };
-      await updateShelf(currentSpace.id, shelf, userState.idToken);
+      await createSpace(shelf, areaId, userState.idToken);
       await getData(searchName, page, 4);
-      showSnackbar("success", "Cập nhật không gian thành công");
+      showSnackbar("success", "Create shelf success");
       handleClose();
     } catch (e) {
       console.log(e.response);
-      setError({submit: {msg: e.response.data.error.message}});
+      setError({msg: e.response.data.error.message});
     } finally {
       hideLoading();
     }
@@ -98,6 +103,36 @@ function FormSpace({
     } else {
       await onHandleEditShelf(data);
     }
+  };
+
+  useEffect(() => {
+    reset({
+      floorWidth: currentSpace.floorWidth,
+      floorHeight: currentSpace.floorHeight,
+      floorLength: currentSpace.floorLength,
+      name: currentSpace.name,
+    });
+  }, [currentSpace]);
+
+  const mapListMenu = (listAreas) =>
+    listAreas?.map((e) => <MenuItem value={e.id}>{e.name}</MenuItem>);
+
+  const handleChange = (event) => {
+    setCurrentIdService(event.target.value);
+    let area = listAreas.find((e) => {
+      return e.id === event.target.value;
+    });
+    setCurrentSpace({
+      ...currentSpace,
+      floorWidth: area.width,
+      floorHeight: area.height,
+      floorLength: area.length,
+    });
+    reset({
+      floorWidth: area.width,
+      floorHeight: area.height,
+      floorLength: area.length,
+    });
   };
 
   return (
@@ -131,7 +166,17 @@ function FormSpace({
         variant="h2"
         sx={{textAlign: "left", marginTop: "2%"}}
       >
-        Kích thước của 1 tầng
+        Chọn kích thước dịch vụ
+      </Typography>
+      <Select onChange={handleChange} value={currentIdService}>
+        {mapListMenu(listAreas)}
+      </Select>
+      <Typography
+        color="black"
+        variant="h2"
+        sx={{textAlign: "left", marginTop: "2%"}}
+      >
+        Kích thước
       </Typography>
       <Grid
         container
@@ -141,22 +186,6 @@ function FormSpace({
           marginTop: "1%",
         }}
       >
-        <Grid item xs={4}>
-          <CustomInput
-            control={control}
-            rules={{
-              required: "*Vui lòng nhập",
-              pattern: {
-                value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
-                message: "*Vui lòng nhập đúng chiều rộng",
-              },
-            }}
-            disabled={isView}
-            name="floorWidth"
-            label="Chiều rộng (m)"
-            userInfo={currentSpace?.floorWidth}
-          />
-        </Grid>
         <Grid item xs={4}>
           <CustomInput
             control={control}
@@ -180,47 +209,33 @@ function FormSpace({
               required: "*Vui lòng nhập",
               pattern: {
                 value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
-                message: "*Vui lòng nhập đúng chiều cao",
+                message: "*Vui lòng nhập đúng chiều rộng",
               },
             }}
+            name="floorWidth"
             disabled={isView}
-            name="floorHeight"
-            label="Chiều cao (m)"
-            userInfo={currentSpace?.floorHeight}
+            label="Chiều rộng (m)"
+            userInfo={currentSpace?.floorWidth}
           />
         </Grid>
-      </Grid>
-      <Box
-        sx={{
-          width: "100%",
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "flex-start",
-          justifyContent: "flex-start",
-          marginTop: "2%",
-        }}
-      >
-        <Box sx={{width: "60%", display: "flex", flexDirection: "column"}}>
-          <Typography color="black" variant="h2" sx={{textAlign: "left"}}>
-            Số tầng của không gian
-          </Typography>
+        <Grid item xs={4}>
           <CustomInput
             control={control}
             rules={{
               required: "*Vui lòng nhập",
               pattern: {
-                value: /^[1-9]+[0-9]*$/,
-                message: "*Vui lòng nhập đúng số tầng",
+                value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
+                message: "*Vui lòng nhập đúng chiều cao",
               },
             }}
+            name="floorHeight"
             disabled={isView}
-            name="numberOfFloor"
-            label="Số tầng của kệ"
-            userInfo={currentSpace?.numberOfFloor}
-            inlineStyle={{marginTop: "3%", width: "180px"}}
+            label="Chiều cao (m)"
+            userInfo={currentSpace?.floorHeight}
           />
-        </Box>
-      </Box>
+        </Grid>
+      </Grid>
+
       {error?.submit?.msg ? (
         <p style={{textAlign: "center", color: "red"}}>{error?.submit?.msg}</p>
       ) : null}
@@ -274,4 +289,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(FormSpace);
+export default connect(mapStateToProps, mapDispatchToProps)(FormUnwieldy);

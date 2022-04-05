@@ -10,18 +10,11 @@ export default function ListShelf({
   handleOpenConfirm,
   setDetailFloor,
 }) {
-  const [expanded, setExpanded] = React.useState(false);
-  const handleChange = (panel) => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false);
-  };
-
   const mapShelf = () => {
     return listShelf.map((e, index) => {
       return (
         <Shelf
           shelf={e}
-          handleChange={handleChange}
-          expanded={expanded}
           id={index}
           area={area}
           storage={storage}

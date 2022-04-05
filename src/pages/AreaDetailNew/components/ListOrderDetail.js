@@ -16,7 +16,7 @@ import moment from "moment";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
-import {Button, TableHead} from "@material-ui/core";
+import {Button, TableHead, Typography} from "@material-ui/core";
 import {makeStyles} from "@material-ui/styles";
 import ConfirmModal from "../../../components/ConfirmModal";
 import {LIST_STATUS_OF_ORDER_DETAIL} from "../../../constant/constant";
@@ -208,7 +208,7 @@ function ListOrderDetail({
     setPage(0);
   };
 
-  return (
+  return listPlacingProducts.length > 0 ? (
     <TableContainer component={Paper}>
       <Table
         sx={{minWidth: 500, maxHeight: 800}}
@@ -351,6 +351,14 @@ function ListOrderDetail({
         </TableFooter>
       </Table>
     </TableContainer>
+  ) : (
+    <Typography
+      color="black"
+      variant="h2"
+      sx={{textAlign: "left", marginBottom: "4%"}}
+    >
+      Chưa có hàng hóa trên kệ
+    </Typography>
   );
 }
 

@@ -393,6 +393,11 @@ export const getListSpace = async (name, page, size, areaId, token) => {
 };
 
 export const createSpace = async (space, areaId, token) => {
+  console.log({
+    floorWidth: space.floorWidth,
+    floorLength: space.floorLength,
+    floorHeight: space.floorHeight,
+  });
   let result = await axios.post(
     `https://localhost:44304/api/v1/spaces`,
     {
@@ -651,9 +656,9 @@ export const createProduct = async (product, token) => {
       price: product.price,
       description: product.description,
       type: product.type,
-      length: parseInt(product.length),
-      width: parseInt(product.width),
-      height: parseInt(product.height),
+      length: parseFloat(product.length),
+      width: parseFloat(product.width),
+      height: parseFloat(product.height),
       size: product.size,
       unit: product.unit,
       tooltip: product.tooltip,

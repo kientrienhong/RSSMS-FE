@@ -121,12 +121,7 @@ function StoredOrderModal({
       setError({...error, submit: "Vui lòng đặt hết hàng hóa lên kệ"});
       return;
     }
-    // storedOrder.products.forEach((e) => {
-    //   if (e.amount > 0) {
-    //     setError("Vui lòng đặt hết hàng hóa lên kệ");
-    //     return;
-    //   }
-    // });
+
     try {
       showLoading();
       if (isMoveOrderDetail) {
@@ -173,16 +168,13 @@ function StoredOrderModal({
 
     if (
       !(
-        foundOrderDetail.serviceType === 2 &&
-        currentFloor.typeShelf === TYPE_SHELF.Hanldy
-      ) &&
-      !(
         foundOrderDetail.serviceType === 0 &&
         currentFloor.typeShelf === TYPE_SHELF["Self-storage"]
       ) &&
       !(
-        foundOrderDetail.serviceType === 3 &&
-        currentFloor.typeShelf === TYPE_SHELF.Unweildy
+        (foundOrderDetail.serviceType === 3 ||
+          foundOrderDetail.serviceType === 2) &&
+        currentFloor.typeShelf === TYPE_SHELF["Door-To-Door"]
       )
     ) {
       setError({
@@ -205,9 +197,9 @@ function StoredOrderModal({
 
     if (
       placingArea <= availableSpace &&
-      foundOrderDetail.length < currentFloor.length &&
-      foundOrderDetail.width < currentFloor.width &&
-      foundOrderDetail.height < currentFloor.height
+      foundOrderDetail.length <= currentFloor.length &&
+      foundOrderDetail.width <= currentFloor.width &&
+      foundOrderDetail.height <= currentFloor.height
     ) {
       placeProductToShelf({
         idOrderDetail: foundOrderDetail.id,
@@ -221,7 +213,10 @@ function StoredOrderModal({
       });
       showSnackbar("success", "Đặt hàng lên kệ thành công");
     } else {
-      setError("Kích thước không phù hợp hoặc không còn chỗ");
+      setError({
+        ...error,
+        placing: "Kích thước không phù hợp hoặc không còn chỗ",
+      });
       return;
     }
   };

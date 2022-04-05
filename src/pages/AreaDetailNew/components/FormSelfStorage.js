@@ -1,11 +1,20 @@
 import React, {useState, useEffect} from "react";
 import {useForm} from "react-hook-form";
-import {Typography, Box, Button, Grid} from "@material-ui/core";
+import {
+  Typography,
+  Box,
+  Button,
+  Grid,
+  Select,
+  MenuItem,
+} from "@material-ui/core";
 import CustomInput from "../../../components/CustomInput";
 import CustomAreaInput from "../../../components/CustomAreaInput";
 import {connect} from "react-redux";
 import * as action from "../../../redux/action/action";
 import {createSpace, updateShelf} from "../../../apis/Apis";
+import CustomSelect from "../../../components/CustomSelect";
+
 function FormSelfStorage({
   isEdit,
   currentSpace,
@@ -18,9 +27,9 @@ function FormSelfStorage({
   areaId,
   searchName,
   handleClose,
-  listSelfStorage,
   userState,
   isView,
+  listStorage,
 }) {
   const {handleSubmit, control, reset} = useForm();
   const [error, setError] = useState({});
@@ -39,11 +48,11 @@ function FormSelfStorage({
       showLoading();
 
       const shelf = {
-        type: 2,
+        type: 1,
         name: data.name,
-        floorWidth: parseInt(data.floorWidth),
-        floorLength: parseInt(data.floorLength),
-        floorHeight: parseInt(data.floorHeight),
+        floorWidth: parseFloat(data.floorWidth),
+        floorLength: parseFloat(data.floorLength),
+        floorHeight: parseFloat(data.floorHeight),
       };
       await updateShelf(currentSpace.id, shelf, userState.idToken);
       await getData(searchName, page, 4);
@@ -57,6 +66,9 @@ function FormSelfStorage({
     }
   };
 
+  const buildDropDown = (listSizeStorage) =>
+    listSizeStorage.map((e) => <MenuItem value={e.value}>{e.label}</MenuItem>);
+
   const onHandleCreateShelf = async (data, areaId) => {
     try {
       showLoading();
@@ -64,9 +76,9 @@ function FormSelfStorage({
       const shelf = {
         type: 1,
         name: data.name,
-        floorWidth: parseInt(data.floorWidth),
-        floorLength: parseInt(data.floorLength),
-        floorHeight: parseInt(data.floorHeight),
+        floorWidth: parseFloat(data.floorWidth),
+        floorLength: parseFloat(data.floorLength),
+        floorHeight: parseFloat(data.floorHeight),
       };
       await createSpace(shelf, areaId, userState.idToken);
       await getData(searchName, page, 4);
@@ -76,8 +88,6 @@ function FormSelfStorage({
       console.log(e?.response?.data?.error?.message);
       if (e?.response?.data?.error?.message)
         showSnackbar("error", e.response.data.error.message);
-
-      // setError({submit: {msg: e.response.data.error.message}});
     } finally {
       hideLoading();
     }
@@ -90,6 +100,8 @@ function FormSelfStorage({
       await onHandleEditShelf(data);
     }
   };
+
+  const onChange = () => {};
 
   return (
     <form
@@ -144,22 +156,6 @@ function FormSelfStorage({
               required: "*Vui lòng nhập",
               pattern: {
                 value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
-                message: "*Vui lòng nhập đúng chiều dài",
-              },
-            }}
-            name="floorLength"
-            disabled={isView}
-            label="Chiều dài (m)"
-            userInfo={currentSpace?.floorLength}
-          />
-        </Grid>
-        <Grid item xs={4}>
-          <CustomInput
-            control={control}
-            rules={{
-              required: "*Vui lòng nhập",
-              pattern: {
-                value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
                 message: "*Vui lòng nhập đúng chiều rộng",
               },
             }}
@@ -169,6 +165,23 @@ function FormSelfStorage({
             userInfo={currentSpace?.floorWidth}
           />
         </Grid>
+        <Grid item xs={4}>
+          <CustomInput
+            control={control}
+            rules={{
+              required: "*Vui lòng nhập",
+              pattern: {
+                value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
+                message: "*Vui lòng nhập đúng chiều dài",
+              },
+            }}
+            name="floorLength"
+            disabled={isView}
+            label="Chiều dài (m)"
+            userInfo={currentSpace?.floorLength}
+          />
+        </Grid>
+
         <Grid item xs={4}>
           <CustomInput
             control={control}
@@ -186,6 +199,10 @@ function FormSelfStorage({
           />
         </Grid>
       </Grid>
+
+      {/* <Select onChange={onChange} value={value}>
+        {buildDropDown(listStorage)}
+      </Select> */}
 
       {error?.submit?.msg ? (
         <p style={{textAlign: "center", color: "red"}}>{error?.submit?.msg}</p>
