@@ -64,14 +64,13 @@ export default function AreaUsage({detailFloor}) {
     <Card
       sx={{
         width: "20%",
-        height: "30%",
+        height: "40%",
         display: "flex",
         flexDirection: "column",
         marginRight: "3%",
         alignItems: "center",
         justifyAligns: "space-between",
         padding: "2%",
-        marginBottom: "4%",
       }}
     >
       <Typography
@@ -79,7 +78,7 @@ export default function AreaUsage({detailFloor}) {
         variant="h2"
         sx={{textAlign: "left", marginBottom: "16px"}}
       >
-        Tình trạng
+        Tình trạng đã sử dụng
       </Typography>
       {buildProductUsage(detailFloor?.usage)}
     </Card>

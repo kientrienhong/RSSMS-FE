@@ -324,7 +324,7 @@ function AreaDetailNew({
             alignItems: "center",
           }}
         >
-          <AreaUsage value={80} />
+          <AreaUsage detailFloor={area} />
           <Box
             sx={{
               width: "2px",

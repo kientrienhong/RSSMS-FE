@@ -24,9 +24,8 @@ export const TYPE_AREA = {
 };
 
 export const TYPE_SHELF = {
-  Hanldy: 0,
-  Unweildy: 1,
-  "Self-storage": 2,
+  "Door-To-Door": 0,
+  "Self-storage": 1,
 };
 
 export const LIST_PRODUCT_MANAGE_TYPE = [
@@ -77,8 +76,7 @@ export const LIST_STATUS_ORDER_SELECT = [
 ];
 
 export const LIST_SPACE_TYPE = [
-  {name: "Kệ", color: style.PRIMARY_BLUE},
-  {name: "Diện tích", color: style.PRIMARY_PURPLE},
+  {name: "Không gian chứa đồ", color: style.PRIMARY_BLUE},
   {name: "Kho", color: style.PRIMARY_BLUE},
 ];
 

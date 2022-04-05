@@ -66,11 +66,14 @@ function AreaList({
 
       setListArea(listAreaTemp.data.data);
       showSnackbar("success", "Tạo khu vực thành công!");
+      handleClose();
     } catch (error) {
       console.log(error);
+      if (error?.response) {
+        showSnackbar("error", error?.response?.data?.error?.message);
+      }
     } finally {
       hideLoading();
-      handleClose();
     }
   };
 
@@ -207,6 +210,7 @@ function AreaList({
           onClick={() => {
             handleOpen(false);
             setIsEdit(false);
+            setCurrentArea({});
           }}
         >
           Tạo khu vực

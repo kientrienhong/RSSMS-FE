@@ -62,7 +62,7 @@ function FormSelfStorage({
       showLoading();
 
       const shelf = {
-        type: 2,
+        type: 1,
         name: data.name,
         floorWidth: parseInt(data.floorWidth),
         floorLength: parseInt(data.floorLength),
@@ -73,9 +73,11 @@ function FormSelfStorage({
       showSnackbar("success", "Tạo kho thành công");
       handleClose();
     } catch (e) {
-      console.log(e.response);
+      console.log(e?.response?.data?.error?.message);
       if (e?.response?.data?.error?.message)
-        setError({msg: e.response.data.error.message});
+        showSnackbar("error", e.response.data.error.message);
+
+      // setError({submit: {msg: e.response.data.error.message}});
     } finally {
       hideLoading();
     }

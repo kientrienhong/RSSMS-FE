@@ -15,7 +15,7 @@ export const hideLoader = () => {
 export const showSnackbar = (type, msg) => {
   return {
     type: ActionType.SHOW_SNACKBAR,
-    payload: { type, msg },
+    payload: {type, msg},
   };
 };
 
@@ -219,5 +219,12 @@ export const placeMovingProduct = (orderDetail, newFloorId) => {
       orderDetail: orderDetail,
       newFloorId: newFloorId,
     },
+  };
+};
+
+export const handleExtendSession = (isOpen) => {
+  return {
+    type: ActionType.HANDLE_OPEN_EXTEND_SESSION,
+    payload: isOpen,
   };
 };

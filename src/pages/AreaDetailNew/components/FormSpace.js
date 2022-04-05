@@ -16,7 +16,7 @@ import {connect} from "react-redux";
 import * as action from "../../../redux/action/action";
 import {createSpace, updateShelf} from "../../../apis/Apis";
 
-function FormHandy({
+function FormSpace({
   isEdit,
   currentSpace,
   setCurrentSpace,
@@ -48,7 +48,7 @@ function FormHandy({
       };
       await createSpace(shelf, areaId, userState.idToken);
       await getData(searchName, page, 4);
-      showSnackbar("success", "Tạo kệ thành công");
+      showSnackbar("success", "Tạo không gian thành công");
       setError({});
       handleClose();
     } catch (e) {
@@ -82,7 +82,7 @@ function FormHandy({
       };
       await updateShelf(currentSpace.id, shelf, userState.idToken);
       await getData(searchName, page, 4);
-      showSnackbar("success", "Cập nhật kệ thành công");
+      showSnackbar("success", "Cập nhật không gian thành công");
       handleClose();
     } catch (e) {
       console.log(e.response);
@@ -202,7 +202,7 @@ function FormHandy({
       >
         <Box sx={{width: "60%", display: "flex", flexDirection: "column"}}>
           <Typography color="black" variant="h2" sx={{textAlign: "left"}}>
-            Số tầng của kệ
+            Số tầng của không gian
           </Typography>
           <CustomInput
             control={control}
@@ -274,4 +274,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(FormHandy);
+export default connect(mapStateToProps, mapDispatchToProps)(FormSpace);

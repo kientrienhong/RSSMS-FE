@@ -32,6 +32,7 @@ import CustomInput from "../../components/CustomInput";
 import {STYLE_MODAL} from "../../constant/style";
 import CustomSelect from "../../components/CustomSelect";
 import {getBase64} from "../../utils/convertImage";
+import {ErrorHandle} from "../../utils/ErrorHandle";
 let inputFile;
 const styleModal = {
   ...STYLE_MODAL,
@@ -499,7 +500,13 @@ function Users(props) {
   let password = useRef({});
   password.current = watch("password", "");
 
-  const {showLoading, hideLoading, showSnackbar, userState} = props;
+  const {
+    showLoading,
+    hideLoading,
+    showSnackbar,
+    userState,
+    handleExtendSession,
+  } = props;
 
   const handleChangeGender = (event) => {
     setGender(parseInt(event.target.value));
@@ -514,6 +521,7 @@ function Users(props) {
       setTotalUser(list.data.metadata.total);
     } catch (error) {
       console.log(error?.response);
+      ErrorHandle.handle(error, showSnackbar, handleExtendSession);
       if (error?.response) {
         if (error?.response?.data?.error?.code === 404) {
           setListUser([]);
@@ -855,6 +863,9 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    handleExtendSession: (isOpen) =>
+      dispatch(action.handleExtendSession(isOpen)),
+
     showLoading: () => dispatch(action.showLoader()),
     hideLoading: () => dispatch(action.hideLoader()),
     showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),

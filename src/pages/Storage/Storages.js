@@ -32,6 +32,7 @@ import ListStaff from "./components/ListStaff";
 import {STYLE_MODAL} from "../../constant/style";
 import AssignStaffModal from "./components/AssignStaffModal";
 import {getBase64} from "../../utils/convertImage";
+import {ErrorHandle} from "../../utils/ErrorHandle";
 let inputFile;
 const styleModal = {
   ...STYLE_MODAL,
@@ -99,6 +100,7 @@ function Storages(props) {
     storedOrder,
     isLoadingStorage,
     userState,
+    handleExtendSession,
   } = props;
   const [open, setOpen] = React.useState(false);
   const [searchName, setSearchName] = React.useState("");
@@ -179,6 +181,7 @@ function Storages(props) {
         await getData(searchName, page, 4, userState.idToken);
       } catch (error) {
         console.log(error);
+        ErrorHandle.handle(error, showSnackbar, handleExtendSession);
       } finally {
         hideLoading();
       }
@@ -193,6 +196,7 @@ function Storages(props) {
         await getData(searchName, page, 4, userState.idToken);
       } catch (error) {
         console.log(error);
+        ErrorHandle.handle(error, showSnackbar, handleExtendSession);
       } finally {
         hideLoading();
       }
@@ -214,6 +218,8 @@ function Storages(props) {
           listUserNotAssigned = await getListStaff(null, userState.idToken);
         } catch (error) {
           console.log(error);
+          ErrorHandle.handle(error, showSnackbar, handleExtendSession);
+
           setListStaffUnAssigned([]);
           setListShowStaffUnAssigned([]);
         }
@@ -241,6 +247,8 @@ function Storages(props) {
           setListShowStaffUnAssigned(newListUserUnAssign);
         } catch (error) {
           console.log(error);
+          ErrorHandle.handle(error, showSnackbar, handleExtendSession);
+
           setListStaffAssigned([]);
           setListShowStaffAssigned([]);
           setListStaffUnAssigned(listUserNotAssigned.data);
@@ -288,6 +296,7 @@ function Storages(props) {
       handleCloseAssignStaff();
     } catch (error) {
       console.log(error.response);
+      ErrorHandle.handle(error, showSnackbar, handleExtendSession);
 
       setError({
         ...error,
@@ -467,6 +476,7 @@ function Storages(props) {
       setTotalPage(list.data.metadata.totalPage);
     } catch (e) {
       console.log(e);
+      ErrorHandle.handle(e, showSnackbar, handleExtendSession);
     } finally {
       hideLoading();
     }
@@ -826,6 +836,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    handleExtendSession: () => dispatch(action.handleExtendSession()),
     showLoading: () => dispatch(action.showLoader()),
     hideLoading: () => dispatch(action.hideLoader()),
     showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
