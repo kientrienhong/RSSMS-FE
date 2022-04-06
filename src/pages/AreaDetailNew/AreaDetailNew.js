@@ -86,7 +86,12 @@ function AreaDetailNew({
       setIsEdit(true);
       setIsView(isView);
     } else {
-      setCurrentSpace({type: 0});
+      setCurrentSpace({
+        type: 0,
+        floorWidth: 0,
+        floorHeight: 0,
+        floorLength: 0,
+      });
       setIsEdit(false);
       setIsView(isView);
     }
@@ -143,9 +148,9 @@ function AreaDetailNew({
       await getData();
       showSnackbar("success", "Xóa không gian thành công!");
     } catch (error) {
-      console.log(error);
       if (error?.response?.status === 404) {
-        setListShelves([]);
+        console.log(error?.response?.status);
+
         showSnackbar("success", "Xóa không gian thành công!");
       } else {
         throw error;
@@ -159,7 +164,6 @@ function AreaDetailNew({
 
       setStorage(storageTemp.data);
       let area = await getDetailArea(areaId, userState.idToken);
-      console.log(area);
       setArea(area.data);
       let response = await getListSpace(
         searchName,
@@ -176,6 +180,9 @@ function AreaDetailNew({
       hideLoading();
     } catch (e) {
       console.log(e.response);
+      if (e?.response?.status === 404) {
+        setListShelves([]);
+      }
       hideLoading();
     }
   };
@@ -208,13 +215,7 @@ function AreaDetailNew({
         id={currentSpace?.id}
         msg={"Xóa không gian thành công!"}
       />
-      <ModalDetailFloor
-        detailFloor={detailFloor}
-        open={openDetailFloor}
-        handleClose={handleCloseDetailFloor}
-        handleOpenOrderDetail={handleOpenOrderDetail}
-        setCurrentOrderDetail={setCurrentOrderDetail}
-      />
+
       <SelfStorageModal
         currentSpace={currentSpace}
         setCurrentSpace={setCurrentSpace}
@@ -225,6 +226,13 @@ function AreaDetailNew({
         getData={getData}
         open={isOpenSelfStorage}
         handleClose={handleCloseSelfStorage}
+      />
+      <ModalDetailFloor
+        detailFloor={detailFloor}
+        open={openDetailFloor}
+        handleClose={handleCloseDetailFloor}
+        handleOpenOrderDetail={handleOpenOrderDetail}
+        setCurrentOrderDetail={setCurrentOrderDetail}
       />
       <ModalSpace
         currentSpace={currentSpace}
@@ -284,7 +292,10 @@ function AreaDetailNew({
             if (area.type === 1) {
               handleOpenSpace({}, false);
             } else {
-              handleOpenSelfStorage({type: 0}, false);
+              handleOpenSelfStorage(
+                {type: 0, floorWidth: 0, floorHeight: 0, floorLength: 0},
+                false
+              );
             }
           }}
         >
@@ -354,6 +365,10 @@ function AreaDetailNew({
               handleOpenSelfStorage={handleOpenSelfStorage}
               listShelf={listShelves}
               handleOpenConfirm={handleOpenConfirm}
+              detailFloor={detailFloor}
+              handleCloseDetailFloor={handleCloseDetailFloor}
+              handleOpenOrderDetail={handleOpenOrderDetail}
+              setCurrentOrderDetail={setCurrentOrderDetail}
             />
           </Box>
         </Box>

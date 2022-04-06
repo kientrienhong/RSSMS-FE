@@ -92,16 +92,6 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-const listHeaderName = [
-  "Mã đơn",
-  "Hình ảnh",
-  "Tên khách hàng",
-  "Trạng thái",
-  "Thời gian hết hạn",
-  "Kích thước thật",
-  "Hành động",
-];
-
 const mapListTableHeader = (listHeader) => (
   <TableHead>
     <TableRow sx={{color: "black"}}>
@@ -144,8 +134,28 @@ function ListOrderDetail({
   isMoveOrderDetail,
   storedOrder,
 }) {
+  console.log(detailFloor);
   let listPlacingProducts = [];
 
+  const listHeaderName =
+    detailFloor?.spaceType === 0
+      ? [
+          "Mã đơn",
+          "Hình ảnh",
+          "Tên khách hàng",
+          "Trạng thái",
+          "Thời gian hết hạn",
+          "Kích thước thật",
+          "Hành động",
+        ]
+      : [
+          "Mã đơn",
+          "Tên khách hàng",
+          "Trạng thái",
+          "Thời gian hết hạn",
+          "Kích thước thật",
+          "Hành động",
+        ];
   if (isMoveOrderDetail) {
     listOrderDetail = listOrderDetail?.map((e) => {
       let indexFound = storedOrder?.products?.findIndex((ele) => {
@@ -218,7 +228,7 @@ function ListOrderDetail({
         <TableBody>
           {listPlacingProducts.map((row, index) => {
             return (
-              <TableRow key={row.id}>
+              <TableRow key={row?.id}>
                 <TableCell
                   component="th"
                   scope="row"
@@ -231,8 +241,30 @@ function ListOrderDetail({
                     )
                   }
                 >
-                  {row.orderName}
+                  {row?.orderName}
                 </TableCell>
+                {detailFloor?.spaceType === 0 ? (
+                  <TableCell
+                    style={{color: "black"}}
+                    onClick={(e) =>
+                      handleClickRow(
+                        row,
+                        setCurrentOrderDetail,
+                        handleOpenOrderDetail
+                      )
+                    }
+                  >
+                    <img
+                      width="40"
+                      height="40"
+                      src={row?.images[0]?.url}
+                      alt="order detail"
+                    />
+                  </TableCell>
+                ) : (
+                  <></>
+                )}
+
                 <TableCell
                   style={{color: "black"}}
                   onClick={(e) =>
@@ -243,28 +275,11 @@ function ListOrderDetail({
                     )
                   }
                 >
-                  <img
-                    width="40"
-                    height="40"
-                    src={row?.images[0].url}
-                    alt="order detail"
-                  />
-                </TableCell>
-                <TableCell
-                  style={{color: "black"}}
-                  onClick={(e) =>
-                    handleClickRow(
-                      row,
-                      setCurrentOrderDetail,
-                      handleOpenOrderDetail
-                    )
-                  }
-                >
-                  {row.customerName}
+                  {row?.customerName}
                 </TableCell>
                 <TableCell
                   style={{
-                    color: LIST_STATUS_OF_ORDER_DETAIL[row.orderStatus].color,
+                    color: LIST_STATUS_OF_ORDER_DETAIL[row?.orderStatus]?.color,
                   }}
                   onClick={(e) =>
                     handleClickRow(
@@ -274,7 +289,7 @@ function ListOrderDetail({
                     )
                   }
                 >
-                  {LIST_STATUS_OF_ORDER_DETAIL[row.orderStatus].name}
+                  {LIST_STATUS_OF_ORDER_DETAIL[row?.orderStatus]?.name}
                 </TableCell>
                 <TableCell
                   style={{color: "black"}}
@@ -286,7 +301,7 @@ function ListOrderDetail({
                     )
                   }
                 >
-                  {moment(new Date(row.returnDate)).format("DD/MM/YYYY")}
+                  {moment(new Date(row?.returnDate)).format("DD/MM/YYYY")}
                 </TableCell>
                 <TableCell
                   style={{color: "black"}}
@@ -298,10 +313,10 @@ function ListOrderDetail({
                     )
                   }
                 >
-                  {row.width}m x {row.length}m x {row.height}m
+                  {row?.width}m x {row?.length}m x {row?.height}m
                 </TableCell>
                 <TableCell>
-                  {row.orderStatus === 2 ? (
+                  {row?.orderStatus === 2 ? (
                     <Button
                       style={{
                         height: "45px",
@@ -329,26 +344,6 @@ function ListOrderDetail({
             );
           })}
         </TableBody>
-        <TableFooter>
-          <TableRow>
-            <TablePagination
-              rowsPerPageOptions={[10]}
-              colSpan={3}
-              count={totalOrderDetail}
-              rowsPerPage={rowsPerPage}
-              page={page - 1}
-              SelectProps={{
-                inputProps: {
-                  "aria-label": "rows per page",
-                },
-                native: true,
-              }}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-              ActionsComponent={TablePaginationActions}
-            />
-          </TableRow>
-        </TableFooter>
       </Table>
     </TableContainer>
   ) : (

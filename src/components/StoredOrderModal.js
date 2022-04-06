@@ -165,7 +165,8 @@ function StoredOrderModal({
       setError("Hàng hóa này đã được đạt trên kệ");
       return;
     }
-
+    console.log(foundOrderDetail);
+    console.log(currentFloor);
     if (
       !(
         foundOrderDetail.serviceType === 0 &&

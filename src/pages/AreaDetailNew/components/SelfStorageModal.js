@@ -36,8 +36,9 @@ function SelfStorageModal({
     const process = async () => {
       try {
         showLoading();
-        let listStorageTemp = await getProduct(userState.idToken, 4);
-        setListStorage(listStorageTemp.data);
+        let listStorageTemp = await getProduct(0, userState.idToken);
+        console.log(listStorageTemp.data[0]);
+        setListStorage(listStorageTemp.data[0]);
       } catch (error) {
         console.log(error);
       } finally {

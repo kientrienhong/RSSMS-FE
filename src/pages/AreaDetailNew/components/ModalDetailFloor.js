@@ -24,21 +24,21 @@ function ModalDetailFloor({
   setCurrentOrderDetail,
   placingProducts,
 }) {
-  let additionUsed = 0;
-  placingProducts?.floors?.forEach((e) => {
-    if (e.floorId === detailFloor.id) {
-      additionUsed += e.width * e.height * e.length;
-    }
-  });
+  // let additionUsed = 0;
+  // placingProducts?.floors?.forEach((e) => {
+  //   if (e.floorId === detailFloor.id) {
+  //     additionUsed += e.width * e.height * e.length;
+  //   }
+  // });
 
-  let additionUsage =
-    ((additionUsed + detailFloor.used) / detailFloor.available) * 100;
-  let uiDetailFloor = {
-    ...detailFloor,
-    usage: additionUsage + detailFloor.usage,
-    used: additionUsed + detailFloor.used,
-    available: detailFloor.available,
-  };
+  // let additionUsage =
+  //   ((additionUsed + detailFloor.used) / detailFloor.available) * 100;
+  // let uiDetailFloor = {
+  //   ...detailFloor,
+  //   usage: additionUsage + detailFloor.usage,
+  //   used: additionUsed + detailFloor.used,
+  //   available: detailFloor.available,
+  // };
   return (
     <Modal
       open={open}
@@ -76,7 +76,7 @@ function ModalDetailFloor({
               justifyContent: "flex-start",
             }}
           >
-            <AreaUsage detailFloor={uiDetailFloor} />
+            <AreaUsage detailFloor={detailFloor} />
             <ListOrderDetail
               listOrderDetail={detailFloor?.orderDetails}
               handleOpenOrderDetail={handleOpenOrderDetail}

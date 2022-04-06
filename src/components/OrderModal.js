@@ -29,6 +29,7 @@ export default function OrderModal({
   page,
   searchId,
 }) {
+  console.log(currentOrder);
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {

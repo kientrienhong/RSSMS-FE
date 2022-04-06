@@ -26,6 +26,7 @@ import {
   BOX_TYPE,
   ACCESSSORY_TYPE,
   SERVICE_TYPE,
+  SELF_STORAGE_TYPE,
 } from "../constant/constant";
 import {useNavigate} from "react-router";
 import {updateOrder} from "../apis/Apis";
@@ -271,7 +272,11 @@ function InformationOrder({
         if (type === undefined) {
           return;
         }
-        if (e.serviceType === AREA_TYPE || e.serviceType === BOX_TYPE) {
+        if (
+          e.serviceType === AREA_TYPE ||
+          e.serviceType === BOX_TYPE ||
+          e.serviceType === SELF_STORAGE_TYPE
+        ) {
           let indexFound = result[type].findIndex(
             (ele1) => e.serviceId === ele1.serviceId
           );
@@ -290,7 +295,8 @@ function InformationOrder({
         e.orderDetailServices.forEach((addition) => {
           if (
             addition.serviceType === BOX_TYPE ||
-            addition.serviceType === AREA_TYPE
+            addition.serviceType === AREA_TYPE ||
+            addition.serviceType === SELF_STORAGE_TYPE
           ) {
             return;
           }

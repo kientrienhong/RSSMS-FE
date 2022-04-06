@@ -33,7 +33,7 @@ function FormSelfStorage({
 }) {
   const {handleSubmit, control, reset} = useForm();
   const [error, setError] = useState({});
-
+  const [idStorage, setIdStorage] = useState("");
   useEffect(() => {
     reset({
       floorWidth: currentSpace?.floorWidth,
@@ -41,7 +41,16 @@ function FormSelfStorage({
       floorLength: currentSpace?.floorLength,
       name: currentSpace.name,
     });
-  }, [currentSpace]);
+
+    setIdStorage(
+      listStorage?.find(
+        (e) =>
+          e.width === currentSpace.floorWidth &&
+          e.height === currentSpace.floorHeight &&
+          e.length === currentSpace.floorLength
+      )?.id
+    );
+  }, [currentSpace, listStorage]);
 
   const onHandleEditShelf = async (data) => {
     try {
@@ -67,7 +76,7 @@ function FormSelfStorage({
   };
 
   const buildDropDown = (listSizeStorage) =>
-    listSizeStorage.map((e) => <MenuItem value={e.value}>{e.label}</MenuItem>);
+    listSizeStorage.map((e) => <MenuItem value={e.id}>{e.name}</MenuItem>);
 
   const onHandleCreateShelf = async (data, areaId) => {
     try {
@@ -100,8 +109,21 @@ function FormSelfStorage({
       await onHandleEditShelf(data);
     }
   };
-
-  const onChange = () => {};
+  const onChange = (event) => {
+    setIdStorage(event.target.value);
+    const currentStorage = listStorage.find((e) => e.id === event.target.value);
+    reset({
+      floorWidth: currentStorage?.width,
+      floorHeight: currentStorage?.height,
+      floorLength: currentStorage?.length,
+    });
+    setCurrentSpace({
+      ...currentSpace,
+      floorWidth: currentStorage?.width,
+      floorHeight: currentStorage?.height,
+      floorLength: currentStorage?.length,
+    });
+  };
 
   return (
     <form
@@ -137,6 +159,17 @@ function FormSelfStorage({
       <Typography
         color="black"
         variant="h2"
+        sx={{textAlign: "left", marginTop: "4%", marginBottom: "2%"}}
+      >
+        Chọn loại dịch vụ
+      </Typography>
+      <Select onChange={onChange} value={idStorage}>
+        {buildDropDown(listStorage)}
+      </Select>
+
+      <Typography
+        color="black"
+        variant="h2"
         sx={{textAlign: "left", marginTop: "4%"}}
       >
         Kích thước
@@ -160,7 +193,7 @@ function FormSelfStorage({
               },
             }}
             name="floorWidth"
-            disabled={isView}
+            disabled={true}
             label="Chiều rộng (m)"
             userInfo={currentSpace?.floorWidth}
           />
@@ -176,7 +209,7 @@ function FormSelfStorage({
               },
             }}
             name="floorLength"
-            disabled={isView}
+            disabled={true}
             label="Chiều dài (m)"
             userInfo={currentSpace?.floorLength}
           />
@@ -193,17 +226,12 @@ function FormSelfStorage({
               },
             }}
             name="floorHeight"
-            disabled={isView}
+            disabled={true}
             label="Chiều cao (m)"
             userInfo={currentSpace?.floorHeight}
           />
         </Grid>
       </Grid>
-
-      {/* <Select onChange={onChange} value={value}>
-        {buildDropDown(listStorage)}
-      </Select> */}
-
       {error?.submit?.msg ? (
         <p style={{textAlign: "center", color: "red"}}>{error?.submit?.msg}</p>
       ) : null}

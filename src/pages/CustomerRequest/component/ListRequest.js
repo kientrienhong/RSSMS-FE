@@ -147,6 +147,7 @@ function ListRequest({
   handleOpenUpdateRequest,
   showSnackbar,
 }) {
+  console.log(listRequest);
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
