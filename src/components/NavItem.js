@@ -5,9 +5,9 @@ import {
   useNavigate,
 } from "react-router-dom";
 import * as action from "../redux/action/action";
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import { Button, ListItem } from "@material-ui/core";
+import {Button, ListItem} from "@material-ui/core";
 const NavItem = ({
   href,
   icon: Icon,
@@ -58,36 +58,6 @@ const NavItem = ({
           },
         }}
         to={href}
-        // onClick={() => {
-        //   if (currentPositionViewOrderId !== -1) {
-        //     handleProgressModal(
-        //       true,
-        //       `You are viewing #${currentPositionViewOrderId} order. You want to keep it?`,
-        //       () => {
-        //         console.log("testesse");
-        //         handleProgressModal(
-        //           false,
-        //           "",
-        //           () => {},
-        //           () => {}
-        //         );
-        //       },
-        //       () => {
-        //         console.log("testessxzczbcme");
-
-        //         handleProgressModal(
-        //           false,
-        //           "",
-        //           () => {
-        //             setUpCurrentViewOrderId(-1);
-        //           },
-        //           () => {}
-        //         );
-        //       }
-        //     );
-        //   }
-        //   // navigate(href);
-        // }}
       >
         {Icon && <Icon size="20" />}
         {reactIcon}

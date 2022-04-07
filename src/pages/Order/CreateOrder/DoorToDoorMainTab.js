@@ -31,11 +31,24 @@ export default function SelfStorageMainTab({
   setListAreas,
   setListAccessory,
   choosenProduct,
+  setResetQuantity,
 }) {
   const [tabIndex, setTabIndex] = React.useState(0);
 
   const handleChangeTab = async (event, newtabIndex) => {
     setTabIndex(newtabIndex);
+    setChoosenProduct({
+      product: [],
+      accessory: [],
+      services: [],
+    });
+
+    let listAccessoryTemp = setResetQuantity(listAccessory, "accessory");
+    let listBoxesTemp = setResetQuantity(listBoxes, "product");
+    let listAreasTemp = setResetQuantity(listAreas, "product");
+    setListAccessory(listAccessoryTemp);
+    setListBoxes(listBoxesTemp);
+    setListAreas(listAreasTemp);
   };
 
   return (
@@ -53,11 +66,11 @@ export default function SelfStorageMainTab({
           onChange={handleChangeTab}
           aria-label="basic tabs example"
         >
-          <Tab label="Box Items" {...a11yProps(0)} />
-          <Tab label="Area Items" {...a11yProps(1)} />
+          <Tab label="Gửi theo loại" {...a11yProps(0)} />
+          <Tab label="Gửi theo diện tích" {...a11yProps(1)} />
         </Tabs>
       </Box>
-      <Box sx={{ height: "90%" }}>
+      <Box sx={{ height: "90%", width: "100%" }}>
         <TabPanel value={tabIndex} index={0}>
           <BoxTab
             choosenProduct={choosenProduct}

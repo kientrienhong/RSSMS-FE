@@ -1,6 +1,6 @@
 import React from "react";
-import { Box, Typography, Card } from "@material-ui/core";
-import { formatCurrency } from "../../../utils/FormatCurrency";
+import {Box, Typography, Card} from "@material-ui/core";
+import {formatCurrency} from "../../../utils/FormatCurrency";
 export default function Product({
   product,
   setCurrentProduct,
@@ -18,8 +18,6 @@ export default function Product({
     handleOpenConfirm();
   };
 
-  const handleOnClickSeeMore = () => {};
-
   return (
     <Card
       sx={{
@@ -31,7 +29,7 @@ export default function Product({
       }}
     >
       <img
-        src={product?.images[0]?.url}
+        src={product?.imageUrl}
         alt={product?.name}
         width="80px"
         height="80px"
@@ -42,12 +40,15 @@ export default function Product({
       <Typography
         color="black"
         variant="h2"
-        style={{ marginTop: "3%", marginLeft: "3%" }}
+        style={{marginTop: "3%", marginLeft: "3%"}}
       >
         {product?.name}
       </Typography>
-      <p style={{ marginLeft: "3%", marginTop: "3%" }}>
-        {product?.description}
+      <p style={{marginLeft: "3%", marginTop: "3%", marginBottom: "0"}}>
+        Mô tả : {product?.description}
+      </p>
+      <p style={{marginLeft: "3%", marginTop: "3%"}}>
+        Kích thước: {product?.width}m x {product.length}m x {product.height}m
       </p>
       <Box
         sx={{
@@ -59,7 +60,7 @@ export default function Product({
           marginTop: "3%",
         }}
       >
-        <Typography color="primary" variant="h3" style={{ marginLeft: "3%" }}>
+        <Typography color="primary" variant="h3" style={{marginLeft: "3%"}}>
           {formatCurrency(product?.price, "đ")} / {product?.unit}
         </Typography>
         <Box

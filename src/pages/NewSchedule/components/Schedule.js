@@ -1,24 +1,45 @@
 import React from "react";
-import { Box, Checkbox, Button, Avatar } from "@material-ui/core";
-export default function Schedule({
+import {Box, Checkbox, Button, Avatar, Typography} from "@material-ui/core";
+import {getOrderById, getRequestDetail} from "../../../apis/Apis";
+import {connect} from "react-redux";
+import {styled} from "@mui/material/styles";
+import Tooltip, {tooltipClasses} from "@mui/material/Tooltip";
+import * as action from "../../../redux/action/action";
+import moment from "moment";
+const HtmlTooltip = styled(({className, ...props}) => (
+  <Tooltip {...props} classes={{popper: className}} />
+))(({theme}) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: "#f5f5f9",
+    color: "rgba(0, 0, 0, 0.87)",
+    maxWidth: 220,
+    zIndex: "99999999999999999999 !important",
+    fontSize: theme.typography.pxToRem(12),
+    border: "1px solid #dadde9",
+  },
+}));
+
+function Schedule({
   schedule,
   setCurrentOrder,
   handleOpen,
   onChangeCheckBox,
   listSelectedOrder,
   handleOpenAssignTime,
+  userState,
+  handleOpenOrderModal,
 }) {
-  let timeString = schedule.isDelivery ? "deliveryTime" : "returnTime";
+  let isFoundInListSelectedOrder = listSelectedOrder?.findIndex((e) => {
+    return schedule.id === e.id;
+  });
   let foundSameStorage = false;
-
-  let indexFound = listSelectedOrder?.findIndex((e) => {
-    let timeStringElement = e.isDelivery ? "deliveryTime" : "returnTime";
+  let indexFoundSameTime = listSelectedOrder?.findIndex((e) => {
     if (e.storageId === schedule.storageId) {
       foundSameStorage = true;
     }
-    if (e[timeStringElement] === schedule[timeString] && schedule.id !== e.id) {
-      return true;
-    }
+    return (
+      e["deliveryTime"] === schedule["deliveryTime"] && schedule.id !== e.id
+    );
   });
 
   let foundSameListStaff = 0;
@@ -50,6 +71,42 @@ export default function Schedule({
     }
   }
 
+  const buildToolTipStaff = () => {
+    if (schedule?.listStaffDelivery) {
+      return schedule.listStaffDelivery.map((e, index) => (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+          }}
+        >
+          <Box
+            sx={{
+              marginRight: "8px",
+            }}
+          >
+            <Avatar
+              src={e?.imageUrl}
+              sx={{
+                width: 80,
+                height: 80,
+              }}
+            />
+          </Box>
+          <Box>
+            <Typography color="black" variant="h5">
+              Tên: {e.name}
+            </Typography>
+            <p>SĐT: {e.phone}</p>
+            <p>
+              Ngày Sinh: {moment(new Date(e.birthdate)).format("DD/MM/YYYY")}
+            </p>
+          </Box>
+        </Box>
+      ));
+    }
+  };
+
   const buildListAvatar = () => {
     if (schedule?.listStaffDelivery) {
       return schedule.listStaffDelivery.map((e, index) => (
@@ -59,9 +116,9 @@ export default function Schedule({
             height: 28,
             marginLeft: index === 0 ? "0px" : "-8px",
           }}
-          src={e?.images[0]?.url}
+          src={e?.imageUrl}
           alt={e}
-          key={e?.images[0]?.url}
+          key={e?.imageUrl}
         />
       ));
     }
@@ -85,7 +142,7 @@ export default function Schedule({
         justifyContent: "space-between",
         alignItems: "center",
         height: "150px",
-        width: onChangeCheckBox !== undefined ? "225px" : "320px",
+        width: onChangeCheckBox !== undefined ? "335px" : "320px",
         marginRight: "3%",
         padding: "8px",
         borderRadius: "4px",
@@ -99,20 +156,69 @@ export default function Schedule({
           justifyContent: "space-between",
         }}
       >
-        <p style={{ display: "inline-block", margin: 0 }}>
-          {schedule.orderId === undefined ? "Order: #" : "Request: #"}
-          {schedule.id}
-        </p>
         <Box
           sx={{
-            width: "70%",
             display: "flex",
-            flexDirection: "row",
-            justifyContent: "flex-end",
+            flexDirection: "column",
+            width: "80%",
           }}
         >
-          {buildListAvatar()}
+          <p style={{display: "inline-block", margin: 0}}>
+            <p
+              style={{
+                fontWeight: "bold",
+                display: "inline-block",
+                margin: "0",
+                marginRight: "2px",
+                marginBottom: "1%",
+              }}
+            >
+              Tên khách:
+            </p>
+            {schedule.customerName}
+          </p>
+          <p style={{display: "inline-block", margin: 0}}>
+            <p
+              style={{
+                fontWeight: "bold",
+                display: "inline-block",
+                margin: "0",
+                marginRight: "2px",
+              }}
+            >
+              Địa chỉ:
+            </p>
+
+            {schedule.deliveryAddress}
+          </p>
         </Box>
+        {schedule?.listStaffDelivery ? (
+          <HtmlTooltip
+            title={
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                {buildToolTipStaff()}
+              </Box>
+            }
+          >
+            <Box
+              sx={{
+                width: "70%",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "flex-end",
+              }}
+            >
+              {buildListAvatar()}
+            </Box>
+          </HtmlTooltip>
+        ) : (
+          <></>
+        )}
       </Box>
       <Box
         sx={{
@@ -127,13 +233,23 @@ export default function Schedule({
           sx={{
             display: "flex",
             flexDirection: "row",
-            width: "70%",
+            width: "100%",
             justifyContent: "start",
             alignItems: "center",
           }}
         >
-          <p style={{ display: "block", margin: "0" }}>
-            {schedule.storageName}
+          <p style={{display: "block", margin: "0"}}>
+            <p
+              style={{
+                fontWeight: "bold",
+                display: "inline-block",
+                margin: 0,
+                marginRight: "2px",
+              }}
+            >
+              Tên kho:
+            </p>{" "}
+            {schedule?.storageName ? schedule?.storageName : "Chưa được phân"}
           </p>
         </Box>
 
@@ -142,15 +258,30 @@ export default function Schedule({
             display: "flex",
             flexDirection: "row",
             width: "30%",
+            justifyContent: "flex-end",
             alignItems: "center !important",
           }}
         >
           <img
-            onClick={() => {
-              if (schedule.orderId) {
-              } else {
-                setCurrentOrder(schedule);
-                handleOpen();
+            onClick={async () => {
+              try {
+                if (schedule.type === 4) {
+                  const orderDetail = await getOrderById(
+                    schedule.orderId,
+                    userState.idToken
+                  );
+                  setCurrentOrder(orderDetail.data);
+                  handleOpenOrderModal();
+                } else {
+                  const orderDetail = await getRequestDetail(
+                    schedule.id,
+                    userState.idToken
+                  );
+                  setCurrentOrder(orderDetail.data);
+                  handleOpen();
+                }
+              } catch (error) {
+                console.log(error);
               }
             }}
             src="/img/info.png"
@@ -164,14 +295,18 @@ export default function Schedule({
           />
           {onChangeCheckBox !== undefined ? (
             <Checkbox
+              checked={
+                isFoundInListSelectedOrder !== -1 &&
+                listSelectedOrder.length > 0
+              }
               disabled={
-                indexFound !== -1 ||
+                indexFoundSameTime !== -1 ||
                 (!foundSameStorage && listSelectedOrder.length > 0) ||
                 (listSelectedOrder.length > 0 && !isSameListStaff)
               }
               onChange={(val) => onChangeCheckBox(schedule, val.target.checked)}
               color="success"
-              inputProps={{ "aria-label": "controlled" }}
+              inputProps={{"aria-label": "controlled"}}
             />
           ) : (
             <Button
@@ -197,3 +332,17 @@ export default function Schedule({
     </Box>
   );
 }
+
+const mapStateToProps = (state) => ({
+  userState: state.information.user,
+});
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    showLoading: () => dispatch(action.showLoader()),
+    hideLoading: () => dispatch(action.hideLoader()),
+    showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Schedule);

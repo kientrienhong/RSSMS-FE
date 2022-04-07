@@ -5,6 +5,7 @@ const initialState = {
   snackbar: false,
   typeSnackbar: "success",
   msgSnackbar: "",
+  isOpenExtendSession: false,
   isViewStoredModal: false,
   isOpenStoredModal: false,
   progressModal: {
@@ -20,20 +21,20 @@ const application = (state = initialState, action) => {
     case ActionType.SHOW_LOADER: {
       state.loading = true;
 
-      return { ...state };
+      return {...state};
     }
 
     case ActionType.HIDE_LOADER: {
       state.loading = false;
 
-      return { ...state };
+      return {...state};
     }
     case ActionType.SHOW_SNACKBAR: {
       state.snackbar = true;
       state.typeSnackbar = action.payload.type;
       state.msgSnackbar = action.payload.msg;
 
-      return { ...state };
+      return {...state};
     }
 
     case ActionType.HIDE_SNACKBAR: {
@@ -41,11 +42,10 @@ const application = (state = initialState, action) => {
       state.typeSnackbar = "success";
       state.msgSnackbar = "";
 
-      return { ...state };
+      return {...state};
     }
 
     case ActionType.HANDLE_PROGRESS_MODAL: {
-      console.log(action.payload);
       state.progressModal.isOpen = action.payload.isOpen;
       state.progressModal.title = action.payload.title;
       state.progressModal.yesFunction =
@@ -57,23 +57,28 @@ const application = (state = initialState, action) => {
           ? state.progressModal.noFunction
           : action.payload.noFunction;
 
-      return { ...state };
+      return {...state};
     }
 
     case ActionType.CLOSE_ORDER_MODAL: {
       state.isOpenStoredModal = false;
       state.isViewStoredModal = false;
-      return { ...state };
+      return {...state};
+    }
+
+    case ActionType.HANDLE_OPEN_EXTEND_SESSION: {
+      state.isOpenExtendSession = action.payload;
+      return {...state};
     }
 
     case ActionType.OPEN_ORDER_MODAL: {
       state.isViewStoredModal = action.payload;
       state.isOpenStoredModal = true;
-      return { ...state };
+      return {...state};
     }
 
     default: {
-      return { ...state };
+      return {...state};
     }
   }
 };

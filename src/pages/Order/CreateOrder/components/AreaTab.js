@@ -18,7 +18,7 @@ export default function AreaTab({
       <Grid item xs={4} key={index}>
         <ItemNote
           product={e}
-          image={e?.images}
+          image={e?.imageUrl}
           unit={e.unit}
           type={e.type}
           price={e.price}
@@ -40,7 +40,7 @@ export default function AreaTab({
       <Grid item xs={4} key={index}>
         <Item
           type={e.type}
-          image={e?.images}
+          image={e?.imageUrl}
           unit={e.unit}
           price={e.price}
           typeInt={e.typeInt}
@@ -63,7 +63,8 @@ export default function AreaTab({
         flexDirection: "column",
         alignItems: "flex-start",
         justifyContent: "flex-start",
-        marginTop: "-6.5%",
+        marginTop: "2.5%",
+        width: "100%",
       }}
     >
       <Typography
@@ -73,7 +74,7 @@ export default function AreaTab({
         color="textPrimary"
         variant="h2"
       >
-        Area
+        Dịch vụ
       </Typography>
       <Grid
         container
@@ -92,7 +93,7 @@ export default function AreaTab({
         color="textPrimary"
         variant="h2"
       >
-        Accessory
+        Phụ kiện
       </Typography>
       <Grid
         container
@@ -103,25 +104,6 @@ export default function AreaTab({
         }}
       >
         {mapListItemsToGrid(listAccessory, setListAccessory)}
-      </Grid>
-      <Typography
-        sx={{
-          marginBottom: "2%",
-        }}
-        color="textPrimary"
-        variant="h2"
-      >
-        Services
-      </Typography>
-      <Grid
-        container
-        spacing={2}
-        sx={{
-          width: "98%",
-          marginBottom: "3%",
-        }}
-      >
-        {mapListItemsToGrid(listServices, setListServices)}
       </Grid>
     </Box>
   );

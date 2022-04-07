@@ -1,22 +1,13 @@
-import React, { useRef, useState, useEffect } from "react";
-import {
-  Box,
-  Modal,
-  Button,
-  Typography,
-  FormControl,
-  Select,
-  MenuItem,
-  FormHelperText,
-} from "@material-ui/core";
-import { STYLE_MODAL } from "../../../constant/style";
+import React, {useRef, useState, useEffect} from "react";
+import {Box, Modal, Button, Typography, MenuItem} from "@material-ui/core";
+import {STYLE_MODAL} from "../../../constant/style";
 import CustomInput from "../../../components/CustomInput";
 import CustomAreaInput from "../../../components/CustomAreaInput";
-import { LIST_UNIT } from "../../../constant/constant";
-import { connect } from "react-redux";
+import {LIST_UNIT, ACCESSSORY_TYPE} from "../../../constant/constant";
+import {connect} from "react-redux";
 import * as action from "../../../redux/action/action";
-import { createProduct, updateProduct } from "../../../apis/Apis";
-import { getBase64 } from "../../../utils/convertImage";
+import {createProduct, updateProduct} from "../../../apis/Apis";
+import {getBase64} from "../../../utils/convertImage";
 import CustomSelect from "../../../components/CustomSelect";
 const styleBoxInput = {
   display: "flex",
@@ -28,7 +19,7 @@ const styleBoxInput = {
   marginTop: "6% ",
   marginBottom: "4%",
 };
-const styleInput = { marginRight: "5%" };
+const styleInput = {marginRight: "5%"};
 
 function ProductModal({
   open,
@@ -47,7 +38,6 @@ function ProductModal({
   errors,
 }) {
   const [unit, setUnit] = useState("");
-  const [sizeArray, setSizeArray] = useState();
   const [error, setError] = useState({});
   const buildDropDown = (listSizeStorage) =>
     listSizeStorage.map((e) => <MenuItem value={e.value}>{e.label}</MenuItem>);
@@ -57,14 +47,10 @@ function ProductModal({
   };
   useEffect(() => {
     setUnit(currentProduct.unit);
-    setSizeArray(currentProduct?.size?.split(" x "));
   }, [currentProduct]);
 
   useEffect(() => {
     setError({});
-    if (open === false) {
-      setSizeArray();
-    }
   }, [open]);
 
   const onHandleCreateProduct = async (data) => {
@@ -73,14 +59,14 @@ function ProductModal({
       price: parseInt(data.price),
       description: data.description,
       type: typeProduct,
-      size: `${data.width}m x ${data.length}m x ${data.height}m`,
+      width: data.width ? data.width : "0",
+      height: data.height ? data.height : "0",
+      length: data.length ? data.length : "0",
       unit: data.unit,
       tooltip: data.tooltip,
-      images: [
-        {
-          url: null,
-        },
-      ],
+      image: {
+        url: null,
+      },
     };
     try {
       showLoading();
@@ -88,7 +74,7 @@ function ProductModal({
       if (!currentProduct.avatarFile) {
         setError({
           ...error,
-          avatarFile: { message: "Please provide product image!" },
+          avatarFile: {message: "Please provide product image!"},
         });
         hideLoading();
 
@@ -97,11 +83,9 @@ function ProductModal({
       let base64 = await getBase64(currentProduct.avatarFile);
       productTemp = {
         ...productTemp,
-        images: [
-          {
-            file: base64.split(",")[1],
-          },
-        ],
+        image: {
+          file: base64.split(",")[1],
+        },
       };
       const response = await createProduct(productTemp, userState.idToken);
       if (response.status === 200) {
@@ -128,15 +112,14 @@ function ProductModal({
       price: parseInt(data.price),
       description: data.description,
       type: typeProduct,
-      size: `${data.width}m x ${data.length}m x ${data.height}m`,
+      width: data.width ? data.width : "0",
+      height: data.height ? data.height : "0",
+      length: data.length ? data.length : "0",
       unit: data.unit,
       tooltip: data.tooltip,
-      images: [
-        {
-          id: currentProduct?.images[0]?.id,
-          url: currentProduct?.images[0]?.url,
-        },
-      ],
+      image: {
+        url: currentProduct?.imageUrl,
+      },
     };
     try {
       showLoading();
@@ -195,17 +178,12 @@ function ProductModal({
     ) {
       setCurrentProduct({
         ...currentProduct,
-        images: [
-          {
-            id: currentProduct?.images[0]?.id,
-            url: URL.createObjectURL(event.target.files[0]),
-          },
-        ],
+        imageUrl: URL.createObjectURL(event.target.files[0]),
         avatarFile: event.target.files[0],
       });
       setError();
     } else {
-      setError({ avatarFile: { message: "Please choose image file!" } });
+      setError({avatarFile: {message: "Vui lòng chọn tập tin hình ảnh!"}});
     }
   };
 
@@ -221,7 +199,7 @@ function ProductModal({
           border: "solid 1px #000",
         }}
       >
-        {currentProduct?.images[0]?.url === null ? (
+        {currentProduct?.imageUrl === undefined ? (
           <img
             src="/img/imageEdit.png"
             width="50px"
@@ -236,8 +214,8 @@ function ProductModal({
           />
         ) : (
           <img
-            style={{ height: "444px", width: "310px" }}
-            src={currentProduct?.images[0]?.url}
+            style={{height: "444px", width: "310px"}}
+            src={currentProduct?.imageUrl}
             alt="avatar"
           />
         )}
@@ -251,8 +229,8 @@ function ProductModal({
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Box sx={{ ...STYLE_MODAL, width: "60%" }}>
-        <Box sx={{ display: "flex", flexDirection: "row", width: "100%" }}>
+      <Box sx={{...STYLE_MODAL, width: "60%"}}>
+        <Box sx={{display: "flex", flexDirection: "row", width: "100%"}}>
           {buildInputFileImage()}
           <Box
             sx={{
@@ -266,9 +244,9 @@ function ProductModal({
             <Typography
               color="black"
               variant="h2"
-              style={{ marginTop: "1%", marginBottom: "2%" }}
+              style={{marginTop: "1%", marginBottom: "2%"}}
             >
-              Product Information
+              Thông tin dịch vụ
             </Typography>
             <form
               onSubmit={handleSubmit(onSubmit)}
@@ -276,6 +254,7 @@ function ProductModal({
                 width: "100%",
                 display: "flex",
                 flexDirection: "column",
+                alignItems: "flex-start",
               }}
             >
               <input
@@ -284,7 +263,7 @@ function ProductModal({
                 name="fileImage"
                 ref={inputFile}
                 onChange={(e) => onChangeInputFile(e)}
-                style={{ display: "none" }}
+                style={{display: "none"}}
               />
               <Box
                 sx={{
@@ -295,87 +274,89 @@ function ProductModal({
               >
                 <CustomInput
                   control={control}
-                  rules={{ required: "Name is required" }}
-                  styles={{ width: "475px" }}
+                  rules={{required: "*Vui lòng nhập"}}
+                  styles={{width: "475px"}}
                   name="name"
-                  label="Name"
+                  label="Tên"
                   userInfo={currentProduct?.name}
-                  inlineStyle={{ ...styleInput }}
+                  inlineStyle={{...styleInput}}
                 />
               </Box>
-              <Box
-                sx={{ ...styleBoxInput, marginTop: "5%", marginLeft: "-2%" }}
-              >
-                <CustomInput
-                  control={control}
-                  rules={{
-                    required: "Width required",
-                    pattern: {
-                      value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
-                      message: "Invalid width",
-                    },
+              {typeProduct !== ACCESSSORY_TYPE ? (
+                <Box
+                  sx={{
+                    ...styleBoxInput,
+                    marginTop: "5%",
+                    justifyContent: "flex-start",
                   }}
-                  styles={{ width: "120px" }}
-                  name="width"
-                  label="Width (m)"
-                  userInfo={
-                    sizeArray?.length === 3 ? sizeArray[0].slice(0, -1) : ""
-                  }
-                  inlineStyle={styleInput}
-                />
-                <CustomInput
-                  control={control}
-                  rules={{
-                    required: "Length required",
-                    pattern: {
-                      value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
-                      message: "Invalid length",
-                    },
-                  }}
-                  styles={{ width: "120px" }}
-                  name="length"
-                  label="Length (m)"
-                  userInfo={
-                    sizeArray?.length === 3 ? sizeArray[1].slice(0, -1) : ""
-                  }
-                  inlineStyle={styleInput}
-                />
-                <CustomInput
-                  control={control}
-                  rules={{
-                    required: "Height required",
-                    pattern: {
-                      value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
-                      message: "Invalid height",
-                    },
-                  }}
-                  styles={{ width: "120px" }}
-                  name="height"
-                  label="Height (m)"
-                  userInfo={
-                    sizeArray?.length === 3 ? sizeArray[2].slice(0, -1) : ""
-                  }
-                  inlineStyle={styleInput}
-                />
-              </Box>
+                >
+                  <CustomInput
+                    control={control}
+                    rules={{
+                      required: "*Vui lòng nhập",
+                      pattern: {
+                        value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
+                        message: "*Vui lòng nhập đúng chiều rộng",
+                      },
+                    }}
+                    styles={{width: "120px"}}
+                    name="width"
+                    label="Chiều rộng (m)"
+                    userInfo={currentProduct?.width}
+                    inlineStyle={styleInput}
+                  />
+                  <CustomInput
+                    control={control}
+                    rules={{
+                      required: "*Vui lòng nhập",
+                      pattern: {
+                        value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
+                        message: "*Vui lòng nhập đúng chiều dài",
+                      },
+                    }}
+                    styles={{width: "120px"}}
+                    name="length"
+                    label="Chiều dài (m)"
+                    userInfo={currentProduct?.length}
+                    inlineStyle={styleInput}
+                  />
+                  <CustomInput
+                    control={control}
+                    rules={{
+                      required: "*Vui lòng nhập",
+                      pattern: {
+                        value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
+                        message: "*Vui lòng nhập đúng chiều cao",
+                      },
+                    }}
+                    styles={{width: "120px"}}
+                    name="height"
+                    label="Chiều cao (m)"
+                    userInfo={currentProduct?.height}
+                    inlineStyle={styleInput}
+                  />
+                </Box>
+              ) : (
+                <></>
+              )}
 
               <CustomAreaInput
                 control={control}
-                rules={{ required: "Description is required" }}
-                styles={{ width: "500px" }}
+                rules={{required: "*Vui lòng nhập"}}
+                styles={{width: "500px"}}
                 name="description"
-                label="Description"
+                label="Mô tả"
                 userInfo={currentProduct?.description}
-                inlineStyle={{ ...styleInput, marginTop: "4%", width: "500px" }}
+                inlineStyle={{...styleInput, marginTop: "4%", width: "500px"}}
               />
               <CustomAreaInput
                 control={control}
-                rules={{ required: "Tooltip is required" }}
-                styles={{ width: "500px" }}
+                rules={{required: "*Vui lòng nhập"}}
+                styles={{width: "500px"}}
                 name="tooltip"
-                label="Tooltip"
+                label="Chú thích"
                 userInfo={currentProduct?.tooltip}
-                inlineStyle={{ ...styleInput, marginTop: "4%", width: "500px" }}
+                inlineStyle={{...styleInput, marginTop: "4%", width: "500px"}}
               />
               <Box
                 sx={{
@@ -400,26 +381,25 @@ function ProductModal({
                     variant="h2"
                     style={{
                       marginTop: "1%",
-                      marginBottom: "2.8%",
+                      marginBottom: "4.5%",
                     }}
                   >
-                    Price
+                    Giá tiền
                   </Typography>
                   <CustomInput
                     control={control}
                     rules={{
-                      required: "Price is required",
+                      required: "*Vui lòng nhập",
 
                       pattern: {
                         value: /^\+?([1-9]\d{4,14})$/,
-                        message: "Invalid price",
+                        message: "*Vui lòng nhập đúng giá tiền",
                       },
                     }}
-                    styles={{ width: "240px" }}
+                    styles={{width: "240px"}}
                     name="price"
-                    label="Price"
                     userInfo={currentProduct?.price}
-                    inlineStyle={{ ...styleInput }}
+                    inlineStyle={{...styleInput}}
                   />
                 </Box>
                 <Box
@@ -436,18 +416,18 @@ function ProductModal({
                     style={{
                       marginTop: "1%",
                       marginLeft: "5%",
-                      marginBottom: "3%",
+                      marginBottom: "5%",
                     }}
                   >
-                    Unit
+                    Đơn vị
                   </Typography>
                   <CustomSelect
-                    label="Type"
+                    label="Loại"
                     name="unit"
                     control={control}
                     errors={errors}
                     defaultValue={unit}
-                    errorMsg={"Required unit"}
+                    errorMsg={"*Vui lòng chọn"}
                   >
                     {buildDropDown(LIST_UNIT)}
                   </CustomSelect>
@@ -492,7 +472,7 @@ function ProductModal({
                   variant="contained"
                   type="submit"
                 >
-                  Submit
+                  Xác nhận
                 </Button>
                 <Button
                   style={{
@@ -504,7 +484,7 @@ function ProductModal({
                   color="error"
                   variant="outlined"
                 >
-                  Cancel
+                  Đóng
                 </Button>
               </Box>
             </form>

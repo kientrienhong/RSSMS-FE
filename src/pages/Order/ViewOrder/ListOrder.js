@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { useTheme } from "@mui/material/styles";
+import {useTheme} from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -15,25 +15,19 @@ import FirstPageIcon from "@mui/icons-material/FirstPage";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
-import {
-  Checkbox,
-  FormControlLabel,
-  Modal,
-  Typography,
-} from "@material-ui/core";
-import { Button, TableHead } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
-import { useForm } from "react-hook-form";
-import { connect } from "react-redux";
+import {Checkbox, FormControlLabel, Modal, Typography} from "@material-ui/core";
+import {Button, TableHead} from "@material-ui/core";
+import {useForm} from "react-hook-form";
+import {connect} from "react-redux";
 import * as action from "../../../redux/action/action";
-import { getOrderById, cancelOrder, assignOrder } from "../../../apis/Apis";
+import {getOrderById, cancelOrder, assignOrder} from "../../../apis/Apis";
 import CustomAreaInput from "../../../components/CustomAreaInput";
-import { ORDER_STATUS, ORDER_TYPE } from "../../../constant/constant";
+import {ORDER_STATUS, ORDER_TYPE} from "../../../constant/constant";
 import AssignOrderModal from "./AssignOrderModal";
 import ConfirmModal from "../../../components/ConfirmModal";
 function TablePaginationActions(props) {
   const theme = useTheme();
-  const { count, page, rowsPerPage, onPageChange } = props;
+  const {count, page, rowsPerPage, onPageChange} = props;
 
   const handleFirstPageButtonClick = (event) => {
     onPageChange(event, 0);
@@ -52,7 +46,7 @@ function TablePaginationActions(props) {
   };
 
   return (
-    <Box sx={{ flexShrink: 0, ml: 2.5 }}>
+    <Box sx={{flexShrink: 0, ml: 2.5}}>
       <IconButton
         onClick={handleFirstPageButtonClick}
         disabled={page === 0}
@@ -101,19 +95,19 @@ TablePaginationActions.propTypes = {
 };
 
 const listHeaderName = [
-  "ID",
-  "Customer name",
-  "Customer phone",
-  "Address Delivery",
-  "Type",
-  "Is Paid",
-  "Status",
-  "Action",
+  "Mã",
+  "Tên khách hàng",
+  "SĐT khách hàng",
+  "Địa chỉ giao hàng",
+  "Loại đơn",
+  "Đã thanh toán",
+  "Trạng thái",
+  "Thao tác",
 ];
 
 const mapListTableHeader = (listHeader, userState) => (
   <TableHead>
-    <TableRow sx={{ color: "black" }}>
+    <TableRow sx={{color: "black"}}>
       {listHeader.map((e) => {
         if (userState.roleName === "Admin") {
           if (e === "Action") {
@@ -125,17 +119,6 @@ const mapListTableHeader = (listHeader, userState) => (
     </TableRow>
   </TableHead>
 );
-
-const useStyles = makeStyles({
-  button: {
-    backgroundColor: "#CE0200",
-    color: "white",
-    "&:hover": {
-      backgroundColor: "#FF615F",
-      color: "white",
-    },
-  },
-});
 
 const styleModal = {
   position: "absolute",
@@ -165,23 +148,16 @@ function ListOrder({
   showSnackbar,
   userState,
   currentOrder,
+  handleUpdateOrderOpen,
 }) {
-  const classes = useStyles();
-
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   const [open, setOpen] = React.useState(false);
   const [currentId, setCurrentId] = React.useState(-1);
-  const { handleSubmit, control } = useForm();
+  const {handleSubmit, control} = useForm();
   const [openAssign, setOpenAssign] = React.useState(false);
-  const handleConfirmOpen = () => {
-    setOpen(true);
-  };
+
   const handleClose = () => {
     setOpen(false);
-  };
-
-  const handleOpenAssign = () => {
-    setOpenAssign(true);
   };
 
   const handleCloseAssign = () => {
@@ -208,7 +184,6 @@ function ListOrder({
     try {
       showLoading();
       let orderTemp = await getOrderById(row.id, userState.idToken);
-      console.log(orderTemp.data);
       setOrder(orderTemp.data);
     } catch (e) {
       console.log(e.response);
@@ -232,7 +207,7 @@ function ListOrder({
       showLoading();
       await handleDeleteOrder(currentId, data.reason, userState.idToken);
       handleClose();
-      showSnackbar("success", " Cancel order success!");
+      showSnackbar("success", "Hủy đơn thành công!");
     } catch (error) {
       console.log(error);
     } finally {
@@ -257,7 +232,7 @@ function ListOrder({
             flexDirection: "column",
           }}
         >
-          <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
+          <form onSubmit={handleSubmit(onSubmit)} style={{width: "100%"}}>
             <Typography
               color="black"
               variant="h2"
@@ -267,16 +242,16 @@ function ListOrder({
                 marginBottom: "2%",
               }}
             >
-              Are you sure?
+              Bạn đã chắc chắn?
             </Typography>
             <CustomAreaInput
               control={control}
               rules={{
-                required: "Reason required",
+                required: "*Vui lòng nhập",
               }}
-              styles={{ width: "550px" }}
+              styles={{width: "550px"}}
               name="reason"
-              label="Reason"
+              label="Lý do"
               userInfo={""}
             />
             <Box
@@ -308,7 +283,7 @@ function ListOrder({
                   variant="contained"
                   type="submit"
                 >
-                  Yes
+                  Xác nhận
                 </Button>
                 <Button
                   style={{
@@ -320,7 +295,7 @@ function ListOrder({
                   color="error"
                   variant="outlined"
                 >
-                  No
+                  Đóng
                 </Button>
               </Box>
             </Box>
@@ -341,7 +316,7 @@ function ListOrder({
 
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+      <Table sx={{minWidth: 500}} aria-label="custom pagination table">
         {buildModalCancelOrder()}
         {mapListTableHeader(listHeaderName, userState)}
         {userState.roleName === "Manager" ? (
@@ -360,133 +335,84 @@ function ListOrder({
             showLoading={showLoading}
             hideLoading={hideLoading}
             showSnackbar={showSnackbar}
-            msg="Assign order success"
+            msg="Xử lý đơn thành công"
           />
         )}
 
         <TableBody>
           {listOrder?.map((row, index) => {
-            let typeOrder = ORDER_TYPE[row.typeOrder];
-            let status = ORDER_STATUS[row.status];
-
+            let typeOrder = ORDER_TYPE[row.type];
+            let status = ORDER_STATUS[row.status]?.name;
+            let color = ORDER_STATUS[row.status]?.color;
             return (
               <TableRow key={row.id}>
                 <TableCell
                   component="th"
                   scope="row"
-                  style={{ color: "black" }}
-                  onClick={(e) => {
-                    handleOpen(true);
-
-                    handleClickRow(row);
-                  }}
+                  style={{color: "black", width: "10%"}}
                 >
-                  {row.id}
+                  {row.name}
                 </TableCell>
-                <TableCell
-                  style={{ color: "black" }}
-                  onClick={(e) => {
-                    handleOpen(true);
-
-                    handleClickRow(row);
-                  }}
-                >
+                <TableCell style={{color: "black"}}>
                   {row.customerName}
                 </TableCell>
-                <TableCell
-                  style={{ color: "black" }}
-                  onClick={(e) => {
-                    handleOpen(true);
-
-                    handleClickRow(row);
-                  }}
-                >
+                <TableCell style={{color: "black"}}>
                   {row.customerPhone}
                 </TableCell>
-                <TableCell
-                  style={{ color: "black" }}
-                  onClick={(e) => {
-                    handleOpen(true);
-
-                    handleClickRow(row);
-                  }}
-                >
+                <TableCell style={{color: "black"}}>
                   {row.deliveryAddress}
                 </TableCell>
-                <TableCell
-                  style={{ color: "black" }}
-                  onClick={(e) => {
-                    handleOpen(true);
-
-                    handleClickRow(row);
-                  }}
-                >
-                  {typeOrder}
-                </TableCell>
-                <TableCell
-                  style={{ color: "black" }}
-                  onClick={(e) => {
-                    handleOpen(true);
-
-                    handleClickRow(row);
-                  }}
-                >
+                <TableCell style={{color: "black"}}>{typeOrder}</TableCell>
+                <TableCell style={{color: "black", width: "10%"}}>
                   <FormControlLabel
                     value="isPaid"
                     control={<Checkbox checked={row.isPaid} disabled={true} />}
-                    label="Is Paid"
+                    label="Đã thanh toán"
                     labelPlacement="Is Paid"
                   />
                 </TableCell>
-                <TableCell
-                  style={{ color: "black" }}
-                  onClick={(e) => {
-                    handleOpen(true);
-
-                    handleClickRow(row);
-                  }}
-                >
+                <TableCell style={{color: color, fontWeight: "bold"}}>
                   {status}
                 </TableCell>
+
                 {userState.roleName !== "Admin" ? (
-                  <TableCell style={{ color: "black" }}>
-                    {row.status === 0 ? null : (
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexDirection: "row",
+                  <TableCell style={{color: "black"}}>
+                    {row.status === 1 || row.status === 0 ? null : (
+                      <Button
+                        onClick={async () => {
+                          await handleClickRow(row);
+                          handleUpdateOrderOpen();
                         }}
+                        style={{
+                          height: "45px",
+                          paddingLeft: "16px",
+                          paddingRight: "16px",
+                          marginBottom: "4%",
+                        }}
+                        color="primary"
+                        variant="contained"
                       >
-                        {row.status === 1 ? (
-                          <Button
-                            style={{
-                              height: "45px",
-                              paddingLeft: "16px",
-                              paddingRight: "16px",
-                              marginRight: "4%",
-                            }}
-                            onClick={() => {
-                              setCurrentId(row.id);
-                              handleClickRow(row);
-                              handleOpenAssign();
-                            }}
-                            color="primary"
-                            variant="contained"
-                          >
-                            Assign
-                          </Button>
-                        ) : null}
-                        <Button
-                          className={classes.button}
-                          onClick={() => {
-                            setCurrentId(row.id);
-                            handleConfirmOpen();
-                          }}
-                        >
-                          Cancel
-                        </Button>
-                      </Box>
+                        Cập nhật
+                      </Button>
                     )}
+                    <Button
+                      onClick={async () => {
+                        handleClickRow(row);
+                        handleOpen(true);
+                      }}
+                      style={{
+                        height: "45px",
+                        paddingLeft: "16px",
+                        paddingRight: "16px",
+                        marginBottom: "4%",
+                        marginLeft: "2%",
+                      }}
+                      color="success"
+                      variant="contained"
+                      type="submit"
+                    >
+                      Xem thêm
+                    </Button>
                   </TableCell>
                 ) : (
                   <></>

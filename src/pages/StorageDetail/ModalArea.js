@@ -1,8 +1,15 @@
 import React from "react";
-import { MenuItem, Box, Typography, Button, Modal } from "@material-ui/core";
+import {
+  MenuItem,
+  Box,
+  Typography,
+  Button,
+  Modal,
+  Grid,
+} from "@material-ui/core";
 import CustomInput from "../../components/CustomInput";
 import CustomAreaInput from "../../components/CustomAreaInput";
-import { STYLE_MODAL } from "../../constant/style";
+import {STYLE_MODAL} from "../../constant/style";
 import CustomSelect from "../../components/CustomSelect";
 
 export default function ModalArea({
@@ -15,7 +22,7 @@ export default function ModalArea({
   isEdit,
   errors,
 }) {
-  const styleInput = { marginRight: "2.5%" };
+  const styleInput = {marginRight: "2.5%"};
 
   const styleModal = {
     ...STYLE_MODAL,
@@ -39,32 +46,89 @@ export default function ModalArea({
         }}
       >
         <Typography color="black" variant="h2">
-          {isEdit === true ? "Edit area" : "Create area"}
+          {isEdit === true ? "Cập nhật khu vực" : "Tạo khu vực"}
         </Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Box sx={{ marginTop: "16px" }}>
+          <Box sx={{marginTop: "16px"}}>
             <CustomInput
               control={control}
               rules={{
-                required: "Name required",
+                required: "*Vui lòng nhập",
               }}
-              styles={{ width: "400px" }}
+              styles={{width: "400px"}}
               name="name"
-              label="Name"
+              label="Tên"
               userInfo={currentArea.name}
-              inlineStyle={{ ...styleInput, marginBottom: "4%" }}
+              inlineStyle={{...styleInput, marginBottom: "4%"}}
             />
             <CustomAreaInput
               control={control}
               rules={{
-                required: "Description required",
+                required: "*Vui lòng nhập",
               }}
-              styles={{ width: "400px" }}
+              styles={{width: "400px"}}
               name="description"
-              label="Description"
+              label="Mô tả"
               userInfo={currentArea.description}
               inlineStyle={styleInput}
             />
+            <Grid
+              container
+              spacing={2}
+              sx={{
+                width: "98%",
+                marginTop: "3%",
+              }}
+            >
+              <Grid item xs={4}>
+                <CustomInput
+                  control={control}
+                  rules={{
+                    required: "*Vui lòng nhập",
+                    pattern: {
+                      value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
+                      message: "*Vui lòng nhập đúng chiều dài",
+                    },
+                  }}
+                  name="length"
+                  label="Chiều dài (m)"
+                  userInfo={currentArea?.length}
+                  inlineStyle={{...styleInput, marginBottom: "4%"}}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <CustomInput
+                  control={control}
+                  rules={{
+                    required: "*Vui lòng nhập",
+                    pattern: {
+                      value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
+                      message: "*Vui lòng nhập đúng chiều rộng",
+                    },
+                  }}
+                  name="width"
+                  label="Chiều rộng (m)"
+                  userInfo={currentArea?.width}
+                  inlineStyle={{...styleInput, marginBottom: "4%"}}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <CustomInput
+                  control={control}
+                  rules={{
+                    required: "*Vui lòng nhập",
+                    pattern: {
+                      value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
+                      message: "*Vui lòng nhập đúng chiều cao",
+                    },
+                  }}
+                  name="height"
+                  label="Chiều cao (m)"
+                  userInfo={currentArea?.height}
+                  inlineStyle={{...styleInput, marginBottom: "4%"}}
+                />
+              </Grid>
+            </Grid>
           </Box>
           <Box
             sx={{
@@ -79,6 +143,7 @@ export default function ModalArea({
                 flexDirection: "column",
                 justifyContent: "flex-start",
                 marginRight: "4%",
+                marginTop: "4%",
               }}
             >
               <Typography
@@ -91,17 +156,17 @@ export default function ModalArea({
                   marginBottom: "16px",
                 }}
               >
-                Area type
+                Loại khu vực
               </Typography>
               <CustomSelect
                 name="type"
                 control={control}
                 errors={errors}
-                errorMsg={"Required type"}
+                errorMsg={"*Vui lòng nhập"}
                 defaultValue={typeList[currentArea.type] || ""}
               >
-                <MenuItem value={"Self-Storage"}>Self-Storage</MenuItem>
-                <MenuItem value={"Door-to-door"}>Door-to-door</MenuItem>
+                <MenuItem value={"Self-Storage"}>Kho tự quản</MenuItem>
+                <MenuItem value={"Door-to-door"}>Giữ đồ thuê</MenuItem>
               </CustomSelect>
             </Box>
           </Box>
@@ -109,12 +174,23 @@ export default function ModalArea({
             sx={{
               width: "100%",
               display: "flex",
+              flexDirection: "row",
               justifyContent: "center",
               marginTop: "16px",
             }}
           >
             <Button color="primary" type="submit" variant="contained">
-              Submit
+              Xác nhận
+            </Button>
+            <Button
+              color="error"
+              onClick={() => handleClose()}
+              variant="outlined"
+              style={{
+                marginLeft: "2%",
+              }}
+            >
+              Đóng
             </Button>
           </Box>
         </form>

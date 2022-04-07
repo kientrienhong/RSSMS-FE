@@ -1,8 +1,7 @@
 import React from "react";
-import { Box, Typography } from "@material-ui/core";
-import { styled } from "@mui/material/styles";
-import { useNavigate } from "react-router-dom";
-import { TYPE_AREA } from "../../constant/constant";
+import {Box, Typography} from "@material-ui/core";
+import {useNavigate} from "react-router-dom";
+import {TYPE_AREA} from "../../constant/constant";
 
 export default function RowArea({
   area,
@@ -24,7 +23,7 @@ export default function RowArea({
         marginBottom: "8px",
       }}
     >
-      <Box sx={{ width: "80%", display: "flex", flexDirection: "column" }}>
+      <Box sx={{width: "80%", display: "flex", flexDirection: "column"}}>
         <Typography color="black" variant="h3">
           {area.name}
           <Typography
@@ -39,11 +38,11 @@ export default function RowArea({
         </Typography>
         <p>{area.description}</p>
       </Box>
-      <Box sx={{ width: "20%", display: "flex", flexDirection: "row" }}>
+      <Box sx={{width: "20%", display: "flex", flexDirection: "row"}}>
         <img
           src="/img/edit.png"
           alt="edit"
-          style={{ marginRight: "8%", cursor: "pointer" }}
+          style={{marginRight: "8%", cursor: "pointer"}}
           onClick={() => {
             handleOpen(true);
             setCurrentArea(area);
@@ -53,7 +52,7 @@ export default function RowArea({
         <img
           src="/img/delete.png"
           alt="edit"
-          style={{ marginRight: "8%", cursor: "pointer" }}
+          style={{marginRight: "8%", cursor: "pointer"}}
           onClick={() => {
             setCurrentArea(area);
             handleOpenConfirm();
@@ -62,7 +61,7 @@ export default function RowArea({
         <img
           src="/img/info.png"
           alt="edit"
-          style={{ cursor: "pointer" }}
+          style={{cursor: "pointer"}}
           onClick={() => {
             navigate("/app/storages/" + storageId + "/areas/" + area.id, {
               replace: false,

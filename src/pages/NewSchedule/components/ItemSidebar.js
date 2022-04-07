@@ -1,7 +1,7 @@
 import React from "react";
-import { Grid, Box, Typography, Modal } from "@material-ui/core";
+import {Box} from "@material-ui/core";
 
-export default function ItemSidebar({ time }) {
+export default function ItemSidebar({time}) {
   return (
     <Box
       sx={{

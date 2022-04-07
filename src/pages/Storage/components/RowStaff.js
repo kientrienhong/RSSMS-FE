@@ -49,7 +49,7 @@ export default function RowStaff({
               }}
             >
               <Avatar
-                src={staff?.images[0]?.url}
+                src={staff?.imageUrl}
                 sx={{
                   width: 80,
                   height: 80,

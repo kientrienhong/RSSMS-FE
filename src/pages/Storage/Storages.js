@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, {useRef, useEffect} from "react";
 import {
   Box,
   InputAdornment,
@@ -6,12 +6,11 @@ import {
   TextField,
   Button,
   Modal,
-  MenuItem,
   Typography,
 } from "@material-ui/core";
 import SearchIcon from "@mui/icons-material/Search";
 import ListStorage from "./components/ListStorage";
-import { useForm } from "react-hook-form";
+import {useForm} from "react-hook-form";
 import CustomInput from "../../components/CustomInput";
 import ProductButton from "../Order/CreateOrder/components/ProductButton";
 import {
@@ -21,16 +20,18 @@ import {
   deleteStorage,
   getListUser,
   assignListStaffToStorage,
+  getListStaff,
 } from "../../apis/Apis";
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 import * as action from "../../redux/action/action";
-import { storageFirebase } from "../../firebase/firebase";
+import {storageFirebase} from "../../firebase/firebase";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import ListStaff from "./components/ListStaff";
-import { STYLE_MODAL } from "../../constant/style";
+import {STYLE_MODAL} from "../../constant/style";
 import AssignStaffModal from "./components/AssignStaffModal";
-import { getBase64 } from "../../utils/convertImage";
+import {getBase64} from "../../utils/convertImage";
+import {ErrorHandle} from "../../utils/ErrorHandle";
 let inputFile;
 const styleModal = {
   ...STYLE_MODAL,
@@ -51,7 +52,7 @@ const handleOnclickImage = () => {
   inputFile.current.click();
 };
 
-const styleInput = { marginRight: "2.5%", marginLeft: "2.5%" };
+const styleInput = {marginRight: "2.5%", marginLeft: "2.5%"};
 
 const buildInputFileImage = (storage) => {
   return (
@@ -65,7 +66,7 @@ const buildInputFileImage = (storage) => {
         border: "solid 1px #000",
       }}
     >
-      {storage?.images[0]?.url === null ? (
+      {storage?.imageUrl === undefined ? (
         <img
           src="/img/imageEdit.png"
           width="50px"
@@ -80,8 +81,8 @@ const buildInputFileImage = (storage) => {
         />
       ) : (
         <img
-          style={{ height: "400px", width: "100%" }}
-          src={storage.images[0].url}
+          style={{height: "400px", width: "100%"}}
+          src={storage?.imageUrl}
           alt="avatar"
         />
       )}
@@ -98,6 +99,7 @@ function Storages(props) {
     storedOrder,
     isLoadingStorage,
     userState,
+    handleExtendSession,
   } = props;
   const [open, setOpen] = React.useState(false);
   const [searchName, setSearchName] = React.useState("");
@@ -111,16 +113,15 @@ function Storages(props) {
     handleSubmit,
     reset,
     control,
-    formState: { errors },
+    formState: {errors},
   } = useForm();
   const [error, setError] = React.useState({});
   const [listStorages, setListStorages] = React.useState([]);
   const [listStaffAssigned, setListStaffAssigned] = React.useState([]);
   const [listStaffUnAssigned, setListStaffUnAssigned] = React.useState([]);
   const [isEdit, setEdit] = React.useState(false);
-  const [type, setType] = React.useState("");
   const [storage, setStorage] = React.useState({
-    images: [{ id: null, url: null }],
+    images: [{id: null, url: null}],
   });
   const [page, setPage] = React.useState(1);
 
@@ -130,7 +131,7 @@ function Storages(props) {
 
   const handleCloseAssignStaff = () => {
     setOpenAssignStaff(false);
-    setStorage({ avatarFile: undefined, images: [{ id: null, url: null }] });
+    setStorage({avatarFile: undefined, images: [{id: null, url: null}]});
     reset();
   };
 
@@ -179,6 +180,7 @@ function Storages(props) {
         await getData(searchName, page, 4, userState.idToken);
       } catch (error) {
         console.log(error);
+        ErrorHandle.handle(error, showSnackbar, handleExtendSession);
       } finally {
         hideLoading();
       }
@@ -193,6 +195,7 @@ function Storages(props) {
         await getData(searchName, page, 4, userState.idToken);
       } catch (error) {
         console.log(error);
+        ErrorHandle.handle(error, showSnackbar, handleExtendSession);
       } finally {
         hideLoading();
       }
@@ -211,55 +214,51 @@ function Storages(props) {
         let listUserNotAssigned = [];
         try {
           showLoading();
-          listUserNotAssigned = await getListUser(
-            "",
-            1,
-            -1,
-            userState.idToken,
-            0
-          );
+          listUserNotAssigned = await getListStaff(null, userState.idToken);
         } catch (error) {
           console.log(error);
+          ErrorHandle.handle(error, showSnackbar, handleExtendSession);
+
           setListStaffUnAssigned([]);
           setListShowStaffUnAssigned([]);
         }
         try {
-          let listUserAssigned = await getListUser(
-            "",
-            1,
-            -1,
-            userState.idToken,
-            storage.id
+          let listUserAssigned = await getListStaff(
+            storage.id,
+            userState.idToken
           );
-          let managerFound = listUserAssigned.data.data.find(
+
+          let managerFound = listUserAssigned.data.find(
             (e) => e.roleName === "Manager"
           );
           let newListUserUnAssign;
           if (listUserNotAssigned?.data) {
-            newListUserUnAssign = listUserNotAssigned?.data?.data?.filter(
-              (e) => e.id !== managerFound.id
+            newListUserUnAssign = listUserNotAssigned?.data?.filter(
+              (e) => e.id !== managerFound?.id
             );
           } else {
             newListUserUnAssign = [];
           }
 
-          setListStaffAssigned(listUserAssigned.data.data);
-          setListShowStaffAssigned(listUserAssigned.data.data);
+          setListStaffAssigned(listUserAssigned.data);
+          setListShowStaffAssigned(listUserAssigned.data);
           setListStaffUnAssigned(newListUserUnAssign);
           setListShowStaffUnAssigned(newListUserUnAssign);
         } catch (error) {
           console.log(error);
+          ErrorHandle.handle(error, showSnackbar, handleExtendSession);
+
           setListStaffAssigned([]);
           setListShowStaffAssigned([]);
-          setListStaffUnAssigned(listUserNotAssigned.data.data);
-          setListShowStaffUnAssigned(listUserNotAssigned.data.data);
+          setListStaffUnAssigned(listUserNotAssigned.data);
+          setListShowStaffUnAssigned(listUserNotAssigned.data);
         } finally {
           hideLoading();
         }
       } else {
         setStorage({
           avatarFile: undefined,
-          images: [{ id: null, url: null }],
+          images: [{id: null, url: null}],
         });
         reset();
       }
@@ -291,16 +290,17 @@ function Storages(props) {
       await getData(searchName, page, 4, userState.idToken);
 
       hideLoading();
-      showSnackbar("success", "Assign Success!");
+      showSnackbar("success", "Phân công thành công!");
       setError({});
       handleCloseAssignStaff();
     } catch (error) {
       console.log(error.response);
+      ErrorHandle.handle(error, showSnackbar, handleExtendSession);
 
       setError({
         ...error,
         assignStaff: {
-          message: error.response.data.error.message,
+          message: error?.response?.data?.error?.message,
         },
       });
       hideLoading();
@@ -308,18 +308,16 @@ function Storages(props) {
   };
 
   const onHandleCreateStorage = async (data) => {
-    let size = `${data.width}m x ${data.length}m x ${data.height}m`;
-
     let storageTemp = {
       name: data.name,
-      size: size,
+      height: data.height,
+      width: data.width,
+      length: data.length,
       address: data.address,
       status: 1,
-      images: [
-        {
-          url: null,
-        },
-      ],
+      image: {
+        url: null,
+      },
       listStaff: [],
     };
     try {
@@ -327,7 +325,7 @@ function Storages(props) {
       if (!storage.avatarFile) {
         setError({
           ...error,
-          avatarFile: { message: "Please provide storage image!" },
+          avatarFile: {message: "Vui lòng thêm hình ảnh"},
         });
         hideLoading();
 
@@ -337,16 +335,14 @@ function Storages(props) {
 
       storageTemp = {
         ...storageTemp,
-        images: [
-          {
-            file: base64.split(",")[1],
-          },
-        ],
+        image: {
+          file: base64.split(",")[1],
+        },
       };
       const response = await createStorage(storageTemp, userState.idToken);
       if (response.status === 200) {
         if (response.status === 200) {
-          showSnackbar("success", "Create storage successful!");
+          showSnackbar("success", "Tạo kho thành công!");
           await getData(searchName, page, 4, userState.idToken);
           handleClose();
           setError({});
@@ -360,19 +356,16 @@ function Storages(props) {
   };
 
   const onHandleUpdateUser = async (data) => {
-    let size = `${data.width}m x ${data.length}m x ${data.height}m`;
-
     let storageTemp = {
       name: data.name,
-      size: size,
+      height: data.height,
+      width: data.width,
+      length: data.length,
       address: data.address,
       status: 1,
-      images: [
-        {
-          id: storage?.images[0]?.id,
-          url: storage?.images[0]?.url,
-        },
-      ],
+      image: {
+        url: storage?.imageUrl,
+      },
       listStaff: [],
     };
     try {
@@ -388,7 +381,7 @@ function Storages(props) {
           userState.idToken
         );
         if (responseUpdate.status === 200) {
-          showSnackbar("success", "Update storage successful!");
+          showSnackbar("success", "Cập nhật kho thành công!");
           await getData(searchName, page, 4, userState.idToken);
           handleClose();
           hideLoading();
@@ -396,21 +389,6 @@ function Storages(props) {
         } else {
           hideLoading();
         }
-        // let urlFirebase;
-        // let name = `storages/${id}/avatar.png`;
-        // const ref = storageFirebase.ref(name);
-        // const uploadTask = ref.put(storage.avatarFile);
-        // uploadTask.on("state_changed", console.log, console.error, async () => {
-        //   urlFirebase = await ref.getDownloadURL();
-
-        // responseUpdate = await updateStorage(
-        //   storageTemp,
-        //   id,
-        //   urlFirebase,
-        //   userState.idToken
-        // );
-
-        // });
       } else {
         responseUpdate = await updateStorage(
           storageTemp,
@@ -419,7 +397,7 @@ function Storages(props) {
           userState.idToken
         );
         if (responseUpdate.status === 200) {
-          showSnackbar("success", "Update storage successful!");
+          showSnackbar("success", "Cập nhật kho thành công!");
           await getData(searchName, page, 4, userState.idToken);
           handleClose();
           hideLoading();
@@ -430,6 +408,7 @@ function Storages(props) {
       }
     } catch (error) {
       console.log(error);
+      hideLoading();
     }
   };
 
@@ -484,7 +463,7 @@ function Storages(props) {
   };
   const handleClose = () => {
     setOpen(false);
-    setStorage({ avatarFile: undefined, images: [{ id: null, url: null }] });
+    setStorage({avatarFile: undefined, images: [{id: null, url: null}]});
     reset();
   };
 
@@ -496,6 +475,7 @@ function Storages(props) {
       setTotalPage(list.data.metadata.totalPage);
     } catch (e) {
       console.log(e);
+      ErrorHandle.handle(e, showSnackbar, handleExtendSession);
     } finally {
       hideLoading();
     }
@@ -509,16 +489,11 @@ function Storages(props) {
     ) {
       setStorage({
         ...storage,
-        images: [
-          {
-            id: storage?.images[0]?.id,
-            url: URL.createObjectURL(event.target.files[0]),
-          },
-        ],
+        imageUrl: URL.createObjectURL(event.target.files[0]),
         avatarFile: event.target.files[0],
       });
     } else {
-      setError({ avatarFile: { message: "Please choose image storage!" } });
+      setError({avatarFile: {message: "Vui lòng chọn tập tin hình ảnh"}});
     }
   };
 
@@ -571,37 +546,37 @@ function Storages(props) {
           name="fileImage"
           ref={inputFile}
           onChange={(e) => onChangeInputFile(e, setStorage, storage)}
-          style={{ display: "none" }}
+          style={{display: "none"}}
         />
         <Typography
           color="black"
           variant="h2"
-          style={{ marginTop: "1%", marginLeft: "3%" }}
+          style={{marginTop: "1%", marginLeft: "3%"}}
         >
-          Storage Information
+          Thông tin kho
         </Typography>
-        <Box sx={{ ...styleBoxInput, marginTop: "16px" }}>
+        <Box sx={{...styleBoxInput, marginTop: "16px"}}>
           <CustomInput
             control={control}
             rules={{
-              required: "Name required",
+              required: "*Vui lòng nhập",
             }}
-            styles={{ width: "400px" }}
+            styles={{width: "400px"}}
             name="name"
-            label="Name"
+            label="Tên"
             userInfo={storage.name}
             inlineStyle={styleInput}
           />
         </Box>
-        <Box sx={{ ...styleBoxInput }}>
+        <Box sx={{...styleBoxInput}}>
           <CustomInput
             control={control}
             rules={{
-              required: "Address required",
+              required: "*Vui lòng nhập",
             }}
-            styles={{ width: "400px" }}
+            styles={{width: "400px"}}
             name="address"
-            label="Address"
+            label="Địa chỉ"
             userInfo={storage.address}
             inlineStyle={styleInput}
           />
@@ -609,53 +584,53 @@ function Storages(props) {
         <Typography
           color="black"
           variant="h2"
-          style={{ marginTop: "8%", marginLeft: "3%", marginBottom: "2%" }}
+          style={{marginTop: "8%", marginLeft: "3%", marginBottom: "2%"}}
         >
-          Storage Size Detail
+          Thông tin kích thước kho
         </Typography>
-        <Box sx={{ ...styleBoxInput, marginTop: "5%" }}>
+        <Box sx={{...styleBoxInput, marginTop: "5%"}}>
           <CustomInput
             control={control}
             rules={{
-              required: "Width required",
+              required: "*Vui lòng nhập",
               pattern: {
                 value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
-                message: "Invalid width",
+                message: "*Vui lòng nhập đúng chiều rộng",
               },
             }}
-            styles={{ width: "120px" }}
+            styles={{width: "120px"}}
             name="width"
-            label="Width (m)"
+            label="Chiều rộng (m)"
             userInfo={storage.width}
             inlineStyle={styleInput}
           />
           <CustomInput
             control={control}
             rules={{
-              required: "Length required",
+              required: "*Vui lòng nhập",
               pattern: {
                 value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
-                message: "Invalid length",
+                message: "*Vui lòng nhập đúng chiều dài",
               },
             }}
-            styles={{ width: "120px" }}
+            styles={{width: "120px"}}
             name="length"
-            label="Length (m)"
+            label="Chiều dài (m)"
             userInfo={storage.length}
             inlineStyle={styleInput}
           />
           <CustomInput
             control={control}
             rules={{
-              required: "Height required",
+              required: "*Vui lòng nhập",
               pattern: {
                 value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
-                message: "Invalid height",
+                message: "*Vui lòng nhập chiều cao",
               },
             }}
-            styles={{ width: "120px" }}
+            styles={{width: "120px"}}
             name="height"
-            label="Height (m)"
+            label="Chiều cao (m)"
             userInfo={storage.height}
             inlineStyle={styleInput}
           />
@@ -690,7 +665,7 @@ function Storages(props) {
             variant="contained"
             type="submit"
           >
-            Submit
+            Xác nhận
           </Button>
           <Button
             style={{
@@ -702,7 +677,7 @@ function Storages(props) {
             color="error"
             variant="outlined"
           >
-            Cancel
+            Đóng
           </Button>
         </Box>
       </form>
@@ -725,7 +700,7 @@ function Storages(props) {
             flexDirection: "column",
           }}
         >
-          <Box sx={{ height: "90%" }}>
+          <Box sx={{height: "90%"}}>
             <Box
               sx={{
                 width: "100%",
@@ -793,7 +768,7 @@ function Storages(props) {
           }}
           onChange={(e) => onHandleSearch(e)}
           InputProps={{
-            style: { height: "45px", backgroundColor: "white" },
+            style: {height: "45px", backgroundColor: "white"},
             startAdornment: (
               <InputAdornment>
                 <IconButton>
@@ -820,7 +795,7 @@ function Storages(props) {
             variant="contained"
             onClick={() => handleOpen(false)}
           >
-            Create storage
+            Tạo kho
           </Button>
         ) : (
           <></>
@@ -860,6 +835,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    handleExtendSession: () => dispatch(action.handleExtendSession()),
     showLoading: () => dispatch(action.showLoader()),
     hideLoading: () => dispatch(action.hideLoader()),
     showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),

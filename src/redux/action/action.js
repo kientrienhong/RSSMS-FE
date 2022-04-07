@@ -15,7 +15,7 @@ export const hideLoader = () => {
 export const showSnackbar = (type, msg) => {
   return {
     type: ActionType.SHOW_SNACKBAR,
-    payload: { type, msg },
+    payload: {type, msg},
   };
 };
 
@@ -171,6 +171,12 @@ export const setUpCurrentViewOrderId = (orderId) => {
   };
 };
 
+export const changeIsLoadRequest = () => {
+  return {
+    type: ActionType.CHANGE_IS_LOAD_REQUEST,
+  };
+};
+
 export const handleProgressModal = (isOpen, title, yesFunction, noFunction) => {
   return {
     type: ActionType.HANDLE_PROGRESS_MODAL,
@@ -180,5 +186,45 @@ export const handleProgressModal = (isOpen, title, yesFunction, noFunction) => {
       yesFunction,
       noFunction,
     },
+  };
+};
+
+export const setUpCurrentFloor = (floor) => {
+  return {
+    type: ActionType.SET_UP_CURRENT_FLOOR,
+    payload: floor,
+  };
+};
+
+export const changeMoveOrderDetail = () => {
+  return {
+    type: ActionType.CHANGE_MOVE_ORDER_DETAIL,
+  };
+};
+
+export const addMovingProduct = (orderDetail, oldFloorId) => {
+  return {
+    type: ActionType.ADD_MOVING_PRODUCT,
+    payload: {
+      orderDetail: orderDetail,
+      oldFloorId: oldFloorId,
+    },
+  };
+};
+
+export const placeMovingProduct = (orderDetail, newFloorId) => {
+  return {
+    type: ActionType.PLACING_MOVING_PRODUCT,
+    payload: {
+      orderDetail: orderDetail,
+      newFloorId: newFloorId,
+    },
+  };
+};
+
+export const handleExtendSession = (isOpen) => {
+  return {
+    type: ActionType.HANDLE_OPEN_EXTEND_SESSION,
+    payload: isOpen,
   };
 };

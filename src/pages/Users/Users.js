@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, {useEffect, useRef} from "react";
 import {
   Box,
   Card,
@@ -14,21 +14,25 @@ import {
   FormControlLabel,
   Radio,
 } from "@material-ui/core";
-import { MALE, FEMALE, OTHER_GENDER } from "../../constant/constant";
+import {MALE, FEMALE, OTHER_GENDER} from "../../constant/constant";
 
 import SearchIcon from "@mui/icons-material/Search";
 import ListUsers from "./components/ListUsers";
 import CustomAvatar from "../../components/CustomAvatar";
-import { getListUser, createUser, updateUser } from "../../apis/Apis";
-import { connect } from "react-redux";
+import {
+  getListUser,
+  createUser,
+  updateUser,
+  getListRole,
+} from "../../apis/Apis";
+import {connect} from "react-redux";
 import * as action from "../../redux/action/action";
-import { Controller, useForm } from "react-hook-form";
+import {Controller, useForm} from "react-hook-form";
 import CustomInput from "../../components/CustomInput";
-import { storageFirebase } from "../../firebase/firebase";
-import { ROLE_USER } from "../../constant/constant";
-import { STYLE_MODAL } from "../../constant/style";
+import {STYLE_MODAL} from "../../constant/style";
 import CustomSelect from "../../components/CustomSelect";
-import { getBase64 } from "../../utils/convertImage";
+import {getBase64} from "../../utils/convertImage";
+import {ErrorHandle} from "../../utils/ErrorHandle";
 let inputFile;
 const styleModal = {
   ...STYLE_MODAL,
@@ -65,21 +69,16 @@ const onChangeInputFile = (event, setUser, user, setError) => {
   ) {
     setUser({
       ...user,
-      images: [
-        {
-          id: user?.images[0]?.id,
-          url: URL.createObjectURL(event.target.files[0]),
-        },
-      ],
+      imageUrl: URL.createObjectURL(event.target.files[0]),
       avatarFile: event.target.files[0],
     });
     setError();
   } else {
-    setError({ message: "Please choose image file!" });
+    setError({message: "Vui lòng chọn tập tin hình ảnh!"});
   }
 };
 
-const styleInput = { marginRight: "2.5%", marginLeft: "2.5%" };
+const styleInput = {marginRight: "2.5%", marginLeft: "2.5%"};
 
 const buildModal = (
   user,
@@ -95,7 +94,9 @@ const buildModal = (
   error,
   gender,
   handleChangeGender,
-  setError
+  setError,
+  mapListRoleUser,
+  refSelect
 ) => {
   return (
     <Modal
@@ -120,7 +121,7 @@ const buildModal = (
             name="fileImage"
             ref={inputFile}
             onChange={(e) => onChangeInputFile(e, setUser, user, setError)}
-            style={{ display: "none" }}
+            style={{display: "none"}}
           />
           <Box
             sx={{
@@ -131,7 +132,7 @@ const buildModal = (
             }}
           >
             <CustomAvatar
-              url={user?.images[0]?.url}
+              url={user?.imageUrl}
               isEdit="true"
               onHandleClick={handleOnclickAvatar}
             />
@@ -140,22 +141,22 @@ const buildModal = (
           <Typography
             color="black"
             variant="h2"
-            style={{ marginTop: "2%", textAlign: "left", marginLeft: "2.5%" }}
+            style={{marginTop: "2%", textAlign: "left", marginLeft: "2.5%"}}
           >
-            Account information
+            Thông tin tài khoản
           </Typography>
-          <Box sx={{ ...styleBoxInput, marginTop: "2%" }}>
+          <Box sx={{...styleBoxInput, marginTop: "2%"}}>
             <CustomInput
               control={control}
               rules={{
-                required: "Email required",
+                required: "*Vui lòng nhập",
                 pattern: {
                   value:
                     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                  message: "Invalid email",
+                  message: "*Vui lòng mail đúng",
                 },
               }}
-              styles={{ width: "240px" }}
+              styles={{width: "240px"}}
               name="email"
               label="Email"
               disabled={isEdit}
@@ -164,36 +165,36 @@ const buildModal = (
             />
             <CustomInput
               control={control}
-              rules={{ required: "Name required" }}
-              styles={{ width: "240px" }}
+              rules={{required: "*Vui lòng nhập"}}
+              styles={{width: "240px"}}
               name="name"
-              label="Name"
+              label="Họ và tên"
               userInfo={user.name}
               inlineStyle={styleInput}
             />
             <CustomInput
               control={control}
               rules={{
-                required: "Phone required",
+                required: "*Vui lòng nhập",
                 pattern: {
                   value: /^[0][0-9]{9}$/,
-                  message: "Invalid phone number",
+                  message: "*Vui lòng nhập đúng số điện thoại",
                 },
               }}
-              styles={{ width: "240px" }}
+              styles={{width: "240px"}}
               name="phone"
-              label="Phone"
+              label="Số điện thoại"
               userInfo={user.phone}
               inlineStyle={styleInput}
             />
           </Box>
-          <Box sx={{ ...styleBoxInput, alignItems: "center" }}>
+          <Box sx={{...styleBoxInput, alignItems: "center"}}>
             <CustomInput
               control={control}
-              rules={{ required: "Address required" }}
-              styles={{ width: "370px" }}
+              rules={{required: "*Vui lòng nhập"}}
+              styles={{width: "370px"}}
               name="address"
-              label="Address"
+              label="Địa chỉ"
               userInfo={user.address}
               inlineStyle={styleInput}
             />
@@ -212,7 +213,7 @@ const buildModal = (
                   marginBottom: "0",
                 }}
               >
-                Gender
+                Giới tính
               </p>
               <FormControl
                 component="fieldset"
@@ -222,7 +223,7 @@ const buildModal = (
               >
                 <RadioGroup
                   row
-                  aria-label="gender"
+                  aria-label="Giớ tính"
                   name="row-radio-buttons-group"
                   onChange={handleChangeGender}
                   value={gender}
@@ -230,17 +231,17 @@ const buildModal = (
                   <FormControlLabel
                     value={MALE}
                     control={<Radio />}
-                    label="Male"
+                    label="Nam"
                   />
                   <FormControlLabel
                     value={FEMALE}
                     control={<Radio />}
-                    label="Female"
+                    label="Nữ"
                   />
                   <FormControlLabel
                     value={OTHER_GENDER}
                     control={<Radio />}
-                    label="Other"
+                    label="Khác"
                   />
                 </RadioGroup>
               </FormControl>
@@ -270,14 +271,14 @@ const buildModal = (
                     marginTop: "5%",
                   }}
                 >
-                  Birthday
+                  Ngày sinh
                 </p>
                 <CustomInput
                   control={control}
                   rules={{
-                    required: "Birthday required",
+                    required: "*Vui lòng nhập",
                   }}
-                  styles={{ width: "240px" }}
+                  styles={{width: "240px"}}
                   name="birthdate"
                   type="date"
                   userInfo={
@@ -309,18 +310,15 @@ const buildModal = (
                 <Controller
                   name="password"
                   control={control}
-                  render={({
-                    field: { onChange, value },
-                    fieldState: { error },
-                  }) => {
+                  render={({field: {onChange, value}, fieldState: {error}}) => {
                     return (
                       <TextField
-                        label="Password"
+                        label="Mật khẩu"
                         variant="outlined"
                         inputRef={password}
                         value={value}
                         style={styleInput}
-                        inputProps={{ width: "280px" }}
+                        inputProps={{width: "280px"}}
                         onChange={onChange}
                         userInfo={""}
                         error={!!error}
@@ -330,7 +328,7 @@ const buildModal = (
                     );
                   }}
                   rules={{
-                    required: "Password required",
+                    required: "*Vui lòng nhập",
                   }}
                 />
               </Box>
@@ -345,18 +343,18 @@ const buildModal = (
                 <CustomInput
                   control={control}
                   rules={{
-                    required: "Confirm password required",
+                    required: "*Vui lòng nhập",
                     validate: (value) => {
                       return (
                         value ===
                           (password.current.value ?? password.current) ||
-                        "The passwords do not match"
+                        "*Mật khẩu không khớp"
                       );
                     },
                   }}
-                  styles={{ width: "280px" }}
+                  styles={{width: "280px"}}
                   name="confirmPassword"
-                  label="Confirm Password"
+                  label="Xác nhận mật khẩu"
                   type="password"
                   inlineStyle={styleInput}
                   userInfo={""}
@@ -377,14 +375,14 @@ const buildModal = (
                     marginTop: "5%",
                   }}
                 >
-                  Birthday
+                  Ngày sinh
                 </p>
                 <CustomInput
                   control={control}
                   rules={{
-                    required: "Birthday required",
+                    required: "*Vui lòng nhập",
                   }}
-                  styles={{ width: "240px" }}
+                  styles={{width: "240px"}}
                   name="birthdate"
                   type="date"
                   userInfo={
@@ -408,7 +406,7 @@ const buildModal = (
             }}
           >
             {isEdit === false ? (
-              <Box sx={styleBoxComboBox}>
+              <Box sx={styleBoxComboBox} ref={refSelect}>
                 <Typography
                   color="black"
                   variant="h2"
@@ -419,20 +417,17 @@ const buildModal = (
                     marginBottom: "5%",
                   }}
                 >
-                  Type
+                  Chức vụ
                 </Typography>
                 <CustomSelect
-                  label="Type"
-                  name="roleName"
-                  defaultValue={user?.roleName}
+                  label="Chức vụ"
+                  name="roleId"
+                  defaultValue={user?.roleId}
                   control={control}
                   errors={errors}
-                  errorMsg={"Required role"}
+                  errorMsg={"*Vui lòng chọn"}
                 >
-                  <MenuItem value={"Customer"}>Customer</MenuItem>
-                  <MenuItem value={"Manager"}>Manager</MenuItem>
-                  <MenuItem value={"Office staff"}>Office Staff</MenuItem>
-                  <MenuItem value={"Delivery Staff"}>Delivery Staff</MenuItem>
+                  {mapListRoleUser()}
                 </CustomSelect>
               </Box>
             ) : null}
@@ -465,7 +460,7 @@ const buildModal = (
               variant="contained"
               type="submit"
             >
-              Submit
+              Xác nhận
             </Button>
             <Button
               style={{
@@ -477,7 +472,7 @@ const buildModal = (
               color="error"
               variant="outlined"
             >
-              Cancel
+              Đóng
             </Button>
           </Box>
         </form>
@@ -487,23 +482,31 @@ const buildModal = (
 };
 
 function Users(props) {
+  let refSelect = useRef(null);
+
   const [page, setPage] = React.useState(1);
   const [searchName, setSearchName] = React.useState("");
   const [totalUser, setTotalUser] = React.useState(0);
   const [open, setOpen] = React.useState(false);
   const [error, setError] = React.useState({});
-
+  const [listRole, setListRole] = React.useState([]);
   const {
     handleSubmit,
     reset,
     control,
     watch,
-    formState: { errors },
+    formState: {errors},
   } = useForm();
   let password = useRef({});
   password.current = watch("password", "");
 
-  const { showLoading, hideLoading, showSnackbar, userState } = props;
+  const {
+    showLoading,
+    hideLoading,
+    showSnackbar,
+    userState,
+    handleExtendSession,
+  } = props;
 
   const handleChangeGender = (event) => {
     setGender(parseInt(event.target.value));
@@ -513,10 +516,12 @@ function Users(props) {
     try {
       showLoading();
       let list = await getListUser(name, page, size, userState.idToken);
+      console.log(list);
       setListUser(list.data.data);
       setTotalUser(list.data.metadata.total);
     } catch (error) {
       console.log(error?.response);
+      ErrorHandle.handle(error, showSnackbar, handleExtendSession);
       if (error?.response) {
         if (error?.response?.data?.error?.code === 404) {
           setListUser([]);
@@ -540,11 +545,11 @@ function Users(props) {
     let dob = new Date(data.birthdate);
     let currentYear = new Date();
     if (dob > currentYear) {
-      setError({ message: "Please enter date of birth before today" });
+      setError({message: "Vui lòng nhập ngày sau ngày hôm nay"});
       return;
     } else if (currentYear.getFullYear() - dob.getFullYear() < 18) {
       setError({
-        message: "\nPlease enter date of birth more than 18 years old",
+        message: "\nVui lòng nhập ngày sinh lớn hơn 18 tuổi",
       });
       return;
     }
@@ -552,7 +557,6 @@ function Users(props) {
     if (error?.message?.length > 0) {
       return;
     }
-    let roleName = ROLE_USER[data.roleName];
     let userTemp = {
       name: data.name,
       email: data.email,
@@ -560,13 +564,10 @@ function Users(props) {
       birthdate: data.birthdate,
       gender: gender,
       phone: data.phone,
-      roleId: roleName,
-      images: [
-        {
-          id: user?.images[0]?.id,
-          url: user?.images[0]?.url,
-        },
-      ],
+      roleId: data.roleId,
+      images: {
+        url: user?.imageUrl,
+      },
     };
     try {
       showLoading();
@@ -582,7 +583,7 @@ function Users(props) {
           userState.idToken
         );
         if (responseUpdate.status === 200) {
-          showSnackbar("success", "Update user successful!");
+          showSnackbar("success", "Cập nhật tài khoản thành công!");
           await getData(searchName, page, 8);
           handleClose();
           hideLoading();
@@ -592,7 +593,7 @@ function Users(props) {
       } else {
         responseUpdate = await updateUser(userTemp, id, "", userState.idToken);
         if (responseUpdate.status === 200) {
-          showSnackbar("success", "Update user successful!");
+          showSnackbar("success", "Cập nhật tài khoản thành công!");
           await getData(searchName, page, 8);
           handleClose();
           hideLoading();
@@ -605,7 +606,7 @@ function Users(props) {
       if (error.response) {
         if (error.response.message === "Email is existed") {
           setError({
-            message: "Email is existed",
+            message: "Email đã tồn tại",
           });
         } else {
           setError({
@@ -623,17 +624,14 @@ function Users(props) {
   const onHandleCreateUser = async (data) => {
     let dob = new Date(data.birthdate);
     let currentYear = new Date();
-    if (dob > currentYear) {
-      setError({ message: "Please enter date of birth before today" });
-      return;
-    } else if (currentYear.getFullYear() - dob.getFullYear() < 18) {
-      setError({
-        message: "\nPlease enter date of birth more than 18 years old",
-      });
-      return;
-    }
-
-    if (error?.message?.length > 0) {
+    if (currentYear.getFullYear() - dob.getFullYear() < 18) {
+      if (
+        refSelect?.current?.children[1]?.children[0]?.children[0]
+          ?.textContent !== "Customer"
+      )
+        setError({
+          message: "\nVui lòng nhập ngày sinh lớn hơn 18 tuổi",
+        });
       return;
     }
 
@@ -644,7 +642,6 @@ function Users(props) {
         file: base64.split(",")[1],
       };
     }
-    let roleName = ROLE_USER[data.roleName];
     let userTemp = {
       name: data.name,
       password: data.password,
@@ -653,15 +650,15 @@ function Users(props) {
       gender: gender,
       birthdate: data.birthdate,
       phone: data.phone,
-      roleId: roleName,
+      roleId: data.roleId,
       avatarLink: avatarLinkObject,
     };
     try {
       showLoading();
-
       const response = await createUser(userTemp, userState.idToken);
+
       if (response.status === 200) {
-        showSnackbar("success", "Create user successful!");
+        showSnackbar("success", "Tạo tài khoản thành công!");
         await getData(searchName, page, 8);
 
         handleClose();
@@ -669,14 +666,15 @@ function Users(props) {
         setError({});
       }
     } catch (error) {
-      if (error.response) {
-        if (error.response.data.error.message === "Email is existed") {
+      console.log(error);
+      if (error?.response) {
+        if (error?.response?.data?.error?.message === "Email is existed") {
           setError({
-            message: "Email is existed",
+            message: "Email đã tồn tại",
           });
         } else {
           setError({
-            message: error.response.data.error.message,
+            message: error?.response?.data?.error?.message,
           });
         }
       } else {
@@ -722,10 +720,33 @@ function Users(props) {
     process();
   }, [page]);
 
+  useEffect(() => {
+    if (open) {
+      const process = async () => {
+        try {
+          showLoading();
+          const response = await getListRole(userState.idToken);
+          setListRole(response.data.data);
+          hideLoading();
+        } catch (error) {
+          console.log(error);
+          hideLoading();
+        }
+      };
+      process();
+    }
+  }, [open]);
+
   const [listUser, setListUser] = React.useState([]);
   const [isEdit, setEdit] = React.useState(false);
-  const [user, setUser] = React.useState({ images: [{ id: null, url: null }] });
+  const [user, setUser] = React.useState({images: [{id: null, url: null}]});
   const [gender, setGender] = React.useState(user.gender ?? MALE);
+
+  const mapListRoleUser = () => {
+    return listRole?.map((e) => {
+      return <MenuItem value={e.id}>{e.name}</MenuItem>;
+    });
+  };
 
   const handleOpen = (isEdit) => {
     setOpen(true);
@@ -733,7 +754,8 @@ function Users(props) {
   };
   const handleClose = () => {
     setOpen(false);
-    setUser({ avatarFile: undefined, images: [{ id: null, url: null }] });
+    setUser({avatarFile: undefined, images: [{id: null, url: null}]});
+    setError({});
     reset();
   };
   return (
@@ -758,7 +780,9 @@ function Users(props) {
         error,
         gender,
         handleChangeGender,
-        setError
+        setError,
+        mapListRoleUser,
+        refSelect
       )}
       <Box
         sx={{
@@ -776,7 +800,7 @@ function Users(props) {
           }}
           onChange={(e) => onHandleSearch(e)}
           InputProps={{
-            style: { height: "45px", backgroundColor: "white" },
+            style: {height: "45px", backgroundColor: "white"},
             startAdornment: (
               <InputAdornment>
                 <IconButton>
@@ -786,23 +810,23 @@ function Users(props) {
             ),
           }}
         />
-        <Box sx={{ width: "2%" }} />
+        <Box sx={{width: "2%"}} />
         <Button
-          style={{ height: "45px", paddingLeft: "16px", paddingRight: "16px" }}
+          style={{height: "45px", paddingLeft: "16px", paddingRight: "16px"}}
           color="primary"
           variant="contained"
           onClick={(e) => {
-            setUser({ images: [{ id: null, url: null }] });
+            setUser({images: [{id: null, url: null}]});
             handleOpen(false);
           }}
         >
-          Create user
+          Tạo tài khoản
         </Button>
       </Box>
       <Card
         variant="outlined"
         color="#FFF"
-        sx={{ marginLeft: "2%", marginRight: "2%" }}
+        sx={{marginLeft: "2%", marginRight: "2%"}}
       >
         {listUser.length > 0 ? (
           <ListUsers
@@ -826,7 +850,7 @@ function Users(props) {
               margin: "2% 0",
             }}
           >
-            User not found
+            Không tìm thấy tài khoản
           </Typography>
         )}
       </Card>
@@ -839,6 +863,9 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    handleExtendSession: (isOpen) =>
+      dispatch(action.handleExtendSession(isOpen)),
+
     showLoading: () => dispatch(action.showLoader()),
     hideLoading: () => dispatch(action.hideLoader()),
     showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),

@@ -114,7 +114,7 @@ function DoorToDoorOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
         }}
       >
         <Typography variant="h2" color="black" style={{ marginBottom: "3%" }}>
-          Total
+          Tổng đơn
         </Typography>
         <Typography variant="h2" color="primary" style={{ marginBottom: "3%" }}>
           {formatCurrency(sum, " đ")}
@@ -155,7 +155,7 @@ function DoorToDoorOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
             variant="h2"
             style={{ marginBottom: "3%", marginRight: "8%" }}
           >
-            Total
+            Tổng
           </Typography>
         </Box>
 
@@ -253,7 +253,7 @@ function DoorToDoorOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
             variant="h2"
             style={{ marginBottom: "3%", marginRight: "8%" }}
           >
-            Total
+            Tổng
           </Typography>
         </Box>
 
@@ -282,10 +282,11 @@ function DoorToDoorOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
+        marginRight: "5%",
       }}
     >
       <Typography variant="h2" style={{ marginBottom: "3%" }}>
-        Time
+        Thời gian
       </Typography>
       <Card
         sx={{
@@ -300,11 +301,11 @@ function DoorToDoorOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
           control={
             <Checkbox checked={isCustomerDelivery} onChange={handleChange} />
           }
-          label="Customer delivery by themselves"
+          label="Khách tự vận chuyển"
           labelPlacement="Customer delivery by themselves"
         />
         <Typography variant="h2" style={{ marginBottom: "3%" }}>
-          Delivery Date Time
+          Thời gian lấy hàng
         </Typography>
         <TextField
           id="date"
@@ -328,7 +329,7 @@ function DoorToDoorOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
           {mapListTime(timeDelivery, setTimeDelivery)}
         </Grid>
         <Typography variant="h2" style={{ marginBottom: "3%" }}>
-          Return Date Time
+          Ngày trả hàng
         </Typography>
         <TextField
           id="date"
@@ -349,19 +350,19 @@ function DoorToDoorOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
           }}
         >
           <Typography variant="h2" style={{ marginBottom: "3%" }}>
-            Duration
+            Thời hạn
           </Typography>
           <Typography
             variant="h2"
             color="primary"
             style={{ marginBottom: "3%" }}
           >
-            {duration} days
+            {duration} ngày
           </Typography>
         </Box>
       </Card>
-      <Typography variant="h2" style={{ marginBottom: "3%" }}>
-        Bill
+      <Typography variant="h2" style={{ marginBottom: "3%", marginTop: "2%" }}>
+        Hóa đơn
       </Typography>
       <Card
         sx={{
@@ -380,10 +381,10 @@ function DoorToDoorOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
           }}
         >
           <Typography variant="h2" style={{ marginBottom: "3%" }}>
-            Product
+            Dịch vụ
           </Typography>
           <Typography variant="h2" style={{ marginBottom: "3%" }}>
-            Cost
+            Giá tiền
           </Typography>
         </Box>
         <Divider />
@@ -399,17 +400,17 @@ function DoorToDoorOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
           }}
         >
           <Typography variant="h2" style={{ marginBottom: "3%" }}>
-            Accessory
+            Phụ kiện
           </Typography>
           <Typography variant="h2" style={{ marginBottom: "3%" }}>
-            Cost
+            Giá tiền
           </Typography>
         </Box>
         <Divider />
         {mapListDetailOthers(choosenProduct.accessory)}
         <Divider />
         {buildTotalEachPartPrice("accessory")}
-        <Box
+        {/* <Box
           sx={{
             display: "flex",
             flexDirection: "row",
@@ -427,7 +428,7 @@ function DoorToDoorOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
         <Divider />
         {mapListDetailOthers(choosenProduct.services)}
         <Divider />
-        {buildTotalEachPartPrice("services")}
+        {buildTotalEachPartPrice("services")} */}
         {buildTotalPrice()}
       </Card>
       <p style={{ color: "red", textAlign: "center" }}>{error?.time}</p>
@@ -451,7 +452,7 @@ function DoorToDoorOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
           if (!dateDelivery) {
             errorTemp = {
               dateDelivery: {
-                message: "Required Date Delivery",
+                message: "*Vui lòng nhập",
               },
             };
           }
@@ -459,14 +460,14 @@ function DoorToDoorOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
             errorTemp = {
               ...errorTemp,
               dateReturn: {
-                message: "Required Date Return",
+                message: "*Vui lòng nhập",
               },
             };
           }
 
           if (!timeDelivery.name && isCustomerDelivery === false) {
             errorTemp.time =
-              "Please choose customer delivery or choose time delivery";
+              "Vui lòng chọn khách tự vận chuyển hoặc chọn giờ vận chuyển";
           }
 
           if (
@@ -474,7 +475,7 @@ function DoorToDoorOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
             choosenProduct.accessory.length === 0 &&
             choosenProduct.services.length === 0
           ) {
-            errorTemp.product = "Please buy something";
+            errorTemp.product = "Vui lòng chọn dịch vụ";
           }
 
           if (Object.keys(errorTemp).length === 0) {
@@ -484,7 +485,7 @@ function DoorToDoorOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
           }
         }}
       >
-        Next
+        Tiếp theo
       </Button>
     </Box>
   );

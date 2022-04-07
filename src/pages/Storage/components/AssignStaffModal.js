@@ -1,7 +1,7 @@
 import React from "react";
-import { Box, Typography, Modal, Button } from "@material-ui/core";
+import {Box, Modal, Button} from "@material-ui/core";
 import ListStaff from "./ListStaff";
-import { STYLE_MODAL } from "../../../constant/style";
+import {STYLE_MODAL} from "../../../constant/style";
 const styleModal = {
   ...STYLE_MODAL,
   width: "70%",
@@ -37,7 +37,7 @@ export default function AssignStaffModal({
           flexDirection: "column",
         }}
       >
-        <Box sx={{ height: "90%" }}>
+        <Box sx={{height: "90%"}}>
           <Box
             sx={{
               display: "flex",
@@ -50,7 +50,7 @@ export default function AssignStaffModal({
             <ListStaff
               listStaff={listShowStaffAssigned}
               isAssigned={true}
-              name="Staffs belong to this storage"
+              name="Danh sách nhân viên được phân công vào kho"
               addAssignStaff={addAssignStaff}
               removeAssignStaff={removeAssignStaff}
               onHandleSearch={handleChangeSearchAssigned}
@@ -58,7 +58,7 @@ export default function AssignStaffModal({
             <ListStaff
               listStaff={listShowStaffUnAssigned}
               isAssigned={false}
-              name="Staffs are not assigned yet"
+              name="Danh sách nhân viên chưa được phân công"
               addAssignStaff={addAssignStaff}
               removeAssignStaff={removeAssignStaff}
               onHandleSearch={handleChangeSearchUnAssigned}
@@ -80,7 +80,8 @@ export default function AssignStaffModal({
               display: "flex",
               flexDirection: "row",
               justifyContent: "center",
-              marginTop: "16px",
+              alignItems: "center",
+              marginTop: "4%",
             }}
           >
             <Button
@@ -88,7 +89,7 @@ export default function AssignStaffModal({
                 height: "45px",
                 paddingLeft: "16px",
                 paddingRight: "16px",
-                marginTop: "4%",
+                marginRight: "4%",
               }}
               color="primary"
               variant="contained"
@@ -100,7 +101,19 @@ export default function AssignStaffModal({
                 )
               }
             >
-              Submit
+              Xác nhận
+            </Button>
+            <Button
+              style={{
+                height: "45px",
+                paddingLeft: "16px",
+                paddingRight: "16px",
+              }}
+              onClick={() => handleCloseAssignStaff()}
+              color="error"
+              variant="outlined"
+            >
+              Đóng
             </Button>
           </Box>
         </Box>

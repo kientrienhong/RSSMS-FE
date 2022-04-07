@@ -105,7 +105,7 @@ export default function Item({
       }}
     >
       <img
-        src={image ? image[0]?.url : undefined}
+        src={image ? image : undefined}
         alt={name}
         style={{
           marginTop: "20px",
@@ -124,6 +124,7 @@ export default function Item({
         sx={{
           display: "flex",
           flexDirection: "row",
+          width: "80%",
           justifyContent: "center",
           marginBottom: "4%",
           marginTop: "3%",
@@ -132,7 +133,7 @@ export default function Item({
         <button style={styleButtonMinus} onClick={handleOnClickMinus}>
           -
         </button>
-        <input style={styleInput} value={quantity}></input>
+        <Box style={styleInput}>{quantity}</Box>
         <button style={styleButtonPlus} onClick={handleOnClickPlus}>
           +
         </button>

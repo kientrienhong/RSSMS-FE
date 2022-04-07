@@ -31,7 +31,7 @@ function Account({ user }) {
           variant="h2"
           style={{ marginTop: "2%", textAlign: "left", marginLeft: "2.5%" }}
         >
-          Account information
+          Thông tin tài khoản
         </Typography>
         <UpdateInformation />
         <Typography
@@ -39,7 +39,7 @@ function Account({ user }) {
           variant="h2"
           style={{ marginTop: "2%", textAlign: "left", marginLeft: "2.5%" }}
         >
-          Change password
+          Đổi mật khẩu
         </Typography>
         <ChangePassword userId={user.userId} />
       </Card>

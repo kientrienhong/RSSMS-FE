@@ -104,7 +104,7 @@ function SelfStorageOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
         }}
       >
         <Typography variant="h2" color="black" style={{ marginBottom: "3%" }}>
-          Total
+          Tổng đơn
         </Typography>
         <Typography variant="h2" color="primary" style={{ marginBottom: "3%" }}>
           {formatCurrency(sum, " đ")}
@@ -147,7 +147,7 @@ function SelfStorageOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
             variant="h2"
             style={{ marginBottom: "3%", marginRight: "8%" }}
           >
-            Total
+            Tổng
           </Typography>
         </Box>
 
@@ -190,7 +190,7 @@ function SelfStorageOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
             variant="h2"
             style={{ marginBottom: "3%", marginRight: "8%" }}
           >
-            Total
+            Tổng
           </Typography>
         </Box>
 
@@ -287,10 +287,11 @@ function SelfStorageOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
+        marginRight: "5%",
       }}
     >
       <Typography variant="h2" style={{ marginBottom: "3%" }}>
-        Time
+        Thời gian
       </Typography>
       <Card
         sx={{
@@ -302,7 +303,7 @@ function SelfStorageOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
         }}
       >
         <Typography variant="h2" style={{ marginBottom: "3%" }}>
-          Start renting
+          Ngày bắt đầu
         </Typography>
         <TextField
           id="date"
@@ -325,7 +326,7 @@ function SelfStorageOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
           }}
         >
           <Typography variant="h2" style={{ marginBottom: "3%" }}>
-            Duration (months)
+            Thời hạn (tháng)
           </Typography>
           <Box
             sx={{
@@ -353,7 +354,7 @@ function SelfStorageOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
           }}
         >
           <Typography variant="h2" style={{ marginBottom: "3%" }}>
-            End renting
+            Ngày kết thúc
           </Typography>
           <Typography
             variant="h2"
@@ -384,10 +385,10 @@ function SelfStorageOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
           }}
         >
           <Typography variant="h2" style={{ marginBottom: "3%" }}>
-            Product
+            Dịch vụ
           </Typography>
           <Typography variant="h2" style={{ marginBottom: "3%" }}>
-            Cost
+            Giá tiền
           </Typography>
         </Box>
         <Divider />
@@ -403,10 +404,10 @@ function SelfStorageOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
           }}
         >
           <Typography variant="h2" style={{ marginBottom: "3%" }}>
-            Accessory
+            Phụ kiện
           </Typography>
           <Typography variant="h2" style={{ marginBottom: "3%" }}>
-            Cost
+            Giá tiền
           </Typography>
         </Box>
         <Divider />
@@ -440,30 +441,29 @@ function SelfStorageOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
             totalPrice: totalPrice(),
           });
           let errorTemp = {};
-          console.log(dateStart < new Date().toISOString().split("T")[0]);
           if (!dateStart) {
             errorTemp = {
               dateStart: {
-                message: "Required Date Start",
+                message: "*Vui lòng nhập",
               },
             };
           } else if (dateStart < new Date().toISOString().split("T")[0]) {
             errorTemp = {
               dateStart: {
-                message: "Please choose date after today!",
+                message: "*Vui lòng chọn ngày sau ngày hôm nay!",
               },
             };
           }
 
           if (duration === 0) {
-            errorTemp.duration = "Please input duration";
+            errorTemp.duration = "Vui lòng chọn thời hạn";
           }
 
           if (
             choosenProduct.product.length === 0 &&
             choosenProduct.accessory.length === 0
           ) {
-            errorTemp.product = "Please buy something";
+            errorTemp.product = "Vui lòng chọn dịch vụ";
           }
 
           if (Object.keys(errorTemp).length === 0) {
@@ -474,7 +474,7 @@ function SelfStorageOrderInfo({ choosenProduct, setUpOrder, onHandleOpen }) {
           }
         }}
       >
-        Next
+        Tiếp theo
       </Button>
     </Box>
   );

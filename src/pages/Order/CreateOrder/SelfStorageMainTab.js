@@ -14,7 +14,7 @@ export default function SelfStorageMainTab({
       return (
         <Grid item xs={4} key={index}>
           <Item
-            image={e?.images}
+            image={e?.imageUrl}
             unit={e.unit}
             type={e.type}
             typeInt={e.typeInt}
@@ -48,7 +48,7 @@ export default function SelfStorageMainTab({
         color="textPrimary"
         variant="h2"
       >
-        Storage
+        Kho
       </Typography>
       <Grid
         container
@@ -68,7 +68,7 @@ export default function SelfStorageMainTab({
         color="textPrimary"
         variant="h2"
       >
-        Accessory
+        Phụ kiện
       </Typography>
       <Grid
         container

@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { useTheme } from "@mui/material/styles";
+import {useTheme} from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -15,14 +15,14 @@ import FirstPageIcon from "@mui/icons-material/FirstPage";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
-import { Button, TableHead } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
+import {Button, TableHead} from "@material-ui/core";
+import {makeStyles} from "@material-ui/styles";
 import ConfirmModal from "../../../components/ConfirmModal";
-import { deleteUser } from "../../../apis/Apis";
-import { connect } from "react-redux";
+import {deleteUser} from "../../../apis/Apis";
+import {connect} from "react-redux";
 function TablePaginationActions(props) {
   const theme = useTheme();
-  const { count, page, rowsPerPage, onPageChange } = props;
+  const {count, page, rowsPerPage, onPageChange} = props;
 
   const handleFirstPageButtonClick = (event) => {
     onPageChange(event, 0);
@@ -41,7 +41,7 @@ function TablePaginationActions(props) {
   };
 
   return (
-    <Box sx={{ flexShrink: 0, ml: 2.5 }}>
+    <Box sx={{flexShrink: 0, ml: 2.5}}>
       <IconButton
         onClick={handleFirstPageButtonClick}
         disabled={page === 0}
@@ -89,11 +89,18 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-const listHeaderName = ["Name", "Email", "Phone", "Storage", "Type", "Action"];
+const listHeaderName = [
+  "Họ và tên",
+  "Email",
+  "Số điện thoại",
+  "Kho",
+  "Chức vụ",
+  "Thao tác",
+];
 
 const mapListTableHeader = (listHeader) => (
   <TableHead>
-    <TableRow sx={{ color: "black" }}>
+    <TableRow sx={{color: "black"}}>
       {listHeader.map((e) => (
         <TableCell>{e}</TableCell>
       ))}
@@ -115,7 +122,7 @@ const handleClickRow = (row, setUser, handleOpen, reset) => {
     storageName: row.storageName,
     roleName: row.roleName,
     address: row.address,
-    images: [row.images[0]],
+    imageUrl: row.imageUrl,
   };
 
   setUser(user);
@@ -156,23 +163,17 @@ function ListUsers({
   };
   const handleDeleteUser = async (id) => {
     let response;
-    try {
-      response = await deleteUser(id, userState.idToken);
-      if (listUser.length === 1) {
-        if (page !== 1) {
-          setPage(page - 1);
-        }
+    response = await deleteUser(id, userState.idToken);
+    if (listUser.length === 1) {
+      if (page !== 1) {
+        setPage(page - 1);
       }
-      await getData(searchName, page, 8);
-    } catch (error) {
-      console.log(error);
     }
+    await getData(searchName, page, 8);
 
     return response;
   };
   // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page - 1 > 0 ? Math.max(0, (1 + page) * rowsPerPage - listUser.length) : 0;
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage + 1);
@@ -185,62 +186,45 @@ function ListUsers({
 
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+      <Table sx={{minWidth: 500}} aria-label="custom pagination table">
         <ConfirmModal
           open={open}
           handleClose={handleClose}
           onHandleYes={handleDeleteUser}
           id={currentId}
-          msg={"Delete user success!"}
+          msg={"Xóa tài khoản thành công!"}
         />
         {mapListTableHeader(listHeaderName)}
         <TableBody>
           {listUser.map((row, index) => {
             return (
               <TableRow key={row.id}>
-                <TableCell
-                  component="th"
-                  scope="row"
-                  style={{ color: "black" }}
-                  onClick={(e) =>
-                    handleClickRow(row, setUser, handleOpen, reset)
-                  }
-                >
+                <TableCell component="th" scope="row" style={{color: "black"}}>
                   {row.name}
                 </TableCell>
-                <TableCell
-                  style={{ color: "black" }}
-                  onClick={(e) =>
-                    handleClickRow(row, setUser, handleOpen, reset)
-                  }
-                >
-                  {row.email}
+                <TableCell style={{color: "black"}}>{row.email}</TableCell>
+                <TableCell style={{color: "black"}}>{row.phone}</TableCell>
+                <TableCell style={{color: "black"}}>
+                  {/* {row?.staffManageStorages[0]?.storageName} */}
                 </TableCell>
-                <TableCell
-                  style={{ color: "black" }}
-                  onClick={(e) =>
-                    handleClickRow(row, setUser, handleOpen, reset)
-                  }
-                >
-                  {row.phone}
-                </TableCell>
-                <TableCell
-                  style={{ color: "black" }}
-                  onClick={(e) =>
-                    handleClickRow(row, setUser, handleOpen, reset)
-                  }
-                >
-                  {row?.staffManageStorages[0]?.storageName}
-                </TableCell>
-                <TableCell
-                  style={{ color: "black" }}
-                  onClick={(e) =>
-                    handleClickRow(row, setUser, handleOpen, reset)
-                  }
-                >
-                  {row.roleName}
-                </TableCell>
-                <TableCell style={{ color: "black" }}>
+                <TableCell style={{color: "black"}}>{row.roleName}</TableCell>
+                <TableCell style={{color: "black"}}>
+                  <Button
+                    onClick={async () => {
+                      handleClickRow(row, setUser, handleOpen, reset);
+                    }}
+                    style={{
+                      height: "45px",
+                      paddingLeft: "16px",
+                      paddingRight: "16px",
+                      marginRight: "4%",
+                    }}
+                    color="success"
+                    variant="contained"
+                    type="submit"
+                  >
+                    Xem thêm
+                  </Button>
                   <Button
                     className={classes.button}
                     onClick={() => {
@@ -248,7 +232,7 @@ function ListUsers({
                       handleConfirmOpen();
                     }}
                   >
-                    Delete
+                    Xóa
                   </Button>
                 </TableCell>
               </TableRow>

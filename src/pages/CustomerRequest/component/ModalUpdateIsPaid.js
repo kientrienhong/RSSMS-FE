@@ -1,11 +1,13 @@
-import React, { useState } from "react";
-import { Box, Modal, Button, Typography, Checkbox } from "@material-ui/core";
-import { STYLE_MODAL } from "../../../constant/style";
-import { connect } from "react-redux";
-import { updateIsPaidRequest } from "../../../apis/Apis";
-import * as action from "../../../redux/action/action";
-import { formatCurrency } from "../../../utils/FormatCurrency";
+import React from "react";
+import {Box, Modal, Button, Typography, Checkbox} from "@material-ui/core";
+import {STYLE_MODAL} from "../../../constant/style";
+import {LIST_STATUS_REQUEST} from "../../../constant/constant";
 
+import {connect} from "react-redux";
+import {updateIsPaidRequest} from "../../../apis/Apis";
+import * as action from "../../../redux/action/action";
+import {formatCurrency} from "../../../utils/FormatCurrency";
+import moment from "moment";
 const styleModal = {
   ...STYLE_MODAL,
   width: "50%",
@@ -20,12 +22,23 @@ function ModalUpdateIsPaid({
   hideLoading,
   showSnackbar,
   requestDetail,
+  getData,
+  page,
 }) {
   const [checked, setChecked] = React.useState(false);
   const handleChange = (event) => {
     setChecked(event.target.checked);
   };
-  const buildInformation = (title, value) => {
+  const buildInformation = (title, value, color) => {
+    let localColor;
+    let bold;
+    if (color) {
+      localColor = color;
+      bold = "bold";
+    } else {
+      localColor = "black";
+      bold = "normal";
+    }
     return (
       <Box
         sx={{
@@ -46,7 +59,9 @@ function ModalUpdateIsPaid({
         >
           {title}
         </Typography>
-        <p style={{ fontSize: "18px" }}>{value}</p>
+        <p style={{fontSize: "18px", color: localColor, fontWeight: bold}}>
+          {value}
+        </p>
       </Box>
     );
   };
@@ -76,7 +91,7 @@ function ModalUpdateIsPaid({
             marginLeft: "2.5%",
           }}
         >
-          Detail Extension Order Request
+          Chi tiết yêu cầu gia hạn đơn
         </Typography>
         <Box
           sx={{
@@ -92,20 +107,54 @@ function ModalUpdateIsPaid({
               textAlign: "left",
             }}
           >
-            Order information
+            Thông tin đơn hàng
           </Typography>
-          {buildInformation("Id:", `#${currentRequest?.id}`)}
-          {buildInformation("Order Id:", `#${currentRequest?.orderId}`)}
+          {buildInformation("Mã yêu cầu:", `#${currentRequest?.id}`)}
+          {buildInformation(
+            "Tình trạng yêu cầu:",
+            LIST_STATUS_REQUEST[currentRequest?.status]?.name,
+            LIST_STATUS_REQUEST[currentRequest?.status]?.color
+          )}
+          {buildInformation("Mã đơn:", `#${currentRequest?.orderId}`)}
 
           {buildInformation(
-            "Old return date:",
+            "Ngày kết thúc trước khi gia hạn:",
             `${requestDetail?.oldReturnDate}`
           )}
-          {buildInformation("New return date:", `${requestDetail?.returnDate}`)}
-          {/* {buildInformation(
-            "Total price:",
-            `${formatCurrency(requestDetail?.totalPrice, " VND")}`
-          )} */}
+          {buildInformation(
+            "Ngày kết thúc sau khi gia hạn:",
+            moment(new Date(requestDetail?.returnDate)).format("DD/MM/YYYY")
+          )}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              width: "100%",
+              justifyContent: "space-between",
+              alignItems: "center",
+              height: "40px",
+              marginBottom: "2%",
+            }}
+          >
+            <Typography
+              color="black"
+              variant="h4"
+              sx={{
+                fontWeight: "bold",
+              }}
+            >
+              Tổng số tiền:
+            </Typography>
+            <Typography
+              color="primary"
+              variant="h2"
+              sx={{
+                fontWeight: "bold",
+              }}
+            >
+              {`${formatCurrency(requestDetail?.totalPrice, " đ")}`}
+            </Typography>
+          </Box>
 
           <Box
             sx={{
@@ -122,12 +171,13 @@ function ModalUpdateIsPaid({
                 fontWeight: "bold",
               }}
             >
-              Is paid:
+              Đã thanh toán:
             </Typography>
             <Checkbox
-              checked={checked}
+              checked={checked || currentRequest?.status === 2}
+              disabled={currentRequest?.status === 2}
               onChange={handleChange}
-              inputProps={{ "aria-label": "controlled" }}
+              inputProps={{"aria-label": "controlled"}}
             />
           </Box>
         </Box>
@@ -140,11 +190,15 @@ function ModalUpdateIsPaid({
           onClick={async () => {
             try {
               showLoading();
-              const response = await updateIsPaidRequest(
+              await updateIsPaidRequest(
                 currentRequest.id,
+                checked,
                 userState.idToken
               );
+
               showSnackbar("success", "Update success");
+              await getData("", page, 8);
+              handleClose();
             } catch (error) {
               console.log(error?.response);
             } finally {

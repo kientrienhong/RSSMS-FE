@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useState} from "react";
 import PropTypes from "prop-types";
 import {
   AppBar,
@@ -15,9 +15,9 @@ import MenuIcon from "@material-ui/icons/Menu";
 import NotificationsIcon from "@material-ui/icons/NotificationsOutlined";
 import InputIcon from "@material-ui/icons/Input";
 import Logo from "./Logo";
-import { useNavigate } from "react-router";
-import { STYLE_MODAL } from "../constant/style";
-import { connect } from "react-redux";
+import {useNavigate} from "react-router";
+import {STYLE_MODAL} from "../constant/style";
+import {connect} from "react-redux";
 import * as action from "../apis/Apis";
 const DashboardNavbar = ({
   onMobileNavOpen,
@@ -78,11 +78,11 @@ const DashboardNavbar = ({
               marginLeft: "2.5%",
             }}
           >
-            Are you sure?
+            Bạn đã chắc chắn?
           </Typography>
           <Box
             sx={{
-              width: "60%",
+              width: "80%",
               margin: "40px auto 10px auto",
               display: "flex",
               flexDirection: "row",
@@ -97,7 +97,8 @@ const DashboardNavbar = ({
               }}
               onClick={async () => {
                 try {
-                  navigate("/", { replace: true });
+                  await localStorage.removeItem("user");
+                  navigate("/", {replace: true});
                 } catch (error) {
                   console.log(error);
                 } finally {
@@ -107,7 +108,7 @@ const DashboardNavbar = ({
               variant="contained"
               type="submit"
             >
-              Yes
+              Xác nhận
             </Button>
             <Button
               style={{
@@ -119,7 +120,7 @@ const DashboardNavbar = ({
               color="error"
               variant="outlined"
             >
-              No
+              Không
             </Button>
           </Box>
         </Box>
@@ -127,11 +128,11 @@ const DashboardNavbar = ({
 
       <Toolbar>
         <Logo />
-        <Box sx={{ flexGrow: 1 }} />
+        <Box sx={{flexGrow: 1}} />
 
         <Hidden xlDown>
           <IconButton color="primary" size="large">
-            <Badge badgeContent={unReadNoti.length} color="error">
+            <Badge badgeContent={unReadNoti?.length} color="error">
               <NotificationsIcon
                 onClick={() => {
                   if (openNotification === true) {

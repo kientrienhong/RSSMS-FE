@@ -1,14 +1,14 @@
-import React, { useState } from "react";
-import { Box, Button, TextField, Typography } from "@material-ui/core";
-import { connect } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import React, {useState, useEffect} from "react";
+import {Box, Button, TextField, Typography} from "@material-ui/core";
+import {connect} from "react-redux";
+import {useNavigate} from "react-router-dom";
 import LoadingPage from "../Loading/LoadingPage";
 import * as action from "../../redux/action/action";
-import { login, getNotifcations } from "../../apis/Apis";
+import {login, getNotifcations} from "../../apis/Apis";
 function LogIn(props) {
   const [isValid, setValid] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const [input, setInput] = useState({ email: "", password: "" });
+  const [input, setInput] = useState({email: "", password: ""});
   const navigate = useNavigate();
 
   const submitLogin = async () => {
@@ -18,7 +18,7 @@ function LogIn(props) {
       const response = await login(input.email, input.password, token);
       if (response.code === 404) {
         setValid(false);
-        setErrorMsg("Invalid username or password");
+        setErrorMsg("Tài khoản / mật khẩu không đúng");
       } else {
         try {
           let responseNotifcation = await getNotifcations(
@@ -31,19 +31,28 @@ function LogIn(props) {
         }
         props.setUpUser(response.data);
         localStorage.setItem("user", JSON.stringify(response.data));
-        navigate("/app/account", { replace: true });
+        navigate("/app/account", {replace: true});
       }
     } catch (e) {
-      console.log(e);
+      console.log(e.response);
       setValid(false);
-      setErrorMsg("Invalid username or password");
+      setErrorMsg("Tài khoản / mật khẩu không đúng");
     } finally {
       props.hideLoading();
     }
   };
 
+  useEffect(() => {
+    const loggedInUser = localStorage.getItem("user");
+    if (loggedInUser) {
+      navigate("/app/account", {replace: true});
+      const foundUser = JSON.parse(loggedInUser);
+      props.setUpUser(foundUser);
+    }
+  }, []);
+
   const handleOnChange = (e, value) => {
-    let inputTemp = { ...input };
+    let inputTemp = {...input};
     inputTemp[`${value}`] = e.target.value;
     setInput(inputTemp);
   };
@@ -59,13 +68,13 @@ function LogIn(props) {
   };
 
   return (
-    <Box style={{ display: "relative", width: "100%", height: "100%" }}>
+    <Box style={{display: "relative", width: "100%", height: "100%"}}>
       <Box
-        sx={{ display: "flex", flexDirection: "row", alignItems: "flex-start" }}
+        sx={{display: "flex", flexDirection: "row", alignItems: "flex-start"}}
       >
-        <Box sx={{ width: "50%", height: "100%", display: "inline-block" }}>
+        <Box sx={{width: "50%", height: "100%", display: "inline-block"}}>
           <img
-            style={{ height: "100vh", width: "100%" }}
+            style={{height: "100vh", width: "100%"}}
             alt="loginBackground"
             src={"/img/loginBackground.png"}
             className="nav__log-in__img"
@@ -74,9 +83,10 @@ function LogIn(props) {
         <Box
           sx={{
             width: "50%",
-            height: "100%",
+            height: "100vh",
             display: "inline-block",
             alignItems: "center",
+            justifyContent: "center",
           }}
         >
           <Box
@@ -84,20 +94,19 @@ function LogIn(props) {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
+              height: "100%",
               justifyContent: "center",
             }}
           >
             <img
               alt="logo"
-              style={{ margin: "5% 0%", width: "100px", height: "100px" }}
+              style={{margin: "5% 0%", width: "300px", height: "100px"}}
               src={process.env.PUBLIC_URL + "/img/logo.png"}
               className="nav__log-in__img"
             ></img>
-            <Typography color="primary" variant="h1" style={{ margin: "4%" }}>
-              Sign in
-            </Typography>
+
             <Box sx={style.boxTextField}>
-              <Typography variant="h3" style={{ marginBottom: "4%" }}>
+              <Typography variant="h3" style={{marginBottom: "4%"}}>
                 Email
               </Typography>
               <TextField
@@ -106,8 +115,8 @@ function LogIn(props) {
               />
             </Box>
             <Box sx={style.boxTextField}>
-              <Typography variant="h3" style={{ marginBottom: "1%" }}>
-                Password
+              <Typography variant="h3" style={{marginBottom: "1%"}}>
+                Mật khẩu
               </Typography>
 
               <TextField
@@ -117,18 +126,18 @@ function LogIn(props) {
               />
             </Box>
             {isValid === false ? (
-              <p style={{ color: "red" }}>{errorMsg}</p>
+              <p style={{color: "red"}}>{errorMsg}</p>
             ) : null}
 
             <Box sx={style.boxTextField}>
               <Button
-                style={{ height: "45px" }}
+                style={{height: "45px"}}
                 color="primary"
                 onClick={async () => await submitLogin()}
                 component="a"
                 variant="contained"
               >
-                Sign in
+                Đăng nhập
               </Button>
             </Box>
           </Box>

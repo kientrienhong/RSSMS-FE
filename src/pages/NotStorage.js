@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography } from "@material-ui/core";
+import {Box, Typography} from "@material-ui/core";
 export default function NotStorage() {
   return (
     <Box
@@ -22,7 +22,7 @@ export default function NotStorage() {
           marginLeft: "2.5%",
         }}
       >
-        You have not been assigned yet!
+        Bạn chưa được phân vào bất cứ kho nào
       </Typography>
     </Box>
   );

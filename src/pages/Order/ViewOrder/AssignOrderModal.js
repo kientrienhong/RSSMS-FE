@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import {
   Box,
   Modal,
@@ -8,9 +8,9 @@ import {
   Radio,
   Grid,
 } from "@material-ui/core";
-import { STYLE_MODAL } from "../../../constant/style";
-import { connect } from "react-redux";
-import { getListStorage, assignOrder } from "../../../apis/Apis";
+import {STYLE_MODAL} from "../../../constant/style";
+import {connect} from "react-redux";
+import {getListStorage, assignOrder} from "../../../apis/Apis";
 
 import * as action from "../../../redux/action/action";
 function AssignOrderModal({
@@ -36,13 +36,13 @@ function AssignOrderModal({
   };
   const handleAssignStorage = async () => {
     if (selectedValue === "") {
-      setError("Please storage to assign");
+      setError("Vui lòng chọn kho");
       return;
     }
     try {
       showLoading();
-      await assignOrder(currentId, parseInt(selectedValue), userState.idToken);
-      showSnackbar("success", "Assign success");
+      await assignOrder(currentId, selectedValue, userState.idToken);
+      showSnackbar("success", "Phân đơn thành công!");
       changeIsLoadOrder();
       handleClose();
     } catch (e) {
@@ -95,6 +95,7 @@ function AssignOrderModal({
             justifyContent: "center",
             alignItems: "center",
             marginBottom: "8%",
+            height: "auto",
             cursor: "pointer",
           }}
           key={e.id}
@@ -108,12 +109,7 @@ function AssignOrderModal({
               width: "80%",
             }}
           >
-            <img
-              src={e?.images[0]?.url}
-              alt={e.name}
-              width={160}
-              height={160}
-            />
+            <img src={e?.imageUrl} alt={e.name} width={160} height={160} />
             <Box
               sx={{
                 display: "flex",
@@ -150,7 +146,7 @@ function AssignOrderModal({
             checked={selectedValue === e.id.toString()}
             name="radio-buttons"
             onChange={handleChange}
-            inputProps={{ "aria-label": "B" }}
+            inputProps={{"aria-label": "B"}}
           />
         </Card>
       );
@@ -189,7 +185,7 @@ function AssignOrderModal({
           </Grid>
         </Box>
         {error?.length > 0 ? (
-          <p style={{ color: "red", textAlign: "center" }}>{error}</p>
+          <p style={{color: "red", textAlign: "center"}}>{error}</p>
         ) : null}
         <Box
           sx={{
@@ -210,7 +206,7 @@ function AssignOrderModal({
             color="primary"
             variant="contained"
           >
-            Submit
+            Xác nhận
           </Button>
           <Button
             style={{
@@ -222,7 +218,7 @@ function AssignOrderModal({
             color="error"
             variant="outlined"
           >
-            Cancel
+            Đóng
           </Button>
         </Box>
       </Box>

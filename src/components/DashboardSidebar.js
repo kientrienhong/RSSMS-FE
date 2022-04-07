@@ -1,34 +1,26 @@
-import { useEffect } from "react";
-import { Link as RouterLink, useLocation } from "react-router-dom";
+import {useEffect} from "react";
+import {Link as RouterLink, useLocation} from "react-router-dom";
 import PropTypes from "prop-types";
-import {
-  Avatar,
-  Box,
-  Drawer,
-  Hidden,
-  List,
-  Typography,
-} from "@material-ui/core";
+import {Avatar, Box, Drawer, Hidden, List, Typography} from "@material-ui/core";
 import NavItem from "./NavItem";
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 import {
   LIST_SIDE_BAR_ADMIN,
   LIST_SIDE_BAR_MANAGER,
   LIST_SIDE_BAR_OFFICE_STAFF,
 } from "../constant/route";
 
-const DashboardSidebar = ({ onMobileClose, openMobile, user }) => {
+const DashboardSidebar = ({onMobileClose, openMobile, user}) => {
   let items = [];
-
   if (user.roleName === "Admin") {
     items = LIST_SIDE_BAR_ADMIN;
   } else if (user.roleName === "Manager") {
     items = LIST_SIDE_BAR_MANAGER;
-  } else if (user.roleName === "Office staff") {
-    if (user.staffManageStorages.length === 0) {
+  } else if (user.roleName === "Office Staff") {
+    if (user?.staffAssignStorages?.length === 0) {
       items = LIST_SIDE_BAR_OFFICE_STAFF(undefined);
     } else {
-      items = LIST_SIDE_BAR_OFFICE_STAFF(user.staffManageStorages[0].storageId);
+      items = LIST_SIDE_BAR_OFFICE_STAFF(user.storageId);
     }
   }
 
@@ -58,7 +50,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile, user }) => {
       >
         <Avatar
           component={RouterLink}
-          src={user?.images.length === 0 ? undefined : user?.images[0].url}
+          src={user?.imageUrl}
           sx={{
             cursor: "pointer",
             width: 64,
@@ -73,7 +65,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile, user }) => {
           {user.roleName}
         </Typography>
       </Box>
-      <Box sx={{ p: 2 }}>
+      <Box sx={{p: 2}}>
         <List>
           {items.map((item) => (
             <NavItem
@@ -87,7 +79,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile, user }) => {
           ))}
         </List>
       </Box>
-      <Box sx={{ flexGrow: 1 }} />
+      <Box sx={{flexGrow: 1}} />
     </Box>
   );
 

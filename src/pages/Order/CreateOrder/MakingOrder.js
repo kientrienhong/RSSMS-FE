@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Alert, Box, Snackbar } from "@material-ui/core";
 import { BsBoxSeam } from "react-icons/bs";
 import { FaWarehouse } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+
 import SelfStorageMainTab from "./SelfStorageMainTab";
 import SelfStorageOrderInfo from "./components/SelfStorageOrderInfo";
 import DoorToDoorMainTab from "./DoorToDoorMainTab";
@@ -21,6 +23,8 @@ function MakingOrder({
   msgSnackbar,
   closeSnackbar,
 }) {
+  let navigate = useNavigate();
+
   const [listStorages, setListStorages] = useState([]);
 
   const [listAccessory, setListAccessory] = useState([]);
@@ -51,15 +55,15 @@ function MakingOrder({
       "accessory"
     );
     let listBoxesTemp = setResetQuantity(listProductTemp.data[2], "product");
-    let listAreasTemp = setResetQuantity(listProductTemp.data[4], "product");
-    let listServicesTemp = setResetQuantity(
-      listProductTemp.data[3],
-      "services"
-    );
+    let listAreasTemp = setResetQuantity(listProductTemp.data[3], "product");
+    // let listServicesTemp = setResetQuantity(
+    //   listProductTemp.data[3],
+    //   "services"
+    // );
 
     setListAccessory(listAccessoryTemp);
     setListStorages(listStoragesTemp);
-    setListServices(listServicesTemp);
+    // setListServices(listServicesTemp);
     setListBoxes(listBoxesTemp);
     setListAreas(listAreasTemp);
   };
@@ -86,23 +90,28 @@ function MakingOrder({
   }, []);
 
   const onClickMainTab = (name) => {
-    if (name === "Self-Storage") {
+    if (name === "Kho tự quản") {
       setIndexMain(0);
       setCurrentColor({ selfStorage: "#04BFFE", doorToDoor: "#A19FA8" });
-      setChoosenProduct({
-        product: [],
-        accessory: [],
-        services: [],
-      });
     } else {
       setIndexMain(1);
       setCurrentColor({ selfStorage: "#A19FA8", doorToDoor: "#04BFFE" });
-      setChoosenProduct({
-        product: [],
-        accessory: [],
-        services: [],
-      });
     }
+    setChoosenProduct({
+      product: [],
+      accessory: [],
+      services: [],
+    });
+
+    let listStoragesTemp = setResetQuantity(listStorages, "product");
+    let listAccessoryTemp = setResetQuantity(listAccessory, "accessory");
+    let listBoxesTemp = setResetQuantity(listBoxes, "product");
+    let listAreasTemp = setResetQuantity(listAreas, "product");
+    setListAccessory(listAccessoryTemp);
+    setListStorages(listStoragesTemp);
+    // setListServices(listServicesTemp);
+    setListBoxes(listBoxesTemp);
+    setListAreas(listAreasTemp);
   };
 
   const buildMainTab = (icon, name, color) => {
@@ -160,6 +169,21 @@ function MakingOrder({
           {msgSnackbar}
         </Alert>
       </Snackbar>
+      <img
+        src="/img/arrowLeft.png"
+        alt="backButton"
+        width="40px"
+        height="40px"
+        style={{
+          position: "fixed",
+          top: "50px",
+          left: "50px",
+          cursor: "pointer",
+        }}
+        onClick={() => {
+          navigate(-1);
+        }}
+      />
       <Box
         sx={{
           width: "10%",
@@ -180,12 +204,12 @@ function MakingOrder({
 
         {buildMainTab(
           <FaWarehouse size={40} color={currentColor.selfStorage} />,
-          "Self-Storage",
+          "Kho tự quản",
           currentColor.selfStorage
         )}
         {buildMainTab(
           <BsBoxSeam size={40} color={currentColor.doorToDoor} />,
-          "Door to door",
+          "Giữ đồ thuê",
           currentColor.doorToDoor
         )}
       </Box>
@@ -226,6 +250,7 @@ function MakingOrder({
             setListAreas={setListAreas}
             setListAccessory={setListAccessory}
             choosenProduct={choosenProduct}
+            setResetQuantity={setResetQuantity}
           />
         )}
       </Box>

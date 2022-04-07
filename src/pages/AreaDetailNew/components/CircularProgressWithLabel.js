@@ -7,20 +7,20 @@ export default function CircularProgressWithLabel(props) {
     <Box
       sx={{ position: "relative", display: "inline-flex", margin: "0 auto" }}
     >
-      <CircularProgress variant="determinate" {...props} size={54} />
+      <CircularProgress variant="determinate" {...props} size={96} />
       <Box
         sx={{
-          top: "35%",
-          left: "25%",
+          top: "50%",
+          left: "50%",
           position: "absolute",
-          tranform: "translate(-50%, -50%)",
+          transform: "translate(-50%, -50%)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
         }}
       >
         <p
-          style={{ fontSize: "12px", display: "inline-block", margin: "0" }}
+          style={{ fontSize: "20px", display: "inline-block", margin: "0" }}
         >{`${Math.round(props.value)}%`}</p>
       </Box>
     </Box>

@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import { Box, Card, Typography, Button } from "@material-ui/core";
+import React, {useState} from "react";
+import {Box, Card, Typography, Button} from "@material-ui/core";
 import RowArea from "./RowArea";
 import ModalArea from "./ModalArea";
-import { useForm } from "react-hook-form";
-import { connect } from "react-redux";
+import {useForm} from "react-hook-form";
+import {connect} from "react-redux";
 import * as action from "../../redux/action/action";
 import ConfirmModal from "../../components/ConfirmModal";
-import { createArea, deleteArea, updateArea, getArea } from "../../apis/Apis";
-import { TYPE_AREA } from "../../constant/constant";
+import {createArea, deleteArea, updateArea, getArea} from "../../apis/Apis";
+import {ErrorHandle} from "../../utils/ErrorHandle";
 
 function AreaList({
   listArea,
@@ -22,7 +22,7 @@ function AreaList({
     handleSubmit,
     control,
     reset,
-    formState: { errors },
+    formState: {errors},
   } = useForm();
 
   const mapListToview = (
@@ -46,47 +46,63 @@ function AreaList({
       );
     });
 
-  const addArea = async (name, description, type) => {
+  const addArea = async (name, description, type, data) => {
     try {
       showLoading();
       await createArea(
-        parseInt(storageId),
+        storageId,
         name,
         description,
         type === "Self-Storage" ? 0 : 1,
+        {
+          width: parseInt(data.width),
+          height: parseInt(data.height),
+          length: parseInt(data.length),
+        },
         userState.idToken
       );
-      let listAreaTemp = await getArea(parseInt(storageId), userState.idToken);
+      let listAreaTemp = await getArea(storageId, userState.idToken);
 
       setListArea(listAreaTemp.data.data);
-      showSnackbar("success", "Create area success!");
+      showSnackbar("success", "Tạo khu vực thành công!");
+      handleClose();
     } catch (error) {
       console.log(error);
+      if (error?.response) {
+        showSnackbar("error", error?.response?.data?.error?.message);
+      }
     } finally {
       hideLoading();
-      handleClose();
     }
   };
 
-  const editArea = async (name, description, type) => {
+  const editArea = async (name, description, type, data) => {
     try {
       showLoading();
       await updateArea(
-        parseInt(currentArea.id),
+        currentArea.id,
         name,
         description,
+
         type === "Self-Storage" ? 0 : 1,
+        {
+          width: parseInt(data.width),
+          height: parseInt(data.height),
+          length: parseInt(data.length),
+        },
+
         userState.idToken
       );
 
-      let listAreaTemp = await getArea(parseInt(storageId), userState.idToken);
+      let listAreaTemp = await getArea(storageId, userState.idToken);
       setListArea(listAreaTemp.data.data);
-      showSnackbar("success", "Update area success!");
+      showSnackbar("success", "Cập nhật khu vực thành công!");
+      handleClose();
     } catch (error) {
-      console.log(error);
+      ErrorHandle.handle(error, showSnackbar);
+      console.log(error.response);
     } finally {
       hideLoading();
-      handleClose();
     }
   };
 
@@ -105,9 +121,9 @@ function AreaList({
 
   const onSubmit = (data) => {
     if (isEdit === false) {
-      addArea(data.name, data.description, data.type);
+      addArea(data.name, data.description, data.type, data);
     } else {
-      editArea(data.name, data.description, data.type);
+      editArea(data.name, data.description, data.type, data);
     }
   };
 
@@ -123,17 +139,18 @@ function AreaList({
   };
 
   const onHandleDeleteArea = async (id) => {
+    await deleteArea(id, userState.idToken);
     try {
-      showLoading();
-      await deleteArea(id, userState.idToken);
       let listAreaTemp = await getArea(storageId, userState.idToken);
       setListArea(listAreaTemp.data.data);
-      showSnackbar("success", "Delete area success!");
+      showSnackbar("success", "Xóa khu vực thành công!");
     } catch (error) {
-      throw error;
-    } finally {
-      hideLoading();
-      handleClose();
+      if (error?.response?.status === 404) {
+        setListArea([]);
+        showSnackbar("success", "Xóa khu vực thành công!");
+      } else {
+        throw error;
+      }
     }
   };
 
@@ -166,7 +183,7 @@ function AreaList({
         handleClose={handleCloseConfirm}
         onHandleYes={onHandleDeleteArea}
         id={currentArea.id}
-        msg={"Delete area success!"}
+        msg={"Xóa khu vực thành công!"}
       />
       <Box
         sx={{
@@ -179,7 +196,7 @@ function AreaList({
         }}
       >
         <Typography color="black" variant="h2">
-          List area
+          Danh sách khu vực
         </Typography>
         <Button
           style={{
@@ -192,9 +209,10 @@ function AreaList({
           onClick={() => {
             handleOpen(false);
             setIsEdit(false);
+            setCurrentArea({});
           }}
         >
-          Create area
+          Tạo khu vực
         </Button>
       </Box>
       {mapListToview(

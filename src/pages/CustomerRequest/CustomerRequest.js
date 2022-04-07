@@ -1,37 +1,102 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import {
   Box,
   IconButton,
   TextField,
-  Button,
-  Modal,
   Typography,
   Card,
   InputAdornment,
 } from "@material-ui/core";
 import SearchIcon from "@mui/icons-material/Search";
 import ListRequest from "./component/ListRequest";
-import { useForm } from "react-hook-form";
+import {useForm} from "react-hook-form";
 import * as action from "../../redux/action/action";
-import { connect } from "react-redux";
-import { getCustomerRequest, getRequestDetail } from "../../apis/Apis";
+import {connect} from "react-redux";
+import {
+  getCustomerRequest,
+  getRequestDetail,
+  assignOrder,
+  updateRequestWithNote,
+} from "../../apis/Apis";
+
 import ModalCancelDetail from "./component/ModalCancelDetail";
 import ModalReturnItem from "./component/ModalReturnItem";
 import ModalUpdateIsPaid from "./component/ModalUpdateIsPaid";
+import AssignOrderModal from "./component/AssignOrderModal";
+import RequestModal from "../../components/RequestModal";
+import ConfirmModal from "../../components/ConfirmModal";
+import UpdateRequestModal from "../../components/UpdateRequestModal";
+
 function CustomerRequest({
   showLoading,
   hideLoading,
   showSnackbar,
   userState,
+  isLoadingRequest,
 }) {
   const [listRequest, setListRequest] = useState([]);
   const [totalRequest, setTotalRequest] = useState(0);
   const [requestDetail, setRequestDetail] = useState({});
-  const [error, setError] = useState({});
   const [request, setRequest] = useState({});
   const [page, setPage] = useState(1);
   const [currentRequest, setCurrentRequest] = useState();
   const [openIsPaid, setOpenIsPaid] = useState(false);
+  const [openAssignOrder, setOpenAssignOrder] = useState(false);
+  const [openOrderModal, setOpenOrderModal] = useState(false);
+  const [openUpdateRequest, setOpenUpdateRequest] = useState(false);
+  const [updateStatus, setUpdateStatus] = useState(-1);
+  const {control, reset} = useForm();
+  const [openAssign, setOpenAssign] = useState(false);
+
+  const handleOpenUpdateRequest = () => {
+    setOpenUpdateRequest(true);
+  };
+
+  const handleCloseUpdateRequest = () => {
+    setOpenUpdateRequest(false);
+  };
+  const handleOpenAssign = () => {
+    setOpenAssign(true);
+  };
+
+  const handleCloseAssign = () => {
+    setOpenAssign(false);
+  };
+
+  const handleAssignOrder = async (id) => {
+    try {
+      showLoading();
+
+      await assignOrder(id, userState.storageId, userState.idToken);
+      handleCloseAssign();
+      await getData("", page, 8, userState.idToken);
+    } finally {
+      hideLoading();
+    }
+  };
+
+  useEffect(() => {
+    try {
+      showLoading();
+
+      getData("", page, 8);
+      hideLoading();
+    } catch (error) {
+      console.log(error);
+      hideLoading();
+    }
+  }, [isLoadingRequest, hideLoading, showLoading, page]);
+
+  const handleOpenOrderModal = (request) => {
+    setCurrentRequest(request);
+    setOpenOrderModal(true);
+  };
+
+  const handleCloseOrderModal = () => {
+    setCurrentRequest({});
+    setOpenOrderModal(false);
+  };
+
   const handleOpenIsPaid = () => {
     setOpenIsPaid(true);
   };
@@ -44,6 +109,14 @@ function CustomerRequest({
   const [openCancelOrder, setOpenCancelOrder] = useState(false);
   const handleOpenCancelOrder = () => {
     setOpenCancelOrder(true);
+  };
+
+  const handleOpenAssignOrder = () => {
+    setOpenAssignOrder(true);
+  };
+
+  const handleCloseAssignOrder = () => {
+    setOpenAssignOrder(false);
   };
 
   const handleCloseCancelOrder = () => {
@@ -69,7 +142,6 @@ function CustomerRequest({
         size,
         userState.idToken
       );
-      console.log(list);
       setListRequest(list.data.data);
       setTotalRequest(list.data.metadata.total);
     } catch (error) {
@@ -93,6 +165,27 @@ function CustomerRequest({
     firstCall();
   }, []);
 
+  const handleSubmitReport = async (data) => {
+    try {
+      showLoading();
+      const response = await updateRequestWithNote(
+        updateStatus,
+        data.note,
+        request?.id,
+        userState.idToken
+      );
+
+      console.log(response);
+      await getData("", page, 8);
+      handleCloseUpdateRequest();
+      setUpdateStatus(-1);
+    } catch (error) {
+      console.log(error.response);
+    } finally {
+      hideLoading();
+    }
+  };
+
   useEffect(() => {
     const firstCall = async () => {
       if (currentRequest === undefined) {
@@ -105,7 +198,6 @@ function CustomerRequest({
           currentRequest?.id,
           userState.idToken
         );
-        console.log(response.data);
         setRequestDetail(response.data);
         hideLoading();
       } catch (error) {
@@ -137,6 +229,26 @@ function CustomerRequest({
         py: 3,
       }}
     >
+      {userState.roleName === "Manager" ? (
+        <AssignOrderModal
+          open={openAssignOrder}
+          handleClose={handleCloseAssignOrder}
+          currentId={request.id}
+        />
+      ) : (
+        <ConfirmModal
+          open={openAssign}
+          handleClose={handleCloseAssign}
+          onHandleYes={handleAssignOrder}
+          id={request?.id}
+          showLoading={showLoading}
+          hideLoading={hideLoading}
+          showSnackbar={showSnackbar}
+          msg="Xử lý đơn thành công"
+          msgTitle="Bạn có muốn phân đơn này vào kho của mình?"
+        />
+      )}
+
       <Box
         sx={{
           marginLeft: "2%",
@@ -153,7 +265,7 @@ function CustomerRequest({
           }}
           onChange={(e) => {}}
           InputProps={{
-            style: { height: "45px", backgroundColor: "white" },
+            style: {height: "45px", backgroundColor: "white"},
             startAdornment: (
               <InputAdornment>
                 <IconButton>
@@ -163,8 +275,13 @@ function CustomerRequest({
             ),
           }}
         />
-        <Box sx={{ width: "2%" }} />
       </Box>
+      <UpdateRequestModal
+        open={openUpdateRequest}
+        handleClose={handleCloseUpdateRequest}
+        title={"Báo cáo khách vắng mặt"}
+        onSubmit={handleSubmitReport}
+      />
       <ModalReturnItem
         open={openReturnItem}
         handleClose={handleCloseReturnItem}
@@ -182,25 +299,52 @@ function CustomerRequest({
         handleClose={handleCloseIsPaid}
         currentRequest={currentRequest}
         requestDetail={requestDetail}
+        getData={getData}
+        page={page}
       />
-
+      <RequestModal
+        open={openOrderModal}
+        handleClose={handleCloseOrderModal}
+        currentOrder={currentRequest}
+        control={control}
+        isView={true}
+        reset={reset}
+      />
       <Card
         variant="outlined"
         color="#FFF"
-        sx={{ marginLeft: "2%", marginRight: "2%" }}
+        sx={{marginLeft: "2%", marginRight: "2%"}}
       >
-        <ListRequest
-          setRequest={setRequest}
-          setCurrentRequest={setCurrentRequest}
-          handleOpenIsPaid={handleOpenIsPaid}
-          handleOpenReturnItem={handleOpenReturnItem}
-          handleOpenCancelOrder={handleOpenCancelOrder}
-          listRequest={listRequest}
-          page={page}
-          setPage={setPage}
-          totalRequest={totalRequest}
-          getData={getData}
-        />
+        {listRequest.length > 0 ? (
+          <ListRequest
+            setRequest={setRequest}
+            setCurrentRequest={setCurrentRequest}
+            handleOpenIsPaid={handleOpenIsPaid}
+            handleOpenReturnItem={handleOpenReturnItem}
+            handleOpenCancelOrder={handleOpenCancelOrder}
+            listRequest={listRequest}
+            page={page}
+            setPage={setPage}
+            setUpdateStatus={setUpdateStatus}
+            handleOpenOrderModal={handleOpenOrderModal}
+            totalRequest={totalRequest}
+            getData={getData}
+            handleOpenUpdateRequest={handleOpenUpdateRequest}
+            handleOpenAssign={handleOpenAssign}
+            handleOpenAssignOrder={handleOpenAssignOrder}
+          />
+        ) : (
+          <Typography
+            color="black"
+            variant="h5"
+            style={{
+              textAlign: "center",
+              margin: "2% 0",
+            }}
+          >
+            Không tìm yêu cầu nào
+          </Typography>
+        )}
       </Card>
     </Box>
   );
@@ -208,6 +352,7 @@ function CustomerRequest({
 
 const mapStateToProps = (state) => ({
   userState: state.information.user,
+  isLoadingRequest: state.order.isLoadingRequest,
 });
 
 const mapDispatchToProps = (dispatch) => {

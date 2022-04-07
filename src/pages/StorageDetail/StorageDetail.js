@@ -20,10 +20,7 @@ function StorageDetail({ showLoading, hideLoading, userState }) {
       try {
         showLoading();
         await getData();
-        let listAreaTemp = await getArea(
-          parseInt(storageId),
-          userState.idToken
-        );
+        let listAreaTemp = await getArea(storageId, userState.idToken);
         setListArea(listAreaTemp.data.data);
       } catch (error) {
         console.log(error?.response);
@@ -47,7 +44,7 @@ function StorageDetail({ showLoading, hideLoading, userState }) {
       <AreaList
         listArea={listArea}
         setListArea={setListArea}
-        storageId={storageId}
+        storageId={storage.id}
       />
     </Box>
   );

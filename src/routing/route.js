@@ -1,22 +1,21 @@
 import LogIn from "../pages/LogIn/LogIn";
 import DashboardLayout from "../components/DashboardLayout";
-import { Navigate } from "react-router";
+import {Navigate} from "react-router";
 import Account from "../pages/Account/Account";
 import NotFound from "../pages/NotFoundPage";
 import Users from "../pages/Users/Users";
 import Storages from "../pages/Storage/Storages";
 import StorageDetail from "../pages/StorageDetail/StorageDetail";
-import AreaDetail from "../pages/AreaDetail/AreaDetail";
 import Order from "../pages/Order/Order";
-import MakingOrder from "../pages/Order/CreateOrder/MakingOrder";
 import Products from "../pages/Product/Products";
-import Schedule from "../pages/Schedule/Schedule";
 import ProtectTemplate from "../Template/ProtectTemplate";
-import { ROLE_USER } from "../constant/constant";
+import {ROLE_USER} from "../constant/constant";
 import NotStorage from "../pages/NotStorage";
 import CustomerRequest from "../pages/CustomerRequest/CustomerRequest";
 import NewSchedule from "../pages/NewSchedule/NewSchedule";
 import StaffRequest from "../pages/Staff_Request/StaffRequest";
+import AreaDetailNew from "../pages/AreaDetailNew/AreaDetailNew";
+import LiquidatedOrder from "../pages/LiquidatedOrder/LiquidatedOrder";
 const routes = [
   {
     path: "app",
@@ -68,6 +67,21 @@ const routes = [
         ),
       },
       {
+        path: "liquidateOrder",
+        element: (
+          <ProtectTemplate
+            Component={LiquidatedOrder}
+            permission={[
+              Object.keys(ROLE_USER)[0],
+              Object.keys(ROLE_USER)[1],
+              Object.keys(ROLE_USER)[4],
+            ]}
+          >
+            <LiquidatedOrder />
+          </ProtectTemplate>
+        ),
+      },
+      {
         path: "orders",
         element: (
           <ProtectTemplate
@@ -83,7 +97,7 @@ const routes = [
         ),
       },
       {
-        path: "products",
+        path: "services",
         element: (
           <ProtectTemplate
             Component={Products}
@@ -98,7 +112,7 @@ const routes = [
         element: (
           <ProtectTemplate
             Component={NewSchedule}
-            permission={[Object.keys(ROLE_USER)[1]]}
+            permission={[Object.keys(ROLE_USER)[1], Object.keys(ROLE_USER)[0]]}
           >
             <NewSchedule />
           </ProtectTemplate>
@@ -109,7 +123,7 @@ const routes = [
         element: (
           <ProtectTemplate
             Component={NewSchedule}
-            permission={[Object.keys(ROLE_USER)[1]]}
+            permission={[Object.keys(ROLE_USER)[1], Object.keys(ROLE_USER)[0]]}
           >
             <NewSchedule />
           </ProtectTemplate>
@@ -120,7 +134,7 @@ const routes = [
         element: (
           <ProtectTemplate
             Component={StaffRequest}
-            permission={[Object.keys(ROLE_USER)[1]]}
+            permission={[Object.keys(ROLE_USER)[1], Object.keys(ROLE_USER)[0]]}
           >
             <StaffRequest />
           </ProtectTemplate>
@@ -131,7 +145,11 @@ const routes = [
         element: (
           <ProtectTemplate
             Component={CustomerRequest}
-            permission={[Object.keys(ROLE_USER)[1]]}
+            permission={[
+              Object.keys(ROLE_USER)[1],
+              Object.keys(ROLE_USER)[4],
+              Object.keys(ROLE_USER)[0],
+            ]}
           >
             <CustomerRequest />
           </ProtectTemplate>
@@ -156,14 +174,14 @@ const routes = [
         path: "storages/:storageId/areas/:areaId",
         element: (
           <ProtectTemplate
-            Component={AreaDetail}
+            Component={AreaDetailNew}
             permission={[
               Object.keys(ROLE_USER)[0],
               Object.keys(ROLE_USER)[1],
               Object.keys(ROLE_USER)[4],
             ]}
           >
-            <AreaDetail />
+            <AreaDetailNew />
           </ProtectTemplate>
         ),
       },
@@ -178,26 +196,12 @@ const routes = [
           </ProtectTemplate>
         ),
       },
-      { path: "*", element: <Navigate to="/404" /> },
+      {path: "*", element: <Navigate to="/404" />},
     ],
   },
   {
     path: "/",
-    children: [
-      { element: <LogIn /> },
-      { path: "404", element: <NotFound /> },
-      {
-        path: "orders/makingOrder",
-        element: (
-          <ProtectTemplate
-            Component={MakingOrder}
-            permission={[Object.keys(ROLE_USER)[1], Object.keys(ROLE_USER)[4]]}
-          >
-            <MakingOrder />
-          </ProtectTemplate>
-        ),
-      },
-    ],
+    children: [{element: <LogIn />}, {path: "404", element: <NotFound />}],
   },
 ];
 

@@ -1,31 +1,35 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import {
   Box,
-  Button,
   InputAdornment,
   IconButton,
   TextField,
   Card,
+  Typography,
 } from "@material-ui/core";
 import SearchIcon from "@mui/icons-material/Search";
-import { useNavigate } from "react-router";
-import OrderModal from "../../components/OrderModal";
+import {useNavigate} from "react-router";
 import ListOrder from "./ViewOrder/ListOrder";
-import { useForm } from "react-hook-form";
-import { connect } from "react-redux";
+import {useForm} from "react-hook-form";
+import {connect} from "react-redux";
 import * as action from "../../redux/action/action";
-import { getOrder } from "../../apis/Apis";
+import {getOrder} from "../../apis/Apis";
+import UpdateOrderModal from "../../components/UpdateOrderModal";
 
 import ProductButton from "./CreateOrder/components/ProductButton";
+import OrderModal from "../../components/OrderModal";
 function Order({
   isLoadingOrder,
   showLoading,
   hideLoading,
   storedOrder,
   userState,
+  showSnackbar,
 }) {
+  const [openUpdateOrder, setOpenUpdateOrder] = React.useState(false);
+
   const navigate = useNavigate();
-  const { handleSubmit, reset, control } = useForm();
+  const {handleSubmit, reset, control} = useForm();
 
   const [currentOrder, setCurrentOrder] = useState();
   const [open, setOpen] = useState(false);
@@ -33,6 +37,15 @@ function Order({
   const [page, setPage] = useState(1);
   const [totalOrder, setTotalOrder] = useState(0);
   const [searchId, setSearchId] = useState("");
+
+  const handleUpdateOrderOpen = () => {
+    setOpenUpdateOrder(true);
+  };
+
+  const handleUpdateOrderClose = () => {
+    setOpenUpdateOrder(false);
+  };
+
   const onHandleOpen = () => {
     setOpen(true);
   };
@@ -60,6 +73,13 @@ function Order({
       setTotalOrder(list.data.metadata.total);
     } catch (error) {
       console.log(error.response);
+      if (error?.response?.data?.error) {
+        if (
+          error?.response?.data?.error?.message === "Unrecognized Guid format."
+        ) {
+          navigate("/app/not_storage");
+        }
+      }
     } finally {
       hideLoading();
     }
@@ -117,10 +137,18 @@ function Order({
     <Box
       sx={{
         backgroundColor: "background.default",
-        height: "auto",
+        height: "100vh",
         py: 3,
       }}
     >
+      <UpdateOrderModal
+        open={openUpdateOrder}
+        handleClose={handleUpdateOrderClose}
+        currentOrder={currentOrder}
+        getData={getData}
+        page={page}
+        searchId={searchId}
+      />
       <OrderModal
         open={open}
         reset={reset}
@@ -150,7 +178,7 @@ function Order({
           }}
           onChange={handleChangeSearchId}
           InputProps={{
-            style: { height: "45px", backgroundColor: "white" },
+            style: {height: "45px", backgroundColor: "white"},
             startAdornment: (
               <InputAdornment>
                 <IconButton>
@@ -169,44 +197,39 @@ function Order({
         ) : (
           <></>
         )}
-        {userState.roleName !== "Admin" ? (
-          <Button
-            style={{
-              height: "45px",
-              paddingLeft: "16px",
-              paddingRight: "16px",
-              marginLeft: "2%",
-            }}
-            color="primary"
-            variant="contained"
-            onClick={(e) => {
-              navigate("/orders/makingOrder");
-            }}
-          >
-            Create order
-          </Button>
-        ) : (
-          <></>
-        )}
       </Box>
       <Card
         variant="outlined"
         color="#FFF"
-        sx={{ marginLeft: "2%", marginRight: "2%" }}
+        sx={{marginLeft: "2%", marginRight: "2%"}}
       >
-        <ListOrder
-          listOrder={listOrder}
-          searchId={searchId}
-          page={page}
-          totalOrder={totalOrder}
-          handleOpen={onHandleOpen}
-          setOrder={setCurrentOrder}
-          getData={getData}
-          reset={reset}
-          setListOrder={setListOrder}
-          setPage={setPage}
-          currentOrder={currentOrder}
-        />
+        {listOrder.length > 0 ? (
+          <ListOrder
+            listOrder={listOrder}
+            searchId={searchId}
+            page={page}
+            totalOrder={totalOrder}
+            handleOpen={onHandleOpen}
+            setOrder={setCurrentOrder}
+            getData={getData}
+            reset={reset}
+            handleUpdateOrderOpen={handleUpdateOrderOpen}
+            setListOrder={setListOrder}
+            setPage={setPage}
+            currentOrder={currentOrder}
+          />
+        ) : (
+          <Typography
+            color="black"
+            variant="h5"
+            style={{
+              textAlign: "center",
+              margin: "2% 0",
+            }}
+          >
+            Không tìm thấy đơn hàng
+          </Typography>
+        )}
       </Card>
     </Box>
   );

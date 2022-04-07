@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import { Box, Modal, Button, Typography, Checkbox } from "@material-ui/core";
-import { STYLE_MODAL } from "../../../constant/style";
-import { connect } from "react-redux";
-import { updateIsPaidRequest } from "../../../apis/Apis";
+import React from "react";
+import {Box, Modal, Button, Typography} from "@material-ui/core";
+import {STYLE_MODAL} from "../../../constant/style";
+import {connect} from "react-redux";
+import {updateIsPaidRequest} from "../../../apis/Apis";
+import moment from "moment";
 import * as action from "../../../redux/action/action";
 const styleModal = {
   ...STYLE_MODAL,
@@ -40,7 +41,7 @@ function ModalReturnItem({
         >
           {title}
         </Typography>
-        <p style={{ fontSize: "18px" }}>{value}</p>
+        <p style={{fontSize: "18px"}}>{value}</p>
       </Box>
     );
   };
@@ -70,7 +71,7 @@ function ModalReturnItem({
             marginLeft: "2.5%",
           }}
         >
-          Detail Return Order Request
+          Chi tiết yêu cầu trả đơn
         </Typography>
         <Box
           sx={{
@@ -78,23 +79,21 @@ function ModalReturnItem({
             flexDirection: "column",
           }}
         >
-          <Typography
-            color="black"
-            variant="h2"
-            style={{
-              marginTop: "2%",
-              textAlign: "left",
-            }}
-          >
-            Order information
-          </Typography>
-          {buildInformation("Id:", `#${currentRequest?.id}`)}
+          {buildInformation("Mã yêu cầu:", `#${currentRequest?.id}`)}
           {/* {buildInformation("Created Date:", `${requestDetail?.createdDate}`)} */}
-          {buildInformation("Return date:", `${requestDetail?.returnDate}`)}
-          {buildInformation("Return time:", `${requestDetail?.returnTime}`)}
           {buildInformation(
-            "Return address:",
-            `${requestDetail?.returnAddress}`
+            "Ngày trả đơn:",
+            `${moment(new Date(requestDetail?.deliveryDate)).format(
+              "DD/MM/YYYY"
+            )}`
+          )}
+          {buildInformation(
+            "Khung giờ trả đơn:",
+            `${requestDetail?.deliveryTime}`
+          )}
+          {buildInformation(
+            "Địa chỉ trả đơn:",
+            `${requestDetail?.deliveryAddress}`
           )}
         </Box>
         <Button
@@ -111,7 +110,7 @@ function ModalReturnItem({
                 userState.idToken
               );
               console.log(response);
-              showSnackbar("success", "Update success");
+              showSnackbar("success", "Cập nhật yêu cầu thành công!");
             } catch (error) {
               console.log(error?.response);
             } finally {

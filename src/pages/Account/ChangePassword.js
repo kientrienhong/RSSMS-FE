@@ -1,10 +1,10 @@
-import React, { useRef, useState } from "react";
-import { connect } from "react-redux";
+import React, {useRef, useState} from "react";
+import {connect} from "react-redux";
 import * as action from "../../redux/action/action";
-import { Controller, useForm } from "react-hook-form";
+import {Controller, useForm} from "react-hook-form";
 import CustomInput from "../../components/CustomInput";
-import { Box, Button, TextField } from "@material-ui/core";
-import { changePassword } from "../../apis/Apis";
+import {Box, Button, TextField} from "@material-ui/core";
+import {changePassword} from "../../apis/Apis";
 function ChangePassword({
   showLoading,
   hideLoading,
@@ -12,9 +12,8 @@ function ChangePassword({
   userId,
   userState,
 }) {
-  const { register, handleSubmit, control, watch, reset } = useForm();
+  const {handleSubmit, control, watch} = useForm();
   const [error, setError] = useState("");
-  const [errorPassword, setErrorPassword] = useState({});
   const password = useRef({});
   password.current = watch("password", "");
   const styleBoxInput = {
@@ -27,7 +26,7 @@ function ChangePassword({
     marginTop: "8% ",
   };
 
-  const styleInput = { marginRight: "2.5%", marginLeft: "2.5%" };
+  const styleInput = {marginRight: "2.5%", marginLeft: "2.5%"};
   const onSubmit = async (data) => {
     try {
       showLoading();
@@ -38,7 +37,7 @@ function ChangePassword({
         data.confirmPassword,
         userState.idToken
       );
-      showSnackbar("success", "Change password successful!");
+      showSnackbar("success", "Thay đổi mật khẩu thành công!");
     } catch (e) {
       if (e?.response?.data?.error?.message) {
         setError(e?.response?.data?.error?.message);
@@ -57,15 +56,15 @@ function ChangePassword({
       }}
     >
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Box sx={{ ...styleBoxInput, marginTop: "2%" }}>
+        <Box sx={{...styleBoxInput, marginTop: "2%"}}>
           <CustomInput
             control={control}
             rules={{
-              required: "Old password required",
+              required: "*Vui lòng nhập",
             }}
-            styles={{ width: "300px" }}
+            styles={{width: "300px"}}
             name="oldPassword"
-            label="Old Password"
+            label="Mật khẩu cũ"
             disabled={false}
             type="password"
             userInfo={""}
@@ -75,17 +74,17 @@ function ChangePassword({
             name="password"
             control={control}
             rules={{
-              required: "Password required",
+              required: "*Vui lòng nhập",
             }}
-            render={({ field: { onChange, value }, fieldState: { error } }) => {
+            render={({field: {onChange, value}, fieldState: {error}}) => {
               return (
                 <TextField
-                  label="Password"
+                  label="Mật khẩu mới"
                   variant="outlined"
                   inputRef={password}
                   value={value}
                   style={styleInput}
-                  inputProps={{ style: { width: "300px" } }}
+                  inputProps={{style: {width: "300px"}}}
                   onChange={onChange}
                   type="password"
                   error={!!error}
@@ -97,24 +96,24 @@ function ChangePassword({
           <CustomInput
             control={control}
             rules={{
-              required: "Confirm password required",
+              required: "*Vui lòng nhập",
               validate: (value) => {
                 return (
                   value === (password.current.value ?? password.current) ||
-                  "The passwords do not match"
+                  "*Mật khẩu không khớp"
                 );
               },
             }}
-            styles={{ width: "300px" }}
+            styles={{width: "300px"}}
             name="confirmPassword"
-            label="Confirm Password"
+            label="Xác nhận mật khẩu mới"
             type="password"
             userInfo={""}
             inlineStyle={styleInput}
           />
         </Box>
         {error?.length > 0 ? (
-          <p style={{ color: "red", textAlign: "center", marginTop: "36px" }}>
+          <p style={{color: "red", textAlign: "center", marginTop: "36px"}}>
             {error}
           </p>
         ) : null}
@@ -137,7 +136,7 @@ function ChangePassword({
             variant="contained"
             type="submit"
           >
-            Submit
+            Xác nhận
           </Button>
         </Box>
       </form>

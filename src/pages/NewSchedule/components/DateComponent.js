@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography, Badge } from "@material-ui/core";
+import {Box, Typography, Badge} from "@material-ui/core";
 
 export default function DateComponent({
   dateSchedule,
@@ -11,7 +11,17 @@ export default function DateComponent({
   setListSelectedOrder,
 }) {
   let color = currentIndex === index ? "primary" : "black";
-  let splitedDateSchedule = dateSchedule.toString().split(" ");
+  var options = {
+    weekday: "short",
+    year: "numeric",
+    month: "2-digit",
+    day: "numeric",
+  };
+  let splitedDateSchedule = dateSchedule
+    .toLocaleDateString("vi-VN", options)
+    .toString()
+    .split(", ");
+  let splitedDate = splitedDateSchedule[1]?.split("/");
   return (
     <Badge
       color="error"
@@ -42,7 +52,7 @@ export default function DateComponent({
           {splitedDateSchedule[0]}
         </Typography>
         <Typography color={color} variant="h6">
-          {`${splitedDateSchedule[1]} / ${splitedDateSchedule[2]}`}
+          {`${splitedDate[0]} / ${splitedDate[1]}`}
         </Typography>
       </Box>
     </Badge>

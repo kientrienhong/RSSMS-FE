@@ -1,48 +1,43 @@
-import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
+import React, {useState, useEffect} from "react";
+import {connect} from "react-redux";
 import * as action from "../../redux/action/action";
-import { Box, Typography, Button, Badge } from "@material-ui/core";
+import {Box, Typography, Button} from "@material-ui/core";
 import moment from "moment";
-import { useForm } from "react-hook-form";
+import {useForm} from "react-hook-form";
 import ListDateComponent from "./components/ListDateComponent";
 import ListItemSidebar from "./components/ListItemSidebar";
-import { LIST_TIME, TYPE_SCHEDULE } from "../../constant/constant";
-import OrderModal from "../../components/OrderModal";
-import { isDateAfter, isDateBefore } from "../../utils/DateUtils";
+import {LIST_TIME, TYPE_SCHEDULE} from "../../constant/constant";
+import RequestModal from "../../components/RequestModal";
 import {
-  getOrder,
-  getListUser,
   getSchedule,
-  getRequestToSchedule,
+  getRequestToScheduleNew,
+  getListDeliveryStaff,
 } from "../../apis/Apis";
+import {TYPE_REQUEST_DELIVERY_TAKE} from "../../constant/constant";
 import ScheduleArea from "./components/ScheduleArea";
-import { useParams } from "react-router-dom";
+import {useParams} from "react-router-dom";
 
-import ListUnassignOrderModal from "./components/ListUnassignOrderModal";
-import OrderAssignTimeModal from "./components/OrderAssignTimeModal";
 import OrderAssignModal from "./components/OrderAssignModal";
-function NewSchedule({ showLoading, hideLoading, userState }) {
+import OrderModal from "../../components/OrderModal";
+function NewSchedule({showLoading, hideLoading, userState}) {
   const [listShowStaffAssigned, setListShowStaffAssigned] = React.useState([]);
   const [listShowStaffUnAssigned, setListShowStaffUnAssigned] = React.useState(
     []
   );
   const [listStaffAssigned, setListStaffAssigned] = React.useState([]);
   const [listStaffUnAssigned, setListStaffUnAssigned] = React.useState([]);
-  const { scheduleDate } = useParams();
+  const {scheduleDate} = useParams();
   const [listDateAWeek, setListDateAWeek] = useState([]);
   const [currentIndexDate, setCurrentIndexDate] = useState(-1);
   const [listSelectedOrder, setListSelectedOrder] = useState([]);
   const [currentOrder, setCurrentOrder] = useState({});
   const [open, setOpen] = useState(false);
   const [openAssignStaff, setOpenAssignStaff] = useState(false);
-  const [openAssignTime, setOpenAssignTime] = useState(false);
-  const { handleSubmit, control, watch } = useForm();
+  const [openOrderModal, setOpenOrderModal] = useState(false);
+  const {handleSubmit, control, reset} = useForm();
   const [startOfWeek, setStartOfWeek] = React.useState();
   const [endOfWeek, setEndOfWeek] = React.useState();
-  const [openAssignReturnTime, setOpenAssignReturnTime] = useState(false);
-
-  const [listOrderNotAssignedReturnTime, setListOrderNotAssignedReturnTime] =
-    React.useState([]);
+  React.useState([]);
   const [listScheduleWholeWeek, setListScheduleWholeWeek] = useState([]);
   const [listScheduleCurrentDate, setListScheduleCurrentDate] = useState([]);
   function addDays(date, days) {
@@ -51,28 +46,20 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
     return result;
   }
 
+  const handleOpenOrderModal = () => {
+    setOpenOrderModal(true);
+  };
+
+  const handleCloseOrderModal = () => {
+    setOpenOrderModal(false);
+  };
+
   const handleOpenAssignStaff = () => {
     setOpenAssignStaff(true);
   };
 
   const handleCloseAssignStaff = () => {
     setOpenAssignStaff(false);
-  };
-
-  const handleOpenAssignTime = () => {
-    setOpenAssignTime(true);
-  };
-
-  const handleCloseAssignTime = () => {
-    setOpenAssignTime(false);
-  };
-
-  const handleOpenAssignReturnTime = () => {
-    setOpenAssignReturnTime(true);
-  };
-
-  const handleCloseAssignReturnTime = () => {
-    setOpenAssignReturnTime(false);
   };
 
   const handleOpen = () => {
@@ -85,20 +72,17 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
 
   const onChangeCheckBox = (schedule, value) => {
     let listSelectedOrderTemp = [...listSelectedOrder];
-    let timeString = schedule.isDelivery ? "deliveryTime" : "returnTime";
     let indexFound = listSelectedOrderTemp.findIndex((e) => {
-      let timeStringElement = e.isDelivery ? "deliveryTime" : "returnTime";
-
-      if (e[timeStringElement] === schedule[timeString]) {
+      if (e["deliveryTime"] === schedule["deliveryTime"]) {
         if (schedule.id === e.id) {
-          schedule = { ...schedule, isSelected: false };
+          schedule = {...schedule, isSelected: false};
           return true;
         }
       }
     });
     if (value) {
       if (indexFound === -1) {
-        schedule = { ...schedule, isSelected: true };
+        schedule = {...schedule, isSelected: true};
         listSelectedOrderTemp.push(schedule);
       }
       setListSelectedOrder(listSelectedOrderTemp);
@@ -106,46 +90,38 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
       if (indexFound !== -1) {
         listSelectedOrderTemp.splice(indexFound, 1);
       }
-
       setListSelectedOrder(listSelectedOrderTemp);
     }
   };
 
-  const handleFormatDate = (date, result, order, value) => {
-    if (value === "returnTime" && order[value] === null) {
-      let listOrderNotAssignedTemp = [...listOrderNotAssignedReturnTime];
-      listOrderNotAssignedTemp.push(order);
-      setListOrderNotAssignedReturnTime(listOrderNotAssignedTemp);
-      return;
-    }
-
-    if (value === "returnTime") {
-      order = { ...order, isDelivery: false };
+  const handleFormatDate = (date, result, order) => {
+    if (order.type === TYPE_REQUEST_DELIVERY_TAKE) {
+      order = {...order, isDelivery: true};
     } else {
-      order = { ...order, isDelivery: true };
+      order = {...order, isDelivery: false};
     }
-    order = { ...order, isSelected: false };
-    // if (Object.keys(result).length > 0) {
+    order = {...order, isSelected: false};
     let currentDate = Object.keys(result)?.find((e) => {
-      if (e === date.toLocaleDateString("en-US")) {
-        return true;
-      }
+      return e === date.toLocaleDateString("en-US");
     });
-    // }
-    result[currentDate].listSchedule.get(order[value]).push(order);
+    result[currentDate].listSchedule.get(order.deliveryTime).push(order);
     result[currentDate].amountNotAssignStaff += 1;
   };
 
   const handleFormatRequestSchedule = (date, result, request) => {
     let currentDate = Object.keys(result)?.find((e) => {
-      if (e === date.toLocaleDateString("en-US")) {
-        return true;
-      }
+      return e === date.toLocaleDateString("en-US");
     });
-    result[currentDate].listSchedule
-      .get(request["returnTime"])
-      .push({ ...request, isDelivery: false });
-    result[currentDate].amountNotAssignStaff += 1;
+
+    let indexFound = result[currentDate].listSchedule
+      .get(request["scheduleTime"])
+      .findIndex((e) => e.id === request.requestId);
+
+    result[currentDate].listSchedule.get(request["scheduleTime"])[
+      indexFound
+    ].listStaffDelivery = request.accounts;
+
+    result[currentDate].amountNotAssignStaff -= 1;
   };
 
   const mapListNote = () =>
@@ -173,11 +149,11 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
     ));
 
   const getData = async (startOfWeek, endOfWeek, currentSchedule) => {
+    let result = {};
+    let currentIndexDateLocal = 0;
     try {
       showLoading();
       let currStr = new Date().toLocaleDateString("en-US");
-      let result = {};
-      let currentIndexDateLocal = 0;
       currentSchedule = new Date(currentSchedule).toLocaleDateString("en-US");
       if (startOfWeek.toLocaleDateString("en-US") === currStr) {
         setCurrentIndexDate(0);
@@ -205,99 +181,37 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
       }
       setListDateAWeek(listDateAWeekTemp);
 
-      let response = await getOrder(
-        "",
-        "",
-        "",
-        startOfWeek.toISOString().split("T")[0],
+      let response = await getRequestToScheduleNew(
+        addDays(startOfWeek, 1).toISOString().split("T")[0],
         endOfWeek.toISOString().split("T")[0],
-        userState.idToken,
-        "OrderStatuses=2&OrderStatuses=3&OrderStatuses=4"
+        userState.idToken
       );
       response?.data?.data
-        ?.filter((e) => e.status !== 0 && e.typeOrder !== 0)
-        ?.forEach((e) => {
-          let dateDelivery = new Date(e.deliveryDate);
-          let dateReturn = new Date(e.returnDate);
-          if (
-            isDateBefore(dateReturn, endOfWeek) === true &&
-            isDateAfter(dateReturn, startOfWeek) === true
-          ) {
-            handleFormatDate(dateReturn, result, e, "returnTime");
-          } else {
-            handleFormatDate(dateDelivery, result, e, "deliveryTime");
-          }
+        .filter((e) => e.isCustomerDelivery === false && e.typeOrder === 1)
+        .forEach((e) => {
+          handleFormatDate(new Date(e.deliveryDate), result, e);
         });
-
       try {
-        let responseRequest = await getRequestToSchedule(
+        let responseRequest = await getSchedule(
           startOfWeek.toISOString().split("T")[0],
           endOfWeek.toISOString().split("T")[0],
           userState.idToken
         );
-
         responseRequest.data.data.forEach((e) => {
-          handleFormatRequestSchedule(new Date(e.returnDate), result, e);
+          handleFormatRequestSchedule(new Date(e.scheduleDay), result, e);
         });
       } catch (error) {
         console.log(error.response);
-      }
-      console.log(result);
-      try {
-        let responseSchedule = await getSchedule(
-          startOfWeek.toISOString().split("T")[0],
-          endOfWeek.toISOString().split("T")[0],
-          userState.idToken
-        );
-
-        if (responseSchedule.data.data) {
-          responseSchedule.data.data.forEach((schedule) => {
-            Object.keys(result).forEach((resultKey) => {
-              for (const entry of result[resultKey].listSchedule?.entries()) {
-                if (entry[1]?.length > 0) {
-                  let index = -1;
-                  console.log(entry[1]);
-                  console.log(schedule);
-                  if (schedule.requestId) {
-                    index = entry[1].findIndex((order) => {
-                      return (
-                        order.orderId === schedule.orderId &&
-                        order.id === schedule.requestId
-                      );
-                    });
-                  } else {
-                    index = entry[1].findIndex(
-                      (order) => order.id === schedule.orderId
-                    );
-                  }
-
-                  if (index !== -1) {
-                    result[resultKey].listSchedule.get(entry[0])[index] = {
-                      ...result[resultKey].listSchedule.get(entry[0])[index],
-                      listStaffDelivery: schedule.users,
-                    };
-                    result[resultKey].amountNotAssignStaff -= 1;
-                  }
-                }
-              }
-            });
-          });
-          setListScheduleWholeWeek(result);
-          setListScheduleCurrentDate(
-            result[Object.keys(result)[currentIndexDateLocal]]
-          );
-        }
-      } catch (exception) {
-        console.log(exception.response);
-        setListScheduleWholeWeek(result);
-        setListScheduleCurrentDate(
-          result[Object.keys(result)[currentIndexDateLocal]]
-        );
+      } finally {
       }
     } catch (e) {
-      console.log(e);
+      console.log(e.response);
     } finally {
       hideLoading();
+      setListScheduleWholeWeek(result);
+      setListScheduleCurrentDate(
+        result[Object.keys(result)[currentIndexDateLocal]]
+      );
     }
   };
 
@@ -371,7 +285,7 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
           }
         });
 
-        listSelectedTime = listSelectedTime.join("&DeliveryTimes=");
+        listSelectedTime = listSelectedTime.join("&deliveryTimes=");
         let storageId;
 
         if (listSelectedOrder?.length > 0) {
@@ -380,25 +294,22 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
 
         try {
           showLoading();
-          let listUserNotAssigned = await getListUser(
-            "",
-            1,
-            -1,
-            userState.idToken,
+          let listUserNotAssigned = await getListDeliveryStaff(
             storageId,
             listDateAWeek[currentIndexDate].toISOString(),
-            `&DeliveryTimes=${listSelectedTime}`,
-            "Delivery Staff"
+            `&deliveryTimes=${listSelectedTime}`,
+            "Delivery Staff",
+            userState.idToken
           );
           setListShowStaffUnAssigned(
-            listUserNotAssigned.data.data.length === 0
+            listUserNotAssigned.data.length === 0
               ? []
-              : listUserNotAssigned.data.data
+              : listUserNotAssigned.data
           );
           setListStaffUnAssigned(
-            listUserNotAssigned.data.data.length === 0
+            listUserNotAssigned.data.length === 0
               ? []
-              : listUserNotAssigned.data.data
+              : listUserNotAssigned.data
           );
           setListStaffAssigned(listSelectedOrder[0]?.listStaffDelivery ?? []);
           setListShowStaffAssigned(
@@ -446,11 +357,7 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
 
         showLoading();
 
-        let result = await getData(
-          startOfWeekLocal,
-          endOfWeekLocal,
-          scheduleDate
-        );
+        await getData(startOfWeekLocal, endOfWeekLocal, scheduleDate);
       } catch (error) {
         console.log(error);
       } finally {
@@ -459,6 +366,10 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
     };
     firstCall();
   }, []);
+
+  useEffect(() => {
+    getData(startOfWeek, endOfWeek, scheduleDate);
+  }, [startOfWeek, endOfWeek]);
 
   return (
     <Box
@@ -486,30 +397,25 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
         handleChangeSearchAssigned={handleChangeSearchAssigned}
         handleChangeSearchUnAssigned={handleChangeSearchUnAssigned}
       />
-      <ListUnassignOrderModal
-        open={openAssignReturnTime}
-        listUnassignOrder={listOrderNotAssignedReturnTime}
-        handleClose={handleCloseAssignReturnTime}
-        setCurrentOrder={setCurrentOrder}
-        handleOpenDetailOrder={handleOpen}
-        handleOpenAssignTime={handleOpenAssignTime}
-      />
-      <OrderAssignTimeModal
-        getData={getData}
-        order={currentOrder}
-        startOfWeek={startOfWeek}
-        listOrderNotAssignedReturnTime={listOrderNotAssignedReturnTime}
-        setListOrderNotAssignedReturnTime={setListOrderNotAssignedReturnTime}
-        endOfWeek={endOfWeek}
-        open={openAssignTime}
-        handleClose={handleCloseAssignTime}
-      />
       <OrderModal
+        open={openOrderModal}
+        reset={reset}
+        handleClose={handleCloseOrderModal}
+        handleSubmit={handleSubmit}
+        control={control}
+        currentOrder={currentOrder}
+        // getData={getData}
+        page={1}
+        searchId={""}
+        isView={userState.roleName === "Admin"}
+      />
+      <RequestModal
         open={open}
         handleClose={handleClose}
         currentOrder={currentOrder}
         control={control}
         isView={true}
+        reset={reset}
       />
       <ListDateComponent
         setListSelectedOrder={setListSelectedOrder}
@@ -518,13 +424,17 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
         setListScheduleCurrentDate={setListScheduleCurrentDate}
         listDateAWeek={listDateAWeek}
         setCurrentIndexDate={setCurrentIndexDate}
+        setEndOfWeek={setEndOfWeek}
+        setStartOfWeek={setStartOfWeek}
       />
       <Box
         sx={{
-          margin: "1% 4%",
+          margin: "1% 0%",
+          marginLeft: "15%",
           display: "flex",
-          width: "90%",
-          justifyContent: "right",
+          width: "80%",
+          flexDirection: "row",
+          justifyContent: "space-between",
           alignItems: "center",
         }}
       >
@@ -537,26 +447,6 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
         >
           {mapListNote()}
         </Box>
-        <Badge
-          color="error"
-          badgeContent={listOrderNotAssignedReturnTime?.length}
-        >
-          <Button
-            style={{
-              height: "45px",
-              paddingLeft: "16px",
-              paddingRight: "16px",
-            }}
-            onClick={async () => {
-              handleOpenAssignReturnTime();
-            }}
-            color="success"
-            variant="contained"
-            type="submit"
-          >
-            Unassign return time order
-          </Button>
-        </Badge>
 
         <Button
           style={{
@@ -573,7 +463,7 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
           variant="contained"
           type="submit"
         >
-          Assign Delivery Staff
+          Phân lịch cho nhân viên
         </Button>
       </Box>
       <Box
@@ -586,6 +476,7 @@ function NewSchedule({ showLoading, hideLoading, userState }) {
         <ScheduleArea
           listGroup={listScheduleCurrentDate}
           setCurrentOrder={setCurrentOrder}
+          handleOpenOrderModal={handleOpenOrderModal}
           handleOpen={handleOpen}
           onChangeCheckBox={onChangeCheckBox}
           listSelectedOrder={listSelectedOrder}
