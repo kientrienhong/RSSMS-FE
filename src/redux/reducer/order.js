@@ -129,7 +129,7 @@ const order = (state = initialState, action) => {
     case ActionType.PLACE_PRODUCT_TO_SHELF: {
       let placingProductTemp = {...state.placingProducts};
       let storedOrderTemp = {...state.storedOrder};
-
+      console.log(action.payload.orderDetail);
       let foundProduct = storedOrderTemp.products.find((e) => {
         return e.id.toString() == action.payload.idOrderDetail;
       });
@@ -171,6 +171,7 @@ const order = (state = initialState, action) => {
         oldFloorId: foundProduct.oldFloorId,
         images: foundProduct.images,
         customerName: customerName,
+        serviceType: action.payload.orderDetail.serviceType,
         customerPhone: customerPhone,
         orderName: orderName,
         returnDate: returnDate,

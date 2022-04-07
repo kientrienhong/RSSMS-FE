@@ -130,6 +130,7 @@ function StoredOrderModal({
             orderDetailId: e.idOrderDetail,
             floorId: e.floorId,
             oldFloorId: e.oldFloorId.id,
+            serviceType: e.serviceType,
           };
         });
         let response = await moveOrderDetail(requestDate, userState.idToken);
@@ -165,8 +166,6 @@ function StoredOrderModal({
       setError("Hàng hóa này đã được đạt trên kệ");
       return;
     }
-    console.log(foundOrderDetail);
-    console.log(currentFloor);
     if (
       !(
         foundOrderDetail.serviceType === 0 &&
@@ -280,23 +279,31 @@ function StoredOrderModal({
                 alignItems: "flex-start",
               }}
             >
-              <Typography
-                color="black"
-                variant="h2"
-                style={{
-                  marginBottom: "8%",
-                }}
-              >
-                Tất cả các sản phẩm trong đơn
-              </Typography>
               <Box
                 sx={{
-                  height: "346px",
+                  height: "80%",
+                  width: "100%",
+                  overflowY: "scroll",
                 }}
               >
-                <Grid container spacing={2}>
-                  {buildRadioSelect(storedOrder?.product)}
-                </Grid>
+                <Typography
+                  color="black"
+                  variant="h2"
+                  style={{
+                    marginBottom: "8%",
+                  }}
+                >
+                  Tất cả các sản phẩm trong đơn
+                </Typography>
+                <Box
+                  sx={{
+                    height: "346px",
+                  }}
+                >
+                  <Grid container spacing={2}>
+                    {buildRadioSelect(storedOrder?.product)}
+                  </Grid>
+                </Box>
               </Box>
               {isView === true ? null : (
                 <Box

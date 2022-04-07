@@ -593,6 +593,7 @@ export const placeBoxes = async (placingProducts, token) => {
     return {
       floorId: e.floorId,
       orderDetailId: e.idOrderDetail,
+      serviceType: e.serviceType,
     };
   });
 
