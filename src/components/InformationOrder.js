@@ -1,9 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {
   Box,
-  Modal,
-  Tabs,
-  Tab,
   Typography,
   TextField,
   FormControlLabel,
@@ -16,7 +13,7 @@ import {
 import {Controller} from "react-hook-form";
 import CustomInput from "./CustomInput";
 import TagSelection from "../pages/Order/CreateOrder/components/TagSelection";
-import {MenuItem, Select, FormControl} from "@material-ui/core";
+import {MenuItem, FormControl} from "@material-ui/core";
 import ListPositionStored from "./ListPositionStored";
 import {
   PRODUCT_TYPE,
@@ -182,20 +179,6 @@ function InformationOrder({
         </MenuItem>
       );
     });
-  };
-
-  const handleChangeDeliveryDate = (e) => {
-    if (isView === true) {
-      return;
-    }
-    setDateDelivery(e.target.value);
-    if (dateDelivery !== undefined || dateReturn !== undefined) {
-      let parseDateReturn = new Date(dateReturn);
-      let parseDateDelivery = new Date(e.target.value);
-      let diffTime = parseDateReturn.getTime() - parseDateDelivery.getTime();
-      let diffDays = diffTime / (1000 * 3600 * 24);
-      setDuration(diffDays);
-    }
   };
 
   const handleOnClickMinus = (event) => {

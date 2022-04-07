@@ -33,7 +33,6 @@ const order = (state = initialState, action) => {
     }
 
     case ActionType.STORE_ORDER: {
-      let test = action.payload;
       let storedOrderTemp = {...state.storedOrder};
       let placingProductsTemp = {
         orderId: -1,
@@ -41,9 +40,9 @@ const order = (state = initialState, action) => {
         typeOrder: action.payload.typeOrder,
       };
       storedOrderTemp.products = action.payload.orderDetails.filter((e) => {
-        if (e.serviceType === 0 || e.serviceType === 2 || e.serviceType === 3) {
-          return e;
-        }
+        return (
+          e.serviceType === 0 || e.serviceType === 2 || e.serviceType === 3
+        );
       });
       storedOrderTemp.orderId = action.payload.id;
 

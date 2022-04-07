@@ -18,7 +18,6 @@ import Logo from "./Logo";
 import {useNavigate} from "react-router";
 import {STYLE_MODAL} from "../constant/style";
 import {connect} from "react-redux";
-import * as action from "../apis/Apis";
 const DashboardNavbar = ({
   onMobileNavOpen,
   handleCloseNotification,
@@ -27,7 +26,6 @@ const DashboardNavbar = ({
   unReadNoti,
   ...rest
 }) => {
-  const [notifications] = useState([]);
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 

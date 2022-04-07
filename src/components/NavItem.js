@@ -1,9 +1,4 @@
-import {
-  NavLink as RouterLink,
-  matchPath,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import {NavLink as RouterLink, matchPath, useLocation} from "react-router-dom";
 import * as action from "../redux/action/action";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
@@ -18,8 +13,6 @@ const NavItem = ({
   currentPositionViewOrderId,
   ...rest
 }) => {
-  const navigate = useNavigate();
-
   const location = useLocation();
   const active = href
     ? !!matchPath(

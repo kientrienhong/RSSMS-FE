@@ -13,7 +13,7 @@ import {
 } from "@material-ui/core";
 import TagSelection from "../pages/Order/CreateOrder/components/TagSelection";
 import CustomInput from "./CustomInput";
-import {MenuItem, Select, FormControl} from "@material-ui/core";
+import {MenuItem, FormControl} from "@material-ui/core";
 import OrderDetail from "./OrderDetail";
 import {connect} from "react-redux";
 import * as action from "../redux/action/action";
@@ -23,7 +23,6 @@ import {useNavigate} from "react-router";
 import {PRODUCT_TYPE, LIST_STATUS, LIST_TIME} from "../constant/constant";
 import ListPositionStored from "./ListPositionStored";
 import {Controller} from "react-hook-form";
-import CustomSelect from "./CustomSelect";
 
 const styleModal = {
   position: "absolute",
@@ -154,13 +153,10 @@ function RequestModal({
         name: currentOrder?.returnTime,
         isAvailable: true,
       });
-      let currentDuration;
       if (currentOrder?.typeOrder === 0) {
         setDuration(currentOrder?.durationMonths);
-        currentDuration = currentOrder?.durationMonths;
       } else {
         setDuration(currentOrder?.durationDays);
-        currentDuration = currentOrder?.durationDays;
       }
       setIsPaid(currentOrder?.isPaid);
       setIsCustomerDelivery(currentOrder?.isUserDelivery);

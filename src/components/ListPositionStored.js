@@ -1,9 +1,9 @@
 import React from "react";
-import { Box, Modal, Button, Typography, Checkbox } from "@material-ui/core";
-import { useNavigate } from "react-router";
+import {Box, Typography} from "@material-ui/core";
+import {useNavigate} from "react-router";
 import * as action from "../redux/action/action";
-import { connect } from "react-redux";
-function ListPositionStored({ currentOrder, setUpCurrentViewOrderId }) {
+import {connect} from "react-redux";
+function ListPositionStored({currentOrder, setUpCurrentViewOrderId}) {
   const navigate = useNavigate();
 
   const mapList = currentOrder.orderDetails

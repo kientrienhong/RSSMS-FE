@@ -133,7 +133,7 @@ function StoredOrderModal({
             serviceType: e.serviceType,
           };
         });
-        let response = await moveOrderDetail(requestDate, userState.idToken);
+        await moveOrderDetail(requestDate, userState.idToken);
       } else {
         await placeBoxes(placingProducts, userState.idToken);
       }

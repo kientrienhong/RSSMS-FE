@@ -1,5 +1,4 @@
 import React from "react";
-import {Route} from "react-router-dom";
 import {Navigate} from "react-router";
 
 export default function ProtectTemplate({children, Component, permission}) {

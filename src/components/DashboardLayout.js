@@ -1,17 +1,16 @@
-import { useState } from "react";
-import { Outlet } from "react-router-dom";
-import { styled } from "@material-ui/core/styles";
-import { Snackbar, Alert, Box, Divider, Typography } from "@material-ui/core";
+import {useState} from "react";
+import {Outlet} from "react-router-dom";
+import {styled} from "@material-ui/core/styles";
+import {Snackbar, Alert, Box, Divider, Typography} from "@material-ui/core";
 import DashboardNavbar from "./DashboardNavbar";
 import DashboardSidebar from "./DashboardSidebar";
 import LoadingPage from "../pages/Loading/LoadingPage";
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 import * as action from "../redux/action/action";
 import StoredOrderModal from "./StoredOrderModal";
 import moment from "moment";
-import { updateNotification } from "../apis/Apis";
-import ProgressModal from "./ProgressModal";
-const DashboardLayoutRoot = styled("div")(({ theme }) => ({
+import {updateNotification} from "../apis/Apis";
+const DashboardLayoutRoot = styled("div")(({theme}) => ({
   backgroundColor: theme.palette.background.default,
   display: "flex",
   height: "100%",
@@ -19,7 +18,7 @@ const DashboardLayoutRoot = styled("div")(({ theme }) => ({
   width: "100%",
 }));
 
-const DashboardLayoutWrapper = styled("div")(({ theme }) => ({
+const DashboardLayoutWrapper = styled("div")(({theme}) => ({
   display: "flex",
   flex: "1 1 auto",
   overflow: "hidden",
@@ -50,7 +49,7 @@ const DashboardLayout = (props) => {
   const mapListNotifcation = () => {
     if (props?.notifications?.length === 0) {
       return (
-        <Typography color="black" variant="h2" style={{ margin: "4%" }}>
+        <Typography color="black" variant="h2" style={{margin: "4%"}}>
           No notifications yets!
         </Typography>
       );
@@ -143,7 +142,7 @@ const DashboardLayout = (props) => {
         props.userState.idToken
       );
       let newNotification = [...props.notifications].map((e) => {
-        return { ...e, isRead: true };
+        return {...e, isRead: true};
       });
       props.setUpNotification(newNotification);
 
@@ -164,12 +163,12 @@ const DashboardLayout = (props) => {
         open={props.snackbar}
         autoHideDuration={3000}
         onClose={props.closeSnackbar}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        anchorOrigin={{vertical: "top", horizontal: "center"}}
       >
         <Alert
           onClose={props.closeSnackbar}
           severity={props.typeSnackbar}
-          sx={{ width: "100%" }}
+          sx={{width: "100%"}}
         >
           {props.msgSnackbar}
         </Alert>
