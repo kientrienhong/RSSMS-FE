@@ -119,7 +119,7 @@ function ModalUpdateIsPaid({
 
           {buildInformation(
             "Ngày kết thúc trước khi gia hạn:",
-            `${requestDetail?.oldReturnDate}`
+            moment(new Date(requestDetail?.oldReturnDate)).format("DD/MM/YYYY")
           )}
           {buildInformation(
             "Ngày kết thúc sau khi gia hạn:",
@@ -181,36 +181,58 @@ function ModalUpdateIsPaid({
             />
           </Box>
         </Box>
-        <Button
-          style={{
-            height: "45px",
-            paddingLeft: "16px",
-            paddingRight: "16px",
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            flexDirection: "row",
+            width: "100%",
+            marginTop: "32px",
           }}
-          onClick={async () => {
-            try {
-              showLoading();
-              await updateIsPaidRequest(
-                currentRequest.id,
-                checked,
-                userState.idToken
-              );
-
-              showSnackbar("success", "Update success");
-              await getData("", page, 8);
-              handleClose();
-            } catch (error) {
-              console.log(error?.response);
-            } finally {
-              hideLoading();
-            }
-          }}
-          color="primary"
-          variant="contained"
-          type="submit"
         >
-          Submit
-        </Button>
+          <Button
+            style={{
+              height: "45px",
+              paddingLeft: "16px",
+              paddingRight: "16px",
+              marginRight: "4%",
+            }}
+            onClick={async () => {
+              try {
+                showLoading();
+                await updateIsPaidRequest(
+                  currentRequest.id,
+                  checked,
+                  userState.idToken
+                );
+
+                showSnackbar("success", "Update success");
+                await getData("", page, 8);
+                handleClose();
+              } catch (error) {
+                console.log(error?.response);
+              } finally {
+                hideLoading();
+              }
+            }}
+            color="primary"
+            variant="contained"
+          >
+            Xác nhận
+          </Button>
+          <Button
+            style={{
+              height: "45px",
+              paddingLeft: "16px",
+              paddingRight: "16px",
+            }}
+            onClick={() => handleClose()}
+            color="error"
+            variant="outlined"
+          >
+            Đóng
+          </Button>
+        </Box>
       </Box>
     </Modal>
   );

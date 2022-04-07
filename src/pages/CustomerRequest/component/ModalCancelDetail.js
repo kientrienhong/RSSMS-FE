@@ -103,7 +103,7 @@ function ModalCancelDetail({
           variant="contained"
           type="submit"
         >
-          Submit
+          Xác nhận
         </Button>
       </Box>
     </Modal>

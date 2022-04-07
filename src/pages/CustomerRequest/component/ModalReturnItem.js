@@ -96,33 +96,55 @@ function ModalReturnItem({
             `${requestDetail?.deliveryAddress}`
           )}
         </Box>
-        <Button
-          style={{
-            height: "45px",
-            paddingLeft: "16px",
-            paddingRight: "16px",
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            flexDirection: "row",
+            width: "100%",
+            marginTop: "32px",
           }}
-          onClick={async () => {
-            try {
-              showLoading();
-              const response = await updateIsPaidRequest(
-                currentRequest.id,
-                userState.idToken
-              );
-              console.log(response);
-              showSnackbar("success", "Cập nhật yêu cầu thành công!");
-            } catch (error) {
-              console.log(error?.response);
-            } finally {
-              hideLoading();
-            }
-          }}
-          color="primary"
-          variant="contained"
-          type="submit"
         >
-          Submit
-        </Button>
+          <Button
+            style={{
+              height: "45px",
+              paddingLeft: "16px",
+              paddingRight: "16px",
+              marginRight: "4%",
+            }}
+            onClick={async () => {
+              try {
+                showLoading();
+                const response = await updateIsPaidRequest(
+                  currentRequest.id,
+                  userState.idToken
+                );
+                console.log(response);
+                showSnackbar("success", "Cập nhật yêu cầu thành công!");
+              } catch (error) {
+                console.log(error?.response);
+              } finally {
+                hideLoading();
+              }
+            }}
+            color="primary"
+            variant="contained"
+          >
+            Xác nhận
+          </Button>
+          <Button
+            style={{
+              height: "45px",
+              paddingLeft: "16px",
+              paddingRight: "16px",
+            }}
+            onClick={() => handleClose()}
+            color="error"
+            variant="outlined"
+          >
+            Đóng
+          </Button>
+        </Box>
       </Box>
     </Modal>
   );

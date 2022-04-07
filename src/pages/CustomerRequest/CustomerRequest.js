@@ -201,7 +201,7 @@ function CustomerRequest({
         setRequestDetail(response.data);
         hideLoading();
       } catch (error) {
-        console.log(error);
+        console.log(error.response);
         hideLoading();
       }
     };

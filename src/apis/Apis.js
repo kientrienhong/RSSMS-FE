@@ -800,6 +800,7 @@ export const updateIsPaidRequest = async (idRequest, isPaid, token) => {
     {
       id: idRequest,
       isPaid: isPaid,
+      status: 3,
     },
     {headers: {Authorization: `Bearer ${token}`}}
   );

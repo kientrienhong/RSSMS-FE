@@ -37,7 +37,6 @@ function NewSchedule({showLoading, hideLoading, userState}) {
   const {handleSubmit, control, reset} = useForm();
   const [startOfWeek, setStartOfWeek] = React.useState();
   const [endOfWeek, setEndOfWeek] = React.useState();
-  React.useState([]);
   const [listScheduleWholeWeek, setListScheduleWholeWeek] = useState([]);
   const [listScheduleCurrentDate, setListScheduleCurrentDate] = useState([]);
   function addDays(date, days) {
@@ -186,8 +185,13 @@ function NewSchedule({showLoading, hideLoading, userState}) {
         endOfWeek.toISOString().split("T")[0],
         userState.idToken
       );
+
       response?.data?.data
-        .filter((e) => e.isCustomerDelivery === false && e.typeOrder === 1)
+        .filter(
+          (e) =>
+            (e.isCustomerDelivery === false && e.typeOrder === 1) ||
+            e.type === 4
+        )
         .forEach((e) => {
           handleFormatDate(new Date(e.deliveryDate), result, e);
         });
@@ -205,6 +209,7 @@ function NewSchedule({showLoading, hideLoading, userState}) {
       } finally {
       }
     } catch (e) {
+      console.log(e);
       console.log(e.response);
     } finally {
       hideLoading();

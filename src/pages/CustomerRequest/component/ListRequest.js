@@ -180,21 +180,25 @@ function ListRequest({
                 <TableCell style={{color: "black"}}>
                   <Button
                     onClick={async () => {
-                      const response = await getRequestDetail(
-                        row.id,
-                        userState.idToken
-                      );
+                      try {
+                        const response = await getRequestDetail(
+                          row.id,
+                          userState.idToken
+                        );
 
-                      setCurrentRequest(response.data);
+                        setCurrentRequest(response.data);
 
-                      if (row.type === 2) {
-                        handleOpenIsPaid();
-                      } else if (row.type === 3) {
-                        handleOpenCancelOrder();
-                      } else if (row.type === 1) {
-                        handleOpenOrderModal(response.data);
-                      } else {
-                        handleOpenReturnItem();
+                        if (row.type === 2) {
+                          handleOpenIsPaid();
+                        } else if (row.type === 3) {
+                          handleOpenCancelOrder();
+                        } else if (row.type === 1) {
+                          handleOpenOrderModal(response.data);
+                        } else {
+                          handleOpenReturnItem();
+                        }
+                      } catch (e) {
+                        console.log(e?.response);
                       }
                     }}
                     style={{
