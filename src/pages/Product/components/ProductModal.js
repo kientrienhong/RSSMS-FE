@@ -1,14 +1,5 @@
 import React, {useRef, useState, useEffect} from "react";
-import {
-  Box,
-  Modal,
-  Button,
-  Typography,
-  FormControl,
-  Select,
-  MenuItem,
-  FormHelperText,
-} from "@material-ui/core";
+import {Box, Modal, Button, Typography, MenuItem} from "@material-ui/core";
 import {STYLE_MODAL} from "../../../constant/style";
 import CustomInput from "../../../components/CustomInput";
 import CustomAreaInput from "../../../components/CustomAreaInput";

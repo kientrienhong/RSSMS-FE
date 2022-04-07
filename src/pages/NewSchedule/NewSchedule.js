@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import {connect} from "react-redux";
 import * as action from "../../redux/action/action";
-import {Box, Typography, Button, Badge} from "@material-ui/core";
+import {Box, Typography, Button} from "@material-ui/core";
 import moment from "moment";
 import {useForm} from "react-hook-form";
 import ListDateComponent from "./components/ListDateComponent";
@@ -34,7 +34,7 @@ function NewSchedule({showLoading, hideLoading, userState}) {
   const [open, setOpen] = useState(false);
   const [openAssignStaff, setOpenAssignStaff] = useState(false);
   const [openOrderModal, setOpenOrderModal] = useState(false);
-  const {handleSubmit, control, watch, reset} = useForm();
+  const {handleSubmit, control, reset} = useForm();
   const [startOfWeek, setStartOfWeek] = React.useState();
   const [endOfWeek, setEndOfWeek] = React.useState();
   React.useState([]);
@@ -102,9 +102,7 @@ function NewSchedule({showLoading, hideLoading, userState}) {
     }
     order = {...order, isSelected: false};
     let currentDate = Object.keys(result)?.find((e) => {
-      if (e === date.toLocaleDateString("en-US")) {
-        return true;
-      }
+      return e === date.toLocaleDateString("en-US");
     });
     result[currentDate].listSchedule.get(order.deliveryTime).push(order);
     result[currentDate].amountNotAssignStaff += 1;
@@ -112,9 +110,7 @@ function NewSchedule({showLoading, hideLoading, userState}) {
 
   const handleFormatRequestSchedule = (date, result, request) => {
     let currentDate = Object.keys(result)?.find((e) => {
-      if (e === date.toLocaleDateString("en-US")) {
-        return true;
-      }
+      return e === date.toLocaleDateString("en-US");
     });
 
     let indexFound = result[currentDate].listSchedule
@@ -361,11 +357,7 @@ function NewSchedule({showLoading, hideLoading, userState}) {
 
         showLoading();
 
-        let result = await getData(
-          startOfWeekLocal,
-          endOfWeekLocal,
-          scheduleDate
-        );
+        await getData(startOfWeekLocal, endOfWeekLocal, scheduleDate);
       } catch (error) {
         console.log(error);
       } finally {
@@ -376,7 +368,7 @@ function NewSchedule({showLoading, hideLoading, userState}) {
   }, []);
 
   useEffect(() => {
-    let result = getData(startOfWeek, endOfWeek, scheduleDate);
+    getData(startOfWeek, endOfWeek, scheduleDate);
   }, [startOfWeek, endOfWeek]);
 
   return (

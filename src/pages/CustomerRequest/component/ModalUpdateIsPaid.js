@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { Box, Modal, Button, Typography, Checkbox } from "@material-ui/core";
-import { STYLE_MODAL } from "../../../constant/style";
-import { LIST_STATUS_REQUEST } from "../../../constant/constant";
+import React from "react";
+import {Box, Modal, Button, Typography, Checkbox} from "@material-ui/core";
+import {STYLE_MODAL} from "../../../constant/style";
+import {LIST_STATUS_REQUEST} from "../../../constant/constant";
 
-import { connect } from "react-redux";
-import { updateIsPaidRequest } from "../../../apis/Apis";
+import {connect} from "react-redux";
+import {updateIsPaidRequest} from "../../../apis/Apis";
 import * as action from "../../../redux/action/action";
-import { formatCurrency } from "../../../utils/FormatCurrency";
+import {formatCurrency} from "../../../utils/FormatCurrency";
 import moment from "moment";
 const styleModal = {
   ...STYLE_MODAL,
@@ -59,7 +59,7 @@ function ModalUpdateIsPaid({
         >
           {title}
         </Typography>
-        <p style={{ fontSize: "18px", color: localColor, fontWeight: bold }}>
+        <p style={{fontSize: "18px", color: localColor, fontWeight: bold}}>
           {value}
         </p>
       </Box>
@@ -177,7 +177,7 @@ function ModalUpdateIsPaid({
               checked={checked || currentRequest?.status === 2}
               disabled={currentRequest?.status === 2}
               onChange={handleChange}
-              inputProps={{ "aria-label": "controlled" }}
+              inputProps={{"aria-label": "controlled"}}
             />
           </Box>
         </Box>
@@ -190,8 +190,7 @@ function ModalUpdateIsPaid({
           onClick={async () => {
             try {
               showLoading();
-              let test = checked;
-              const response = await updateIsPaidRequest(
+              await updateIsPaidRequest(
                 currentRequest.id,
                 checked,
                 userState.idToken

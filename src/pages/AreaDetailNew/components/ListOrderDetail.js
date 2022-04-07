@@ -6,8 +6,6 @@ import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
-import TableFooter from "@mui/material/TableFooter";
-import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
@@ -17,8 +15,6 @@ import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 import {Button, TableHead, Typography} from "@material-ui/core";
-import {makeStyles} from "@material-ui/styles";
-import ConfirmModal from "../../../components/ConfirmModal";
 import {LIST_STATUS_OF_ORDER_DETAIL} from "../../../constant/constant";
 import {connect} from "react-redux";
 import * as action from "../../../redux/action/action";
@@ -106,16 +102,7 @@ const handleClickRow = (row, setCurrentOrderDetail, handleOpenOrderDetail) => {
   setCurrentOrderDetail(row);
   handleOpenOrderDetail();
 };
-const useStyles = makeStyles({
-  button: {
-    backgroundColor: "#CE0200",
-    color: "white",
-    "&:hover": {
-      backgroundColor: "#FF615F",
-      color: "white",
-    },
-  },
-});
+
 function ListOrderDetail({
   setCurrentOrderDetail,
   handleOpen,
@@ -193,30 +180,7 @@ function ListOrderDetail({
   }
   listPlacingProducts = listPlacingProducts.concat(listOrderDetail);
 
-  const [rowsPerPage, setRowsPerPage] = React.useState(8);
-  const [open, setOpen] = React.useState(false);
-  const [currentId, setCurrentId] = React.useState(-1);
-  const handleConfirmOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page - 1 > 0
-      ? Math.max(0, (1 + page) * rowsPerPage - listOrderDetail.length)
-      : 0;
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage + 1);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
 
   return listPlacingProducts.length > 0 ? (
     <TableContainer component={Paper}>

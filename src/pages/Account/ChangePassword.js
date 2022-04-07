@@ -1,10 +1,10 @@
-import React, { useRef, useState } from "react";
-import { connect } from "react-redux";
+import React, {useRef, useState} from "react";
+import {connect} from "react-redux";
 import * as action from "../../redux/action/action";
-import { Controller, useForm } from "react-hook-form";
+import {Controller, useForm} from "react-hook-form";
 import CustomInput from "../../components/CustomInput";
-import { Box, Button, TextField } from "@material-ui/core";
-import { changePassword } from "../../apis/Apis";
+import {Box, Button, TextField} from "@material-ui/core";
+import {changePassword} from "../../apis/Apis";
 function ChangePassword({
   showLoading,
   hideLoading,
@@ -12,9 +12,8 @@ function ChangePassword({
   userId,
   userState,
 }) {
-  const { register, handleSubmit, control, watch, reset } = useForm();
+  const {handleSubmit, control, watch} = useForm();
   const [error, setError] = useState("");
-  const [errorPassword, setErrorPassword] = useState({});
   const password = useRef({});
   password.current = watch("password", "");
   const styleBoxInput = {
@@ -27,7 +26,7 @@ function ChangePassword({
     marginTop: "8% ",
   };
 
-  const styleInput = { marginRight: "2.5%", marginLeft: "2.5%" };
+  const styleInput = {marginRight: "2.5%", marginLeft: "2.5%"};
   const onSubmit = async (data) => {
     try {
       showLoading();
@@ -57,13 +56,13 @@ function ChangePassword({
       }}
     >
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Box sx={{ ...styleBoxInput, marginTop: "2%" }}>
+        <Box sx={{...styleBoxInput, marginTop: "2%"}}>
           <CustomInput
             control={control}
             rules={{
               required: "*Vui lòng nhập",
             }}
-            styles={{ width: "300px" }}
+            styles={{width: "300px"}}
             name="oldPassword"
             label="Mật khẩu cũ"
             disabled={false}
@@ -77,7 +76,7 @@ function ChangePassword({
             rules={{
               required: "*Vui lòng nhập",
             }}
-            render={({ field: { onChange, value }, fieldState: { error } }) => {
+            render={({field: {onChange, value}, fieldState: {error}}) => {
               return (
                 <TextField
                   label="Mật khẩu mới"
@@ -85,7 +84,7 @@ function ChangePassword({
                   inputRef={password}
                   value={value}
                   style={styleInput}
-                  inputProps={{ style: { width: "300px" } }}
+                  inputProps={{style: {width: "300px"}}}
                   onChange={onChange}
                   type="password"
                   error={!!error}
@@ -105,7 +104,7 @@ function ChangePassword({
                 );
               },
             }}
-            styles={{ width: "300px" }}
+            styles={{width: "300px"}}
             name="confirmPassword"
             label="Xác nhận mật khẩu mới"
             type="password"
@@ -114,7 +113,7 @@ function ChangePassword({
           />
         </Box>
         {error?.length > 0 ? (
-          <p style={{ color: "red", textAlign: "center", marginTop: "36px" }}>
+          <p style={{color: "red", textAlign: "center", marginTop: "36px"}}>
             {error}
           </p>
         ) : null}

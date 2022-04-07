@@ -6,7 +6,6 @@ import {
   TextField,
   Button,
   Modal,
-  MenuItem,
   Typography,
 } from "@material-ui/core";
 import SearchIcon from "@mui/icons-material/Search";

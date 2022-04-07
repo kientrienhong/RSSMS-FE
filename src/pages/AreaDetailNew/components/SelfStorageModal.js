@@ -1,12 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {
-  Box,
-  Button,
-  InputAdornment,
-  IconButton,
-  TextField,
-  Modal,
-} from "@material-ui/core";
+import {Box, Modal} from "@material-ui/core";
 import {getProduct} from "../../../apis/Apis";
 import {STYLE_MODAL} from "../../../constant/style";
 import FormSelfStorage from "./FormSelfStorage";

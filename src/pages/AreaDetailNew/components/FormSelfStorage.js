@@ -9,11 +9,9 @@ import {
   MenuItem,
 } from "@material-ui/core";
 import CustomInput from "../../../components/CustomInput";
-import CustomAreaInput from "../../../components/CustomAreaInput";
 import {connect} from "react-redux";
 import * as action from "../../../redux/action/action";
 import {createSpace, updateShelf} from "../../../apis/Apis";
-import CustomSelect from "../../../components/CustomSelect";
 
 function FormSelfStorage({
   isEdit,

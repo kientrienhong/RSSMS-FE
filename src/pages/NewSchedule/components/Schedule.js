@@ -37,12 +37,9 @@ function Schedule({
     if (e.storageId === schedule.storageId) {
       foundSameStorage = true;
     }
-    if (
-      e["deliveryTime"] === schedule["deliveryTime"] &&
-      schedule.id !== e.id
-    ) {
-      return true;
-    }
+    return (
+      e["deliveryTime"] === schedule["deliveryTime"] && schedule.id !== e.id
+    );
   });
 
   let foundSameListStaff = 0;

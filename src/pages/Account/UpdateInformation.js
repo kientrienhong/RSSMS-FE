@@ -1,22 +1,20 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, {useState, useRef} from "react";
 import {
   Box,
   Button,
   FormControl,
-  FormLabel,
   RadioGroup,
   FormControlLabel,
   Radio,
 } from "@material-ui/core";
 import CustomAvatar from "../../components/CustomAvatar";
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 import * as action from "../../redux/action/action";
-import { useForm } from "react-hook-form";
+import {useForm} from "react-hook-form";
 import CustomInput from "../../components/CustomInput";
-import { storageFirebase } from "../../firebase/firebase";
-import { updateUser } from "../../apis/Apis";
-import { MALE, FEMALE, OTHER_GENDER } from "../../constant/constant";
-import { getBase64 } from "../../utils/convertImage";
+import {updateUser} from "../../apis/Apis";
+import {MALE, FEMALE, OTHER_GENDER} from "../../constant/constant";
+import {getBase64} from "../../utils/convertImage";
 function UpdateInformation({
   user,
   setUpUser,
@@ -25,7 +23,7 @@ function UpdateInformation({
   showSnackbar,
 }) {
   const [imageFile, setImageFile] = useState({});
-  const { handleSubmit, control } = useForm();
+  const {handleSubmit, control} = useForm();
   const [value, setValue] = React.useState(user.gender);
   const [error, setError] = React.useState("");
   const handleChange = (event) => {
@@ -43,7 +41,7 @@ function UpdateInformation({
     marginTop: "8% ",
   };
 
-  const styleInput = { marginRight: "2.5%", marginLeft: "2.5%" };
+  const styleInput = {marginRight: "2.5%", marginLeft: "2.5%"};
 
   const onSubmit = async (data) => {
     let dob = new Date(data.birthdate);
@@ -191,7 +189,7 @@ function UpdateInformation({
         <form onSubmit={handleSubmit(onSubmit)}>
           <input
             type="file"
-            style={{ display: "none" }}
+            style={{display: "none"}}
             ref={inputFile}
             onChange={(e) => onChangeInputFile(e)}
           />
@@ -209,13 +207,13 @@ function UpdateInformation({
               onHandleClick={handleOnclickAvatar}
             />
           </Box>
-          <Box sx={{ ...styleBoxInput, marginTop: "2%" }}>
+          <Box sx={{...styleBoxInput, marginTop: "2%"}}>
             <CustomInput
               control={control}
               rules={{
                 required: "*Vui lòng nhập",
               }}
-              styles={{ width: "540px" }}
+              styles={{width: "540px"}}
               name="email"
               label="Email"
               disabled={true}
@@ -223,13 +221,13 @@ function UpdateInformation({
               inlineStyle={styleInput}
             />
           </Box>
-          <Box sx={{ ...styleBoxInput }}>
+          <Box sx={{...styleBoxInput}}>
             <CustomInput
               control={control}
               rules={{
                 required: "*Vui lòng nhập",
               }}
-              styles={{ width: "300px" }}
+              styles={{width: "300px"}}
               name="name"
               label="Họ và tên"
               disabled={false}
@@ -245,20 +243,20 @@ function UpdateInformation({
                   message: "*Vui lòng nhập số điện thoại đúng",
                 },
               }}
-              styles={{ width: "240px" }}
+              styles={{width: "240px"}}
               name="phone"
               label="Số điện thoại"
               userInfo={user.phone}
               inlineStyle={styleInput}
             />
           </Box>
-          <Box sx={{ ...styleBoxInput, justifyContent: "flex-start" }}>
+          <Box sx={{...styleBoxInput, justifyContent: "flex-start"}}>
             <CustomInput
               control={control}
               rules={{
                 required: "*Vui lòng nhập",
               }}
-              styles={{ width: "240px" }}
+              styles={{width: "240px"}}
               name="birthdate"
               type="date"
               label="Ngày sinh"
@@ -271,7 +269,7 @@ function UpdateInformation({
             />
           </Box>
 
-          <p style={{ marginLeft: "2.5%", marginTop: "5%" }}>Giới tính</p>
+          <p style={{marginLeft: "2.5%", marginTop: "5%"}}>Giới tính</p>
           <FormControl
             component="fieldset"
             sx={{
@@ -294,11 +292,11 @@ function UpdateInformation({
               />
             </RadioGroup>
           </FormControl>
-          <Box sx={{ ...styleBoxInput, marginTop: "3%" }}>
+          <Box sx={{...styleBoxInput, marginTop: "3%"}}>
             <CustomInput
               control={control}
-              rules={{ required: "*Vui lòng nhập" }}
-              styles={{ width: "540px" }}
+              rules={{required: "*Vui lòng nhập"}}
+              styles={{width: "540px"}}
               name="address"
               label="Địa chỉ"
               userInfo={user.address}
@@ -306,7 +304,7 @@ function UpdateInformation({
             />
           </Box>
           {error?.length > 0 ? (
-            <p style={{ color: "red", textAlign: "center", marginTop: "36px" }}>
+            <p style={{color: "red", textAlign: "center", marginTop: "36px"}}>
               {error}
             </p>
           ) : null}

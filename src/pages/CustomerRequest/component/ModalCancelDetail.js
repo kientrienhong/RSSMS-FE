@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { Box, Modal, Button, Typography, Checkbox } from "@material-ui/core";
-import { STYLE_MODAL } from "../../../constant/style";
-import { connect } from "react-redux";
-import { updateIsPaidRequest } from "../../../apis/Apis";
+import React from "react";
+import {Box, Modal, Button, Typography} from "@material-ui/core";
+import {STYLE_MODAL} from "../../../constant/style";
+import {connect} from "react-redux";
+import {updateIsPaidRequest} from "../../../apis/Apis";
 import * as action from "../../../redux/action/action";
 const styleModal = {
   ...STYLE_MODAL,
@@ -40,7 +40,7 @@ function ModalCancelDetail({
         >
           {title}
         </Typography>
-        <p style={{ fontSize: "18px" }}>{value}</p>
+        <p style={{fontSize: "18px"}}>{value}</p>
       </Box>
     );
   };
@@ -91,10 +91,7 @@ function ModalCancelDetail({
           onClick={async () => {
             try {
               showLoading();
-              const response = await updateIsPaidRequest(
-                currentRequest.id,
-                userState.idToken
-              );
+              await updateIsPaidRequest(currentRequest.id, userState.idToken);
               showSnackbar("success", "Update success");
             } catch (error) {
               console.log(error?.response);

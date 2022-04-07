@@ -1,13 +1,5 @@
-import React, {useState} from "react";
-import {
-  Box,
-  Button,
-  InputAdornment,
-  IconButton,
-  TextField,
-  Typography,
-  Modal,
-} from "@material-ui/core";
+import React from "react";
+import {Box, Button, Typography, Modal} from "@material-ui/core";
 import {STYLE_MODAL} from "../../../constant/style";
 import AreaUsage from "./AreaUsage";
 import ListOrderDetail from "./ListOrderDetail";

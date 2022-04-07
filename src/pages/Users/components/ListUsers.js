@@ -174,8 +174,6 @@ function ListUsers({
     return response;
   };
   // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page - 1 > 0 ? Math.max(0, (1 + page) * rowsPerPage - listUser.length) : 0;
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage + 1);

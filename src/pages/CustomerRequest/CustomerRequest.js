@@ -3,8 +3,6 @@ import {
   Box,
   IconButton,
   TextField,
-  Button,
-  Modal,
   Typography,
   Card,
   InputAdornment,
@@ -20,7 +18,6 @@ import {
   assignOrder,
   updateRequestWithNote,
 } from "../../apis/Apis";
-import {useNavigate} from "react-router";
 
 import ModalCancelDetail from "./component/ModalCancelDetail";
 import ModalReturnItem from "./component/ModalReturnItem";
@@ -40,7 +37,6 @@ function CustomerRequest({
   const [listRequest, setListRequest] = useState([]);
   const [totalRequest, setTotalRequest] = useState(0);
   const [requestDetail, setRequestDetail] = useState({});
-  const [error, setError] = useState({});
   const [request, setRequest] = useState({});
   const [page, setPage] = useState(1);
   const [currentRequest, setCurrentRequest] = useState();
@@ -49,9 +45,8 @@ function CustomerRequest({
   const [openOrderModal, setOpenOrderModal] = useState(false);
   const [openUpdateRequest, setOpenUpdateRequest] = useState(false);
   const [updateStatus, setUpdateStatus] = useState(-1);
-  const {handleSubmit, control, reset} = useForm();
+  const {control, reset} = useForm();
   const [openAssign, setOpenAssign] = useState(false);
-  const navigate = useNavigate();
 
   const handleOpenUpdateRequest = () => {
     setOpenUpdateRequest(true);
@@ -90,7 +85,7 @@ function CustomerRequest({
       console.log(error);
       hideLoading();
     }
-  }, [isLoadingRequest]);
+  }, [isLoadingRequest, hideLoading, showLoading, page]);
 
   const handleOpenOrderModal = (request) => {
     setCurrentRequest(request);

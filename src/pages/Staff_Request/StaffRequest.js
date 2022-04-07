@@ -3,15 +3,12 @@ import {
   Box,
   IconButton,
   TextField,
-  Button,
-  Modal,
   Typography,
   Card,
   InputAdornment,
 } from "@material-ui/core";
 import SearchIcon from "@mui/icons-material/Search";
 import ListRequest from "./component/ListRequest";
-import {useForm} from "react-hook-form";
 import * as action from "../../redux/action/action";
 
 import {connect} from "react-redux";
@@ -20,15 +17,10 @@ function StaffRequest({showLoading, hideLoading, showSnackbar, userState}) {
   const [listRequest, setListRequest] = useState([]);
   const [totalRequest, setTotalRequest] = useState(0);
   const [open, setOpen] = useState(false);
-  const [error, setError] = useState({});
   const [request, setRequest] = useState({});
   const [page, setPage] = useState(1);
   const handleOpen = () => {
     setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
   };
 
   const getData = async (name, page, size) => {

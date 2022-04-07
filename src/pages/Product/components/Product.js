@@ -18,8 +18,6 @@ export default function Product({
     handleOpenConfirm();
   };
 
-  const handleOnClickSeeMore = () => {};
-
   return (
     <Card
       sx={{

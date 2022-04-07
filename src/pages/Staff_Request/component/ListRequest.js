@@ -17,9 +17,6 @@ import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 import {Button, TableHead} from "@material-ui/core";
 import moment from "moment";
-import {makeStyles} from "@material-ui/styles";
-import ConfirmModal from "../../../components/ConfirmModal";
-import {deleteUser} from "../../../apis/Apis";
 import {connect} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {LIST_TYPE_REQUEST} from "../../../constant/constant";
@@ -112,16 +109,6 @@ const mapListTableHeader = (listHeader) => (
   </TableHead>
 );
 
-const useStyles = makeStyles({
-  button: {
-    backgroundColor: "#CE0200",
-    color: "white",
-    "&:hover": {
-      backgroundColor: "#FF615F",
-      color: "white",
-    },
-  },
-});
 function ListRequest({
   setRequest,
   handleOpen,
@@ -134,7 +121,6 @@ function ListRequest({
   userState,
   handleOpenAssignOrder,
 }) {
-  const classes = useStyles();
   const navigate = useNavigate();
 
   const handleClickRow = (row, setRequest, handleOpen) => {
@@ -157,20 +143,8 @@ function ListRequest({
     handleOpen(true);
   };
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
-  const [open, setOpen] = React.useState(false);
-  const [currentId, setCurrentId] = React.useState(-1);
-  const handleConfirmOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page - 1 > 0
-      ? Math.max(0, (1 + page) * rowsPerPage - listRequest.length)
-      : 0;
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage + 1);

@@ -4,19 +4,15 @@ import {
   Typography,
   Box,
   Button,
-  FormControl,
   MenuItem,
   Select,
   Grid,
-  FormHelperText,
 } from "@material-ui/core";
 import CustomInput from "../../../components/CustomInput";
-import CustomAreaInput from "../../../components/CustomAreaInput";
 
 import {connect} from "react-redux";
 import * as action from "../../../redux/action/action";
 import {createSpace, updateShelf} from "../../../apis/Apis";
-import CustomSelect from "../../../components/CustomSelect";
 function FormUnwieldy({
   isEdit,
   currentSpace,
@@ -33,13 +29,7 @@ function FormUnwieldy({
   isView,
   listAreas,
 }) {
-  console.log(listAreas);
-  const {
-    handleSubmit,
-    control,
-    reset,
-    formState: {errors},
-  } = useForm();
+  const {handleSubmit, control, reset} = useForm();
   const [currentIdService, setCurrentIdService] = useState(
     listAreas?.find((e) => {
       return (
@@ -62,7 +52,7 @@ function FormUnwieldy({
         floorHeight: parseInt(data.floorHeight),
         floorLength: parseInt(data.floorLength),
       };
-      let test = await updateShelf(currentSpace.id, shelf, userState.idToken);
+      await updateShelf(currentSpace.id, shelf, userState.idToken);
       await getData(searchName, page, 4);
       showSnackbar("success", "Update shelf success");
       handleClose();
@@ -112,7 +102,7 @@ function FormUnwieldy({
       floorLength: currentSpace.floorLength,
       name: currentSpace.name,
     });
-  }, [currentSpace]);
+  }, [currentSpace, reset]);
 
   const mapListMenu = (listAreas) =>
     listAreas?.map((e) => <MenuItem value={e.id}>{e.name}</MenuItem>);

@@ -1,16 +1,6 @@
 import React, {useState, useEffect} from "react";
 import {useForm} from "react-hook-form";
-import {
-  Typography,
-  Box,
-  Button,
-  FormControl,
-  MenuItem,
-  TextField,
-  Select,
-  FormHelperText,
-  Grid,
-} from "@material-ui/core";
+import {Typography, Box, Button, Grid} from "@material-ui/core";
 import CustomInput from "../../../components/CustomInput";
 import {connect} from "react-redux";
 import * as action from "../../../redux/action/action";
@@ -67,7 +57,7 @@ function FormSpace({
       name: currentSpace.name,
       numberOfFloor: currentSpace?.floors?.length,
     });
-  }, [currentSpace]);
+  }, [currentSpace, reset]);
 
   const onHandleEditShelf = async (data) => {
     try {

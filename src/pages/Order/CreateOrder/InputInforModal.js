@@ -23,7 +23,6 @@ import {createOrder} from "../../../apis/Apis";
 import LoadingPage from "../../Loading/LoadingPage";
 import {useNavigate} from "react-router";
 import {STYLE_MODAL} from "../../../constant/style";
-import moment from "moment";
 
 const styleInput = {marginRight: "2.5%", backgroundColor: "white"};
 const styleModal = {...STYLE_MODAL, overflow: "hidden", overflowY: "scroll"};
@@ -71,7 +70,6 @@ function InputInforModal({
           });
         });
       });
-      let test = order;
       let orderTemp = {};
 
       if (order.type === 0) {

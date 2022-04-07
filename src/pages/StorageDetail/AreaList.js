@@ -7,7 +7,6 @@ import {connect} from "react-redux";
 import * as action from "../../redux/action/action";
 import ConfirmModal from "../../components/ConfirmModal";
 import {createArea, deleteArea, updateArea, getArea} from "../../apis/Apis";
-import {TYPE_AREA} from "../../constant/constant";
 import {ErrorHandle} from "../../utils/ErrorHandle";
 
 function AreaList({

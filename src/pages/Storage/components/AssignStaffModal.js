@@ -1,7 +1,7 @@
 import React from "react";
-import { Box, Typography, Modal, Button } from "@material-ui/core";
+import {Box, Modal, Button} from "@material-ui/core";
 import ListStaff from "./ListStaff";
-import { STYLE_MODAL } from "../../../constant/style";
+import {STYLE_MODAL} from "../../../constant/style";
 const styleModal = {
   ...STYLE_MODAL,
   width: "70%",
@@ -37,7 +37,7 @@ export default function AssignStaffModal({
           flexDirection: "column",
         }}
       >
-        <Box sx={{ height: "90%" }}>
+        <Box sx={{height: "90%"}}>
           <Box
             sx={{
               display: "flex",

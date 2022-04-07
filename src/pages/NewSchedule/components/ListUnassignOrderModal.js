@@ -1,14 +1,6 @@
-import React, { useState, useEffect } from "react";
-import {
-  Box,
-  Modal,
-  Typography,
-  Button,
-  Card,
-  Radio,
-  Grid,
-} from "@material-ui/core";
-import { STYLE_MODAL } from "../../../constant/style";
+import React from "react";
+import {Box, Modal, Typography, Button} from "@material-ui/core";
+import {STYLE_MODAL} from "../../../constant/style";
 import Schedule from "./Schedule";
 
 export default function ListUnassignOrderModal({

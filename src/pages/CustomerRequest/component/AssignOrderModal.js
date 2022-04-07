@@ -41,7 +41,7 @@ function AssignOrderModal({
     }
     try {
       showLoading();
-      let test = await assignOrder(currentId, selectedValue, userState.idToken);
+      await assignOrder(currentId, selectedValue, userState.idToken);
       showSnackbar("success", "Phân đơn thành công!");
       changeIsLoadRequest();
       handleClose();
@@ -76,7 +76,7 @@ function AssignOrderModal({
     };
 
     process();
-  }, [open]);
+  }, [open, hideLoading, showLoading, userState]);
 
   const buildRadioSelect = () => {
     return listStorage?.map((e) => {

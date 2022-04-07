@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { Box, Modal, Button, Typography, Checkbox } from "@material-ui/core";
-import { STYLE_MODAL } from "../../../constant/style";
-import { connect } from "react-redux";
-import { updateIsPaidRequest } from "../../../apis/Apis";
+import React from "react";
+import {Box, Modal, Button, Typography} from "@material-ui/core";
+import {STYLE_MODAL} from "../../../constant/style";
+import {connect} from "react-redux";
+import {updateIsPaidRequest} from "../../../apis/Apis";
 import moment from "moment";
 import * as action from "../../../redux/action/action";
 const styleModal = {
@@ -41,7 +41,7 @@ function ModalReturnItem({
         >
           {title}
         </Typography>
-        <p style={{ fontSize: "18px" }}>{value}</p>
+        <p style={{fontSize: "18px"}}>{value}</p>
       </Box>
     );
   };

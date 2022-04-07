@@ -17,7 +17,6 @@ import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 import {Checkbox, FormControlLabel, Modal, Typography} from "@material-ui/core";
 import {Button, TableHead} from "@material-ui/core";
-import {makeStyles} from "@material-ui/styles";
 import {useForm} from "react-hook-form";
 import {connect} from "react-redux";
 import * as action from "../../../redux/action/action";
@@ -121,17 +120,6 @@ const mapListTableHeader = (listHeader, userState) => (
   </TableHead>
 );
 
-const useStyles = makeStyles({
-  button: {
-    backgroundColor: "#CE0200",
-    color: "white",
-    "&:hover": {
-      backgroundColor: "#FF615F",
-      color: "white",
-    },
-  },
-});
-
 const styleModal = {
   position: "absolute",
   top: "50%",
@@ -162,22 +150,14 @@ function ListOrder({
   currentOrder,
   handleUpdateOrderOpen,
 }) {
-  const classes = useStyles();
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   const [open, setOpen] = React.useState(false);
   const [currentId, setCurrentId] = React.useState(-1);
   const {handleSubmit, control} = useForm();
   const [openAssign, setOpenAssign] = React.useState(false);
 
-  const handleConfirmOpen = () => {
-    setOpen(true);
-  };
   const handleClose = () => {
     setOpen(false);
-  };
-
-  const handleOpenAssign = () => {
-    setOpenAssign(true);
   };
 
   const handleCloseAssign = () => {

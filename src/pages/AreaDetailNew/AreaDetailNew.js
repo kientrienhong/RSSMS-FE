@@ -20,10 +20,8 @@ import {
   deleteSpace,
 } from "../../apis/Apis";
 import ModalDetailFloor from "./components/ModalDetailFloor";
-import {AREA_TYPE, SELF_STORAGE_TYPE} from "../../constant/constant";
-import {TYPE_AREA, TYPE_SHELF} from "../../constant/constant";
+import {TYPE_AREA} from "../../constant/constant";
 import AreaUsage from "./components/AreaUsage";
-import Shelf from "./components/Shelf";
 import ListShelf from "./components/ListShelf";
 import ModalSpace from "./components/ModalSpace";
 import SelfStorageModal from "./components/SelfStorageModal";
@@ -44,7 +42,6 @@ function AreaDetailNew({
   const [searchName, setSearchName] = useState("");
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
-  const [currentArea, setCurrentArea] = useState({});
   const [openDetailFloor, setOpenDetailFloor] = useState(false);
   const [currentSpace, setCurrentSpace] = useState({});
   const [currentFloor, setCurrentFloor] = useState({});
