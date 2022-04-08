@@ -177,6 +177,12 @@ export const changeIsLoadRequest = () => {
   };
 };
 
+export const changeIsLoadSchedule = () => {
+  return {
+    type: ActionType.CHANGE_IS_LOAD_SCHEDULE,
+  };
+};
+
 export const handleProgressModal = (isOpen, title, yesFunction, noFunction) => {
   return {
     type: ActionType.HANDLE_PROGRESS_MODAL,

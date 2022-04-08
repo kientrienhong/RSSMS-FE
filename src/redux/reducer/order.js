@@ -19,6 +19,7 @@ const initialState = {
   isLoadingStorage: false,
   isLoadingRequest: false,
   isLoadingOrder: false,
+  isLoadingSchedule: false,
   moveBox: undefined,
 
   isMoveOrderDetail: false,
@@ -92,6 +93,11 @@ const order = (state = initialState, action) => {
 
     case ActionType.CHANGE_IS_LOAD_STORAGE: {
       state.isLoadingStorage = !state.isLoadingStorage;
+      return {...state};
+    }
+
+    case ActionType.CHANGE_IS_LOAD_SCHEDULE: {
+      state.isLoadingSchedule = !state.isLoadingSchedule;
       return {...state};
     }
 

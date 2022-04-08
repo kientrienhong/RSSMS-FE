@@ -19,7 +19,7 @@ import {useParams} from "react-router-dom";
 
 import OrderAssignModal from "./components/OrderAssignModal";
 import OrderModal from "../../components/OrderModal";
-function NewSchedule({showLoading, hideLoading, userState}) {
+function NewSchedule({showLoading, hideLoading, userState, isLoadingSchedule}) {
   const [listShowStaffAssigned, setListShowStaffAssigned] = React.useState([]);
   const [listShowStaffUnAssigned, setListShowStaffUnAssigned] = React.useState(
     []
@@ -375,7 +375,9 @@ function NewSchedule({showLoading, hideLoading, userState}) {
   useEffect(() => {
     getData(startOfWeek, endOfWeek, scheduleDate);
   }, [startOfWeek, endOfWeek]);
-
+  useEffect(() => {
+    getData(startOfWeek, endOfWeek, scheduleDate);
+  }, [isLoadingSchedule]);
   return (
     <Box
       sx={{
@@ -495,6 +497,7 @@ function NewSchedule({showLoading, hideLoading, userState}) {
 
 const mapStateToProps = (state) => ({
   userState: state.information.user,
+  isLoadingSchedule: state.order.isLoadingSchedule,
 });
 
 const mapDispatchToProps = (dispatch) => {

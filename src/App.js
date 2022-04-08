@@ -17,7 +17,8 @@ function App(props) {
       return;
     }
     props.changeIsLoadOrder();
-
+    props.changeIsLoadSchedule();
+    props.changeIsLoadRequest();
     props.addNotification({
       createdDate: new Date().toISOString(),
       id: parseInt(payload.data.NotiId),
@@ -42,6 +43,8 @@ const mapDispatchToProps = (dispatch) => {
     addNotification: (notifcation) =>
       dispatch(action.addNotification(notifcation)),
     changeIsLoadOrder: () => dispatch(action.changeIsLoadOrder()),
+    changeIsLoadSchedule: () => dispatch(action.changeIsLoadSchedule()),
+    changeIsLoadRequest: () => dispatch(action.changeIsLoadRequest()),
   };
 };
 
