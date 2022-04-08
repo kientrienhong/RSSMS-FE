@@ -381,7 +381,7 @@ function NewSchedule({showLoading, hideLoading, userState}) {
       sx={{
         backgroundColor: "background.default",
         height: "100vh",
-        overflowX: "scroll",
+        overflowY: "scroll",
         py: 3,
       }}
     >
@@ -475,6 +475,8 @@ function NewSchedule({showLoading, hideLoading, userState}) {
         sx={{
           display: "flex",
           flexDirection: "row",
+          width: "80%",
+          overflowX: "scroll",
         }}
       >
         <ListItemSidebar listTime={LIST_TIME} />

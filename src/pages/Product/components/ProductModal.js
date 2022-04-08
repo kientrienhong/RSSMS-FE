@@ -74,7 +74,7 @@ function ProductModal({
       if (!currentProduct.avatarFile) {
         setError({
           ...error,
-          avatarFile: {message: "Please provide product image!"},
+          avatarFile: {message: "VUi lòng thêm hình ảnh!"},
         });
         hideLoading();
 
@@ -90,7 +90,7 @@ function ProductModal({
       const response = await createProduct(productTemp, userState.idToken);
       if (response.status === 200) {
         try {
-          showSnackbar("success", "Create product successful!");
+          showSnackbar("success", "Tạo dịch vụ thành công");
           await getData();
           handleClose();
           setError({});
@@ -135,7 +135,7 @@ function ProductModal({
             userState.idToken
           );
           if (responseUpdate.status === 200) {
-            showSnackbar("success", "Update storage successful!");
+            showSnackbar("success", "Cập nhật dịch vụ thành công");
             await getData();
             handleClose();
           }
@@ -150,7 +150,7 @@ function ProductModal({
           userState.idToken
         );
         if (responseUpdate.status === 200) {
-          showSnackbar("success", "Update storage successful!");
+          showSnackbar("success", "Cập nhật dịch vụ thành công");
           await getData();
           handleClose();
         }

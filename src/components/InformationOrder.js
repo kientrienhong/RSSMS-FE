@@ -115,7 +115,7 @@ function InformationOrder({
 
   const handleStoreOrder = () => {
     storeOrder(currentOrder);
-    showSnackbar("success", "Store order success");
+    showSnackbar("success", "Thao tác thành công");
     if (userState.roleName === "Office Staff") {
       navigate(`/app/storages/${userState.storageId}`, {
         replace: true,

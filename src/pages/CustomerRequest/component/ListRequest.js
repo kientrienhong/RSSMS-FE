@@ -99,6 +99,7 @@ const listHeaderName = [
   "Mã",
   "Tên khách hàng",
   "Số điện thoại",
+  "Kho",
   "Loại",
   "Trạng thái",
   "Hành động",
@@ -135,7 +136,6 @@ function ListRequest({
   handleOpenUpdateRequest,
   showSnackbar,
 }) {
-  console.log(listRequest);
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   // Avoid a layout jump when reaching the last page with empty rows.
 
@@ -165,7 +165,11 @@ function ListRequest({
                 <TableCell style={{color: "black"}}>
                   {row.customerPhone}
                 </TableCell>
-
+                <TableCell style={{color: "black"}}>
+                  {row?.storageName === null
+                    ? "Chưa được phân đơn"
+                    : row?.storageName}
+                </TableCell>
                 <TableCell style={{color: "black"}}>
                   {LIST_TYPE_REQUEST[row.type].name}
                 </TableCell>
@@ -243,7 +247,7 @@ function ListRequest({
                       color="primary"
                       variant="contained"
                     >
-                      Xử lý đơn
+                      Tiếp nhận
                     </Button>
                   ) : (
                     <></>

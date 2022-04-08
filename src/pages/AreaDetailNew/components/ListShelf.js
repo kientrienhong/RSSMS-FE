@@ -1,5 +1,7 @@
 import React from "react";
 import Shelf from "./Shelf";
+import {Typography} from "@material-ui/core";
+
 export default function ListShelf({
   listShelf,
   handleOpen,
@@ -28,5 +30,19 @@ export default function ListShelf({
     });
   };
 
-  return <>{mapShelf()}</>;
+  return (
+    <>
+      {listShelf.length > 0 ? (
+        mapShelf()
+      ) : (
+        <Typography
+          color="black"
+          variant="h2"
+          sx={{textAlign: "center", marginTop: "2%"}}
+        >
+          Chưa có không gian chứa
+        </Typography>
+      )}
+    </>
+  );
 }
