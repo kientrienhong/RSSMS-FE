@@ -243,7 +243,7 @@ const order = (state = initialState, action) => {
       state.placingProducts = {
         typeOrder: -1,
         orderId: -1,
-        boxes: [],
+        floors: [],
       };
 
       state.order = {};
