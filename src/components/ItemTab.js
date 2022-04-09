@@ -51,42 +51,60 @@ export default function ItemTab({listOrderDetail}) {
         </Grid>
       ));
 
-  const mapListSperate = () =>
-    listOrderDetail
-      .filter(
-        (e) =>
-          e.serviceType === ACCESSSORY_TYPE || e.serviceType === SERVICE_TYPE
-      )
-      .map((e) => e.orderDetailServices[0])
-      .map((e, index) => (
-        <Grid item xs={3} key={index}>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
+  const mapListSperate = () => {
+    const listOrderSeperate = listOrderDetail.filter(
+      (e) => e.serviceType === ACCESSSORY_TYPE || e.serviceType === SERVICE_TYPE
+    );
+
+    if (listOrderSeperate.length > 0) {
+      return (
+        <Box>
+          <Typography
+            color="primary"
+            variant="h2"
+            style={{
+              textAlign: "left",
+              marginBottom: "2%",
             }}
           >
-            <img src={e.serviceUrl} width="64" height="64" alt="imaged" />
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                marginLeft: "8px",
-              }}
-            >
-              <p
-                style={{
-                  fontWeight: "bold",
-                  fontSize: "24px",
-                }}
-              >
-                {e.serviceName} x {e.amount}
-              </p>
-            </Box>
-          </Box>
-        </Grid>
-      ));
-
+            Sản phẩm riêng:
+          </Typography>
+          {listOrderSeperate
+            .map((e) => e.orderDetailServices[0])
+            .map((e, index) => (
+              <Grid item xs={3} key={index}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                  }}
+                >
+                  <img src={e.serviceUrl} width="64" height="64" alt="imaged" />
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      marginLeft: "8px",
+                    }}
+                  >
+                    <p
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "24px",
+                      }}
+                    >
+                      {e.serviceName} x {e.amount}
+                    </p>
+                  </Box>
+                </Box>
+              </Grid>
+            ))}
+        </Box>
+      );
+    } else {
+      <></>;
+    }
+  };
   return (
     <div
       style={{
@@ -114,16 +132,7 @@ export default function ItemTab({listOrderDetail}) {
       >
         {mapListOrderDetail()}
       </Grid>
-      <Typography
-        color="primary"
-        variant="h2"
-        style={{
-          textAlign: "left",
-          marginBottom: "8px",
-        }}
-      >
-        Phụ kiện riêng:
-      </Typography>
+
       <Grid
         container
         spacing={2}

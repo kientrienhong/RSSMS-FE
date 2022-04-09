@@ -83,6 +83,7 @@ function RequestModal({
   userState,
   isView,
 }) {
+  console.log(currentOrder);
   const [returnAddress, setReturnAddress] = useState();
   const [deliveryAddress, setDeliveryAddress] = useState();
   const [timeDelivery, setTimeDelivery] = useState();
@@ -250,7 +251,7 @@ function RequestModal({
         <TagSelection
           tag={e}
           currentTag={time}
-          setCurrentTag={setTime}
+          setCurrentTag={() => {}}
           setIsCustomerDelivery={setIsCutomer}
         />
       </Grid>
@@ -443,7 +444,7 @@ function RequestModal({
               styles={{width: "300px"}}
               name="deliveryAddress"
               label="Địa chỉ lấy hàng"
-              disabled={isView}
+              disabled={true}
               userInfo={deliveryAddress}
               inlineStyle={{}}
             />
@@ -460,7 +461,7 @@ function RequestModal({
               styles={{width: "300px", display: "block"}}
               name="returnAddress"
               label="Địa chỉ trả hàng"
-              disabled={isView}
+              disabled={true}
               userInfo={returnAddress}
               inlineStyle={{}}
             />
@@ -521,7 +522,7 @@ function RequestModal({
                   control={
                     <Checkbox
                       checked={isCustomerDelivery}
-                      onChange={handleChangeCheckBox}
+                      onChange={() => {}}
                     />
                   }
                   label="Khách hàng tự vận chuyển"
@@ -597,7 +598,7 @@ function RequestModal({
                 </Typography>
               </Box>
             )}
-            {currentOrder?.typeOrder === 0 ? null : (
+            {/* {currentOrder?.typeOrder === 0 ? null : (
               <Box>
                 <Grid
                   container
@@ -621,7 +622,7 @@ function RequestModal({
                   labelPlacement="Customer return by themselves"
                 />
               </Box>
-            )}
+            )} */}
 
             <Typography
               color="black"
@@ -692,19 +693,20 @@ function RequestModal({
               isOrder={false}
             />
 
-            {currentOrder?.orderHistoryExtensions?.length > 0 ? (
-              <ListInfoHistoryExtension
-                list={currentOrder?.orderHistoryExtensions}
-                currentOrder={currentOrder}
-              />
-            ) : (
-              <></>
-            )}
-            {currentOrder?.orderDetails?.boxDetails != null ? (
-              <ListPositionStored currentOrder={currentOrder} />
-            ) : (
-              <></>
-            )}
+            <Typography color="black" variant="h2" sx={{marginBottom: "4%"}}>
+              Ghi chú
+            </Typography>
+
+            <TextField
+              disabled={true}
+              variant="outlined"
+              value={currentOrder?.note}
+              multiline
+              rows={2}
+              rowsMax={4}
+              sx={{marginBottom: "4%"}}
+            />
+
             {isView === true ? (
               <Box
                 sx={{

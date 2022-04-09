@@ -108,6 +108,12 @@ export const LIST_TYPE_REQUEST = [
   {name: "Yêu cầu trả đơn"},
 ];
 
+export const LIST_ADDITIONAL_FEE_TYPE = [
+  {name: "Chi phí thêm khi lấy hàng"},
+  {name: "Chi phí thêm khi trả hàng"},
+  {name: "Bồi thường"},
+];
+
 export const LIST_STATUS_REQUEST = [
   {name: "Đã hủy", color: style.PRIMARY_SEMANTIC_RED},
   {name: "Đang xử lý", color: style.PRIMARY_PURPLE},
@@ -128,7 +134,7 @@ export const ORDER_STATUS = {
   0: {name: "Đã hủy", color: style.PRIMARY_SEMANTIC_RED},
   1: {name: "Đang vận chuyển", color: style.PRIMARY_BLUE},
   2: {name: "Đã lưu kho", color: style.SECOND_SEMANTIC_GREEN},
-  3: {name: "Sắp quá hạn", color: style.PRIMARY_SEMANTIC_RED},
+  3: {name: "Sắp quá hạn", color: style.PRIMARY_SEMANTIC_ORANGE},
   4: {name: "Đã quá hạn", color: style.PRIMARY_SEMANTIC_RED},
   5: {name: "Đang thanh lý", color: style.PRIMARY_SEMANTIC_ORANGE},
   6: {name: "Hoàn thành", color: style.SECOND_SEMANTIC_GREEN},

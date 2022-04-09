@@ -16,6 +16,7 @@ import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 import {Button, TableHead} from "@material-ui/core";
+import moment from "moment";
 import {
   LIST_TYPE_REQUEST,
   LIST_STATUS_REQUEST,
@@ -96,9 +97,10 @@ TablePaginationActions.propTypes = {
 };
 
 const listHeaderName = [
-  "Mã",
   "Tên khách hàng",
   "Số điện thoại",
+  "Ngày giao",
+  "Khung giờ giao",
   "Kho",
   "Loại",
   "Trạng thái",
@@ -156,14 +158,17 @@ function ListRequest({
           {listRequest?.map((row, index) => {
             return (
               <TableRow key={row.id}>
-                <TableCell component="th" scope="row" style={{color: "black"}}>
-                  {row.id}
-                </TableCell>
                 <TableCell style={{color: "black"}}>
                   {row.customerName}
                 </TableCell>
                 <TableCell style={{color: "black"}}>
                   {row.customerPhone}
+                </TableCell>
+                <TableCell style={{color: "black"}}>
+                  {moment(new Date(row?.deliveryDate)).format("DD/MM/YYYY")}
+                </TableCell>
+                <TableCell style={{color: "black"}}>
+                  {row.deliveryTime}
                 </TableCell>
                 <TableCell style={{color: "black"}}>
                   {row?.storageName === null

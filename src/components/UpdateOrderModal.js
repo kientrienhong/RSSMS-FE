@@ -149,7 +149,9 @@ function UpdateOrderModal({
                 paddingRight: "16px",
                 marginLeft: "16px",
               }}
-              type="submit"
+              onClick={() => {
+                handleClose();
+              }}
               color="error"
               variant="outlined"
             >

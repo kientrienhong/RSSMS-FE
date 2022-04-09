@@ -3,7 +3,7 @@ import {Box, Divider, Typography} from "@material-ui/core";
 import {formatCurrency} from "../utils/FormatCurrency";
 import {styled} from "@mui/material/styles";
 import Tooltip, {tooltipClasses} from "@mui/material/Tooltip";
-
+import {LIST_ADDITIONAL_FEE_TYPE} from "../constant/constant";
 const HtmlTooltip = styled(({className, ...props}) => (
   <Tooltip {...props} classes={{popper: className}} />
 ))(({theme}) => ({
@@ -36,9 +36,10 @@ export default function OrderDetail({
       sum += e.price * e.quantity;
     });
 
-    if (order?.additionalFee) {
-      sum += order?.additionalFee;
+    if (order?.orderAdditionalFees) {
+      sum += order?.orderAdditionalFees?.find((e) => e.type === 0).price;
     }
+
     return (
       <Box
         sx={{
@@ -61,6 +62,10 @@ export default function OrderDetail({
   };
 
   const buildTotalEachPartPrice = (value) => {
+    if (choosenProduct[value].length === 0) {
+      return <></>;
+    }
+
     let total = choosenProduct[value].reduce(
       (a, b) => {
         return {
@@ -108,42 +113,58 @@ export default function OrderDetail({
   };
 
   const mapListDetailOthers = (listProduct) => {
-    return listProduct.map((e) => (
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
+    if (listProduct.length > 0) {
+      return listProduct.map((e) => (
         <Box
           sx={{
             display: "flex",
             flexDirection: "row",
-            alignItems: "flex-end",
-            width: "40%",
+            alignItems: "center",
+            justifyContent: "space-between",
           }}
         >
-          <Typography
-            variant="h2"
-            style={{marginBottom: "3%", marginRight: "8%"}}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "flex-end",
+              width: "40%",
+            }}
           >
-            {e?.name}
-          </Typography>
-          <Typography variant="h3" color="primary" style={{marginBottom: "3%"}}>
-            X {e?.quantity}
+            <Typography
+              variant="h2"
+              style={{marginBottom: "3%", marginRight: "8%"}}
+            >
+              {e?.name}
+            </Typography>
+            <Typography
+              variant="h3"
+              color="primary"
+              style={{marginBottom: "3%"}}
+            >
+              X {e?.quantity}
+            </Typography>
+          </Box>
+
+          <Typography variant="h2" color="primary" style={{marginBottom: "3%"}}>
+            {formatCurrency(e?.price * e?.quantity, "đ")}
           </Typography>
         </Box>
-
-        <Typography variant="h2" color="primary" style={{marginBottom: "3%"}}>
-          {formatCurrency(e?.price * e?.quantity, "đ")}
-        </Typography>
-      </Box>
-    ));
+      ));
+    } else {
+      return (
+        <p
+          style={{
+            textAlign: "center",
+          }}
+        >
+          (Trống)
+        </p>
+      );
+    }
   };
 
-  const buildAdditionPrice = () => {
+  const buildAdditionPrice = (additionalFee) => {
     return (
       <Box
         sx={{
@@ -156,7 +177,7 @@ export default function OrderDetail({
           variant="h2"
           style={{marginBottom: "3%", marginRight: "8%"}}
         >
-          Chi phí thêm
+          {LIST_ADDITIONAL_FEE_TYPE[additionalFee.type]?.name}
         </Typography>
         <Divider />
         <Box
@@ -167,15 +188,23 @@ export default function OrderDetail({
             marginTop: "1%",
           }}
         >
-          <Typography variant="h2" style={{marginBottom: "3%", width: "50%"}}>
-            {order?.additionalFeeDescription}
-          </Typography>
+          <p
+            style={{
+              margin: 0,
+            }}
+          >
+            {additionalFee?.description}
+          </p>
+          <Typography
+            variant="h2"
+            style={{marginBottom: "3%", width: "50%"}}
+          ></Typography>
           <Typography
             variant="h2"
             color="primary"
             style={{marginBottom: "3%", width: "50%", textAlign: "right"}}
           >
-            {formatCurrency(order?.additionalFee, "đ")}
+            {formatCurrency(additionalFee?.price, "đ")}
           </Typography>
         </Box>
       </Box>
@@ -398,7 +427,28 @@ export default function OrderDetail({
       <Divider />
       {buildTotalEachPartPrice("accessory")}
       {order?.additionalFee ? buildAdditionPrice() : <></>}
+      {order?.orderAdditionalFees?.find((e) => e.type === 0)?.price > 0 ? (
+        buildAdditionPrice(
+          order?.orderAdditionalFees?.find((e) => e.type === 0)
+        )
+      ) : (
+        <></>
+      )}
       {buildTotalPrice()}
+      {order?.orderAdditionalFees?.find((e) => e.type === 1)?.price > 0 ? (
+        buildAdditionPrice(
+          order?.orderAdditionalFees?.find((e) => e.type === 1)
+        )
+      ) : (
+        <></>
+      )}
+      {order?.orderAdditionalFees?.find((e) => e.type === 2)?.price > 0 ? (
+        buildAdditionPrice(
+          order?.orderAdditionalFees?.find((e) => e.type === 2)
+        )
+      ) : (
+        <></>
+      )}
     </Box>
   );
 }

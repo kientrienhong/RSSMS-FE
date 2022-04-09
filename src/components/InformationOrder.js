@@ -78,8 +78,8 @@ function InformationOrder({
   userState,
   isView,
 }) {
-  const [returnAddress, setReturnAddress] = useState();
-  const [deliveryAddress, setDeliveryAddress] = useState();
+  const [returnAddress, setReturnAddress] = useState("");
+  const [deliveryAddress, setDeliveryAddress] = useState("");
   const [timeDelivery, setTimeDelivery] = useState();
   const [timeReturn, setTimeReturn] = useState();
   const [duration, setDuration] = useState();
@@ -91,27 +91,6 @@ function InformationOrder({
   const [isCustomerReturn, setIsCustomerReturn] = useState();
   const [paymentMethod, setPaymentMethod] = useState(0);
   const navigate = useNavigate();
-  const handleChangePaymentMethod = (e) => {
-    if (isView === true) {
-      return;
-    }
-    setPaymentMethod(parseInt(e.target.value));
-  };
-  const handleChangeCheckBox = (event) => {
-    if (isView === true) {
-      return;
-    }
-    setIsCustomerDelivery(event.target.checked);
-    setTimeDelivery({});
-  };
-
-  const handleChangeCheckBoxCustomerReturn = (event) => {
-    if (isView === true) {
-      return;
-    }
-    setIsCustomerReturn(event.target.checked);
-    setTimeReturn({});
-  };
 
   const handleStoreOrder = () => {
     storeOrder(currentOrder);
@@ -171,44 +150,44 @@ function InformationOrder({
     }
   }, [currentOrder]);
 
-  const generateSelectOptions = () => {
-    return LIST_STATUS.map((option) => {
-      return (
-        <MenuItem key={option.value} value={option.value}>
-          {option.label}
-        </MenuItem>
-      );
-    });
-  };
+  // const generateSelectOptions = () => {
+  //   return LIST_STATUS.map((option) => {
+  //     return (
+  //       <MenuItem key={option.value} value={option.value}>
+  //         {option.label}
+  //       </MenuItem>
+  //     );
+  //   });
+  // };
 
-  const handleOnClickMinus = (event) => {
-    event.preventDefault();
-    if (isView === true) {
-      return;
-    }
+  // const handleOnClickMinus = (event) => {
+  //   event.preventDefault();
+  //   if (isView === true) {
+  //     return;
+  //   }
 
-    if (duration > 0) {
-      let newDuration = duration - 1;
-      setDuration(newDuration);
-      let currentDate = new Date(dateReturn);
+  //   if (duration > 0) {
+  //     let newDuration = duration - 1;
+  //     setDuration(newDuration);
+  //     let currentDate = new Date(dateReturn);
 
-      let newDate = new Date(currentDate.setMonth(currentDate.getMonth() - 1));
-      setDateReturn(newDate.toLocaleDateString("en-US"));
-    }
-  };
+  //     let newDate = new Date(currentDate.setMonth(currentDate.getMonth() - 1));
+  //     setDateReturn(newDate.toLocaleDateString("en-US"));
+  //   }
+  // };
 
-  const handleOnClickPlus = (event) => {
-    event.preventDefault();
-    if (isView === true) {
-      return;
-    }
+  // const handleOnClickPlus = (event) => {
+  //   event.preventDefault();
+  //   if (isView === true) {
+  //     return;
+  //   }
 
-    let newDuration = duration + 1;
-    setDuration(newDuration);
-    let currentDate = new Date(dateReturn);
-    let newDate = new Date(currentDate.setMonth(currentDate.getMonth() + 1));
-    setDateReturn(newDate.toLocaleDateString("en-US"));
-  };
+  //   let newDuration = duration + 1;
+  //   setDuration(newDuration);
+  //   let currentDate = new Date(dateReturn);
+  //   let newDate = new Date(currentDate.setMonth(currentDate.getMonth() + 1));
+  //   setDateReturn(newDate.toLocaleDateString("en-US"));
+  // };
 
   const mapListTime = (time, setTime, setIsCutomer) =>
     LIST_TIME.map((e, index) => (
@@ -216,7 +195,7 @@ function InformationOrder({
         <TagSelection
           tag={e}
           currentTag={time}
-          setCurrentTag={setTime}
+          setCurrentTag={() => {}}
           setIsCustomerDelivery={setIsCutomer}
         />
       </Grid>
@@ -248,7 +227,6 @@ function InformationOrder({
       services: [],
       accessory: [],
     };
-
     if (currentOrder?.orderDetails) {
       currentOrder?.orderDetails?.forEach((e) => {
         let type = PRODUCT_TYPE[e.serviceType];
@@ -261,7 +239,7 @@ function InformationOrder({
           e.serviceType === SELF_STORAGE_TYPE
         ) {
           let indexFound = result[type].findIndex(
-            (ele1) => e.serviceId === ele1.serviceId
+            (ele1) => e.serviceId === ele1.id
           );
           if (indexFound === -1) {
             result[type].push({
@@ -312,14 +290,6 @@ function InformationOrder({
     }
 
     return result;
-  };
-
-  const handleChangeStatus = (e) => {
-    if (isView) {
-      return;
-    }
-
-    setStatusOrder(parseInt(e.target.value));
   };
 
   const onSubmit = async (data) => {
@@ -431,7 +401,7 @@ function InformationOrder({
               name="isPaid"
               defaultValue={isPaid}
               render={({field: {onChange, onBlur, value, name, ref}}) => (
-                <Checkbox checked={value} onChange={onChange} />
+                <Checkbox checked={value} onChange={() => {}} />
               )}
             />
           </Box>
@@ -448,7 +418,7 @@ function InformationOrder({
             styles={{width: "300px"}}
             name="deliveryAddress"
             label="Địa chỉ lấy hàng"
-            disabled={isView}
+            disabled={true}
             userInfo={deliveryAddress}
             inlineStyle={{}}
           />
@@ -465,7 +435,7 @@ function InformationOrder({
             styles={{width: "300px", display: "block"}}
             name="returnAddress"
             label="Địa chỉ trả hàng"
-            disabled={isView}
+            disabled={true}
             userInfo={returnAddress}
             inlineStyle={{}}
           />
@@ -495,7 +465,7 @@ function InformationOrder({
               return (
                 <TextField
                   type="date"
-                  disabled={isView}
+                  disabled={true}
                   value={value}
                   onChange={onChange}
                   sx={{width: 220, marginBottom: "16px"}}
@@ -526,8 +496,8 @@ function InformationOrder({
                 value="isCustomerDelivery"
                 control={
                   <Checkbox
-                    checked={isCustomerDelivery}
-                    onChange={handleChangeCheckBox}
+                    checked={currentOrder?.isCustomerDelivery}
+                    onChange={() => {}}
                   />
                 }
                 label="Khách hàng tự vận chuyển"
@@ -555,13 +525,20 @@ function InformationOrder({
                   alignItems: "center",
                 }}
               >
-                <button style={styleButtonMinus} onClick={handleOnClickMinus}>
+                <Typography
+                  color="primary"
+                  variant="h3"
+                  sx={{marginBottom: "2%", textAlign: "right"}}
+                >
+                  {duration}
+                </Typography>
+                {/* <button style={styleButtonMinus} onClick={handleOnClickMinus}>
                   -
                 </button>
                 <input style={styleInput} value={duration}></input>
                 <button style={styleButtonPlus} onClick={handleOnClickPlus}>
                   +
-                </button>
+                </button> */}
               </Box>
             </Box>
           ) : null}
@@ -586,17 +563,6 @@ function InformationOrder({
               {new Date(currentOrder?.returnDate).toLocaleDateString("en-US")}
             </Typography>
           </Box>
-
-          {/* <TextField
-                id="date"
-                onChange={handleChaneReturnDate}
-                type="date"
-                defaultValue={dateReturn}
-                sx={{ width: 220, marginBottom: "16px" }}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              /> */}
           {currentOrder?.typeOrder === 0 ? null : (
             <Box
               sx={{
@@ -625,7 +591,7 @@ function InformationOrder({
               <RadioGroup
                 aria-label="gender"
                 value={paymentMethod}
-                onChange={handleChangePaymentMethod}
+                onChange={() => {}}
               >
                 <FormControlLabel
                   value={0}
@@ -683,11 +649,6 @@ function InformationOrder({
             isOrder={true}
           />
 
-          {currentOrder?.orderDetails?.boxDetails != null ? (
-            <ListPositionStored currentOrder={currentOrder} />
-          ) : (
-            <></>
-          )}
           {isView === true ? (
             <Box
               sx={{
@@ -719,25 +680,25 @@ function InformationOrder({
                 justifyContent: "center",
               }}
             >
-              {currentOrder?.status === 1 ? (
-                <Button
-                  style={{
-                    height: "45px",
-                    paddingLeft: "16px",
-                    paddingRight: "16px",
-                    marginRight: "4%",
-                  }}
-                  color="primary"
-                  variant="contained"
-                  onClick={() => handleStoreOrder()}
-                >
-                  Lưu trữ đơn
-                </Button>
-              ) : (
+              {/* {currentOrder?.status === 1 ? ( */}
+              <Button
+                style={{
+                  height: "45px",
+                  paddingLeft: "16px",
+                  paddingRight: "16px",
+                  marginRight: "4%",
+                }}
+                color="primary"
+                variant="contained"
+                onClick={() => handleStoreOrder()}
+              >
+                Lưu trữ đơn
+              </Button>
+              {/* ) : (
                 <></>
-              )}
+              )} */}
 
-              {currentOrder?.status !== 0 && currentOrder?.status !== 1 ? (
+              {/* {currentOrder?.status !== 0 && currentOrder?.status !== 1 ? (
                 userState.roleName !== "Admin" ? (
                   <Button
                     style={{
@@ -753,7 +714,7 @@ function InformationOrder({
                     Cập nhật
                   </Button>
                 ) : null
-              ) : null}
+              ) : null} */}
 
               <Button
                 style={{

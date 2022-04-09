@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import {useForm} from "react-hook-form";
 import {
   Typography,
@@ -7,11 +7,13 @@ import {
   Grid,
   Select,
   MenuItem,
+  TextField,
 } from "@material-ui/core";
 import CustomInput from "../../../components/CustomInput";
 import {connect} from "react-redux";
 import * as action from "../../../redux/action/action";
 import {createSpace, updateShelf} from "../../../apis/Apis";
+import {Controller} from "react-hook-form";
 
 function FormSelfStorage({
   isEdit,
@@ -29,6 +31,7 @@ function FormSelfStorage({
   isView,
   listStorage,
 }) {
+  let inputName = useRef(null);
   const {handleSubmit, control, reset} = useForm();
   const [error, setError] = useState({});
   const [idStorage, setIdStorage] = useState("");
@@ -110,16 +113,20 @@ function FormSelfStorage({
   const onChange = (event) => {
     setIdStorage(event.target.value);
     const currentStorage = listStorage.find((e) => e.id === event.target.value);
+
+    console.log(inputName.current.children[1].children[0].value);
     reset({
       floorWidth: currentStorage?.width,
       floorHeight: currentStorage?.height,
       floorLength: currentStorage?.length,
+      name: inputName.current.children[1].children[0].value,
     });
     setCurrentSpace({
       ...currentSpace,
       floorWidth: currentStorage?.width,
       floorHeight: currentStorage?.height,
       floorLength: currentStorage?.length,
+      name: inputName.current.children[1].children[0].value,
     });
   };
 
@@ -143,15 +150,27 @@ function FormSelfStorage({
         <Typography color="black" variant="h2" sx={{textAlign: "left"}}>
           Tên
         </Typography>
-        <CustomInput
+        <Controller
+          name={"name"}
           control={control}
+          defaultValue={currentSpace?.name}
+          render={({field: {onChange, value}, fieldState: {error}}) => {
+            return (
+              <TextField
+                label={"Tên"}
+                ref={inputName}
+                disabled={false}
+                variant="outlined"
+                value={value}
+                style={{marginTop: "2%"}}
+                onChange={onChange}
+                error={!!error}
+                inputProps={{style: {width: "400px"}}}
+                helperText={error ? error.message : null}
+              />
+            );
+          }}
           rules={{required: "*Vui lòng nhập"}}
-          styles={{width: "400px"}}
-          name="name"
-          label="Tên"
-          disabled={isView}
-          userInfo={currentSpace?.name}
-          inlineStyle={{marginTop: "2%"}}
         />
       </Box>
       <Typography

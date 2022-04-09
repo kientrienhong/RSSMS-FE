@@ -197,7 +197,7 @@ function NewSchedule({showLoading, hideLoading, userState, isLoadingSchedule}) {
         });
       try {
         let responseRequest = await getSchedule(
-          startOfWeek.toISOString().split("T")[0],
+          addDays(startOfWeek, 1).toISOString().split("T")[0],
           endOfWeek.toISOString().split("T")[0],
           userState.idToken
         );
