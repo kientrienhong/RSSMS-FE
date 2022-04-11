@@ -35,6 +35,9 @@ function AreaDetailNew({
   showSnackbar,
   userState,
   isLoadingShelf,
+  placingProducts,
+  isMoveOrderDetail,
+  handleCurrentStoreOrder,
 }) {
   const {storageId, areaId} = useParams();
   const [storage, setStorage] = useState({});
@@ -64,6 +67,15 @@ function AreaDetailNew({
   };
 
   const handleOpenConfirm = (space) => {
+    if (
+      isMoveOrderDetail ||
+      storedOrder?.products?.length > 0 ||
+      placingProducts?.floors?.length > 0
+    ) {
+      handleCurrentStoreOrder(true);
+      return;
+    }
+
     setCurrentSpace(space);
     setIsOpenConfirm(true);
   };
@@ -73,6 +85,15 @@ function AreaDetailNew({
   };
 
   const handleOpenSelfStorage = (space, isEdit, isView) => {
+    if (
+      isMoveOrderDetail ||
+      storedOrder?.products?.length > 0 ||
+      placingProducts?.floors?.length > 0
+    ) {
+      handleCurrentStoreOrder(true);
+      return;
+    }
+
     if (isEdit) {
       setCurrentSpace({
         ...space,
@@ -139,6 +160,14 @@ function AreaDetailNew({
   };
 
   const handleDeleteSpace = async (id) => {
+    if (
+      isMoveOrderDetail ||
+      storedOrder?.products?.length > 0 ||
+      placingProducts?.floors?.length > 0
+    ) {
+      handleCurrentStoreOrder(true);
+      return;
+    }
     await deleteSpace(id, userState.idToken);
     try {
       setCurrentSpace({});
@@ -375,6 +404,9 @@ function AreaDetailNew({
 }
 const mapStateToProps = (state) => ({
   storedOrder: state.order.storedOrder,
+  placingProducts: state.order.placingProducts,
+  isMoveOrderDetail: state.order.isMoveOrderDetail,
+
   isLoadingShelf: state.order.isLoadingShelf,
   userState: state.information.user,
 });
@@ -386,6 +418,8 @@ const mapDispatchToProps = (dispatch) => {
     showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
     openStoredOrderModal: (isView) =>
       dispatch(action.openStoredOrderModal(isView)),
+    handleCurrentStoreOrder: (isOpen) =>
+      dispatch(action.handleCurrentStoreOrder(isOpen)),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(AreaDetailNew);

@@ -53,8 +53,8 @@ export default function AreaUsage({detailFloor}) {
             justifyContent: "space-between",
           }}
         >
-          {buildNameValue("Diện tích đã dùng", detailFloor?.used + "m3")}
-          {buildNameValue("Diện tích trống", detailFloor?.available + "m3")}
+          {buildNameValue("Thể tích đã dùng", detailFloor?.used + "m3")}
+          {buildNameValue("Thể tích trống", detailFloor?.available + "m3")}
         </Box>
       </Box>
     );

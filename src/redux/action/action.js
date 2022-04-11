@@ -234,3 +234,10 @@ export const handleExtendSession = (isOpen) => {
     payload: isOpen,
   };
 };
+
+export const handleCurrentStoreOrder = (isOpen) => {
+  return {
+    type: ActionType.HANDLE_CURRENT_STORE_ORDER,
+    payload: isOpen,
+  };
+};

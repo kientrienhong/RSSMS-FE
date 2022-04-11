@@ -120,8 +120,8 @@ function ListOrderDetail({
   placingProducts,
   isMoveOrderDetail,
   storedOrder,
+  handleCurrentStoreOrder,
 }) {
-  console.log(detailFloor);
   let listPlacingProducts = [];
 
   const listHeaderName =
@@ -288,6 +288,14 @@ function ListOrderDetail({
                         paddingRight: "16px",
                       }}
                       onClick={async () => {
+                        if (
+                          !isMoveOrderDetail &&
+                          (storedOrder?.products?.length > 0 ||
+                            placingProducts?.floors?.length > 0)
+                        ) {
+                          handleCurrentStoreOrder(true);
+                          return;
+                        }
                         addMovingProduct(row, detailFloor);
                         showSnackbar(
                           "success",
@@ -326,13 +334,16 @@ const mapStateToProps = (state) => ({
 
   placingProducts: state.order.placingProducts,
   isMoveOrderDetail: state.order.isMoveOrderDetail,
+  isCurrentStoreOrder: state.application.isCurrentStoreOrder,
+
   storedOrder: state.order.storedOrder,
 });
 
 const mapDispatchToProps = (dispatch) => {
   return {
     showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
-
+    handleCurrentStoreOrder: (isOpen) =>
+      dispatch(action.handleCurrentStoreOrder(isOpen)),
     addMovingProduct: (orderDetail, oldFloorId) =>
       dispatch(action.addMovingProduct(orderDetail, oldFloorId)),
   };

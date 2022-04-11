@@ -10,6 +10,7 @@ import * as action from "../redux/action/action";
 import StoredOrderModal from "./StoredOrderModal";
 import moment from "moment";
 import {updateNotification} from "../apis/Apis";
+import CurrentStoreOrderModal from "./CurrentStoreOrderModal";
 const DashboardLayoutRoot = styled("div")(({theme}) => ({
   backgroundColor: theme.palette.background.default,
   display: "flex",
@@ -159,6 +160,7 @@ const DashboardLayout = (props) => {
 
   return (
     <DashboardLayoutRoot>
+      <CurrentStoreOrderModal />
       <Snackbar
         open={props.snackbar}
         autoHideDuration={3000}

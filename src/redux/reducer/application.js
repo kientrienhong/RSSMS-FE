@@ -8,6 +8,7 @@ const initialState = {
   isOpenExtendSession: false,
   isViewStoredModal: false,
   isOpenStoredModal: false,
+  isCurrentStoreOrder: false,
   progressModal: {
     isOpen: false,
     title: "",
@@ -42,6 +43,12 @@ const application = (state = initialState, action) => {
       state.typeSnackbar = "success";
       state.msgSnackbar = "";
 
+      return {...state};
+    }
+
+    case ActionType.HANDLE_CURRENT_STORE_ORDER: {
+      console.log(action.payload);
+      state.isCurrentStoreOrder = action.payload;
       return {...state};
     }
 

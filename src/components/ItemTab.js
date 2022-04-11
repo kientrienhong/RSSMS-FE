@@ -58,7 +58,11 @@ export default function ItemTab({listOrderDetail}) {
 
     if (listOrderSeperate.length > 0) {
       return (
-        <Box>
+        <Box
+          sx={{
+            width: "100%",
+          }}
+        >
           <Typography
             color="primary"
             variant="h2"
