@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import {Outlet} from "react-router-dom";
 import {styled} from "@material-ui/core/styles";
 import {Snackbar, Alert, Box, Divider, Typography} from "@material-ui/core";
@@ -10,6 +10,8 @@ import * as action from "../redux/action/action";
 import StoredOrderModal from "./StoredOrderModal";
 import moment from "moment";
 import {updateNotification} from "../apis/Apis";
+import {useLocation, useNavigate} from "react-router-dom";
+
 import CurrentStoreOrderModal from "./CurrentStoreOrderModal";
 const DashboardLayoutRoot = styled("div")(({theme}) => ({
   backgroundColor: theme.palette.background.default,
@@ -151,6 +153,21 @@ const DashboardLayout = (props) => {
     }
   };
 
+  const location = useLocation();
+  const navigation = useNavigate();
+  useEffect(() => {
+    if (!window.location.pathname.includes("storages")) {
+      if (
+        props.isMoveOrderDetail ||
+        storedOrder?.products?.length > 0 ||
+        props.placingProducts?.floors?.length > 0
+      ) {
+        props.handleCurrentStoreOrder(true);
+        navigation(-1);
+      }
+    }
+  }, [location.key]);
+
   const {
     storedOrder,
     closeStoredOrderModal,
@@ -225,6 +242,9 @@ const mapStateToProps = (state) => ({
   isOpenStoredModal: state.application.isOpenStoredModal,
   isViewStoredModal: state.application.isViewStoredModal,
   storedOrder: state.order.storedOrder,
+  isMoveOrderDetail: state.order.isMoveOrderDetail,
+  placingProducts: state.order.placingProducts,
+
   notifications: state.information.notifications,
   unReadNoti: state.information.unReadNoti,
   userState: state.information.user,
@@ -232,6 +252,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    handleCurrentStoreOrder: (isOpen) =>
+      dispatch(action.handleCurrentStoreOrder(isOpen)),
     closeSnackbar: () => dispatch(action.hideSnackbar()),
     closeStoredOrderModal: () => dispatch(action.closeStoredOrderModal()),
     setUpIsReadNoti: () => dispatch(action.setUpIsReadNoti()),

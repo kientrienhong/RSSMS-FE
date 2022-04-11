@@ -331,11 +331,9 @@ function ListOrderDetail({
 
 const mapStateToProps = (state) => ({
   userState: state.information.user,
-
   placingProducts: state.order.placingProducts,
   isMoveOrderDetail: state.order.isMoveOrderDetail,
   isCurrentStoreOrder: state.application.isCurrentStoreOrder,
-
   storedOrder: state.order.storedOrder,
 });
 
