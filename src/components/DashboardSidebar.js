@@ -9,7 +9,7 @@ import {
   LIST_SIDE_BAR_MANAGER,
   LIST_SIDE_BAR_OFFICE_STAFF,
 } from "../constant/route";
-
+import {MAPPING_ROLE_NAME} from "../constant/constant";
 const DashboardSidebar = ({onMobileClose, openMobile, user}) => {
   let items = [];
   if (user.roleName === "Admin") {
@@ -62,7 +62,7 @@ const DashboardSidebar = ({onMobileClose, openMobile, user}) => {
           {user.name}
         </Typography>
         <Typography color="textSecondary" variant="body2">
-          {user.roleName}
+          {MAPPING_ROLE_NAME[user.roleName]}
         </Typography>
       </Box>
       <Box sx={{p: 2}}>

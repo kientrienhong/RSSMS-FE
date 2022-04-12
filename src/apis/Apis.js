@@ -298,7 +298,7 @@ export const assignListStaffToStorage = async (
   });
 
   const response = await axios.put(
-    "https://localhost:44304/api/v1/staff-assign-storages/assign-staff-to-storage",
+    "https://localhost:44304/api/v1/storages/assign-staff-to-storage",
     {
       storageId: storage.id,
       storageName: storage.name,

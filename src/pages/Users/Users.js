@@ -30,6 +30,8 @@ import * as action from "../../redux/action/action";
 import {Controller, useForm} from "react-hook-form";
 import CustomInput from "../../components/CustomInput";
 import {STYLE_MODAL} from "../../constant/style";
+import {MAPPING_ROLE_NAME} from "../../constant/constant";
+
 import CustomSelect from "../../components/CustomSelect";
 import {getBase64} from "../../utils/convertImage";
 import {ErrorHandle} from "../../utils/ErrorHandle";
@@ -744,7 +746,7 @@ function Users(props) {
 
   const mapListRoleUser = () => {
     return listRole?.map((e) => {
-      return <MenuItem value={e.id}>{e.name}</MenuItem>;
+      return <MenuItem value={e.id}>{MAPPING_ROLE_NAME[e.name]}</MenuItem>;
     });
   };
 

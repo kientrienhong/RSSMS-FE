@@ -216,7 +216,7 @@ function Storages(props) {
           showLoading();
           listUserNotAssigned = await getListStaff(null, userState.idToken);
         } catch (error) {
-          console.log(error);
+          console.log(error?.response);
           ErrorHandle.handle(error, showSnackbar, handleExtendSession);
 
           setListStaffUnAssigned([]);

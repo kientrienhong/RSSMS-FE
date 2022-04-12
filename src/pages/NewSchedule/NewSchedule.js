@@ -189,8 +189,10 @@ function NewSchedule({showLoading, hideLoading, userState, isLoadingSchedule}) {
       response?.data?.data
         .filter(
           (e) =>
-            (e.isCustomerDelivery === false && e.typeOrder === 1) ||
-            e.type === 4
+            (e.isCustomerDelivery === false &&
+              e.typeOrder === 1 &&
+              e.status !== 0) ||
+            (e.type === 4 && e.status !== 0)
         )
         .forEach((e) => {
           handleFormatDate(new Date(e.deliveryDate), result, e);
@@ -282,12 +284,9 @@ function NewSchedule({showLoading, hideLoading, userState, isLoadingSchedule}) {
   useEffect(() => {
     const process = async () => {
       if (openAssignStaff === true) {
+        let test = listSelectedOrder;
         let listSelectedTime = listSelectedOrder?.map((e) => {
-          if (e.isDelivery) {
-            return e["deliveryTime"];
-          } else {
-            return e["returnTime"];
-          }
+          return e["deliveryTime"];
         });
 
         listSelectedTime = listSelectedTime.join("&deliveryTimes=");

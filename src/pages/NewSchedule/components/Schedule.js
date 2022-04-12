@@ -144,6 +144,7 @@ function Schedule({
         height: "150px",
         width: onChangeCheckBox !== undefined ? "335px" : "320px",
         marginRight: "3%",
+        marginTop: "2.4%",
         padding: "8px",
         borderRadius: "4px",
       }}

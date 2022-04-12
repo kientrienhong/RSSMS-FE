@@ -151,6 +151,13 @@ export const LIST_STATUS = [
   {label: "Đã hoàn tất", value: 6},
 ];
 
+export const MAPPING_ROLE_NAME = {
+  Manager: "Quản lý",
+  Admin: "Quản trị viên",
+  "Office Staff": "Thủ kho",
+  "Delivery Staff": "Nhân viên thủ kho",
+};
+
 export const ORDER_TYPE = {
   0: "Kho tự quản",
   1: "Giữ đồ thuê",
