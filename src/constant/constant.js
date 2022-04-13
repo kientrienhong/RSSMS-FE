@@ -115,12 +115,13 @@ export const LIST_ADDITIONAL_FEE_TYPE = [
 ];
 
 export const LIST_STATUS_REQUEST = [
-  {name: "Đã hủy", color: style.PRIMARY_SEMANTIC_RED},
-  {name: "Đang xử lý", color: style.PRIMARY_PURPLE},
-  {name: "Đã xử lý", color: style.PRIMARY_BLUE},
-  {name: "Đã hoàn thành", color: style.SECOND_SEMANTIC_GREEN},
-  {name: "Đang vận chuyển", color: style.PRIMARY_BROWN},
-  {name: "Khách không có mặt", color: style.PRIMARY_SEMANTIC_RED},
+  {name: "Đã hủy", color: style.PRIMARY_SEMANTIC_RED, value: 0},
+  {name: "Đang xử lý", color: style.PRIMARY_PURPLE, value: 1},
+  {name: "Đã xử lý", color: style.PRIMARY_BLUE, value: 2},
+  {name: "Đã hoàn thành", color: style.SECOND_SEMANTIC_GREEN, value: 3},
+  {name: "Đang vận chuyển", color: style.PRIMARY_BROWN, value: 4},
+  {name: "Khách không có mặt", color: style.PRIMARY_SEMANTIC_RED, value: 5},
+  {name: "Có nhân viên hủy lịch", color: style.PRIMARY_SEMANTIC_RED, value: 6},
 ];
 
 export const STATUS_REQUEST_CANCEL = 0;
@@ -130,16 +131,16 @@ export const STATUS_REQUEST_FINISHED = 3;
 export const STATUS_REQUEST_DELIVERING = 4;
 export const STATUS_REQUEST_CUSTOMER_ABSENT = 5;
 
-export const ORDER_STATUS = {
-  0: {name: "Đã hủy", color: style.PRIMARY_SEMANTIC_RED},
-  1: {name: "Đang vận chuyển", color: style.PRIMARY_BLUE},
-  2: {name: "Đã lưu kho", color: style.SECOND_SEMANTIC_GREEN},
-  3: {name: "Sắp quá hạn", color: style.PRIMARY_SEMANTIC_ORANGE},
-  4: {name: "Đã quá hạn", color: style.PRIMARY_SEMANTIC_RED},
-  5: {name: "Đang thanh lý", color: style.PRIMARY_SEMANTIC_ORANGE},
-  6: {name: "Hoàn thành", color: style.SECOND_SEMANTIC_GREEN},
-  7: {name: "Đã thanh lý", color: style.PRIMARY_SEMANTIC_RED},
-};
+export const ORDER_STATUS = [
+  {name: "Đã hủy", color: style.PRIMARY_SEMANTIC_RED, value: 0},
+  {name: "Đang vận chuyển", color: style.PRIMARY_BLUE, value: 1},
+  {name: "Đã lưu kho", color: style.SECOND_SEMANTIC_GREEN, value: 2},
+  {name: "Sắp quá hạn", color: style.PRIMARY_SEMANTIC_ORANGE, value: 3},
+  {name: "Đã quá hạn", color: style.PRIMARY_SEMANTIC_RED, value: 4},
+  {name: "Đang thanh lý", color: style.PRIMARY_SEMANTIC_ORANGE, value: 5},
+  {name: "Hoàn thành", color: style.SECOND_SEMANTIC_GREEN, value: 6},
+  {name: "Đã thanh lý", color: style.PRIMARY_SEMANTIC_RED, value: 7},
+];
 
 export const LIST_STATUS = [
   {label: "Đã hủy", value: 0},

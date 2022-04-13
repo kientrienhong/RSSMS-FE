@@ -18,7 +18,7 @@ import {
   assignOrder,
   updateRequestWithNote,
 } from "../../apis/Apis";
-
+import {LIST_STATUS_REQUEST} from "../../constant/constant";
 import ModalCancelDetail from "./component/ModalCancelDetail";
 import ModalReturnItem from "./component/ModalReturnItem";
 import ModalUpdateIsPaid from "./component/ModalUpdateIsPaid";
@@ -26,6 +26,7 @@ import AssignOrderModal from "./component/AssignOrderModal";
 import RequestModal from "../../components/RequestModal";
 import ConfirmModal from "../../components/ConfirmModal";
 import UpdateRequestModal from "../../components/UpdateRequestModal";
+import MultipleSelectCheckmarks from "../../components/MultipleSelectCheckmarks";
 
 function CustomerRequest({
   showLoading,
@@ -47,9 +48,19 @@ function CustomerRequest({
   const [updateStatus, setUpdateStatus] = useState(-1);
   const {control, reset} = useForm();
   const [openAssign, setOpenAssign] = useState(false);
-
+  const [currentFilter, setCurrentFilter] = useState([]);
   const handleOpenUpdateRequest = () => {
     setOpenUpdateRequest(true);
+  };
+
+  const handleChangeFilter = (event) => {
+    const {
+      target: {value},
+    } = event;
+    setCurrentFilter(
+      // On autofill we get a stringified value.
+      typeof value === "string" ? value.split(",") : value
+    );
   };
 
   const handleCloseUpdateRequest = () => {
@@ -150,6 +161,32 @@ function CustomerRequest({
       hideLoading();
     }
   };
+
+  useEffect(() => {
+    const firstCall = async () => {
+      try {
+        showLoading();
+        let currentFilterTemp = undefined;
+        if (currentFilter.length > 0) {
+          currentFilterTemp = currentFilter.join("&RequestStatus=");
+        }
+        const list = await getCustomerRequest(
+          "",
+          page,
+          8,
+          userState.idToken,
+          currentFilterTemp
+        );
+        setListRequest(list.data.data);
+        setTotalRequest(list.data.metadata.total);
+      } catch (error) {
+        console.log(error.response);
+      } finally {
+        hideLoading();
+      }
+    };
+    firstCall();
+  }, [currentFilter]);
 
   useEffect(() => {
     const firstCall = async () => {
@@ -256,6 +293,7 @@ function CustomerRequest({
           display: "flex",
           height: "45px",
           flexDirection: "row",
+          alignItems: "center",
         }}
       >
         <TextField
@@ -275,11 +313,17 @@ function CustomerRequest({
             ),
           }}
         />
+        <MultipleSelectCheckmarks
+          handleChange={handleChangeFilter}
+          currentData={currentFilter}
+          listData={LIST_STATUS_REQUEST}
+          name={"Lọc theo tình trạng"}
+        />
       </Box>
       <UpdateRequestModal
         open={openUpdateRequest}
         handleClose={handleCloseUpdateRequest}
-        title={"Báo cáo khách vắng mặt"}
+        title={updateStatus === 0 ? "Hủy yêu cầu" : "Báo cáo khách vắng mặt"}
         onSubmit={handleSubmitReport}
       />
       <ModalReturnItem
@@ -302,6 +346,7 @@ function CustomerRequest({
         getData={getData}
         page={page}
       />
+
       <RequestModal
         open={openOrderModal}
         handleClose={handleCloseOrderModal}

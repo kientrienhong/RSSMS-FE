@@ -22,6 +22,7 @@ import {
   LIST_STATUS_REQUEST,
   STATUS_REQUEST_CUSTOMER_ABSENT,
   STATUS_REQUEST_DELIVERING,
+  STATUS_REQUEST_CANCEL,
 } from "../../../constant/constant";
 import {connect} from "react-redux";
 import {getRequestDetail} from "../../../apis/Apis";
@@ -222,6 +223,7 @@ function ListRequest({
                   >
                     Xem thêm
                   </Button>
+
                   {row.type === 1 && row.status === 1 ? (
                     <Button
                       onClick={() => {
@@ -274,6 +276,24 @@ function ListRequest({
                       variant="outlined"
                     >
                       Báo cáo
+                    </Button>
+                  ) : row.status !== STATUS_REQUEST_CANCEL ? (
+                    <Button
+                      onClick={() => {
+                        setRequest(row);
+                        setUpdateStatus(STATUS_REQUEST_CANCEL);
+                        handleOpenUpdateRequest();
+                      }}
+                      style={{
+                        height: "45px",
+                        paddingLeft: "16px",
+                        paddingRight: "16px",
+                        marginRight: "4%",
+                      }}
+                      color="error"
+                      variant="outlined"
+                    >
+                      Hủy yêu cầu
                     </Button>
                   ) : (
                     <></>

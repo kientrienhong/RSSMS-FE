@@ -813,17 +813,21 @@ function Users(props) {
           }}
         />
         <Box sx={{width: "2%"}} />
-        <Button
-          style={{height: "45px", paddingLeft: "16px", paddingRight: "16px"}}
-          color="primary"
-          variant="contained"
-          onClick={(e) => {
-            setUser({images: [{id: null, url: null}]});
-            handleOpen(false);
-          }}
-        >
-          Tạo tài khoản
-        </Button>
+        {userState.roleName !== "Office Staff" ? (
+          <Button
+            style={{height: "45px", paddingLeft: "16px", paddingRight: "16px"}}
+            color="primary"
+            variant="contained"
+            onClick={(e) => {
+              setUser({images: [{id: null, url: null}]});
+              handleOpen(false);
+            }}
+          >
+            Tạo tài khoản
+          </Button>
+        ) : (
+          <></>
+        )}
       </Box>
       <Card
         variant="outlined"

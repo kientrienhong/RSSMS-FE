@@ -15,7 +15,8 @@ import {connect} from "react-redux";
 import * as action from "../../redux/action/action";
 import {getOrder} from "../../apis/Apis";
 import UpdateOrderModal from "../../components/UpdateOrderModal";
-
+import MultipleSelectCheckmarks from "../../components/MultipleSelectCheckmarks";
+import {ORDER_STATUS} from "../../constant/constant";
 import ProductButton from "./CreateOrder/components/ProductButton";
 import OrderModal from "../../components/OrderModal";
 function Order({
@@ -37,6 +38,16 @@ function Order({
   const [page, setPage] = useState(1);
   const [totalOrder, setTotalOrder] = useState(0);
   const [searchId, setSearchId] = useState("");
+  const [currentFilter, setCurrentFilter] = useState([]);
+  const handleChangeFilter = (event) => {
+    const {
+      target: {value},
+    } = event;
+    setCurrentFilter(
+      // On autofill we get a stringified value.
+      typeof value === "string" ? value.split(",") : value
+    );
+  };
 
   const handleUpdateOrderOpen = () => {
     setOpenUpdateOrder(true);
@@ -84,6 +95,34 @@ function Order({
       hideLoading();
     }
   };
+
+  useEffect(() => {
+    const firstCall = async () => {
+      try {
+        showLoading();
+        let currentFilterTemp = undefined;
+        if (currentFilter.length > 0) {
+          currentFilterTemp = currentFilter.join("&OrderStatuses=");
+        }
+        const list = await getOrder(
+          "",
+          page,
+          8,
+          undefined,
+          undefined,
+          userState.idToken,
+          currentFilterTemp
+        );
+        setListOrder(list.data.data);
+        setTotalOrder(list.data.metadata.total);
+      } catch (error) {
+        console.log(error.response);
+      } finally {
+        hideLoading();
+      }
+    };
+    firstCall();
+  }, [currentFilter]);
 
   useEffect(() => {
     const searchNameCall = async () => {
@@ -169,6 +208,7 @@ function Order({
           display: "flex",
           height: "45px",
           flexDirection: "row",
+          alignItems: "center",
         }}
       >
         <TextField
@@ -197,6 +237,12 @@ function Order({
         ) : (
           <></>
         )}
+        <MultipleSelectCheckmarks
+          handleChange={handleChangeFilter}
+          currentData={currentFilter}
+          listData={ORDER_STATUS}
+          name={"Lọc theo tình trạng"}
+        />
       </Box>
       <Card
         variant="outlined"
