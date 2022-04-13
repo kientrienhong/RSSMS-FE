@@ -393,11 +393,6 @@ export const getListSpace = async (name, page, size, areaId, token) => {
 };
 
 export const createSpace = async (space, areaId, token) => {
-  console.log({
-    floorWidth: space.floorWidth,
-    floorLength: space.floorLength,
-    floorHeight: space.floorHeight,
-  });
   let result = await axios.post(
     `https://localhost:44304/api/v1/spaces`,
     {
@@ -681,6 +676,19 @@ export const updateRequestWithNote = async (status, note, idRequest, token) => {
       id: idRequest,
       description: note,
       status: status,
+    },
+    {headers: {Authorization: `Bearer ${token}`}}
+  );
+  return response;
+};
+
+export const doneOrder = async (idOrder, idRequest, token) => {
+  const response = await axios.put(
+    `https://localhost:44304/api/v1/orders/done/order/${idOrder}/requests/${idRequest}`,
+    {
+      orderId: idOrder,
+      requestId: idRequest,
+      status: 5,
     },
     {headers: {Authorization: `Bearer ${token}`}}
   );

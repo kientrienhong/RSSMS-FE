@@ -3,7 +3,7 @@ import {Box, Modal, Typography, MenuItem, Button} from "@material-ui/core";
 import CustomSelect from "./CustomSelect";
 import {useForm} from "react-hook-form";
 import {LIST_STATUS_ORDER_SELECT} from "../constant/constant";
-import {updateStatusOrder} from "../apis/Apis";
+import {updateStatusOrder, doneOrder} from "../apis/Apis";
 import * as action from "../redux/action/action";
 import {connect} from "react-redux";
 
@@ -40,15 +40,17 @@ function UpdateOrderModal({
   const onSubmit = async (data) => {
     try {
       showLoading();
-      await updateStatusOrder(currentOrder?.id, data.status, userState.idToken);
+      let foundRequest = currentOrder?.requests?.find((e) => e.type === 1);
       if (data.status === 5) {
+        await doneOrder(currentOrder?.id, foundRequest.id, userState.idToken);
       }
+      await updateStatusOrder(currentOrder?.id, data.status, userState.idToken);
 
       await getData(searchId, page, 8);
       showSnackbar("success", "Cập nhật tình trạng đơn thành công");
       handleClose();
     } catch (error) {
-      console.log(error);
+      console.log(error?.response);
       showSnackbar("error", error?.response?.data?.error?.message);
     } finally {
       hideLoading();
