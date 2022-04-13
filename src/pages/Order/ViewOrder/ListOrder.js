@@ -415,7 +415,27 @@ function ListOrder({
                     </Button>
                   </TableCell>
                 ) : (
-                  <></>
+                  <TableCell style={{color: "black"}}>
+                    {" "}
+                    <Button
+                      onClick={async () => {
+                        handleClickRow(row);
+                        handleOpen(true);
+                      }}
+                      style={{
+                        height: "45px",
+                        paddingLeft: "16px",
+                        paddingRight: "16px",
+                        marginBottom: "4%",
+                        marginLeft: "2%",
+                      }}
+                      color="success"
+                      variant="contained"
+                      type="submit"
+                    >
+                      Xem thêm
+                    </Button>
+                  </TableCell>
                 )}
               </TableRow>
             );

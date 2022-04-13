@@ -57,30 +57,34 @@ function Floor({
             justifyContent: "center",
           }}
         >
-          <Button
-            style={{
-              height: "32px",
-              paddingLeft: "16px",
-              paddingRight: "16px",
-              width: "100%",
-              marginBottom: "8%",
-            }}
-            color="primary"
-            variant="contained"
-            onClick={() => {
-              setUpCurrentFloor({
-                ...floor,
-                shelfName: shelf.name,
-                areaName: area.name,
-                storageName: storage.name,
-                storageId: storage.id,
-                typeShelf: shelf.type,
-              });
-              openStoredOrderModal();
-            }}
-          >
-            Lưu trữ đồ
-          </Button>
+          {userState.roleName !== "Admin" ? (
+            <Button
+              style={{
+                height: "32px",
+                paddingLeft: "16px",
+                paddingRight: "16px",
+                width: "100%",
+                marginBottom: "8%",
+              }}
+              color="primary"
+              variant="contained"
+              onClick={() => {
+                setUpCurrentFloor({
+                  ...floor,
+                  shelfName: shelf.name,
+                  areaName: area.name,
+                  storageName: storage.name,
+                  storageId: storage.id,
+                  typeShelf: shelf.type,
+                });
+                openStoredOrderModal();
+              }}
+            >
+              Lưu trữ đồ
+            </Button>
+          ) : (
+            <></>
+          )}
           <Button
             style={{
               height: "32px",

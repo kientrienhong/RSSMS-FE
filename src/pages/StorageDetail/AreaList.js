@@ -198,22 +198,26 @@ function AreaList({
         <Typography color="black" variant="h2">
           Danh sách khu vực
         </Typography>
-        <Button
-          style={{
-            height: "45px",
-            paddingLeft: "16px",
-            paddingRight: "16px",
-          }}
-          color="primary"
-          variant="contained"
-          onClick={() => {
-            handleOpen(false);
-            setIsEdit(false);
-            setCurrentArea({});
-          }}
-        >
-          Tạo khu vực
-        </Button>
+        {userState.roleName !== "Admin" ? (
+          <Button
+            style={{
+              height: "45px",
+              paddingLeft: "16px",
+              paddingRight: "16px",
+            }}
+            color="primary"
+            variant="contained"
+            onClick={() => {
+              handleOpen(false);
+              setIsEdit(false);
+              setCurrentArea({});
+            }}
+          >
+            Tạo khu vực
+          </Button>
+        ) : (
+          <></>
+        )}
       </Box>
       {mapListToview(
         setCurrentArea,

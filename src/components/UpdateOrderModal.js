@@ -41,6 +41,9 @@ function UpdateOrderModal({
     try {
       showLoading();
       await updateStatusOrder(currentOrder?.id, data.status, userState.idToken);
+      if (data.status === 5) {
+      }
+
       await getData(searchId, page, 8);
       showSnackbar("success", "Cập nhật tình trạng đơn thành công");
       handleClose();

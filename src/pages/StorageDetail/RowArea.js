@@ -2,14 +2,16 @@ import React from "react";
 import {Box, Typography} from "@material-ui/core";
 import {useNavigate} from "react-router-dom";
 import {TYPE_AREA} from "../../constant/constant";
+import {connect} from "react-redux";
 
-export default function RowArea({
+function RowArea({
   area,
   setCurrentArea,
   handleOpen,
   handleOpenConfirm,
   storageId,
   setIsEdit,
+  userState,
 }) {
   const navigate = useNavigate();
 
@@ -38,7 +40,14 @@ export default function RowArea({
         </Typography>
         <p>{area.description}</p>
       </Box>
-      <Box sx={{width: "20%", display: "flex", flexDirection: "row"}}>
+      <Box
+        sx={{
+          width: "20%",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "flex-end",
+        }}
+      >
         <img
           src="/img/edit.png"
           alt="edit"
@@ -49,15 +58,23 @@ export default function RowArea({
             setIsEdit(true);
           }}
         />
-        <img
-          src="/img/delete.png"
-          alt="edit"
-          style={{marginRight: "8%", cursor: "pointer"}}
-          onClick={() => {
-            setCurrentArea(area);
-            handleOpenConfirm();
-          }}
-        />
+        {userState.roleName !== "Admin" ? (
+          <img
+            src="/img/delete.png"
+            alt="edit"
+            style={{
+              marginRight: userState.roleName !== "Admin" ? "8%" : "0",
+              cursor: "pointer",
+            }}
+            onClick={() => {
+              setCurrentArea(area);
+              handleOpenConfirm();
+            }}
+          />
+        ) : (
+          <></>
+        )}
+
         <img
           src="/img/info.png"
           alt="edit"
@@ -72,3 +89,9 @@ export default function RowArea({
     </Box>
   );
 }
+
+const mapStateToProps = (state) => ({
+  userState: state.information.user,
+});
+
+export default connect(mapStateToProps, null)(RowArea);

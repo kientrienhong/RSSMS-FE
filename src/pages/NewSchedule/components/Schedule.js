@@ -3,6 +3,7 @@ import {Box, Checkbox, Button, Avatar, Typography} from "@material-ui/core";
 import {getOrderById, getRequestDetail} from "../../../apis/Apis";
 import {connect} from "react-redux";
 import {styled} from "@mui/material/styles";
+import {LIST_STATUS_REQUEST} from "../../../constant/constant";
 import Tooltip, {tooltipClasses} from "@mui/material/Tooltip";
 import * as action from "../../../redux/action/action";
 import moment from "moment";
@@ -127,7 +128,7 @@ function Schedule({
   return (
     <Box
       sx={{
-        backgroundColor:
+        borderColor:
           schedule.status === 6
             ? "#FF615F"
             : schedule.isDelivery
@@ -135,16 +136,17 @@ function Schedule({
             : schedule.orderId
             ? "#8099FF"
             : "#04BFFE",
+        borderWidth: 4,
+        borderStyle: "solid",
         boxShadow: 16,
         display: "flex",
         boxSizing: "border-box",
         flexDirection: "column",
         justifyContent: "space-between",
         alignItems: "center",
-        height: "150px",
+        height: "180px",
         width: onChangeCheckBox !== undefined ? "335px" : "320px",
         marginRight: "3%",
-        marginTop: "2.4%",
         padding: "8px",
         borderRadius: "4px",
       }}
@@ -191,6 +193,28 @@ function Schedule({
             </p>
 
             {schedule.deliveryAddress}
+          </p>
+          <p
+            style={{
+              display: "inline-block",
+              margin: 0,
+              color: LIST_STATUS_REQUEST[schedule.status].color,
+              bold: "bold",
+            }}
+          >
+            <p
+              style={{
+                fontWeight: "bold",
+                display: "inline-block",
+                margin: "0",
+                marginRight: "8px",
+                color: "black",
+              }}
+            >
+              Tình trạng:
+            </p>
+
+            {LIST_STATUS_REQUEST[schedule.status].name}
           </p>
         </Box>
         {schedule?.listStaffDelivery ? (

@@ -23,6 +23,7 @@ import {
   STATUS_REQUEST_CUSTOMER_ABSENT,
   STATUS_REQUEST_DELIVERING,
   STATUS_REQUEST_CANCEL,
+  STATUS_REQUEST_FINISHED,
 } from "../../../constant/constant";
 import {connect} from "react-redux";
 import {getRequestDetail} from "../../../apis/Apis";
@@ -277,7 +278,8 @@ function ListRequest({
                     >
                       Báo cáo
                     </Button>
-                  ) : row.status !== STATUS_REQUEST_CANCEL ? (
+                  ) : row.status !== STATUS_REQUEST_CANCEL &&
+                    row.status !== STATUS_REQUEST_FINISHED ? (
                     <Button
                       onClick={() => {
                         setRequest(row);

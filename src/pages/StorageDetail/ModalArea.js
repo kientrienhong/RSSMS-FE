@@ -11,8 +11,8 @@ import CustomInput from "../../components/CustomInput";
 import CustomAreaInput from "../../components/CustomAreaInput";
 import {STYLE_MODAL} from "../../constant/style";
 import CustomSelect from "../../components/CustomSelect";
-
-export default function ModalArea({
+import {connect} from "react-redux";
+function ModalArea({
   open,
   handleClose,
   currentArea,
@@ -21,6 +21,7 @@ export default function ModalArea({
   onSubmit,
   isEdit,
   errors,
+  userState,
 }) {
   const styleInput = {marginRight: "2.5%"};
 
@@ -179,9 +180,13 @@ export default function ModalArea({
               marginTop: "16px",
             }}
           >
-            <Button color="primary" type="submit" variant="contained">
-              Xác nhận
-            </Button>
+            {userState.roleName !== "Admin" ? (
+              <Button color="primary" type="submit" variant="contained">
+                Xác nhận
+              </Button>
+            ) : (
+              <></>
+            )}
             <Button
               color="error"
               onClick={() => handleClose()}
@@ -198,3 +203,9 @@ export default function ModalArea({
     </Modal>
   );
 }
+
+const mapStateToProps = (state) => ({
+  userState: state.information.user,
+});
+
+export default connect(mapStateToProps, null)(ModalArea);

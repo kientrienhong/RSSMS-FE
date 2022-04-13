@@ -6,12 +6,14 @@ import {
   AccordionDetails,
   AccordionSummary,
   Grid,
+  Box,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Floor from "./Floor";
 import {LIST_SPACE_TYPE} from "../../../constant/constant";
+import {connect} from "react-redux";
 
-export default function Shelf({
+function Shelf({
   handleOpen,
   id,
   shelf,
@@ -21,6 +23,7 @@ export default function Shelf({
   handleOpenSelfStorage,
   handleOpenConfirm,
   setDetailFloor,
+  userState,
 }) {
   const mapFloors = () => {
     return shelf.floors.map((e, index) => (
@@ -88,59 +91,75 @@ export default function Shelf({
           Kích thước tầng: {shelf?.floors[0]?.width}m x{" "}
           {shelf?.floors[0]?.length}m x {shelf?.floors[0]?.height}m
         </Typography>
-
-        <Button
-          style={{
-            height: "32px",
-            paddingLeft: "16px",
-            paddingRight: "16px",
-            marginRight: "1%",
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            width: "40%",
+            justifyContent: "flex-end",
           }}
-          onClick={() => {
-            if (area.type === 1) {
-              handleOpenSpace(shelf, true, false);
-            } else {
-              handleOpenSelfStorage(shelf, true, false);
-            }
-          }}
-          color="primary"
-          variant="contained"
         >
-          Chỉnh sửa
-        </Button>
-        <Button
-          style={{
-            height: "32px",
-            paddingLeft: "16px",
-            paddingRight: "16px",
-            marginRight: "1%",
-          }}
-          onClick={() => {
-            if (area.type === 1) {
-              handleOpenSpace(shelf, true, true);
-            } else {
-              handleOpenSelfStorage(shelf, true, true);
-            }
-          }}
-          color="success"
-          variant="contained"
-        >
-          Xem thêm
-        </Button>
-        <Button
-          onClick={() => {
-            handleOpenConfirm(shelf);
-          }}
-          style={{
-            height: "32px",
-            paddingLeft: "16px",
-            paddingRight: "16px",
-          }}
-          color="error"
-          variant="outlined"
-        >
-          Xóa
-        </Button>
+          {userState.roleName !== "Admin" ? (
+            <Button
+              style={{
+                height: "32px",
+                paddingLeft: "16px",
+                paddingRight: "16px",
+                marginRight: "1%",
+              }}
+              onClick={() => {
+                if (area.type === 1) {
+                  handleOpenSpace(shelf, true, false);
+                } else {
+                  handleOpenSelfStorage(shelf, true, false);
+                }
+              }}
+              color="primary"
+              variant="contained"
+            >
+              Chỉnh sửa
+            </Button>
+          ) : (
+            <></>
+          )}
+          <Button
+            style={{
+              height: "32px",
+              paddingLeft: "16px",
+              paddingRight: "16px",
+              marginRight: "1%",
+            }}
+            onClick={() => {
+              if (area.type === 1) {
+                handleOpenSpace(shelf, true, true);
+              } else {
+                handleOpenSelfStorage(shelf, true, true);
+              }
+            }}
+            color="success"
+            variant="contained"
+          >
+            Xem thêm
+          </Button>
+          {userState.roleName !== "Admin" ? (
+            <Button
+              onClick={() => {
+                handleOpenConfirm(shelf);
+              }}
+              style={{
+                height: "32px",
+                paddingLeft: "16px",
+                paddingRight: "16px",
+              }}
+              color="error"
+              variant="outlined"
+            >
+              Xóa
+            </Button>
+          ) : (
+            <></>
+          )}
+        </Box>
       </AccordionSummary>
       <AccordionDetails>
         <Grid
@@ -156,3 +175,8 @@ export default function Shelf({
     </Accordion>
   );
 }
+
+const mapStateToProps = (state) => ({
+  userState: state.information.user,
+});
+export default connect(mapStateToProps, null)(Shelf);

@@ -495,9 +495,6 @@ export const getOrder = async (
         {headers: {Authorization: `Bearer ${token}`}}
       );
     } else {
-      console.log(
-        `https://localhost:44304/api/v1/orders?OrderStatuses=${listFilterOrder}&Id=${id}&page=${page}&size=${size}`
-      );
       response = await axios.get(
         `https://localhost:44304/api/v1/orders?OrderStatuses=${listFilterOrder}&Id=${id}&page=${page}&size=${size}`,
         {headers: {Authorization: `Bearer ${token}`}}
@@ -761,11 +758,6 @@ export const getStaffRequest = async (name, page, size, type, token) => {
 };
 
 export const getCustomerRequest = async (name, page, size, token, filter) => {
-  // const response = await axios.get(
-  //   `https://localhost:44304/api/v1/requests?RequestTypes=1&RequestTypes=2&RequestTypes=3&RequestTypes=4&page=${page}&size=${size}`,
-  //   {headers: {Authorization: `Bearer ${token}`}}
-  // );
-  console.log(filter);
   let response;
   if (filter) {
     response = await axios.get(

@@ -298,37 +298,45 @@ function AreaDetailNew({
             ),
           }}
         />
-        <ProductButton
-          imgUrl={"/img/product.png"}
-          quantity={storedOrder?.totalQuantity}
-          isView={false}
-          name={searchName}
-          page={page}
-        />
-        <Button
-          style={{
-            height: "45px",
-            paddingLeft: "16px",
-            paddingRight: "16px",
-            marginLeft: "1%",
-          }}
-          color="primary"
-          variant="contained"
-          onClick={() => {
-            if (area.type === 1) {
-              handleOpenSpace({}, false);
-            } else {
-              handleOpenSelfStorage(
-                {type: 0, floorWidth: 0, floorHeight: 0, floorLength: 0},
-                false
-              );
-            }
-          }}
-        >
-          {area?.type === TYPE_AREA["Kho tự quản"]
-            ? "Tạo kho"
-            : "Tạo không gian chứa"}
-        </Button>
+        {userState.roleName !== "Admin" ? (
+          <ProductButton
+            imgUrl={"/img/product.png"}
+            quantity={storedOrder?.totalQuantity}
+            isView={false}
+            name={searchName}
+            page={page}
+          />
+        ) : (
+          <></>
+        )}
+        {userState.roleName !== "Admin" ? (
+          <Button
+            style={{
+              height: "45px",
+              paddingLeft: "16px",
+              paddingRight: "16px",
+              marginLeft: "1%",
+            }}
+            color="primary"
+            variant="contained"
+            onClick={() => {
+              if (area.type === 1) {
+                handleOpenSpace({}, false);
+              } else {
+                handleOpenSelfStorage(
+                  {type: 0, floorWidth: 0, floorHeight: 0, floorLength: 0},
+                  false
+                );
+              }
+            }}
+          >
+            {area?.type === TYPE_AREA["Kho tự quản"]
+              ? "Tạo kho"
+              : "Tạo không gian chứa"}
+          </Button>
+        ) : (
+          <></>
+        )}
       </Box>
       <Box
         sx={{
