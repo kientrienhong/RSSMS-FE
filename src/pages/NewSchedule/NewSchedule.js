@@ -480,7 +480,7 @@ function NewSchedule({showLoading, hideLoading, userState, isLoadingSchedule}) {
           overflowX: "scroll",
         }}
       >
-        <ListItemSidebar listTime={LIST_TIME} />
+        {/* <ListItemSidebar listTime={LIST_TIME} /> */}
         <ScheduleArea
           listGroup={listScheduleCurrentDate}
           setCurrentOrder={setCurrentOrder}
@@ -488,6 +488,7 @@ function NewSchedule({showLoading, hideLoading, userState, isLoadingSchedule}) {
           handleOpen={handleOpen}
           onChangeCheckBox={onChangeCheckBox}
           listSelectedOrder={listSelectedOrder}
+          listTime={LIST_TIME}
         />
       </Box>
     </Box>

@@ -1,6 +1,7 @@
 import React from "react";
 import {Box} from "@material-ui/core";
 import Schedule from "./Schedule";
+import ItemSidebar from "./ItemSidebar";
 export default function ScheduleArea({
   listGroup,
   setCurrentOrder,
@@ -8,6 +9,7 @@ export default function ScheduleArea({
   onChangeCheckBox,
   listSelectedOrder,
   handleOpenOrderModal,
+  listTime,
 }) {
   const mapListSchedule = (mapListSchedule) =>
     mapListSchedule?.map((e, index) => (
@@ -28,17 +30,20 @@ export default function ScheduleArea({
       return [];
     }
     for (const entry of listGroup?.entries()) {
+      console.log(entry);
       if (entry[1]?.length === 0) {
         listComponent.push(
           <Box
             sx={{
               height: "100px",
               display: "flex",
-              marginBottom: "7.8%",
+              marginBottom: "13%",
 
               flexDirection: "row",
             }}
-          ></Box>
+          >
+            <ItemSidebar time={entry[0]} />
+          </Box>
         );
       } else {
         listComponent.push(
@@ -46,11 +51,13 @@ export default function ScheduleArea({
             sx={{
               height: "100px",
               display: "flex",
-              marginBottom: "7.8%",
+              marginBottom: "13%",
 
               flexDirection: "row",
             }}
           >
+            <ItemSidebar time={entry[0]} />
+
             {mapListSchedule(entry[1])}
           </Box>
         );

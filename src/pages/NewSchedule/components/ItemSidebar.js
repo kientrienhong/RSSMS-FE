@@ -10,12 +10,14 @@ export default function ItemSidebar({time}) {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        height: "150px",
-        marginBottom: "25%",
+        height: "180px",
+        width: "15%",
         borderRadius: "4px",
+        marginRight: "2%",
+        fontSize: "20px",
       }}
     >
-      {time.name}
+      {time}
     </Box>
   );
 }
