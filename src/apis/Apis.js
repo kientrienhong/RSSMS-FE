@@ -216,9 +216,9 @@ export const createStorage = async (storage, token) => {
     `https://localhost:44304/api/v1/storages`,
     {
       name: storage.name,
-      height: parseInt(storage.height),
-      width: parseInt(storage.width),
-      length: parseInt(storage.length),
+      height: parseFloat(storage.height),
+      width: parseFloat(storage.width),
+      length: parseFloat(storage.length),
       address: storage.address,
       status: 1,
       image: {
@@ -241,9 +241,9 @@ export const updateStorage = async (storage, id, imageUrl, token) => {
       managerId: null,
       status: 1,
       address: storage.address,
-      height: parseInt(storage.height),
-      width: parseInt(storage.width),
-      length: parseInt(storage.length),
+      height: parseFloat(storage.height),
+      width: parseFloat(storage.width),
+      length: parseFloat(storage.length),
       storageId: null,
       image: {
         url: storage.image.url,
@@ -257,9 +257,9 @@ export const updateStorage = async (storage, id, imageUrl, token) => {
       managerId: null,
       status: 1,
       address: storage.address,
-      height: parseInt(storage.height),
-      width: parseInt(storage.width),
-      length: parseInt(storage.length),
+      height: parseFloat(storage.height),
+      width: parseFloat(storage.width),
+      length: parseFloat(storage.length),
       storageId: null,
       image: {
         file: imageUrl,
