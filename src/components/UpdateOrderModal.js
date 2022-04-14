@@ -43,8 +43,13 @@ function UpdateOrderModal({
       let foundRequest = currentOrder?.requests?.find((e) => e.type === 1);
       if (data.status === 5) {
         await doneOrder(currentOrder?.id, foundRequest.id, userState.idToken);
+      } else {
+        await updateStatusOrder(
+          currentOrder?.id,
+          data.status,
+          userState.idToken
+        );
       }
-      await updateStatusOrder(currentOrder?.id, data.status, userState.idToken);
 
       await getData(searchId, page, 8);
       showSnackbar("success", "Cập nhật tình trạng đơn thành công");

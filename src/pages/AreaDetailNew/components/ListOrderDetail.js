@@ -123,7 +123,6 @@ function ListOrderDetail({
   handleCurrentStoreOrder,
 }) {
   let listPlacingProducts = [];
-
   const listHeaderName =
     detailFloor?.spaceType === 0
       ? [
