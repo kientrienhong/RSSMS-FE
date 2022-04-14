@@ -35,12 +35,6 @@ export const LIST_SIDE_BAR_ADMIN = [
     title: "Đơn hàng",
     reactIcon: <FaFileInvoiceDollar />,
   },
-  {
-    href: "/app/liquidateOrder",
-    icon: undefined,
-    title: "Đơn hàng đã thanh lý",
-    reactIcon: <BsTrashFill />,
-  },
 ];
 
 export const LIST_SIDE_BAR_MANAGER = [
@@ -72,12 +66,7 @@ export const LIST_SIDE_BAR_MANAGER = [
     icon: undefined,
     reactIcon: <FaFileInvoiceDollar />,
   },
-  {
-    href: "/app/liquidateOrder",
-    icon: undefined,
-    title: "Đơn hàng đã thanh lý",
-    reactIcon: <BsTrashFill />,
-  },
+
   {
     href: "/app/staff_request",
     title: "Nhân viên yêu cầu",
@@ -119,12 +108,7 @@ export const LIST_SIDE_BAR_OFFICE_STAFF = (idStorage) => {
       icon: undefined,
       reactIcon: <FaFileInvoiceDollar />,
     },
-    {
-      href: "/app/liquidateOrder",
-      icon: undefined,
-      title: "Đơn hàng đã thanh lý",
-      reactIcon: <BsTrashFill />,
-    },
+
     {
       href: "/app/customer_request",
       title: "Khách hàng yêu cầu",

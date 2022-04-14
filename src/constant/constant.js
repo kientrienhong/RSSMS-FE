@@ -70,7 +70,6 @@ export const AREA_SIZE = {
 };
 
 export const LIST_STATUS_ORDER_SELECT = [
-  {name: "Đã lưu kho", value: 2},
   {name: "Đang thanh lý", value: 5},
   {name: "Đã thanh lý", value: 7},
 ];
@@ -137,7 +136,7 @@ export const ORDER_STATUS = [
   {name: "Đã lưu kho", color: style.SECOND_SEMANTIC_GREEN, value: 2},
   {name: "Sắp quá hạn", color: style.PRIMARY_SEMANTIC_ORANGE, value: 3},
   {name: "Đã quá hạn", color: style.PRIMARY_SEMANTIC_RED, value: 4},
-  {name: "Đang thanh lý", color: style.PRIMARY_SEMANTIC_ORANGE, value: 5},
+  {name: "Đang thanh lý", color: style.PRIMARY_BROWN, value: 5},
   {name: "Hoàn thành", color: style.SECOND_SEMANTIC_GREEN, value: 6},
   {name: "Đã thanh lý", color: style.PRIMARY_SEMANTIC_RED, value: 7},
 ];

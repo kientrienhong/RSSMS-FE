@@ -72,7 +72,7 @@ export default function ScheduleArea({
         display: "flex",
         flexDirection: "column",
         width: "80%",
-        marginLeft: "1%",
+        marginLeft: "3%",
       }}
     >
       {mapListGroup(listGroup?.listSchedule)}

@@ -377,7 +377,9 @@ function ListOrder({
 
                 {userState.roleName !== "Admin" ? (
                   <TableCell style={{color: "black"}}>
-                    {row.status === 1 || row.status === 0 ? null : (
+                    {row.status === 1 ||
+                    row.status === 0 ||
+                    row.status === 7 ? null : (
                       <Button
                         onClick={async () => {
                           await handleClickRow(row);

@@ -15,7 +15,6 @@ import CustomerRequest from "../pages/CustomerRequest/CustomerRequest";
 import NewSchedule from "../pages/NewSchedule/NewSchedule";
 import StaffRequest from "../pages/Staff_Request/StaffRequest";
 import AreaDetailNew from "../pages/AreaDetailNew/AreaDetailNew";
-import LiquidatedOrder from "../pages/LiquidatedOrder/LiquidatedOrder";
 const routes = [
   {
     path: "app",
@@ -66,21 +65,7 @@ const routes = [
           </ProtectTemplate>
         ),
       },
-      {
-        path: "liquidateOrder",
-        element: (
-          <ProtectTemplate
-            Component={LiquidatedOrder}
-            permission={[
-              Object.keys(ROLE_USER)[0],
-              Object.keys(ROLE_USER)[1],
-              Object.keys(ROLE_USER)[4],
-            ]}
-          >
-            <LiquidatedOrder />
-          </ProtectTemplate>
-        ),
-      },
+
       {
         path: "orders",
         element: (
