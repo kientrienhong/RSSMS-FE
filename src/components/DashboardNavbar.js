@@ -18,12 +18,17 @@ import Logo from "./Logo";
 import {useNavigate} from "react-router";
 import {STYLE_MODAL} from "../constant/style";
 import {connect} from "react-redux";
+import * as action from "../redux/action/action";
 const DashboardNavbar = ({
   onMobileNavOpen,
   handleCloseNotification,
   handleOpenNotification,
   openNotification,
   unReadNoti,
+  emptyPlacedProduct,
+  setUpCurrentStorage,
+  setUpOrder,
+  setUpUser,
   ...rest
 }) => {
   const [open, setOpen] = useState(false);
@@ -96,6 +101,10 @@ const DashboardNavbar = ({
               onClick={async () => {
                 try {
                   await localStorage.removeItem("user");
+                  emptyPlacedProduct();
+                  setUpCurrentStorage({});
+                  setUpOrder({});
+                  setUpUser({});
                   navigate("/", {replace: true});
                 } catch (error) {
                   console.log(error);
@@ -162,7 +171,13 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => {
-  return {};
+  return {
+    emptyPlacedProduct: () => dispatch(action.emptyPlacedProduct()),
+    setUpCurrentStorage: (storage) =>
+      dispatch(action.setUpCurrentStorage(storage)),
+    setUpOrder: (order) => dispatch(action.setUpOrder(order)),
+    setUpUser: (user) => dispatch(action.setUpUser(user)),
+  };
 };
 
 DashboardNavbar.propTypes = {
