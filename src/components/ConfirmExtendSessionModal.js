@@ -3,6 +3,7 @@ import {Box, Modal, Button, Typography} from "@material-ui/core";
 import {connect} from "react-redux";
 import * as action from "../redux/action/action";
 import {STYLE_MODAL} from "../constant/style";
+import {Navigate, useNavigate} from "react-router";
 const styleModal = {
   ...STYLE_MODAL,
 
@@ -10,20 +11,20 @@ const styleModal = {
 };
 
 function ConfirmExtendSessionModal({
-  onHandleYes,
-  id,
   showLoading,
   hideLoading,
   showSnackbar,
-  msg,
-  msgTitle,
   isOpenExtendSession,
   handleExtendSession,
+  emptyPlacedProduct,
+  setUpCurrentStorage,
+  setUpOrder,
+  setUpUser,
 }) {
   const handleClose = () => {
     handleExtendSession(false);
   };
-
+  const navigate = useNavigate();
   return (
     <Modal
       open={isOpenExtendSession}
@@ -49,7 +50,7 @@ function ConfirmExtendSessionModal({
             marginLeft: "2.5%",
           }}
         >
-          {msgTitle ? msgTitle : "Bạn đã chắc chắn?"}
+          {"Bạn đã hết phiên đăng nhập. Vui lòng đăng nhập lại"}
         </Typography>
         <Box
           sx={{
@@ -70,14 +71,15 @@ function ConfirmExtendSessionModal({
             onClick={async () => {
               try {
                 showLoading();
-                await onHandleYes(id);
+                await localStorage.removeItem("user");
+                emptyPlacedProduct();
+                setUpCurrentStorage({});
+                setUpOrder({});
+                setUpUser({});
+                navigate("/", {replace: true});
                 handleClose();
-                showSnackbar("success", msg);
               } catch (error) {
                 console.log(error);
-
-                console.log(error?.response);
-                showSnackbar("error", error?.response?.data?.error?.message);
               } finally {
                 hideLoading();
               }
@@ -116,7 +118,11 @@ const mapDispatchToProps = (dispatch) => {
     hideLoading: () => dispatch(action.hideLoader()),
     handleExtendSession: (isOpen) =>
       dispatch(action.handleExtendSession(isOpen)),
-
+    emptyPlacedProduct: () => dispatch(action.emptyPlacedProduct()),
+    setUpCurrentStorage: (storage) =>
+      dispatch(action.setUpCurrentStorage(storage)),
+    setUpOrder: (order) => dispatch(action.setUpOrder(order)),
+    setUpUser: (user) => dispatch(action.setUpUser(user)),
     showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
   };
 };

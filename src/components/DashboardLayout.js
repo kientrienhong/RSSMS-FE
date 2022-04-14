@@ -8,6 +8,7 @@ import LoadingPage from "../pages/Loading/LoadingPage";
 import {connect} from "react-redux";
 import * as action from "../redux/action/action";
 import StoredOrderModal from "./StoredOrderModal";
+import ConfirmExtendSessionModal from "./ConfirmExtendSessionModal";
 import moment from "moment";
 import {updateNotification} from "../apis/Apis";
 import {useLocation, useNavigate} from "react-router-dom";
@@ -198,6 +199,7 @@ const DashboardLayout = (props) => {
         open={isOpenStoredModal}
         isView={isViewStoredModal}
       />
+      <ConfirmExtendSessionModal />
       <LoadingPage />
       <DashboardNavbar
         onMobileNavOpen={() => setMobileNavOpen(true)}
