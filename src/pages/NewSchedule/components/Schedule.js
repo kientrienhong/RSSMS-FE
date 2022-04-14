@@ -2,6 +2,11 @@ import React from "react";
 import {Box, Checkbox, Button, Avatar, Typography} from "@material-ui/core";
 import {getOrderById, getRequestDetail} from "../../../apis/Apis";
 import {connect} from "react-redux";
+import {
+  STATUS_REQUEST_FINISHED,
+  STATUS_REQUEST_DELIVERING,
+  STATUS_REQUEST_CUSTOMER_ABSENT,
+} from "../../../constant/constant";
 import {styled} from "@mui/material/styles";
 import {LIST_STATUS_REQUEST} from "../../../constant/constant";
 import Tooltip, {tooltipClasses} from "@mui/material/Tooltip";
@@ -232,7 +237,7 @@ function Schedule({
           >
             <Box
               sx={{
-                width: "70%",
+                width: "30%",
                 display: "flex",
                 flexDirection: "row",
                 justifyContent: "flex-end",
@@ -327,7 +332,10 @@ function Schedule({
               disabled={
                 indexFoundSameTime !== -1 ||
                 (!foundSameStorage && listSelectedOrder.length > 0) ||
-                (listSelectedOrder.length > 0 && !isSameListStaff)
+                (listSelectedOrder.length > 0 && !isSameListStaff) ||
+                schedule.status === STATUS_REQUEST_DELIVERING ||
+                schedule.status === STATUS_REQUEST_FINISHED ||
+                schedule.status === STATUS_REQUEST_CUSTOMER_ABSENT
               }
               onChange={(val) => onChangeCheckBox(schedule, val.target.checked)}
               color="success"

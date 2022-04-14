@@ -37,6 +37,15 @@ function RowArea({
           >
             ({Object.keys(TYPE_AREA)[area.type]})
           </Typography>
+          <Typography
+            color="black"
+            variant="body"
+            sx={{
+              marginLeft: "1%",
+            }}
+          >
+            (Kích thước: {`${area.width}m x ${area.length}m x ${area.height}m`})
+          </Typography>
         </Typography>
         <p>{area.description}</p>
       </Box>

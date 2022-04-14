@@ -684,7 +684,7 @@ export const updateRequestWithNote = async (status, note, idRequest, token) => {
 
 export const doneOrder = async (idOrder, idRequest, token) => {
   const response = await axios.put(
-    `https://localhost:44304/api/v1/orders/done/order/${idOrder}/requests/${idRequest}`,
+    `https://localhost:44304/api/v1/orders/done/order/${idOrder}/request/${idRequest}`,
     {
       orderId: idOrder,
       requestId: idRequest,

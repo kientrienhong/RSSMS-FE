@@ -88,12 +88,12 @@ function ModalArea({
                     required: "*Vui lòng nhập",
                     pattern: {
                       value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
-                      message: "*Vui lòng nhập đúng chiều dài",
+                      message: "*Vui lòng nhập đúng chiều rộng",
                     },
                   }}
-                  name="length"
-                  label="Chiều dài (m)"
-                  userInfo={currentArea?.length}
+                  name="width"
+                  label="Chiều rộng (m)"
+                  userInfo={currentArea?.width}
                   inlineStyle={{...styleInput, marginBottom: "4%"}}
                 />
               </Grid>
@@ -104,12 +104,12 @@ function ModalArea({
                     required: "*Vui lòng nhập",
                     pattern: {
                       value: /^(0\.(?!00)|(?!0)\d+\.)\d+|^\+?([1-9]\d{0,6})$/,
-                      message: "*Vui lòng nhập đúng chiều rộng",
+                      message: "*Vui lòng nhập đúng chiều dài",
                     },
                   }}
-                  name="width"
-                  label="Chiều rộng (m)"
-                  userInfo={currentArea?.width}
+                  name="length"
+                  label="Chiều dài (m)"
+                  userInfo={currentArea?.length}
                   inlineStyle={{...styleInput, marginBottom: "4%"}}
                 />
               </Grid>

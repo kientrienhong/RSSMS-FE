@@ -480,7 +480,6 @@ function NewSchedule({showLoading, hideLoading, userState, isLoadingSchedule}) {
           overflowX: "scroll",
         }}
       >
-        {/* <ListItemSidebar listTime={LIST_TIME} /> */}
         <ScheduleArea
           listGroup={listScheduleCurrentDate}
           setCurrentOrder={setCurrentOrder}
