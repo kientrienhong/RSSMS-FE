@@ -27,8 +27,10 @@ export default function ListDateComponent({
   const onClickPrevious = () => {
     let startDate = new Date(Object.keys(listScheduleWholeWeek)[0]);
     let endDate = new Date(Object.keys(listScheduleWholeWeek)[6]);
+    console.log(startDate, endDate);
     startDate = new Date(startDate.setDate(startDate.getDate() - 7));
-    endDate = new Date(endDate.setDate(endDate.getDate() - 7));
+    endDate = new Date(endDate.setDate(endDate.getDate() - 6));
+
     setStartOfWeek(startDate);
     setEndOfWeek(endDate);
   };
@@ -37,7 +39,7 @@ export default function ListDateComponent({
     let startDate = new Date(Object.keys(listScheduleWholeWeek)[0]);
     let endDate = new Date(Object.keys(listScheduleWholeWeek)[6]);
     startDate = new Date(startDate.setDate(startDate.getDate() + 7));
-    endDate = new Date(endDate.setDate(endDate.getDate() + 7));
+    endDate = new Date(endDate.setDate(endDate.getDate() + 8));
     setStartOfWeek(startDate);
     setEndOfWeek(endDate);
   };

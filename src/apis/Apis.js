@@ -791,6 +791,7 @@ export const getRequestToSchedule = async (dayFrom, dayTo, token) => {
 };
 
 export const getRequestToScheduleNew = async (dayFrom, dayTo, token) => {
+  console.log(dayFrom, dayTo);
   const response = await axios.get(
     `https://localhost:44304/api/v1/requests?FromDate=${dayFrom}&ToDate=${dayTo}&RequestTypes=1&RequestTypes=4`,
     {headers: {Authorization: `Bearer ${token}`}}

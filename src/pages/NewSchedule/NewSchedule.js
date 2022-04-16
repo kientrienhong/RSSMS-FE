@@ -178,6 +178,7 @@ function NewSchedule({showLoading, hideLoading, userState, isLoadingSchedule}) {
         listDateAWeekTemp.push(date);
       }
       setListDateAWeek(listDateAWeekTemp);
+      setCurrentIndexDate(currentIndexDateLocal);
 
       let response = await getRequestToScheduleNew(
         addDays(startOfWeek, 1).toISOString().split("T")[0],
@@ -408,6 +409,7 @@ function NewSchedule({showLoading, hideLoading, userState, isLoadingSchedule}) {
         handleSubmit={handleSubmit}
         control={control}
         currentOrder={currentOrder}
+        // getData={getData}
         page={1}
         searchId={""}
         isView={userState.roleName === "Admin"}
