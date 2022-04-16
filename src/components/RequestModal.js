@@ -13,15 +13,13 @@ import {
 } from "@material-ui/core";
 import TagSelection from "../pages/Order/CreateOrder/components/TagSelection";
 import CustomInput from "./CustomInput";
-import {MenuItem, FormControl} from "@material-ui/core";
+import {FormControl} from "@material-ui/core";
 import OrderDetail from "./OrderDetail";
 import {connect} from "react-redux";
 import * as action from "../redux/action/action";
-import ListInfoHistoryExtension from "./ListInfoHistoryExtension";
 import {updateOrder} from "../apis/Apis";
 import {useNavigate} from "react-router";
 import {PRODUCT_TYPE, LIST_STATUS, LIST_TIME} from "../constant/constant";
-import ListPositionStored from "./ListPositionStored";
 import {Controller} from "react-hook-form";
 
 const styleModal = {
@@ -83,18 +81,14 @@ function RequestModal({
   userState,
   isView,
 }) {
-  console.log(currentOrder);
   const [returnAddress, setReturnAddress] = useState();
   const [deliveryAddress, setDeliveryAddress] = useState();
   const [timeDelivery, setTimeDelivery] = useState();
   const [timeReturn, setTimeReturn] = useState();
   const [duration, setDuration] = useState();
-  const [dateDelivery, setDateDelivery] = useState();
   const [dateReturn, setDateReturn] = useState();
-  const [statusOrder, setStatusOrder] = useState();
   const [isPaid, setIsPaid] = useState();
   const [isCustomerDelivery, setIsCustomerDelivery] = useState();
-  const [isCustomerReturn, setIsCustomerReturn] = useState();
   const [paymentMethod, setPaymentMethod] = useState(0);
   const navigate = useNavigate();
   const handleChangePaymentMethod = (e) => {
@@ -103,27 +97,12 @@ function RequestModal({
     }
     setPaymentMethod(parseInt(e.target.value));
   };
-  const handleChangeCheckBox = (event) => {
-    if (isView === true) {
-      return;
-    }
-    setIsCustomerDelivery(event.target.checked);
-    setTimeDelivery({});
-  };
 
   const handleChangeCheckBoxIsPaid = (event) => {
     if (isView === true) {
       return;
     }
     setIsPaid(event.target.checked);
-  };
-
-  const handleChangeCheckBoxCustomerReturn = (event) => {
-    if (isView === true) {
-      return;
-    }
-    setIsCustomerReturn(event.target.checked);
-    setTimeReturn({});
   };
 
   const handleStoreOrder = () => {
@@ -143,8 +122,6 @@ function RequestModal({
     if (currentOrder) {
       setReturnAddress(currentOrder?.addressReturn);
       setDeliveryAddress(currentOrder?.deliveryAddress);
-
-      setDateDelivery(currentOrder?.deliveryDate?.split("T")[0]);
 
       setTimeDelivery({
         name: currentOrder?.deliveryTime,
@@ -174,30 +151,6 @@ function RequestModal({
       }
     }
   }, [currentOrder]);
-
-  const generateSelectOptions = () => {
-    return LIST_STATUS.map((option) => {
-      return (
-        <MenuItem key={option.value} value={option.value}>
-          {option.label}
-        </MenuItem>
-      );
-    });
-  };
-
-  const handleChangeDeliveryDate = (e) => {
-    if (isView === true) {
-      return;
-    }
-    setDateDelivery(e.target.value);
-    if (dateDelivery !== undefined || dateReturn !== undefined) {
-      let parseDateReturn = new Date(dateReturn);
-      let parseDateDelivery = new Date(e.target.value);
-      let diffTime = parseDateReturn.getTime() - parseDateDelivery.getTime();
-      let diffDays = diffTime / (1000 * 3600 * 24);
-      setDuration(diffDays);
-    }
-  };
 
   const handleOnClickMinus = (event) => {
     event.preventDefault();
@@ -309,14 +262,6 @@ function RequestModal({
     }
 
     return result;
-  };
-
-  const handleChangeStatus = (e) => {
-    if (isView) {
-      return;
-    }
-
-    setStatusOrder(parseInt(e.target.value));
   };
 
   const onSubmit = async (data) => {
@@ -598,31 +543,6 @@ function RequestModal({
                 </Typography>
               </Box>
             )}
-            {/* {currentOrder?.typeOrder === 0 ? null : (
-              <Box>
-                <Grid
-                  container
-                  spacing={2}
-                  sx={{
-                    width: "98%",
-                    marginBottom: "3%",
-                  }}
-                >
-                  {mapListTime(timeReturn, setTimeReturn, setIsCustomerReturn)}
-                </Grid>
-                <FormControlLabel
-                  value="isCustomerReturn"
-                  control={
-                    <Checkbox
-                      checked={isCustomerReturn}
-                      onChange={handleChangeCheckBoxCustomerReturn}
-                    />
-                  }
-                  label="Khách tự vận chuyến trả đồ"
-                  labelPlacement="Customer return by themselves"
-                />
-              </Box>
-            )} */}
 
             <Typography
               color="black"

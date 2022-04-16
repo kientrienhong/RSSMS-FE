@@ -30,7 +30,6 @@ export default function ScheduleArea({
       return [];
     }
     for (const entry of listGroup?.entries()) {
-      console.log(entry);
       if (entry[1]?.length === 0) {
         listComponent.push(
           <Box

@@ -124,22 +124,6 @@ function ListRequest({
   const navigate = useNavigate();
 
   const handleClickRow = (row, setRequest, handleOpen) => {
-    // const user = {
-    //   id: row.id,
-    //   name: row.name,
-    //   gender: row.gender,
-    //   birthdate: row.birthdate,
-    //   email: row.email,
-    //   avatar: row.avatar,
-    //   phone: row.phone,
-    //   storageId: row.storageId,
-    //   storageName: row.storageName,
-    //   roleName: row.roleName,
-    //   address: row.address,
-    //   images: [row.images[0]],
-    // };
-
-    // setRequest(user);
     handleOpen(true);
   };
   const [rowsPerPage, setRowsPerPage] = React.useState(8);

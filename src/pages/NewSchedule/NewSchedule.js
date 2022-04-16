@@ -5,7 +5,6 @@ import {Box, Typography, Button} from "@material-ui/core";
 import moment from "moment";
 import {useForm} from "react-hook-form";
 import ListDateComponent from "./components/ListDateComponent";
-import ListItemSidebar from "./components/ListItemSidebar";
 import {LIST_TIME, TYPE_SCHEDULE} from "../../constant/constant";
 import RequestModal from "../../components/RequestModal";
 import {
@@ -284,7 +283,6 @@ function NewSchedule({showLoading, hideLoading, userState, isLoadingSchedule}) {
   useEffect(() => {
     const process = async () => {
       if (openAssignStaff === true) {
-        let test = listSelectedOrder;
         let listSelectedTime = listSelectedOrder?.map((e) => {
           return e["deliveryTime"];
         });
@@ -410,7 +408,6 @@ function NewSchedule({showLoading, hideLoading, userState, isLoadingSchedule}) {
         handleSubmit={handleSubmit}
         control={control}
         currentOrder={currentOrder}
-        // getData={getData}
         page={1}
         searchId={""}
         isView={userState.roleName === "Admin"}

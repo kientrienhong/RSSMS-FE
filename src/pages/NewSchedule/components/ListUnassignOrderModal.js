@@ -64,15 +64,7 @@ export default function ListUnassignOrderModal({
             overflowY: "scroll",
           }}
         >
-          {/* <Grid
-            container
-            spacing={1}
-            sx={{
-              width: "100%",
-            }}
-          > */}
           {buildListOrder()}
-          {/* </Grid> */}
         </Box>
 
         <Box

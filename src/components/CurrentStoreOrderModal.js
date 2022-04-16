@@ -21,7 +21,6 @@ function CurrentStoreOrderModal({
   const handleClose = () => {
     handleCurrentStoreOrder(false);
   };
-  console.log(isCurrentStoreOrder);
   return (
     <Modal
       open={isCurrentStoreOrder}

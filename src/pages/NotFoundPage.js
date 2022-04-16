@@ -6,9 +6,6 @@ export default function NotFoundPage() {
   const navigate = useNavigate();
 
   return (
-    // <div>
-    //     <h1>Not Found Page</h1>
-    // </div>
     <>
       <Box
         sx={{

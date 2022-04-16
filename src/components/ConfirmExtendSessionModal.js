@@ -3,7 +3,7 @@ import {Box, Modal, Button, Typography} from "@material-ui/core";
 import {connect} from "react-redux";
 import * as action from "../redux/action/action";
 import {STYLE_MODAL} from "../constant/style";
-import {Navigate, useNavigate} from "react-router";
+import {useNavigate} from "react-router";
 const styleModal = {
   ...STYLE_MODAL,
 

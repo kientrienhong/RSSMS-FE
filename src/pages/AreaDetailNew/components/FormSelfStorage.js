@@ -114,7 +114,6 @@ function FormSelfStorage({
     setIdStorage(event.target.value);
     const currentStorage = listStorage.find((e) => e.id === event.target.value);
 
-    console.log(inputName.current.children[1].children[0].value);
     reset({
       floorWidth: currentStorage?.width,
       floorHeight: currentStorage?.height,

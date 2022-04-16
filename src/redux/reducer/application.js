@@ -47,7 +47,6 @@ const application = (state = initialState, action) => {
     }
 
     case ActionType.HANDLE_CURRENT_STORE_ORDER: {
-      console.log(action.payload);
       state.isCurrentStoreOrder = action.payload;
       return {...state};
     }
@@ -74,7 +73,6 @@ const application = (state = initialState, action) => {
     }
 
     case ActionType.HANDLE_OPEN_EXTEND_SESSION: {
-      console.log(action.payload);
       state.isOpenExtendSession = action.payload;
       return {...state};
     }
