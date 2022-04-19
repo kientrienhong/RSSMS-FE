@@ -172,6 +172,16 @@ function AssignOrderModal({
           padding: "4%",
         }}
       >
+        <Typography
+          color="black"
+          variant="h2"
+          style={{
+            marginTop: "2%",
+            textAlign: "left",
+          }}
+        >
+          Danh sách kho phù hợp
+        </Typography>
         <Box
           sx={{
             width: "100%",

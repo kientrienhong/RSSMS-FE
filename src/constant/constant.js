@@ -155,7 +155,7 @@ export const MAPPING_ROLE_NAME = {
   Manager: "Quản lý",
   Admin: "Quản trị viên",
   "Office Staff": "Thủ kho",
-  "Delivery Staff": "Nhân viên thủ kho",
+  "Delivery Staff": "Nhân viên giao hàng",
 };
 
 export const ORDER_TYPE = {
