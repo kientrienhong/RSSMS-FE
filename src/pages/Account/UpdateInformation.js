@@ -15,12 +15,14 @@ import CustomInput from "../../components/CustomInput";
 import {updateUser} from "../../apis/Apis";
 import {MALE, FEMALE, OTHER_GENDER} from "../../constant/constant";
 import {getBase64} from "../../utils/convertImage";
+import {ErrorHandle} from "../../utils/ErrorHandle";
 function UpdateInformation({
   user,
   setUpUser,
   showLoading,
   hideLoading,
   showSnackbar,
+  handleExtendSession,
 }) {
   const [imageFile, setImageFile] = useState({});
   const {handleSubmit, control} = useForm();
@@ -108,6 +110,7 @@ function UpdateInformation({
         }
         hideLoading();
       } catch (error) {
+        ErrorHandle.handle(error, showSnackbar, handleExtendSession);
         console.log(error.response);
         hideLoading();
       }
@@ -129,6 +132,8 @@ function UpdateInformation({
         }
         hideLoading();
       } catch (error) {
+        ErrorHandle.handle(error, showSnackbar, handleExtendSession);
+
         hideLoading();
       }
     }
@@ -342,6 +347,8 @@ const mapDispatchToProps = (dispatch) => {
     hideLoading: () => dispatch(action.hideLoader()),
     showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
     setUpUser: (user) => dispatch(action.setUpUser(user)),
+    handleExtendSession: (isOpen) =>
+      dispatch(action.handleExtendSession(isOpen)),
   };
 };
 

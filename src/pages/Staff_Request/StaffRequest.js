@@ -13,7 +13,14 @@ import * as action from "../../redux/action/action";
 
 import {connect} from "react-redux";
 import {getStaffRequest} from "../../apis/Apis";
-function StaffRequest({showLoading, hideLoading, showSnackbar, userState}) {
+import {ErrorHandle} from "../../utils/ErrorHandle";
+function StaffRequest({
+  showLoading,
+  hideLoading,
+  showSnackbar,
+  userState,
+  handleExtendSession,
+}) {
   const [listRequest, setListRequest] = useState([]);
   const [totalRequest, setTotalRequest] = useState(0);
   const [open, setOpen] = useState(false);
@@ -36,6 +43,8 @@ function StaffRequest({showLoading, hideLoading, showSnackbar, userState}) {
       setListRequest(list.data.data);
       setTotalRequest(list.data.metadata.total);
     } catch (error) {
+      ErrorHandle.handle(error, showSnackbar, handleExtendSession);
+
       console.log(error.response);
     } finally {
       hideLoading();
@@ -148,6 +157,8 @@ const mapDispatchToProps = (dispatch) => {
     showLoading: () => dispatch(action.showLoader()),
     hideLoading: () => dispatch(action.hideLoader()),
     showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
+    handleExtendSession: (isOpen) =>
+      dispatch(action.handleExtendSession(isOpen)),
   };
 };
 

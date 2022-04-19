@@ -19,6 +19,7 @@ import MultipleSelectCheckmarks from "../../components/MultipleSelectCheckmarks"
 import {ORDER_STATUS} from "../../constant/constant";
 import ProductButton from "./CreateOrder/components/ProductButton";
 import OrderModal from "../../components/OrderModal";
+import {ErrorHandle} from "../../utils/ErrorHandle";
 function Order({
   isLoadingOrder,
   showLoading,
@@ -26,6 +27,7 @@ function Order({
   storedOrder,
   userState,
   showSnackbar,
+  handleExtendSession,
 }) {
   const [openUpdateOrder, setOpenUpdateOrder] = React.useState(false);
 
@@ -83,7 +85,7 @@ function Order({
       setListOrder(list.data.data);
       setTotalOrder(list.data.metadata.total);
     } catch (error) {
-      console.log(error.response);
+      ErrorHandle.handle(error, showSnackbar, handleExtendSession);
       if (error?.response?.data?.error) {
         if (
           error?.response?.data?.error?.message === "Unrecognized Guid format."
@@ -292,6 +294,8 @@ const mapDispatchToProps = (dispatch) => {
     showLoading: () => dispatch(action.showLoader()),
     hideLoading: () => dispatch(action.hideLoader()),
     showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
+    handleExtendSession: (isOpen) =>
+      dispatch(action.handleExtendSession(isOpen)),
   };
 };
 

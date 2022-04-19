@@ -18,7 +18,15 @@ import {useParams} from "react-router-dom";
 
 import OrderAssignModal from "./components/OrderAssignModal";
 import OrderModal from "../../components/OrderModal";
-function NewSchedule({showLoading, hideLoading, userState, isLoadingSchedule}) {
+import {ErrorHandle} from "../../utils/ErrorHandle";
+function NewSchedule({
+  showLoading,
+  hideLoading,
+  userState,
+  isLoadingSchedule,
+  showSnackbar,
+  handleExtendSession,
+}) {
   const [listShowStaffAssigned, setListShowStaffAssigned] = React.useState([]);
   const [listShowStaffUnAssigned, setListShowStaffUnAssigned] = React.useState(
     []
@@ -207,10 +215,14 @@ function NewSchedule({showLoading, hideLoading, userState, isLoadingSchedule}) {
           handleFormatRequestSchedule(new Date(e.scheduleDay), result, e);
         });
       } catch (error) {
+        ErrorHandle.handle(error, showSnackbar, handleExtendSession);
+
         console.log(error.response);
       } finally {
       }
     } catch (e) {
+      ErrorHandle.handle(e, showSnackbar, handleExtendSession);
+
       console.log(e);
       console.log(e.response);
     } finally {
@@ -503,6 +515,8 @@ const mapDispatchToProps = (dispatch) => {
     showLoading: () => dispatch(action.showLoader()),
     hideLoading: () => dispatch(action.hideLoader()),
     showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
+    handleExtendSession: (isOpen) =>
+      dispatch(action.handleExtendSession(isOpen)),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(NewSchedule);

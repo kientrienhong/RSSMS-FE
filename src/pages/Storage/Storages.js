@@ -508,6 +508,8 @@ function Storages(props) {
         showLoading();
         await getData("", page, 4, userState.idToken);
       } catch (error) {
+        ErrorHandle.handle(error, showSnackbar, handleExtendSession);
+
         console.log(error);
         setListStorages([]);
       } finally {

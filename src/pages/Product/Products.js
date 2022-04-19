@@ -9,7 +9,14 @@ import * as action from "../../redux/action/action";
 import {useForm} from "react-hook-form";
 
 import ConfirmModal from "../../components/ConfirmModal";
-function Products({showLoading, hideLoading, showSnackbar, userState}) {
+import {ErrorHandle} from "../../utils/ErrorHandle";
+function Products({
+  showLoading,
+  hideLoading,
+  showSnackbar,
+  userState,
+  handleExtendSession,
+}) {
   const [open, setOpen] = useState(false);
   const [openConfirm, setOpenConfirm] = useState(false);
   const {
@@ -60,6 +67,8 @@ function Products({showLoading, hideLoading, showSnackbar, userState}) {
         await getData();
         hideLoading();
       } catch (error) {
+        ErrorHandle.handle(error, showSnackbar, handleExtendSession);
+
         console.log(error.response);
         hideLoading();
       }
@@ -143,6 +152,8 @@ const mapDispatchToProps = (dispatch) => {
     showLoading: () => dispatch(action.showLoader()),
     hideLoading: () => dispatch(action.hideLoader()),
     showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
+    handleExtendSession: (isOpen) =>
+      dispatch(action.handleExtendSession(isOpen)),
   };
 };
 

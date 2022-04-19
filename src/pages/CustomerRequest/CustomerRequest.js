@@ -27,6 +27,7 @@ import RequestModal from "../../components/RequestModal";
 import ConfirmModal from "../../components/ConfirmModal";
 import UpdateRequestModal from "../../components/UpdateRequestModal";
 import MultipleSelectCheckmarks from "../../components/MultipleSelectCheckmarks";
+import {ErrorHandle} from "../../utils/ErrorHandle";
 
 function CustomerRequest({
   showLoading,
@@ -34,6 +35,7 @@ function CustomerRequest({
   showSnackbar,
   userState,
   isLoadingRequest,
+  handleExtendSession,
 }) {
   const [listRequest, setListRequest] = useState([]);
   const [totalRequest, setTotalRequest] = useState(0);
@@ -156,6 +158,7 @@ function CustomerRequest({
       setListRequest(list.data.data);
       setTotalRequest(list.data.metadata.total);
     } catch (error) {
+      ErrorHandle.handle(error, showSnackbar, handleExtendSession);
       console.log(error.response);
     } finally {
       hideLoading();
@@ -405,6 +408,8 @@ const mapDispatchToProps = (dispatch) => {
     showLoading: () => dispatch(action.showLoader()),
     hideLoading: () => dispatch(action.hideLoader()),
     showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
+    handleExtendSession: (isOpen) =>
+      dispatch(action.handleExtendSession(isOpen)),
   };
 };
 

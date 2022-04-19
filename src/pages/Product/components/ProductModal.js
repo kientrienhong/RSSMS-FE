@@ -410,7 +410,7 @@ function ProductModal({
                       marginBottom: "4.5%",
                     }}
                   >
-                    Giá tiền
+                    Giá tiền thuê
                   </Typography>
                   <CustomInput
                     control={control}

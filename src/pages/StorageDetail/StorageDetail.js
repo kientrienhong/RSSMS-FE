@@ -1,15 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
+import React, {useEffect, useState} from "react";
+import {connect} from "react-redux";
 import * as action from "../../redux/action/action";
-import { getStorageDetail, getArea } from "../../apis/Apis";
-import { useParams } from "react-router-dom";
-import { Box } from "@material-ui/core";
+import {getStorageDetail, getArea} from "../../apis/Apis";
+import {useParams} from "react-router-dom";
+import {Box} from "@material-ui/core";
 import StorageDetailView from "./StorageDetailView";
 import AreaList from "./AreaList";
-function StorageDetail({ showLoading, hideLoading, userState }) {
+import {ErrorHandle} from "../../utils/ErrorHandle";
+function StorageDetail({
+  showLoading,
+  hideLoading,
+  userState,
+  showSnackbar,
+  handleExtendSession,
+}) {
   const [storage, setStorage] = useState({});
   const [listArea, setListArea] = useState([]);
-  const { storageId } = useParams();
+  const {storageId} = useParams();
   useEffect(() => {
     const getData = async () => {
       let storageTemp = await getStorageDetail(storageId, userState.idToken);
@@ -23,6 +30,8 @@ function StorageDetail({ showLoading, hideLoading, userState }) {
         let listAreaTemp = await getArea(storageId, userState.idToken);
         setListArea(listAreaTemp.data.data);
       } catch (error) {
+        ErrorHandle.handle(error, showSnackbar, handleExtendSession);
+
         console.log(error?.response);
       } finally {
         hideLoading();
@@ -59,6 +68,8 @@ const mapDispatchToProps = (dispatch) => {
     showLoading: () => dispatch(action.showLoader()),
     hideLoading: () => dispatch(action.hideLoader()),
     showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
+    handleExtendSession: (isOpen) =>
+      dispatch(action.handleExtendSession(isOpen)),
   };
 };
 

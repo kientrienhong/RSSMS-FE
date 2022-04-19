@@ -5,12 +5,14 @@ import {Controller, useForm} from "react-hook-form";
 import CustomInput from "../../components/CustomInput";
 import {Box, Button, TextField} from "@material-ui/core";
 import {changePassword} from "../../apis/Apis";
+import {ErrorHandle} from "../../utils/ErrorHandle";
 function ChangePassword({
   showLoading,
   hideLoading,
   showSnackbar,
   userId,
   userState,
+  handleExtendSession,
 }) {
   const {handleSubmit, control, watch} = useForm();
   const [error, setError] = useState("");
@@ -39,6 +41,8 @@ function ChangePassword({
       );
       showSnackbar("success", "Thay đổi mật khẩu thành công!");
     } catch (e) {
+      ErrorHandle.handle(error, showSnackbar, handleExtendSession);
+
       if (e?.response?.data?.error?.message) {
         setError(e?.response?.data?.error?.message);
       }
@@ -153,6 +157,8 @@ const mapDispatchToProps = (dispatch) => {
     showLoading: () => dispatch(action.showLoader()),
     hideLoading: () => dispatch(action.hideLoader()),
     showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
+    handleExtendSession: (isOpen) =>
+      dispatch(action.handleExtendSession(isOpen)),
   };
 };
 
