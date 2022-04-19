@@ -64,6 +64,7 @@ function ProductModal({
       length: data.length ? data.length : "0",
       unit: data.unit,
       tooltip: data.tooltip,
+      deliveryFee: data.deliveryFee,
       image: {
         url: null,
       },
@@ -116,6 +117,7 @@ function ProductModal({
       height: data.height ? data.height : "0",
       length: data.length ? data.length : "0",
       unit: data.unit,
+      deliveryFee: data.deliveryFee,
       tooltip: data.tooltip,
       image: {
         url: currentProduct?.imageUrl,
@@ -358,6 +360,30 @@ function ProductModal({
                 userInfo={currentProduct?.tooltip}
                 inlineStyle={{...styleInput, marginTop: "4%", width: "500px"}}
               />
+              <Box
+                sx={{
+                  ...styleBoxInput,
+                  marginTop: "3%",
+                  justifyContent: "flex-start",
+                }}
+              >
+                <CustomInput
+                  control={control}
+                  rules={{
+                    required: "*Vui lòng nhập",
+
+                    pattern: {
+                      value: /^\+?([1-9]\d{4,14})$/,
+                      message: "*Vui lòng nhập đúng giá tiền",
+                    },
+                  }}
+                  styles={{width: "475px"}}
+                  name="deliveryFee"
+                  label="Giá tiền vận chuyển"
+                  userInfo={currentProduct?.deliveryFee}
+                  inlineStyle={{...styleInput}}
+                />
+              </Box>
               <Box
                 sx={{
                   ...styleBoxInput,
