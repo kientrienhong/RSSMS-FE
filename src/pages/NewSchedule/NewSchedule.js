@@ -393,7 +393,7 @@ function NewSchedule({
       sx={{
         backgroundColor: "background.default",
         height: "100vh",
-        overflowY: "scroll",
+        overflow: "scroll",
         py: 3,
       }}
     >
@@ -487,8 +487,7 @@ function NewSchedule({
         sx={{
           display: "flex",
           flexDirection: "row",
-          width: "80%",
-          overflowX: "scroll",
+          width: "100%",
         }}
       >
         <ScheduleArea

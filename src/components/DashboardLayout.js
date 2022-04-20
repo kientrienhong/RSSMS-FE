@@ -35,7 +35,7 @@ const DashboardLayoutWrapper = styled("div")(({theme}) => ({
 const DashboardLayoutContainer = styled("div")({
   display: "flex",
   flex: "1 1 auto",
-  overflow: "hidden",
+  overflow: "scroll",
 });
 
 const DashboardLayoutContent = styled("div")({

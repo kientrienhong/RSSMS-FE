@@ -37,6 +37,7 @@ export default function ScheduleArea({
               height: "100px",
               display: "flex",
               marginBottom: "13%",
+              width: "auto",
 
               flexDirection: "row",
             }}
@@ -51,7 +52,7 @@ export default function ScheduleArea({
               height: "100px",
               display: "flex",
               marginBottom: "13%",
-
+              width: "auto",
               flexDirection: "row",
             }}
           >
@@ -70,7 +71,7 @@ export default function ScheduleArea({
       sx={{
         display: "flex",
         flexDirection: "column",
-        width: "80%",
+        width: "100%",
         marginLeft: "3%",
       }}
     >

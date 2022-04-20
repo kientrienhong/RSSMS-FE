@@ -11,7 +11,7 @@ export default function ItemSidebar({time}) {
         justifyContent: "center",
         alignItems: "center",
         height: "180px",
-        width: "15%",
+        width: "200px",
         borderRadius: "4px",
         marginRight: "2%",
         fontSize: "20px",
