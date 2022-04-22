@@ -224,42 +224,6 @@ function ListRequest({
                   >
                     Xem thêm
                   </Button>
-
-                  {row.type === 1 && row.status === 1 ? (
-                    <Button
-                      onClick={() => {
-                        if (
-                          userState.storageId === null &&
-                          userState.roleName === "Office Staff"
-                        ) {
-                          showSnackbar(
-                            "error",
-                            "Bạn chưa được phân vào bất kì kho nào"
-                          );
-                          return;
-                        }
-
-                        setRequest(row);
-                        if (userState.roleName === "Manager") {
-                          handleOpenAssignOrder();
-                        } else {
-                          handleOpenAssign();
-                        }
-                      }}
-                      style={{
-                        height: "45px",
-                        paddingLeft: "16px",
-                        paddingRight: "16px",
-                        marginRight: "4%",
-                      }}
-                      color="primary"
-                      variant="contained"
-                    >
-                      Tiếp nhận
-                    </Button>
-                  ) : (
-                    <></>
-                  )}
                   {row.status === STATUS_REQUEST_DELIVERING ? (
                     <Button
                       onClick={() => {

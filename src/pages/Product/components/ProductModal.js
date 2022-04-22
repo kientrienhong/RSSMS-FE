@@ -75,7 +75,7 @@ function ProductModal({
       if (!currentProduct.avatarFile) {
         setError({
           ...error,
-          avatarFile: {message: "VUi lòng thêm hình ảnh!"},
+          avatarFile: {message: "Vui lòng thêm hình ảnh!"},
         });
         hideLoading();
 

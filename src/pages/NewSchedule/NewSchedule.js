@@ -115,19 +115,23 @@ function NewSchedule({
   };
 
   const handleFormatRequestSchedule = (date, result, request) => {
-    let currentDate = Object.keys(result)?.find((e) => {
-      return e === date.toLocaleDateString("en-US");
-    });
+    try {
+      let currentDate = Object.keys(result)?.find((e) => {
+        return e === date.toLocaleDateString("en-US");
+      });
 
-    let indexFound = result[currentDate].listSchedule
-      .get(request["scheduleTime"])
-      .findIndex((e) => e.id === request.requestId);
+      let indexFound = result[currentDate].listSchedule
+        .get(request["scheduleTime"])
+        .findIndex((e) => e.id === request.requestId);
 
-    result[currentDate].listSchedule.get(request["scheduleTime"])[
-      indexFound
-    ].listStaffDelivery = request.accounts;
+      result[currentDate].listSchedule.get(request["scheduleTime"])[
+        indexFound
+      ].listStaffDelivery = request.accounts;
 
-    result[currentDate].amountNotAssignStaff -= 1;
+      result[currentDate].amountNotAssignStaff -= 1;
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const mapListNote = () =>
