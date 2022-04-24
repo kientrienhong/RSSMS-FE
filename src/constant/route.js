@@ -88,11 +88,7 @@ export const LIST_SIDE_BAR_OFFICE_STAFF = (idStorage) => {
       icon: UserIcon,
       title: "Tài khoản cá nhân",
     },
-    {
-      href: "/app/users",
-      icon: UsersIcon,
-      title: "Tài khoản",
-    },
+
     {
       href:
         idStorage !== undefined && idStorage !== null
