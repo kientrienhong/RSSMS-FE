@@ -139,6 +139,7 @@ export const ORDER_STATUS = [
   {name: "Đang thanh lý", color: style.PRIMARY_BROWN, value: 5},
   {name: "Hoàn thành", color: style.SECOND_SEMANTIC_GREEN, value: 6},
   {name: "Đã thanh lý", color: style.PRIMARY_SEMANTIC_RED, value: 7},
+  {name: "Đã xuất kho", color: style.PRIMARY_BLUE, value: 8},
 ];
 
 export const LIST_STATUS = [

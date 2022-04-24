@@ -5,6 +5,8 @@ import TabPanel from "./TabPanel";
 import InformationOrder from "./InformationOrder";
 import ItemTab from "./ItemTab";
 import ListInfoHistoryExtension from "./ListInfoHistoryExtension";
+import ImportReceipt from "./ImportReceipt";
+import ExportReceipt from "./ExportReceipt";
 const styleModal = {
   position: "absolute",
   top: "6%",
@@ -65,6 +67,9 @@ export default function OrderModal({
           >
             <Tab label="Thông tin đơn" />
             {currentOrder?.type === 1 ? <Tab label="Đồ đạc" /> : <></>}
+
+            {currentOrder?.type === 1 ? <Tab label="Phiếu nhập kho" /> : <></>}
+            {currentOrder?.type === 1 ? <Tab label="Phiếu xuất kho" /> : <></>}
             {currentOrder?.orderHistoryExtensions?.length > 0 ? (
               <Tab label="Lịch sử gia hạn" />
             ) : (
@@ -110,9 +115,32 @@ export default function OrderModal({
         ) : (
           <></>
         )}
-
+        <TabPanel
+          value={value}
+          index={2}
+          style={{
+            width: "100%",
+          }}
+          sx={{
+            width: "100%",
+          }}
+        >
+          <ImportReceipt currentOrder={currentOrder} />
+        </TabPanel>
+        <TabPanel
+          value={value}
+          index={3}
+          style={{
+            width: "100%",
+          }}
+          sx={{
+            width: "100%",
+          }}
+        >
+          <ExportReceipt currentOrder={currentOrder} />
+        </TabPanel>
         {currentOrder?.orderHistoryExtensions?.length > 0 ? (
-          <TabPanel value={value} index={2}>
+          <TabPanel value={value} index={4}>
             <ListInfoHistoryExtension
               list={currentOrder?.orderHistoryExtensions}
               currentOrder={currentOrder}

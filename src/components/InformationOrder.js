@@ -680,42 +680,6 @@ function InformationOrder({
                 justifyContent: "center",
               }}
             >
-              {currentOrder?.status === 1 ? (
-                <Button
-                  style={{
-                    height: "45px",
-                    paddingLeft: "16px",
-                    paddingRight: "16px",
-                    marginRight: "4%",
-                  }}
-                  color="primary"
-                  variant="contained"
-                  onClick={() => handleStoreOrder()}
-                >
-                  Lưu trữ đơn
-                </Button>
-              ) : (
-                <></>
-              )}
-
-              {/* {currentOrder?.status !== 0 && currentOrder?.status !== 1 ? (
-                userState.roleName !== "Admin" ? (
-                  <Button
-                    style={{
-                      height: "45px",
-                      paddingLeft: "16px",
-                      paddingRight: "16px",
-                      marginRight: "4%",
-                    }}
-                    color="success"
-                    variant="contained"
-                    type="submit"
-                  >
-                    Cập nhật
-                  </Button>
-                ) : null
-              ) : null} */}
-
               <Button
                 style={{
                   height: "45px",
