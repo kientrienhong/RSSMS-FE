@@ -59,6 +59,21 @@ export default function ExportReceipt({currentOrder}) {
     ));
   };
   mappingQuantityOrderDetail();
+  if (currentOrder.exportCode === null)
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          width: "100%",
+          alignItems: "center",
+        }}
+      >
+        <Typography color="black" variant="h2">
+          Chưa có phiếu xuất kho
+        </Typography>
+      </Box>
+    );
   return (
     <Box
       sx={{

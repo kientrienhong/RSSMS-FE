@@ -59,6 +59,23 @@ export default function ImportReceipt({currentOrder}) {
     ));
   };
   mappingQuantityOrderDetail();
+
+  if (currentOrder.importCode === null)
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          width: "100%",
+          alignItems: "center",
+        }}
+      >
+        <Typography color="black" variant="h2">
+          Chưa có phiếu nhập kho
+        </Typography>
+      </Box>
+    );
+
   return (
     <Box
       sx={{
