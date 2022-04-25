@@ -240,7 +240,7 @@ function ListRequest({
                       color="error"
                       variant="outlined"
                     >
-                      Báo cáo
+                      Hủy yêu cầu
                     </Button>
                   ) : row.status !== STATUS_REQUEST_CANCEL &&
                     row.status !== STATUS_REQUEST_FINISHED ? (
