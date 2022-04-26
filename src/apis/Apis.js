@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const getListRole = async (token) => {
-  let user = await axios.get(`https://localhost:44304/api/v1/roles`, {
+  let user = await axios.get(`https://rssms.azurewebsites.net/api/v1/roles`, {
     headers: {Authorization: `Bearer ${token}`},
   });
 
@@ -11,14 +11,14 @@ export const getListRole = async (token) => {
 export const getListStaff = async (storageId, token) => {
   if (storageId) {
     return await axios.get(
-      `https://localhost:44304/api/v1/accounts/staffs?storageId=${storageId}&getFromAllStorage=false`,
+      `https://rssms.azurewebsites.net/api/v1/accounts/staffs?storageId=${storageId}&getFromAllStorage=false`,
       {
         headers: {Authorization: `Bearer ${token}`},
       }
     );
   } else {
     return await axios.get(
-      `https://localhost:44304/api/v1/accounts/staffs?getFromAllStorage=false`,
+      `https://rssms.azurewebsites.net/api/v1/accounts/staffs?getFromAllStorage=false`,
       {
         headers: {Authorization: `Bearer ${token}`},
       }
@@ -34,7 +34,7 @@ export const getListDeliveryStaff = async (
   token
 ) => {
   return await axios.get(
-    `https://localhost:44304/api/v1/accounts/staffs?storageId=${storageId}&roleName=${roleName}&scheduleDay=${scheduleDay}&${scheduleTime}`,
+    `https://rssms.azurewebsites.net/api/v1/accounts/staffs?storageId=${storageId}&roleName=${roleName}&scheduleDay=${scheduleDay}&${scheduleTime}`,
     {
       headers: {Authorization: `Bearer ${token}`},
     }
@@ -59,18 +59,18 @@ export const getListUser = async (
     scheduleTime === undefined
   ) {
     listUser = await axios.get(
-      `https://localhost:44304/api/v1/accounts?storageId=${storageId}&Name=${name}&page=${page}&size=${size}`,
+      `https://rssms.azurewebsites.net/api/v1/accounts?storageId=${storageId}&Name=${name}&page=${page}&size=${size}`,
       {headers: {Authorization: `Bearer ${token}`}}
     );
   } else {
     if (scheduleDay !== undefined && scheduleTime !== undefined) {
       listUser = await axios.get(
-        `https://localhost:44304/api/v1/accounts?SheduleDay=${scheduleDay}&${scheduleTime}&page=${page}&size=${size}&RoleName=${roleName}&storageId=${storageId}`,
+        `https://rssms.azurewebsites.net/api/v1/accounts?SheduleDay=${scheduleDay}&${scheduleTime}&page=${page}&size=${size}&RoleName=${roleName}&storageId=${storageId}`,
         {headers: {Authorization: `Bearer ${token}`}}
       );
     } else {
       listUser = await axios.get(
-        `https://localhost:44304/api/v1/accounts?Name=${name}&page=${page}&size=${size}`,
+        `https://rssms.azurewebsites.net/api/v1/accounts?Name=${name}&page=${page}&size=${size}`,
         {headers: {Authorization: `Bearer ${token}`}}
       );
     }
@@ -81,7 +81,7 @@ export const getListUser = async (
 
 export const findUserByPhone = async (phone, token) => {
   let user = await axios.get(
-    `https://localhost:44304/api/v1/accounts/account/${phone}`,
+    `https://rssms.azurewebsites.net/api/v1/accounts/account/${phone}`,
     {headers: {Authorization: `Bearer ${token}`}}
   );
 
@@ -90,7 +90,7 @@ export const findUserByPhone = async (phone, token) => {
 
 export const login = async (email, password, tokenFirebase) => {
   const response = await axios.post(
-    "https://localhost:44304/api/v1/accounts/login",
+    "https://rssms.azurewebsites.net/api/v1/accounts/login",
     {
       email: email,
       password: password,
@@ -109,7 +109,7 @@ export const changePassword = async (
   token
 ) => {
   const response = await axios.post(
-    "https://localhost:44304/api/v1/accounts/changepassword",
+    "https://rssms.azurewebsites.net/api/v1/accounts/changepassword",
     {
       id: id,
       oldPassword: oldPassword,
@@ -124,7 +124,7 @@ export const changePassword = async (
 
 export const createUser = async (user, token) => {
   const response = await axios.post(
-    `https://localhost:44304/api/v1/accounts`,
+    `https://rssms.azurewebsites.net/api/v1/accounts`,
 
     {
       name: user.name,
@@ -147,7 +147,7 @@ export const createUser = async (user, token) => {
 
 export const deleteUser = async (id, token) => {
   const response = await axios.delete(
-    `https://localhost:44304/api/v1/accounts/${id}`,
+    `https://rssms.azurewebsites.net/api/v1/accounts/${id}`,
     {headers: {Authorization: `Bearer ${token}`}}
   );
 
@@ -185,7 +185,7 @@ export const updateUser = async (user, id, imageUrl, token) => {
   }
 
   const response = await axios.put(
-    `https://localhost:44304/api/v1/accounts/${id}`,
+    `https://rssms.azurewebsites.net/api/v1/accounts/${id}`,
     object,
     {headers: {Authorization: `Bearer ${token}`}}
   );
@@ -195,7 +195,7 @@ export const updateUser = async (user, id, imageUrl, token) => {
 
 export const getListStorage = async (name, page, size, token) => {
   const listStorage = await axios.get(
-    `https://localhost:44304/api/v1/storages?Name=${name}&page=${page}&size=${size}`,
+    `https://rssms.azurewebsites.net/api/v1/storages?Name=${name}&page=${page}&size=${size}`,
     {headers: {Authorization: `Bearer ${token}`}}
   );
 
@@ -204,7 +204,7 @@ export const getListStorage = async (name, page, size, token) => {
 
 export const getStorageDetail = async (id, token) => {
   const storage = await axios.get(
-    `https://localhost:44304/api/v1/storages/${id}`,
+    `https://rssms.azurewebsites.net/api/v1/storages/${id}`,
     {headers: {Authorization: `Bearer ${token}`}}
   );
 
@@ -213,7 +213,7 @@ export const getStorageDetail = async (id, token) => {
 
 export const createStorage = async (storage, token) => {
   const response = await axios.post(
-    `https://localhost:44304/api/v1/storages`,
+    `https://rssms.azurewebsites.net/api/v1/storages`,
     {
       name: storage.name,
       height: parseFloat(storage.height),
@@ -268,7 +268,7 @@ export const updateStorage = async (storage, id, imageUrl, token) => {
     };
   }
   const response = await axios.put(
-    `https://localhost:44304/api/v1/storages/${id}`,
+    `https://rssms.azurewebsites.net/api/v1/storages/${id}`,
     object,
     {headers: {Authorization: `Bearer ${token}`}}
   );
@@ -277,7 +277,7 @@ export const updateStorage = async (storage, id, imageUrl, token) => {
 };
 export const deleteStorage = async (id, token) => {
   const response = await axios.delete(
-    `https://localhost:44304/api/v1/storages/${id}`,
+    `https://rssms.azurewebsites.net/api/v1/storages/${id}`,
     {headers: {Authorization: `Bearer ${token}`}}
   );
 
@@ -298,7 +298,7 @@ export const assignListStaffToStorage = async (
   });
 
   const response = await axios.put(
-    "https://localhost:44304/api/v1/storages/assign-staff-to-storage",
+    "https://rssms.azurewebsites.net/api/v1/storages/assign-staff-to-storage",
     {
       storageId: storage.id,
       storageName: storage.name,
@@ -313,7 +313,7 @@ export const assignListStaffToStorage = async (
 
 export const getArea = async (storageId, token) => {
   const response = await axios.get(
-    `https://localhost:44304/api/v1/areas?storageid=${storageId}&page=1&size=-1`,
+    `https://rssms.azurewebsites.net/api/v1/areas?storageid=${storageId}&page=1&size=-1`,
     {headers: {Authorization: `Bearer ${token}`}}
   );
 
@@ -329,7 +329,7 @@ export const createArea = async (
   token
 ) => {
   const response = await axios.post(
-    "https://localhost:44304/api/v1/areas",
+    "https://rssms.azurewebsites.net/api/v1/areas",
     {
       name: name,
       storageId: storageId,
@@ -348,7 +348,7 @@ export const createArea = async (
 
 export const deleteArea = async (id, token) => {
   const response = await axios.delete(
-    `https://localhost:44304/api/v1/areas/${id}`,
+    `https://rssms.azurewebsites.net/api/v1/areas/${id}`,
     {headers: {Authorization: `Bearer ${token}`}}
   );
 
@@ -357,7 +357,7 @@ export const deleteArea = async (id, token) => {
 
 export const updateArea = async (id, name, description, type, size, token) => {
   const response = await axios.put(
-    `https://localhost:44304/api/v1/areas/${id}`,
+    `https://rssms.azurewebsites.net/api/v1/areas/${id}`,
     {
       id: id,
       name: name,
@@ -375,7 +375,7 @@ export const updateArea = async (id, name, description, type, size, token) => {
 
 export const getDetailArea = async (id, token) => {
   const response = await axios.get(
-    `https://localhost:44304/api/v1/areas/${id}`,
+    `https://rssms.azurewebsites.net/api/v1/areas/${id}`,
     {headers: {Authorization: `Bearer ${token}`}}
   );
 
@@ -385,7 +385,7 @@ export const getDetailArea = async (id, token) => {
 export const getListSpace = async (name, page, size, areaId, token) => {
   let listSpace;
   listSpace = await axios.get(
-    `https://localhost:44304/api/v1/spaces?AreaId=${areaId}&Name=${name}&page=${page}&size=${size}`,
+    `https://rssms.azurewebsites.net/api/v1/spaces?AreaId=${areaId}&Name=${name}&page=${page}&size=${size}`,
     {headers: {Authorization: `Bearer ${token}`}}
   );
 
@@ -394,7 +394,7 @@ export const getListSpace = async (name, page, size, areaId, token) => {
 
 export const createSpace = async (space, areaId, token) => {
   let result = await axios.post(
-    `https://localhost:44304/api/v1/spaces`,
+    `https://rssms.azurewebsites.net/api/v1/spaces`,
     {
       areaId: areaId,
       type: space.type,
@@ -412,7 +412,7 @@ export const createSpace = async (space, areaId, token) => {
 
 export const updateShelf = async (id, space, token) => {
   let result = await axios.put(
-    `https://localhost:44304/api/v1/spaces/${id}`,
+    `https://rssms.azurewebsites.net/api/v1/spaces/${id}`,
     {
       id: id,
       type: space.type,
@@ -430,7 +430,7 @@ export const updateShelf = async (id, space, token) => {
 
 export const deleteSpace = async (id, token) => {
   const response = await axios.delete(
-    `https://localhost:44304/api/v1/spaces/${id}`,
+    `https://rssms.azurewebsites.net/api/v1/spaces/${id}`,
     {headers: {Authorization: `Bearer ${token}`}}
   );
 
@@ -439,7 +439,7 @@ export const deleteSpace = async (id, token) => {
 
 export const createOrder = async (order, token) => {
   const response = await axios.post(
-    `https://localhost:44304/api/v1/requests`,
+    `https://rssms.azurewebsites.net/api/v1/requests`,
     {
       customerId: order.customerId,
       deliveryAddress: order.deliveryAddress,
@@ -474,24 +474,24 @@ export const getOrder = async (
   if (dateStart !== undefined && dateEnd !== undefined) {
     if (listFilterOrder === undefined) {
       response = await axios.get(
-        `https://localhost:44304/api/v1/orders?dateFrom=${dateStart}&dateTo=${dateEnd}&page=1&size=-1`,
+        `https://rssms.azurewebsites.net/api/v1/orders?dateFrom=${dateStart}&dateTo=${dateEnd}&page=1&size=-1`,
         {headers: {Authorization: `Bearer ${token}`}}
       );
     } else {
       response = await axios.get(
-        `https://localhost:44304/api/v1/orders?OrderStatuses=${listFilterOrder}&dateFrom=${dateStart}&dateTo=${dateEnd}&page=1&size=-1`,
+        `https://rssms.azurewebsites.net/api/v1/orders?OrderStatuses=${listFilterOrder}&dateFrom=${dateStart}&dateTo=${dateEnd}&page=1&size=-1`,
         {headers: {Authorization: `Bearer ${token}`}}
       );
     }
   } else {
     if (listFilterOrder === undefined) {
       response = await axios.get(
-        `https://localhost:44304/api/v1/orders?Id=${id}&page=${page}&size=${size}`,
+        `https://rssms.azurewebsites.net/api/v1/orders?Id=${id}&page=${page}&size=${size}`,
         {headers: {Authorization: `Bearer ${token}`}}
       );
     } else {
       response = await axios.get(
-        `https://localhost:44304/api/v1/orders?OrderStatuses=${listFilterOrder}&Id=${id}&page=${page}&size=${size}`,
+        `https://rssms.azurewebsites.net/api/v1/orders?OrderStatuses=${listFilterOrder}&Id=${id}&page=${page}&size=${size}`,
         {headers: {Authorization: `Bearer ${token}`}}
       );
     }
@@ -502,7 +502,7 @@ export const getOrder = async (
 
 export const getSchedule = async (dateStart, dateEnd, token) => {
   let response = await axios.get(
-    `https://localhost:44304/api/v1/schedules?DateFrom=${dateStart}&DateTo=${dateEnd}&page=1&size=-1`,
+    `https://rssms.azurewebsites.net/api/v1/schedules?DateFrom=${dateStart}&DateTo=${dateEnd}&page=1&size=-1`,
     {headers: {Authorization: `Bearer ${token}`}}
   );
   return response;
@@ -515,7 +515,7 @@ export const assignSchedule = async (
   token
 ) => {
   let response = await axios.post(
-    `https://localhost:44304/api/v1/schedules`,
+    `https://rssms.azurewebsites.net/api/v1/schedules`,
     {
       scheduleDay: scheduleDay,
       schedules: listOrder,
@@ -528,7 +528,7 @@ export const assignSchedule = async (
 
 export const getOrderById = async (id, token) => {
   const response = await axios.get(
-    `https://localhost:44304/api/v1/orders/${id}`,
+    `https://rssms.azurewebsites.net/api/v1/orders/${id}`,
     {headers: {Authorization: `Bearer ${token}`}}
   );
 
@@ -537,7 +537,7 @@ export const getOrderById = async (id, token) => {
 
 export const cancelOrder = async (id, reason, token) => {
   const response = await axios.put(
-    `https://localhost:44304/api/v1/orders/cancel/${id}`,
+    `https://rssms.azurewebsites.net/api/v1/orders/cancel/${id}`,
     {
       id: id,
       rejectedReason: reason,
@@ -550,7 +550,7 @@ export const cancelOrder = async (id, reason, token) => {
 
 export const updateOrder = async (id, order, token) => {
   const response = await axios.put(
-    `https://localhost:44304/api/v1/orders/${id}`,
+    `https://rssms.azurewebsites.net/api/v1/orders/${id}`,
     {
       id: order.id,
       paymentMethod: order.paymentMethod,
@@ -572,7 +572,7 @@ export const updateOrder = async (id, order, token) => {
 
 export const updateStatusOrder = async (id, status, token) => {
   const response = await axios.put(
-    `https://localhost:44304/api/v1/orders/${id}`,
+    `https://rssms.azurewebsites.net/api/v1/orders/${id}`,
     {
       id: id,
       status: status,
@@ -593,7 +593,7 @@ export const placeBoxes = async (placingProducts, token) => {
   });
 
   const response = await axios.post(
-    `https://localhost:44304/api/v1/orders/assign to floor`,
+    `https://rssms.azurewebsites.net/api/v1/orders/assign to floor`,
     {
       orderDetailAssignFloor: boxesId,
     },
@@ -605,7 +605,7 @@ export const placeBoxes = async (placingProducts, token) => {
 
 export const moveBoxApi = async (box, token) => {
   const response = await axios.put(
-    `https://localhost:44304/api/v1/orderboxdetails`,
+    `https://rssms.azurewebsites.net/api/v1/orderboxdetails`,
     {
       orderId: box.orderId,
       boxId: box.boxId,
@@ -619,7 +619,7 @@ export const moveBoxApi = async (box, token) => {
 
 export const assignOrder = async (requestId, storageId, token) => {
   const response = await axios.post(
-    `https://localhost:44304/api/v1/requests/assign order`,
+    `https://rssms.azurewebsites.net/api/v1/requests/assign order`,
     {
       requestId: requestId,
       storageId: storageId,
@@ -633,11 +633,11 @@ export const assignOrder = async (requestId, storageId, token) => {
 export const getProduct = async (type, token) => {
   let response =
     type === undefined
-      ? await axios.get(`https://localhost:44304/api/v1/services`, {
+      ? await axios.get(`https://rssms.azurewebsites.net/api/v1/services`, {
           headers: {Authorization: `Bearer ${token}`},
         })
       : await axios.get(
-          `https://localhost:44304/api/v1/services?Type=${type}`,
+          `https://rssms.azurewebsites.net/api/v1/services?Type=${type}`,
           {headers: {Authorization: `Bearer ${token}`}}
         );
 
@@ -646,7 +646,7 @@ export const getProduct = async (type, token) => {
 
 export const createProduct = async (product, token) => {
   const response = await axios.post(
-    `https://localhost:44304/api/v1/services`,
+    `https://rssms.azurewebsites.net/api/v1/services`,
     {
       name: product.name,
       price: product.price,
@@ -672,7 +672,7 @@ export const createProduct = async (product, token) => {
 
 export const updateRequestWithNote = async (status, note, idRequest, token) => {
   const response = await axios.put(
-    `https://localhost:44304/api/v1/requests/${idRequest}`,
+    `https://rssms.azurewebsites.net/api/v1/requests/${idRequest}`,
     {
       id: idRequest,
       description: note,
@@ -685,7 +685,7 @@ export const updateRequestWithNote = async (status, note, idRequest, token) => {
 
 export const doneOrder = async (idOrder, idRequest, token) => {
   const response = await axios.put(
-    `https://localhost:44304/api/v1/orders/done/order/${idOrder}/request/${idRequest}`,
+    `https://rssms.azurewebsites.net/api/v1/orders/done/order/${idOrder}/request/${idRequest}`,
     {
       orderId: idOrder,
       requestId: idRequest,
@@ -734,7 +734,7 @@ export const updateProduct = async (product, id, imageUrl, token) => {
     };
   }
   const response = await axios.put(
-    `https://localhost:44304/api/v1/services/${id}`,
+    `https://rssms.azurewebsites.net/api/v1/services/${id}`,
     object,
     {headers: {Authorization: `Bearer ${token}`}}
   );
@@ -743,7 +743,7 @@ export const updateProduct = async (product, id, imageUrl, token) => {
 
 export const deleteProduct = async (id, token) => {
   const response = await axios.delete(
-    `https://localhost:44304/api/v1/services/${id}`,
+    `https://rssms.azurewebsites.net/api/v1/services/${id}`,
     {headers: {Authorization: `Bearer ${token}`}}
   );
 
@@ -752,7 +752,7 @@ export const deleteProduct = async (id, token) => {
 
 export const getNotifcations = async (id, token) => {
   const response = await axios.get(
-    `https://localhost:44304/api/v1/notifications?userId=${id}&page=1&size=-1`,
+    `https://rssms.azurewebsites.net/api/v1/notifications?userId=${id}&page=1&size=-1`,
     {headers: {Authorization: `Bearer ${token}`}}
   );
 
@@ -761,7 +761,7 @@ export const getNotifcations = async (id, token) => {
 
 export const getStaffRequest = async (name, page, size, type, token) => {
   const response = await axios.get(
-    `https://localhost:44304/api/v1/requests?page=${page}&size=${size}&RequestTypes=0`,
+    `https://rssms.azurewebsites.net/api/v1/requests?page=${page}&size=${size}&RequestTypes=0`,
     {headers: {Authorization: `Bearer ${token}`}}
   );
 
@@ -772,12 +772,12 @@ export const getCustomerRequest = async (name, page, size, token, filter) => {
   let response;
   if (filter) {
     response = await axios.get(
-      `https://localhost:44304/api/v1/requests?RequestStatus=${filter}&page=${page}&size=${size}`,
+      `https://rssms.azurewebsites.net/api/v1/requests?RequestStatus=${filter}&page=${page}&size=${size}`,
       {headers: {Authorization: `Bearer ${token}`}}
     );
   } else {
     response = await axios.get(
-      `https://localhost:44304/api/v1/requests?page=${page}&size=${size}`,
+      `https://rssms.azurewebsites.net/api/v1/requests?page=${page}&size=${size}`,
       {headers: {Authorization: `Bearer ${token}`}}
     );
   }
@@ -787,7 +787,7 @@ export const getCustomerRequest = async (name, page, size, token, filter) => {
 
 export const getRequestToSchedule = async (dayFrom, dayTo, token) => {
   const response = await axios.get(
-    `https://localhost:44304/api/v1/requests?FromDate=${dayFrom}&ToDate=${dayTo}&RequestTypes=2&RequestTypes=4`,
+    `https://rssms.azurewebsites.net/api/v1/requests?FromDate=${dayFrom}&ToDate=${dayTo}&RequestTypes=2&RequestTypes=4`,
     {headers: {Authorization: `Bearer ${token}`}}
   );
   return response;
@@ -796,7 +796,7 @@ export const getRequestToSchedule = async (dayFrom, dayTo, token) => {
 export const getRequestToScheduleNew = async (dayFrom, dayTo, token) => {
   console.log(dayFrom, dayTo);
   const response = await axios.get(
-    `https://localhost:44304/api/v1/requests?FromDate=${dayFrom}&ToDate=${dayTo}&RequestTypes=1&RequestTypes=4`,
+    `https://rssms.azurewebsites.net/api/v1/requests?FromDate=${dayFrom}&ToDate=${dayTo}&RequestTypes=1&RequestTypes=4`,
     {headers: {Authorization: `Bearer ${token}`}}
   );
   return response;
@@ -804,7 +804,7 @@ export const getRequestToScheduleNew = async (dayFrom, dayTo, token) => {
 
 export const updateNotification = async (listNotification, token) => {
   const response = await axios.put(
-    `https://localhost:44304/api/v1/notifications`,
+    `https://rssms.azurewebsites.net/api/v1/notifications`,
     {
       ids: listNotification,
     },
@@ -816,7 +816,7 @@ export const updateNotification = async (listNotification, token) => {
 
 export const updateIsPaidRequest = async (idRequest, isPaid, token) => {
   const response = await axios.put(
-    `https://localhost:44304/api/v1/requests/${idRequest.toString()}`,
+    `https://rssms.azurewebsites.net/api/v1/requests/${idRequest.toString()}`,
     {
       id: idRequest,
       isPaid: isPaid,
@@ -830,7 +830,7 @@ export const updateIsPaidRequest = async (idRequest, isPaid, token) => {
 
 export const moveOrderDetail = async (listMoveBox, token) => {
   const response = await axios.put(
-    `https://localhost:44304/api/v1/orders/assign to another floor`,
+    `https://rssms.azurewebsites.net/api/v1/orders/assign to another floor`,
     {
       orderDetailAssignFloor: listMoveBox,
     },
@@ -842,7 +842,7 @@ export const moveOrderDetail = async (listMoveBox, token) => {
 
 export const getRequestDetail = async (id, token) => {
   const response = await axios.get(
-    `https://localhost:44304/api/v1/requests/${id}`,
+    `https://rssms.azurewebsites.net/api/v1/requests/${id}`,
     {headers: {Authorization: `Bearer ${token}`}}
   );
 
@@ -851,7 +851,7 @@ export const getRequestDetail = async (id, token) => {
 
 export const getDetailFloor = async (id, token) => {
   const response = await axios.get(
-    `https://localhost:44304/api/v1/floors/${id}`,
+    `https://rssms.azurewebsites.net/api/v1/floors/${id}`,
     {headers: {Authorization: `Bearer ${token}`}}
   );
 
