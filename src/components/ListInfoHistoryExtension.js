@@ -1,16 +1,18 @@
 import React from "react";
-import {Box} from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { formatCurrency } from "../utils/FormatCurrency";
+
 import Paper from "@mui/material/Paper";
 import moment from "moment";
-export default function ListInfoHistoryExtension({list, currentOrder}) {
+export default function ListInfoHistoryExtension({ list, currentOrder }) {
   return (
-    <Box sx={{display: "flex", flexDirection: "column"}}>
+    <Box sx={{ display: "flex", flexDirection: "column" }}>
       <Box
         sx={{
           display: "flex",
@@ -20,7 +22,7 @@ export default function ListInfoHistoryExtension({list, currentOrder}) {
         }}
       >
         <TableContainer component={Paper}>
-          <Table sx={{minWidth: 650, maxHeight: 500}} aria-label="simple table">
+          <Table sx={{ minWidth: 650, maxHeight: 500 }} aria-label="simple table">
             <TableHead>
               <TableRow>
                 <TableCell>Mã yêu cầu</TableCell>
@@ -29,7 +31,7 @@ export default function ListInfoHistoryExtension({list, currentOrder}) {
                 <TableCell>
                   ({currentOrder.type === 0 ? "Số tháng" : "Số ngày"})
                 </TableCell>
-                <TableCell>Ngày thanh toán</TableCell>
+                <TableCell>Tổng giá tiền</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -45,7 +47,7 @@ export default function ListInfoHistoryExtension({list, currentOrder}) {
                 return (
                   <TableRow
                     key={row.id}
-                    sx={{"&:last-child td, &:last-child th": {border: 0}}}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
                       {row.requestId}
@@ -57,11 +59,9 @@ export default function ListInfoHistoryExtension({list, currentOrder}) {
                       {moment(new Date(row.returnDate)).format("DD/MM/YYYY")}
                     </TableCell>
                     <TableCell>{difference}</TableCell>
-                    <TableCell>
-                      {row.paidDate === null
-                        ? "Chưa thanh toán"
-                        : moment(new Date(row.paidDate)).format("DD/MM/YYYY")}
-                    </TableCell>
+                    <TableCell> {formatCurrency(row.totalPrice, " đ")}</TableCell>
+
+
                   </TableRow>
                 );
               })}
