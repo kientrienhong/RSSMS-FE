@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const domain = 'https://localhost:44304';
+const domain = "https://rssmsapi20220426221036.azurewebsites.net";
 
 export const getListRole = async (token) => {
   let user = await axios.get(`${domain}/api/v1/roles`, {
@@ -82,23 +82,19 @@ export const getListUser = async (
 };
 
 export const findUserByPhone = async (phone, token) => {
-  let user = await axios.get(
-    `${domain}/api/v1/accounts/account/${phone}`,
-    {headers: {Authorization: `Bearer ${token}`}}
-  );
+  let user = await axios.get(`${domain}/api/v1/accounts/account/${phone}`, {
+    headers: {Authorization: `Bearer ${token}`},
+  });
 
   return user;
 };
 
 export const login = async (email, password, tokenFirebase) => {
-  const response = await axios.post(
-    `${domain}/api/v1/accounts/login`,
-    {
-      email: email,
-      password: password,
-      deviceToken: tokenFirebase,
-    }
-  );
+  const response = await axios.post(`${domain}/api/v1/accounts/login`, {
+    email: email,
+    password: password,
+    deviceToken: tokenFirebase,
+  });
 
   return response;
 };
@@ -148,10 +144,9 @@ export const createUser = async (user, token) => {
 };
 
 export const deleteUser = async (id, token) => {
-  const response = await axios.delete(
-    `${domain}/api/v1/accounts/${id}`,
-    {headers: {Authorization: `Bearer ${token}`}}
-  );
+  const response = await axios.delete(`${domain}/api/v1/accounts/${id}`, {
+    headers: {Authorization: `Bearer ${token}`},
+  });
 
   return response;
 };
@@ -186,11 +181,9 @@ export const updateUser = async (user, id, imageUrl, token) => {
     };
   }
 
-  const response = await axios.put(
-    `${domain}/api/v1/accounts/${id}`,
-    object,
-    {headers: {Authorization: `Bearer ${token}`}}
-  );
+  const response = await axios.put(`${domain}/api/v1/accounts/${id}`, object, {
+    headers: {Authorization: `Bearer ${token}`},
+  });
 
   return response;
 };
@@ -205,10 +198,9 @@ export const getListStorage = async (name, page, size, token) => {
 };
 
 export const getStorageDetail = async (id, token) => {
-  const storage = await axios.get(
-    `${domain}/api/v1/storages/${id}`,
-    {headers: {Authorization: `Bearer ${token}`}}
-  );
+  const storage = await axios.get(`${domain}/api/v1/storages/${id}`, {
+    headers: {Authorization: `Bearer ${token}`},
+  });
 
   return storage;
 };
@@ -269,19 +261,16 @@ export const updateStorage = async (storage, id, imageUrl, token) => {
       usage: 0,
     };
   }
-  const response = await axios.put(
-    `${domain}/api/v1/storages/${id}`,
-    object,
-    {headers: {Authorization: `Bearer ${token}`}}
-  );
+  const response = await axios.put(`${domain}/api/v1/storages/${id}`, object, {
+    headers: {Authorization: `Bearer ${token}`},
+  });
 
   return response;
 };
 export const deleteStorage = async (id, token) => {
-  const response = await axios.delete(
-    `${domain}/api/v1/storages/${id}`,
-    {headers: {Authorization: `Bearer ${token}`}}
-  );
+  const response = await axios.delete(`${domain}/api/v1/storages/${id}`, {
+    headers: {Authorization: `Bearer ${token}`},
+  });
 
   return response;
 };
@@ -349,10 +338,9 @@ export const createArea = async (
 };
 
 export const deleteArea = async (id, token) => {
-  const response = await axios.delete(
-    `${domain}/api/v1/areas/${id}`,
-    {headers: {Authorization: `Bearer ${token}`}}
-  );
+  const response = await axios.delete(`${domain}/api/v1/areas/${id}`, {
+    headers: {Authorization: `Bearer ${token}`},
+  });
 
   return response;
 };
@@ -376,10 +364,9 @@ export const updateArea = async (id, name, description, type, size, token) => {
 };
 
 export const getDetailArea = async (id, token) => {
-  const response = await axios.get(
-    `${domain}/api/v1/areas/${id}`,
-    {headers: {Authorization: `Bearer ${token}`}}
-  );
+  const response = await axios.get(`${domain}/api/v1/areas/${id}`, {
+    headers: {Authorization: `Bearer ${token}`},
+  });
 
   return response;
 };
@@ -431,10 +418,9 @@ export const updateShelf = async (id, space, token) => {
 };
 
 export const deleteSpace = async (id, token) => {
-  const response = await axios.delete(
-    `${domain}/api/v1/spaces/${id}`,
-    {headers: {Authorization: `Bearer ${token}`}}
-  );
+  const response = await axios.delete(`${domain}/api/v1/spaces/${id}`, {
+    headers: {Authorization: `Bearer ${token}`},
+  });
 
   return response;
 };
@@ -529,10 +515,9 @@ export const assignSchedule = async (
 };
 
 export const getOrderById = async (id, token) => {
-  const response = await axios.get(
-    `${domain}/api/v1/orders/${id}`,
-    {headers: {Authorization: `Bearer ${token}`}}
-  );
+  const response = await axios.get(`${domain}/api/v1/orders/${id}`, {
+    headers: {Authorization: `Bearer ${token}`},
+  });
 
   return response;
 };
@@ -638,10 +623,9 @@ export const getProduct = async (type, token) => {
       ? await axios.get(`${domain}/api/v1/services`, {
           headers: {Authorization: `Bearer ${token}`},
         })
-      : await axios.get(
-          `${domain}/api/v1/services?Type=${type}`,
-          {headers: {Authorization: `Bearer ${token}`}}
-        );
+      : await axios.get(`${domain}/api/v1/services?Type=${type}`, {
+          headers: {Authorization: `Bearer ${token}`},
+        });
 
   return response;
 };
@@ -735,19 +719,16 @@ export const updateProduct = async (product, id, imageUrl, token) => {
       },
     };
   }
-  const response = await axios.put(
-    `${domain}/api/v1/services/${id}`,
-    object,
-    {headers: {Authorization: `Bearer ${token}`}}
-  );
+  const response = await axios.put(`${domain}/api/v1/services/${id}`, object, {
+    headers: {Authorization: `Bearer ${token}`},
+  });
   return response;
 };
 
 export const deleteProduct = async (id, token) => {
-  const response = await axios.delete(
-    `${domain}/api/v1/services/${id}`,
-    {headers: {Authorization: `Bearer ${token}`}}
-  );
+  const response = await axios.delete(`${domain}/api/v1/services/${id}`, {
+    headers: {Authorization: `Bearer ${token}`},
+  });
 
   return response;
 };
@@ -843,19 +824,17 @@ export const moveOrderDetail = async (listMoveBox, token) => {
 };
 
 export const getRequestDetail = async (id, token) => {
-  const response = await axios.get(
-    `${domain}/api/v1/requests/${id}`,
-    {headers: {Authorization: `Bearer ${token}`}}
-  );
+  const response = await axios.get(`${domain}/api/v1/requests/${id}`, {
+    headers: {Authorization: `Bearer ${token}`},
+  });
 
   return response;
 };
 
 export const getDetailFloor = async (id, token) => {
-  const response = await axios.get(
-    `${domain}/api/v1/floors/${id}`,
-    {headers: {Authorization: `Bearer ${token}`}}
-  );
+  const response = await axios.get(`${domain}/api/v1/floors/${id}`, {
+    headers: {Authorization: `Bearer ${token}`},
+  });
 
   return response;
 };
