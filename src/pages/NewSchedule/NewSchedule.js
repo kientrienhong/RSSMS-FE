@@ -315,7 +315,7 @@ function NewSchedule({
           showLoading();
           let listUserNotAssigned = await getListDeliveryStaff(
             storageId,
-            listDateAWeek[currentIndexDate].toISOString(),
+            addDays(listDateAWeek[currentIndexDate], 1).toISOString(),
             `&deliveryTimes=${listSelectedTime}`,
             "Delivery Staff",
             userState.idToken
