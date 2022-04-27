@@ -3,7 +3,12 @@ import {Box, Modal, Button, Typography, MenuItem} from "@material-ui/core";
 import {STYLE_MODAL} from "../../../constant/style";
 import CustomInput from "../../../components/CustomInput";
 import CustomAreaInput from "../../../components/CustomAreaInput";
-import {LIST_UNIT, ACCESSSORY_TYPE} from "../../../constant/constant";
+import {
+  LIST_UNIT,
+  ACCESSSORY_TYPE,
+  SELF_STORAGE_TYPE,
+  SERVICE_TYPE,
+} from "../../../constant/constant";
 import {connect} from "react-redux";
 import * as action from "../../../redux/action/action";
 import {createProduct, updateProduct} from "../../../apis/Apis";
@@ -64,7 +69,7 @@ function ProductModal({
       length: data.length ? data.length : "0",
       unit: data.unit,
       tooltip: data.tooltip,
-      deliveryFee: data.deliveryFee,
+      deliveryFee: data.deliveryFee ? data.deliveryFee : "0",
       image: {
         url: null,
       },
@@ -117,7 +122,7 @@ function ProductModal({
       height: data.height ? data.height : "0",
       length: data.length ? data.length : "0",
       unit: data.unit,
-      deliveryFee: data.deliveryFee,
+      deliveryFee: data.deliveryFee ? data.deliveryFee : "0",
       tooltip: data.tooltip,
       image: {
         url: currentProduct?.imageUrl,
@@ -360,30 +365,37 @@ function ProductModal({
                 userInfo={currentProduct?.tooltip}
                 inlineStyle={{...styleInput, marginTop: "4%", width: "500px"}}
               />
-              <Box
-                sx={{
-                  ...styleBoxInput,
-                  marginTop: "3%",
-                  justifyContent: "flex-start",
-                }}
-              >
-                <CustomInput
-                  control={control}
-                  rules={{
-                    required: "*Vui lòng nhập",
-
-                    pattern: {
-                      value: /^\+?([1-9]\d{4,14})$/,
-                      message: "*Vui lòng nhập đúng giá tiền",
-                    },
+              {typeProduct !== SELF_STORAGE_TYPE &&
+              typeProduct !== SERVICE_TYPE &&
+              typeProduct !== ACCESSSORY_TYPE ? (
+                <Box
+                  sx={{
+                    ...styleBoxInput,
+                    marginTop: "3%",
+                    justifyContent: "flex-start",
                   }}
-                  styles={{width: "475px"}}
-                  name="deliveryFee"
-                  label="Giá tiền vận chuyển"
-                  userInfo={currentProduct?.deliveryFee}
-                  inlineStyle={{...styleInput}}
-                />
-              </Box>
+                >
+                  <CustomInput
+                    control={control}
+                    rules={{
+                      required: "*Vui lòng nhập",
+
+                      pattern: {
+                        value: /^\+?([1-9]\d{4,14})$/,
+                        message: "*Vui lòng nhập đúng giá tiền",
+                      },
+                    }}
+                    styles={{width: "475px"}}
+                    name="deliveryFee"
+                    label="Giá tiền vận chuyển"
+                    userInfo={currentProduct?.deliveryFee}
+                    inlineStyle={{...styleInput}}
+                  />
+                </Box>
+              ) : (
+                <></>
+              )}
+
               <Box
                 sx={{
                   ...styleBoxInput,
