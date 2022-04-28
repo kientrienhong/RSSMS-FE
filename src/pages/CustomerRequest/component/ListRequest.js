@@ -16,6 +16,8 @@ import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 import {Button, TableHead} from "@material-ui/core";
+import {ErrorHandle} from "../../../utils/ErrorHandle";
+
 import moment from "moment";
 import {
   LIST_TYPE_REQUEST,
@@ -139,6 +141,7 @@ function ListRequest({
   setUpdateStatus,
   handleOpenUpdateRequest,
   showSnackbar,
+  handleExtendSession,
 }) {
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   // Avoid a layout jump when reaching the last page with empty rows.
@@ -198,7 +201,6 @@ function ListRequest({
                         );
 
                         setCurrentRequest(response.data);
-
                         if (row.type === 2) {
                           handleOpenIsPaid();
                         } else if (row.type === 3) {
@@ -209,6 +211,12 @@ function ListRequest({
                           handleOpenReturnItem();
                         }
                       } catch (e) {
+                        ErrorHandle.handle(
+                          e,
+                          showSnackbar,
+                          handleExtendSession
+                        );
+
                         console.log(e?.response);
                       }
                     }}
@@ -228,8 +236,9 @@ function ListRequest({
                     <Button
                       onClick={() => {
                         setRequest(row);
+                        setCurrentRequest(row);
                         setUpdateStatus(STATUS_REQUEST_CUSTOMER_ABSENT);
-                        handleOpenUpdateRequest();
+                        handleOpenCancelOrder();
                       }}
                       style={{
                         height: "45px",
@@ -247,8 +256,10 @@ function ListRequest({
                     <Button
                       onClick={() => {
                         setRequest(row);
+                        setCurrentRequest(row);
+
                         setUpdateStatus(STATUS_REQUEST_CANCEL);
-                        handleOpenUpdateRequest();
+                        handleOpenCancelOrder();
                       }}
                       style={{
                         height: "45px",
@@ -300,6 +311,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
   return {
     showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
+    handleExtendSession: (type, msg) =>
+      dispatch(action.handleExtendSession(type, msg)),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ListRequest);

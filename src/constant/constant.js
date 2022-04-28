@@ -130,17 +130,31 @@ export const STATUS_REQUEST_FINISHED = 3;
 export const STATUS_REQUEST_DELIVERING = 4;
 export const STATUS_REQUEST_CUSTOMER_ABSENT = 5;
 
-export const ORDER_STATUS = [
-  {name: "Đã hủy", color: style.PRIMARY_SEMANTIC_RED, value: 0},
-  {name: "Đang vận chuyển", color: style.PRIMARY_BLUE, value: 1},
-  {name: "Đã lưu kho", color: style.SECOND_SEMANTIC_GREEN, value: 2},
-  {name: "Sắp quá hạn", color: style.PRIMARY_SEMANTIC_ORANGE, value: 3},
-  {name: "Đã quá hạn", color: style.PRIMARY_SEMANTIC_RED, value: 4},
-  {name: "Đang thanh lý", color: style.PRIMARY_BROWN, value: 5},
-  {name: "Hoàn thành", color: style.SECOND_SEMANTIC_GREEN, value: 6},
-  {name: "Đã thanh lý", color: style.PRIMARY_SEMANTIC_RED, value: 7},
-  {name: "Đã xuất kho", color: style.PRIMARY_BLUE, value: 8},
-];
+export const ORDER_STATUS = {
+  0: [
+    {name: "Đã hủy", color: style.PRIMARY_SEMANTIC_RED, value: 0},
+    {name: "Đã tạo đơn", color: style.PRIMARY_BLUE, value: 1},
+    {name: "Đã nhận kho", color: style.SECOND_SEMANTIC_GREEN, value: 2},
+    {name: "Sắp quá hạn", color: style.PRIMARY_SEMANTIC_ORANGE, value: 3},
+    {name: "Đã quá hạn", color: style.PRIMARY_SEMANTIC_RED, value: 4},
+    {name: "Đang thanh lý", color: style.PRIMARY_BROWN, value: 5},
+    {name: "Đã hoàn tất", color: style.SECOND_SEMANTIC_GREEN, value: 6},
+    {name: "Đã thanh lý", color: style.PRIMARY_SEMANTIC_RED, value: 7},
+    {name: "Đã hoàn tất", color: style.SECOND_SEMANTIC_GREEN, value: 8},
+  ],
+
+  1: [
+    {name: "Đã hủy", color: style.PRIMARY_SEMANTIC_RED, value: 0},
+    {name: "Đang vận chuyển", color: style.PRIMARY_BLUE, value: 1},
+    {name: "Đã lưu kho", color: style.SECOND_SEMANTIC_GREEN, value: 2},
+    {name: "Sắp quá hạn", color: style.PRIMARY_SEMANTIC_ORANGE, value: 3},
+    {name: "Đã quá hạn", color: style.PRIMARY_SEMANTIC_RED, value: 4},
+    {name: "Đang thanh lý", color: style.PRIMARY_BROWN, value: 5},
+    {name: "Hoàn thành", color: style.SECOND_SEMANTIC_GREEN, value: 6},
+    {name: "Đã thanh lý", color: style.PRIMARY_SEMANTIC_RED, value: 7},
+    {name: "Đã xuất kho", color: style.PRIMARY_BLUE, value: 8},
+  ],
+};
 
 export const LIST_STATUS = [
   {label: "Đã hủy", value: 0},

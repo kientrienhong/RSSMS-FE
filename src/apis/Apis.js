@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const domain = "https://rssmsapi20220426221036.azurewebsites.net";
+// const domain = "https://rssmsapi20220426221036.azurewebsites.net";
+const domain = "https://localhost:44304";
 
 export const getListRole = async (token) => {
   let user = await axios.get(`${domain}/api/v1/roles`, {
@@ -563,6 +564,19 @@ export const updateStatusOrder = async (id, status, token) => {
     {
       id: id,
       status: status,
+    },
+    {headers: {Authorization: `Bearer ${token}`}}
+  );
+
+  return response;
+};
+
+export const cancelRequest = async (idRequest, token, cancelReason) => {
+  const response = await axios.put(
+    `${domain}/api/v1/requests/cancel request to order/${idRequest}`,
+    {
+      id: idRequest,
+      cancelReason: cancelReason,
     },
     {headers: {Authorization: `Bearer ${token}`}}
   );

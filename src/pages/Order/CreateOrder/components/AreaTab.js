@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography, Grid } from "@material-ui/core";
+import {Box, Typography, Grid} from "@material-ui/core";
 import Item from "./Item";
 import ItemNote from "./ItemNote";
 
@@ -36,7 +36,7 @@ export default function AreaTab({
   };
 
   const mapListItemsToGrid = (listData, setListData) => {
-    return listData.map((e, index) => (
+    return listData?.map((e, index) => (
       <Grid item xs={4} key={index}>
         <Item
           type={e.type}

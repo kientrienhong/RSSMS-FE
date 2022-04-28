@@ -28,6 +28,7 @@ import ConfirmModal from "../../components/ConfirmModal";
 import UpdateRequestModal from "../../components/UpdateRequestModal";
 import MultipleSelectCheckmarks from "../../components/MultipleSelectCheckmarks";
 import {ErrorHandle} from "../../utils/ErrorHandle";
+import CancelRequest from "./component/CancelRequest";
 
 function CustomerRequest({
   showLoading,
@@ -323,6 +324,11 @@ function CustomerRequest({
           name={"Lọc theo tình trạng"}
         />
       </Box>
+      <CancelRequest
+        isOpen={openCancelOrder}
+        currentRequest={currentRequest}
+        handleClose={handleCloseCancelOrder}
+      />
       <UpdateRequestModal
         open={openUpdateRequest}
         handleClose={handleCloseUpdateRequest}
@@ -335,12 +341,12 @@ function CustomerRequest({
         currentRequest={currentRequest}
         requestDetail={requestDetail}
       />
-      <ModalCancelDetail
+      {/* <ModalCancelDetail
         open={openCancelOrder}
         handleClose={handleCloseCancelOrder}
         currentRequest={currentRequest}
         requestDetail={requestDetail}
-      />
+      /> */}
       <ModalUpdateIsPaid
         open={openIsPaid}
         handleClose={handleCloseIsPaid}

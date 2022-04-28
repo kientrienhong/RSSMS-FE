@@ -242,7 +242,7 @@ function Order({
         <MultipleSelectCheckmarks
           handleChange={handleChangeFilter}
           currentData={currentFilter}
-          listData={ORDER_STATUS}
+          listData={ORDER_STATUS[1]}
           name={"Lọc theo tình trạng"}
         />
       </Box>
