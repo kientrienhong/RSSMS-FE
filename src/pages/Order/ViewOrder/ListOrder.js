@@ -25,6 +25,8 @@ import CustomAreaInput from "../../../components/CustomAreaInput";
 import {ORDER_STATUS, ORDER_TYPE} from "../../../constant/constant";
 import AssignOrderModal from "./AssignOrderModal";
 import ConfirmModal from "../../../components/ConfirmModal";
+import CancelOrderModal from "./components/CancelOrderModal";
+
 function TablePaginationActions(props) {
   const theme = useTheme();
   const {count, page, rowsPerPage, onPageChange} = props;
@@ -150,11 +152,20 @@ function ListOrder({
   currentOrder,
   handleUpdateOrderOpen,
 }) {
+  const [openCancelOrder, setOpenCancelOrder] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   const [open, setOpen] = React.useState(false);
   const [currentId, setCurrentId] = React.useState(-1);
   const {handleSubmit, control} = useForm();
   const [openAssign, setOpenAssign] = React.useState(false);
+
+  const handleOpenCancelOrder = () => {
+    setOpenCancelOrder(true);
+  };
+
+  const handleCloseCancelOrder = () => {
+    setOpenCancelOrder(false);
+  };
 
   const handleClose = () => {
     setOpen(false);
@@ -316,6 +327,11 @@ function ListOrder({
 
   return (
     <TableContainer component={Paper}>
+      <CancelOrderModal
+        handleClose={handleCloseCancelOrder}
+        isOpen={openCancelOrder}
+        currentOrder={currentOrder}
+      />
       <Table sx={{minWidth: 500}} aria-label="custom pagination table">
         {buildModalCancelOrder()}
         {mapListTableHeader(listHeaderName, userState)}
@@ -397,6 +413,7 @@ function ListOrder({
                         Cập nhật
                       </Button>
                     )}
+
                     <Button
                       onClick={async () => {
                         handleClickRow(row);
@@ -415,6 +432,30 @@ function ListOrder({
                     >
                       Xem thêm
                     </Button>
+                    {row.status === 1 ||
+                    row.status === 2 ||
+                    row.status === 3 ? (
+                      <Button
+                        style={{
+                          height: "45px",
+                          paddingLeft: "16px",
+                          paddingRight: "16px",
+                          marginRight: "2%",
+                          marginBottom: "4%",
+                          marginLeft: "2%",
+                        }}
+                        color="error"
+                        variant="contained"
+                        onClick={() => {
+                          handleClickRow(row);
+                          handleOpenCancelOrder();
+                        }}
+                      >
+                        Hủy đơn
+                      </Button>
+                    ) : (
+                      <></>
+                    )}
                   </TableCell>
                 ) : (
                   <TableCell style={{color: "black"}}>

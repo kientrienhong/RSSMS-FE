@@ -42,7 +42,12 @@ function UpdateOrderModal({
       showLoading();
       let foundRequest = currentOrder?.requests?.find((e) => e.type === 1);
       if (data.status === 5) {
-        await doneOrder(currentOrder?.id, foundRequest.id, userState.idToken);
+        await doneOrder(
+          currentOrder?.id,
+          foundRequest.id,
+          userState.idToken,
+          5
+        );
       } else {
         await updateStatusOrder(
           currentOrder?.id,

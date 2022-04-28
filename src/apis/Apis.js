@@ -683,13 +683,13 @@ export const updateRequestWithNote = async (status, note, idRequest, token) => {
   return response;
 };
 
-export const doneOrder = async (idOrder, idRequest, token) => {
+export const doneOrder = async (idOrder, idRequest, token, status) => {
   const response = await axios.put(
     `${domain}/api/v1/orders/done/order/${idOrder}/request/${idRequest}`,
     {
       orderId: idOrder,
       requestId: idRequest,
-      status: 5,
+      status: status,
     },
     {headers: {Authorization: `Bearer ${token}`}}
   );
