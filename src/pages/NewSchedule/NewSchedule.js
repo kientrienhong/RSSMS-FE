@@ -403,6 +403,7 @@ function NewSchedule({
     >
       <OrderAssignModal
         open={openAssignStaff}
+        listScheduleWholeWeek={listScheduleWholeWeek}
         handleClose={handleCloseAssignStaff}
         removeAssignStaff={removeAssignStaff}
         addAssignStaff={addAssignStaff}

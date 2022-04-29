@@ -27,6 +27,7 @@ function OrderAssignModal({
   endOfWeek,
   listSelectedOrder,
   setListSelectedOrder,
+  listScheduleWholeWeek,
 }) {
   const assignOrder = async () => {
     try {
@@ -34,10 +35,24 @@ function OrderAssignModal({
       const userIds = listStaffAssigned.map((e) => e.id);
       let currentSchedule;
       let listSelectedTime = listSelectedOrder?.map((e) => {
+        let remainingRequest = 0;
+
+        listScheduleWholeWeek[
+          new Date(e.deliveryDate).toLocaleDateString("en-US")
+        ].listSchedule
+          .get(e.deliveryTime)
+          .filter((eF) => eF.id !== e.id)
+          .forEach((e1) => {
+            if (!e1.listStaffDelivery) {
+              remainingRequest++;
+            }
+          });
+
         return {
           scheduleTime: e.deliveryTime,
           orderId: e.orderId,
           requestId: e.id,
+          requestRemain: remainingRequest,
           deliveryAddress: e.deliveryAddress,
         };
       });
