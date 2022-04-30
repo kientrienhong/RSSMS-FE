@@ -78,6 +78,7 @@ function InformationOrder({
   userState,
   isView,
 }) {
+  console.log(currentOrder);
   const [returnAddress, setReturnAddress] = useState("");
   const [deliveryAddress, setDeliveryAddress] = useState("");
   const [timeDelivery, setTimeDelivery] = useState();

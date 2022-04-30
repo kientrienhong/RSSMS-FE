@@ -41,7 +41,6 @@ function CancelOrderModal({
         currentOrder.status === 4
       ) {
         const request = currentOrder.requests.find((e) => e.type === 1);
-
         response = await doneOrder(
           currentOrder.id,
           request.id,

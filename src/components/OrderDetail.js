@@ -38,6 +38,10 @@ export default function OrderDetail({
 
     if (order?.orderAdditionalFees) {
       sum += order?.orderAdditionalFees?.find((e) => e.type === 0).price;
+
+      if (order?.orderAdditionalFees?.find((e) => e.type === 3)) {
+        sum += (order?.orderAdditionalFees?.find((e) => e.type === 3)).price;
+      }
     }
 
     return (
@@ -63,7 +67,37 @@ export default function OrderDetail({
 
   const buildTotalEachPartPrice = (value) => {
     if (choosenProduct[value].length === 0) {
-      return <></>;
+      return (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marinBottom: "2%",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "flex-end",
+              width: "40%",
+            }}
+          >
+            <Typography
+              variant="h2"
+              style={{marginBottom: "3%", marginRight: "8%"}}
+            >
+              Tổng
+            </Typography>
+          </Box>
+
+          <Typography variant="h2" color="primary" style={{marginBottom: "3%"}}>
+            {formatCurrency(parseInt(0), "đ")}
+          </Typography>
+        </Box>
+      );
     }
 
     let total = choosenProduct[value].reduce(
@@ -78,7 +112,6 @@ export default function OrderDetail({
 
     let totalNum =
       isNaN(parseInt(total?.price)) === true ? 0 : parseInt(total?.price);
-
     return (
       <Box
         sx={{
@@ -170,7 +203,7 @@ export default function OrderDetail({
         sx={{
           display: "flex",
           flexDirection: "column",
-          marginTop: "4%",
+          marginTop: "1%",
         }}
       >
         <Typography
@@ -210,6 +243,8 @@ export default function OrderDetail({
       </Box>
     );
   };
+
+  const deliveryFee = order?.orderAdditionalFees?.find((e) => e.type === 3);
 
   const buildTotalProduct = (value) => {
     let months = Math.ceil(duration / 30);
@@ -426,7 +461,6 @@ export default function OrderDetail({
       {mapListDetailOthers(choosenProduct.accessory)}
       <Divider />
       {buildTotalEachPartPrice("accessory")}
-      {order?.additionalFee ? buildAdditionPrice() : <></>}
       {order?.orderAdditionalFees?.find((e) => e.type === 0)?.price > 0 ? (
         buildAdditionPrice(
           order?.orderAdditionalFees?.find((e) => e.type === 0)
@@ -434,6 +468,27 @@ export default function OrderDetail({
       ) : (
         <></>
       )}
+      {deliveryFee ? (
+        <Typography
+          variant="h2"
+          style={{
+            marginTop: "3%",
+          }}
+        >
+          Phí vận chuyển
+        </Typography>
+      ) : (
+        <></>
+      )}
+      {order?.orderAdditionalFees?.find((e) => e.type === 3) ? (
+        buildAdditionPrice(
+          order?.orderAdditionalFees?.find((e) => e.type === 3)
+        )
+      ) : (
+        <></>
+      )}
+      <Divider />
+
       {buildTotalPrice()}
       {order?.orderAdditionalFees?.find((e) => e.type === 1)?.price > 0 ? (
         buildAdditionPrice(

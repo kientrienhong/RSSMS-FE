@@ -4,6 +4,7 @@ import ListStaff from "../../Storage/components/ListStaff";
 import {Box, Modal, Button} from "@material-ui/core";
 import {connect} from "react-redux";
 import {assignSchedule} from "../../../apis/Apis";
+import {ErrorHandle} from "../../../utils/ErrorHandle";
 
 import * as action from "../../../redux/action/action";
 const styleModal = STYLE_MODAL;
@@ -28,6 +29,7 @@ function OrderAssignModal({
   listSelectedOrder,
   setListSelectedOrder,
   listScheduleWholeWeek,
+  handleExtendSession,
 }) {
   const assignOrder = async () => {
     try {
@@ -56,6 +58,7 @@ function OrderAssignModal({
           deliveryAddress: e.deliveryAddress,
         };
       });
+
       currentSchedule = listSelectedOrder[0]?.deliveryDate;
       await assignSchedule(
         currentSchedule,
@@ -74,6 +77,7 @@ function OrderAssignModal({
       showSnackbar("success", "Phân công thành công");
     } catch (e) {
       console.log(e.response);
+      ErrorHandle.handle(e, showSnackbar, handleExtendSession);
     } finally {
       hideLoading();
     }
@@ -173,6 +177,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    handleExtendSession: () => dispatch(action.handleExtendSession()),
+
     showLoading: () => dispatch(action.showLoader()),
     hideLoading: () => dispatch(action.hideLoader()),
     showSnackbar: (type, msg) => dispatch(action.showSnackbar(type, msg)),
