@@ -34,10 +34,28 @@ function Schedule({
   handleOpenAssignTime,
   userState,
   handleOpenOrderModal,
+  listScheduleCurrentDate,
 }) {
   let isFoundInListSelectedOrder = listSelectedOrder?.findIndex((e) => {
     return schedule.id === e.id;
   });
+  let isNotValidSameStaffAttain = true;
+  if (listSelectedOrder?.length > 0) {
+    if (
+      Object.keys(
+        listScheduleCurrentDate["listSchedule"].get(schedule.deliveryTime)[
+          "listStaffAttend"
+        ]
+      ).length > 0
+    ) {
+      isNotValidSameStaffAttain =
+        listSelectedOrder[0]?.listStaffAttain?.toString() ===
+        listScheduleCurrentDate["listSchedule"]
+          .get(schedule.deliveryTime)
+          ["listStaffAttend"][schedule.storageId].toString();
+    }
+  }
+
   let foundSameStorage = false;
   let indexFoundSameTime = listSelectedOrder?.findIndex((e) => {
     if (e.storageId === schedule.storageId) {
@@ -330,6 +348,7 @@ function Schedule({
                 listSelectedOrder.length > 0
               }
               disabled={
+                !isNotValidSameStaffAttain ||
                 indexFoundSameTime !== -1 ||
                 (!foundSameStorage && listSelectedOrder.length > 0) ||
                 (listSelectedOrder.length > 0 && !isSameListStaff) ||

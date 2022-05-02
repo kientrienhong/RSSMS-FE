@@ -36,7 +36,7 @@ function NewSchedule({
   const {scheduleDate} = useParams();
   const [listDateAWeek, setListDateAWeek] = useState([]);
   const [currentIndexDate, setCurrentIndexDate] = useState(-1);
-  const [listSelectedOrder, setListSelectedOrder] = useState([]);
+  const [listSelectedOrder, setListSelectedOrder] = useState({});
   const [currentOrder, setCurrentOrder] = useState({});
   const [open, setOpen] = useState(false);
   const [openAssignStaff, setOpenAssignStaff] = useState(false);
@@ -81,15 +81,32 @@ function NewSchedule({
     let indexFound = listSelectedOrderTemp.findIndex((e) => {
       if (e["deliveryTime"] === schedule["deliveryTime"]) {
         if (schedule.id === e.id) {
-          schedule = {...schedule, isSelected: false};
+          schedule = {
+            ...schedule,
+            isSelected: false,
+          };
           return true;
         }
       }
     });
     if (value) {
       if (indexFound === -1) {
-        schedule = {...schedule, isSelected: true};
-        listSelectedOrderTemp.push(schedule);
+        schedule = {
+          ...schedule,
+          isSelected: true,
+        };
+        listSelectedOrderTemp.push({
+          ...schedule,
+          listStaffAttain:
+            listScheduleCurrentDate["listSchedule"].get(schedule.deliveryTime)[
+              "listStaffAttend"
+            ][schedule.storageId] === undefined
+              ? []
+              : listScheduleCurrentDate["listSchedule"].get(
+                  schedule.deliveryTime
+                )["listStaffAttend"][schedule.storageId],
+        });
+        console.log(listSelectedOrderTemp);
       }
       setListSelectedOrder(listSelectedOrderTemp);
     } else {
@@ -110,7 +127,9 @@ function NewSchedule({
     let currentDate = Object.keys(result)?.find((e) => {
       return e === date.toLocaleDateString("en-US");
     });
-    result[currentDate].listSchedule.get(order.deliveryTime).push(order);
+    result[currentDate].listSchedule
+      .get(order.deliveryTime)
+      ["listSchedule"].push(order);
     result[currentDate].amountNotAssignStaff += 1;
   };
 
@@ -122,11 +141,34 @@ function NewSchedule({
 
       let indexFound = result[currentDate].listSchedule
         .get(request["scheduleTime"])
-        .findIndex((e) => e.id === request.requestId);
+        ["listSchedule"].findIndex((e) => e.id === request.requestId);
+      let currentRequest = result[currentDate].listSchedule.get(
+        request["scheduleTime"]
+      )["listSchedule"][indexFound];
 
-      result[currentDate].listSchedule.get(request["scheduleTime"])[
-        indexFound
-      ].listStaffDelivery = request.accounts;
+      currentRequest.listStaffDelivery = request.accounts;
+      if (
+        result[currentDate].listSchedule.get(request["scheduleTime"])[
+          "listStaffAttend"
+        ][currentRequest.storageId]
+      ) {
+        if (request.accounts) {
+          result[currentDate].listSchedule.get(request["scheduleTime"])[
+            "listStaffAttend"
+          ][currentRequest.storageId] = result[currentDate].listSchedule
+            .get(request["scheduleTime"])
+            ["listStaffAttend"][currentRequest.storageId].concat(
+              ...request.accounts.map((e) => e.id)
+            );
+        }
+      } else {
+        result[currentDate].listSchedule.get(request["scheduleTime"])[
+          "listStaffAttend"
+        ][currentRequest.storageId] =
+          request.accounts === undefined
+            ? []
+            : request.accounts.map((e) => e.id);
+      }
 
       result[currentDate].amountNotAssignStaff -= 1;
     } catch (error) {
@@ -158,6 +200,23 @@ function NewSchedule({
       </Box>
     ));
 
+  const formatListStaffAttain = () => {
+    let listScheduleCurrentDateTemp = {...listScheduleCurrentDate};
+    if (listScheduleCurrentDateTemp) {
+      if (listScheduleCurrentDateTemp["listSchedule"]) {
+        for (const entry of listScheduleCurrentDateTemp[
+          "listSchedule"
+        ]?.entries()) {
+          Object.keys(entry[1]["listStaffAttend"]).forEach((e) => {
+            entry[1]["listStaffAttend"][e] =
+              entry[1]["listStaffAttend"][e].sort();
+          });
+        }
+      }
+      setListScheduleCurrentDate(listScheduleCurrentDateTemp);
+    }
+  };
+
   const getData = async (startOfWeek, endOfWeek, currentSchedule) => {
     let result = {};
     let currentIndexDateLocal = 0;
@@ -166,9 +225,9 @@ function NewSchedule({
       let currStr = new Date().toLocaleDateString("en-US");
       currentSchedule = new Date(currentSchedule).toLocaleDateString("en-US");
       if (startOfWeek.toLocaleDateString("en-US") === currStr) {
-        setCurrentIndexDate(0);
+        currentIndexDateLocal = 0;
       } else if (startOfWeek.toLocaleDateString("en-US") === currentSchedule) {
-        setCurrentIndexDate(0);
+        currentIndexDateLocal = 0;
       }
 
       let listDateAWeekTemp = [];
@@ -176,7 +235,9 @@ function NewSchedule({
         let date = addDays(startOfWeek, i);
         let dateStr = date.toLocaleDateString("en-US");
         let listTime = new Map();
-        LIST_TIME.forEach((e) => listTime.set(e["name"], []));
+        LIST_TIME.forEach((e) =>
+          listTime.set(e["name"], {listSchedule: [], listStaffAttend: {}})
+        );
         result[dateStr] = {};
         result[dateStr].listSchedule = listTime;
         result[dateStr].amountNotAssignStaff = 0;
@@ -190,7 +251,6 @@ function NewSchedule({
         listDateAWeekTemp.push(date);
       }
       setListDateAWeek(listDateAWeekTemp);
-      setCurrentIndexDate(currentIndexDateLocal);
 
       let response = await getRequestToScheduleNew(
         addDays(startOfWeek, 1).toISOString().split("T")[0],
@@ -232,11 +292,17 @@ function NewSchedule({
     } finally {
       hideLoading();
       setListScheduleWholeWeek(result);
+      setCurrentIndexDate(currentIndexDateLocal);
+
       setListScheduleCurrentDate(
         result[Object.keys(result)[currentIndexDateLocal]]
       );
     }
   };
+
+  useEffect(() => {
+    formatListStaffAttain();
+  }, [currentIndexDate]);
 
   const handleChangeSearchUnAssigned = (event) => {
     let listStaffUnAssignedTemp = [...listStaffUnAssigned];
@@ -496,6 +562,7 @@ function NewSchedule({
         }}
       >
         <ScheduleArea
+          listScheduleCurrentDate={listScheduleCurrentDate}
           listGroup={listScheduleCurrentDate}
           setCurrentOrder={setCurrentOrder}
           handleOpenOrderModal={handleOpenOrderModal}

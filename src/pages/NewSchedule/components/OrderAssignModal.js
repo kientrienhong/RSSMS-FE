@@ -43,7 +43,7 @@ function OrderAssignModal({
           new Date(e.deliveryDate).toLocaleDateString("en-US")
         ].listSchedule
           .get(e.deliveryTime)
-          .filter((eF) => eF.id !== e.id)
+          ["listSchedule"].filter((eF) => eF.id !== e.id)
           .forEach((e1) => {
             if (!e1.listStaffDelivery) {
               remainingRequest++;
@@ -76,6 +76,7 @@ function OrderAssignModal({
       handleClose();
       showSnackbar("success", "Phân công thành công");
     } catch (e) {
+      console.log(e);
       console.log(e.response);
       ErrorHandle.handle(e, showSnackbar, handleExtendSession);
     } finally {

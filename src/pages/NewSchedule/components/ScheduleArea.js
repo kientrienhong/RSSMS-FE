@@ -10,6 +10,7 @@ export default function ScheduleArea({
   listSelectedOrder,
   handleOpenOrderModal,
   listTime,
+  listScheduleCurrentDate,
 }) {
   const mapListSchedule = (mapListSchedule) =>
     mapListSchedule?.map((e, index) => (
@@ -20,6 +21,7 @@ export default function ScheduleArea({
         handleOpen={handleOpen}
         handleOpenOrderModal={handleOpenOrderModal}
         onChangeCheckBox={onChangeCheckBox}
+        listScheduleCurrentDate={listScheduleCurrentDate}
         listSelectedOrder={listSelectedOrder}
       />
     ));
@@ -58,7 +60,7 @@ export default function ScheduleArea({
           >
             <ItemSidebar time={entry[0]} />
 
-            {mapListSchedule(entry[1])}
+            {mapListSchedule(entry[1]["listSchedule"])}
           </Box>
         );
       }
