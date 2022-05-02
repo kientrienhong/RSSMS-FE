@@ -8,7 +8,6 @@ import {
   Typography,
 } from "@material-ui/core";
 import SearchIcon from "@mui/icons-material/Search";
-import ProductButton from "../Order/CreateOrder/components/ProductButton";
 
 import {connect} from "react-redux";
 import * as action from "../../redux/action/action";
@@ -298,17 +297,7 @@ function AreaDetailNew({
             ),
           }}
         />
-        {userState.roleName !== "Admin" ? (
-          <ProductButton
-            imgUrl={"/img/product.png"}
-            quantity={storedOrder?.totalQuantity}
-            isView={false}
-            name={searchName}
-            page={page}
-          />
-        ) : (
-          <></>
-        )}
+
         {userState.roleName !== "Admin" ? (
           <Button
             style={{

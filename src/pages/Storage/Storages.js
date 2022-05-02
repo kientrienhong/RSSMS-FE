@@ -12,7 +12,6 @@ import SearchIcon from "@mui/icons-material/Search";
 import ListStorage from "./components/ListStorage";
 import {useForm} from "react-hook-form";
 import CustomInput from "../../components/CustomInput";
-import ProductButton from "../Order/CreateOrder/components/ProductButton";
 import {
   getListStorage,
   createStorage,
@@ -777,11 +776,7 @@ function Storages(props) {
             ),
           }}
         />
-        <ProductButton
-          imgUrl={"/img/product.png"}
-          quantity={storedOrder?.totalQuantity}
-          isView={false}
-        />
+
         {userState.roleName === "Admin" ? (
           <Button
             style={{

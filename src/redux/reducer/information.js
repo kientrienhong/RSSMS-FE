@@ -10,29 +10,30 @@ const information = (state = initialState, action) => {
   switch (action.type) {
     case ActionType.SET_UP_USER: {
       state.user = action.payload;
-      return { ...state };
+      return {...state};
     }
 
     case ActionType.SET_UP_NOTIFICATIONS: {
       state.notifications = action.payload;
       state.unReadNoti = action.payload.filter((e) => e.isRead === false);
-      return { ...state };
+      return {...state};
     }
 
     case ActionType.SET_UP_IS_READ_NOTI: {
       state.unReadNoti = [];
-      return { ...state };
+      return {...state};
     }
 
     case ActionType.ADD_NOTIFICATIONS: {
+      console.log(state.notifications);
       let notificationsTemp = [...state.notifications];
       notificationsTemp.unshift(action.payload);
       state.unReadNoti.unshift(action.payload);
-      return { ...state, notifications: notificationsTemp };
+      return {...state, notifications: notificationsTemp};
     }
 
     default: {
-      return { ...state };
+      return {...state};
     }
   }
 };

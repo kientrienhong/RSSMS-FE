@@ -272,7 +272,7 @@ function InformationOrder({
               id: addition.serviceId,
               name: addition.serviceName,
               quantity: 1,
-              price: addition.totalPrice,
+              price: addition.price,
             });
           } else {
             result[typeAddition][indexFound].quantity++;

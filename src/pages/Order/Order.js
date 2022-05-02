@@ -17,7 +17,6 @@ import {getOrder} from "../../apis/Apis";
 import UpdateOrderModal from "../../components/UpdateOrderModal";
 import MultipleSelectCheckmarks from "../../components/MultipleSelectCheckmarks";
 import {ORDER_STATUS} from "../../constant/constant";
-import ProductButton from "./CreateOrder/components/ProductButton";
 import OrderModal from "../../components/OrderModal";
 import {ErrorHandle} from "../../utils/ErrorHandle";
 function Order({
@@ -230,15 +229,7 @@ function Order({
             ),
           }}
         />
-        {userState.roleName !== "Admin" ? (
-          <ProductButton
-            imgUrl={"/img/product.png"}
-            quantity={storedOrder?.totalQuantity}
-            isView={true}
-          />
-        ) : (
-          <></>
-        )}
+
         <MultipleSelectCheckmarks
           handleChange={handleChangeFilter}
           currentData={currentFilter}

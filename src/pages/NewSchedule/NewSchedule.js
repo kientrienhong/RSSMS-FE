@@ -211,8 +211,8 @@ function NewSchedule({
         });
       try {
         let responseRequest = await getSchedule(
-          addDays(startOfWeek, 1).toISOString().split("T")[0],
-          endOfWeek.toISOString().split("T")[0],
+          startOfWeek.toLocaleDateString("en-US"),
+          endOfWeek.toLocaleDateString("en-US"),
           userState.idToken
         );
         responseRequest.data.data.forEach((e) => {
@@ -315,7 +315,7 @@ function NewSchedule({
           showLoading();
           let listUserNotAssigned = await getListDeliveryStaff(
             storageId,
-            addDays(listDateAWeek[currentIndexDate], 1).toISOString(),
+            listDateAWeek[currentIndexDate].toLocaleDateString("en-US"),
             `&deliveryTimes=${listSelectedTime}`,
             "Delivery Staff",
             userState.idToken
