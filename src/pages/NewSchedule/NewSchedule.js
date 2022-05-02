@@ -36,7 +36,7 @@ function NewSchedule({
   const {scheduleDate} = useParams();
   const [listDateAWeek, setListDateAWeek] = useState([]);
   const [currentIndexDate, setCurrentIndexDate] = useState(-1);
-  const [listSelectedOrder, setListSelectedOrder] = useState({});
+  const [listSelectedOrder, setListSelectedOrder] = useState([]);
   const [currentOrder, setCurrentOrder] = useState({});
   const [open, setOpen] = useState(false);
   const [openAssignStaff, setOpenAssignStaff] = useState(false);
