@@ -88,22 +88,11 @@ function ModalCancelDetail({
             paddingLeft: "16px",
             paddingRight: "16px",
           }}
-          onClick={async () => {
-            try {
-              showLoading();
-              await updateIsPaidRequest(currentRequest.id, userState.idToken);
-              showSnackbar("success", "Update success");
-            } catch (error) {
-              console.log(error?.response);
-            } finally {
-              hideLoading();
-            }
-          }}
-          color="primary"
-          variant="contained"
-          type="submit"
+          onClick={() => handleClose()}
+          color="error"
+          variant="outlined"
         >
-          Xác nhận
+          Đóng
         </Button>
       </Box>
     </Modal>

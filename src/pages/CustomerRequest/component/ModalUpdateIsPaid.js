@@ -25,10 +25,6 @@ function ModalUpdateIsPaid({
   getData,
   page,
 }) {
-  const [checked, setChecked] = React.useState(false);
-  const handleChange = (event) => {
-    setChecked(event.target.checked);
-  };
   const buildInformation = (title, value, color) => {
     let localColor;
     let bold;
@@ -174,9 +170,8 @@ function ModalUpdateIsPaid({
               Đã thanh toán:
             </Typography>
             <Checkbox
-              checked={checked || currentRequest?.status === 2}
-              disabled={currentRequest?.status === 2}
-              onChange={handleChange}
+              checked={true}
+              disabled={true}
               inputProps={{"aria-label": "controlled"}}
             />
           </Box>
@@ -190,36 +185,6 @@ function ModalUpdateIsPaid({
             marginTop: "32px",
           }}
         >
-          <Button
-            style={{
-              height: "45px",
-              paddingLeft: "16px",
-              paddingRight: "16px",
-              marginRight: "4%",
-            }}
-            onClick={async () => {
-              try {
-                showLoading();
-                await updateIsPaidRequest(
-                  currentRequest.id,
-                  checked,
-                  userState.idToken
-                );
-
-                showSnackbar("success", "Update success");
-                await getData("", page, 8);
-                handleClose();
-              } catch (error) {
-                console.log(error?.response);
-              } finally {
-                hideLoading();
-              }
-            }}
-            color="primary"
-            variant="contained"
-          >
-            Xác nhận
-          </Button>
           <Button
             style={{
               height: "45px",

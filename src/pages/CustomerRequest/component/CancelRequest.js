@@ -164,19 +164,6 @@ function CancelRequest({
                 height: "45px",
                 paddingLeft: "16px",
                 paddingRight: "16px",
-                marginRight: "16%",
-              }}
-              color="primary"
-              variant="contained"
-              type="submit"
-            >
-              Xác nhận
-            </Button>
-            <Button
-              style={{
-                height: "45px",
-                paddingLeft: "16px",
-                paddingRight: "16px",
               }}
               onClick={() => handleClose()}
               color="error"
