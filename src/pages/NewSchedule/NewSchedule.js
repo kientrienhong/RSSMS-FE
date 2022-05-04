@@ -279,13 +279,13 @@ function NewSchedule({
           handleFormatRequestSchedule(new Date(e.scheduleDay), result, e);
         });
       } catch (error) {
-        ErrorHandle.handle(error, showSnackbar, handleExtendSession);
+        // ErrorHandle.handle(error, showSnackbar, handleExtendSession);
 
         console.log(error.response);
       } finally {
       }
     } catch (e) {
-      ErrorHandle.handle(e, showSnackbar, handleExtendSession);
+      // ErrorHandle.handle(e, showSnackbar, handleExtendSession);
 
       console.log(e);
       console.log(e.response);
