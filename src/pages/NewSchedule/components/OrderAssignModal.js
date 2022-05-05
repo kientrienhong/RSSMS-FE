@@ -60,11 +60,13 @@ function OrderAssignModal({
       });
 
       currentSchedule = listSelectedOrder[0]?.deliveryDate;
+      
       await assignSchedule(
         currentSchedule,
         listSelectedTime,
         userIds,
-        userState.idToken
+        userState.idToken,
+        listShowStaffUnAssigned.length
       );
 
       setListSelectedOrder([]);
