@@ -501,7 +501,8 @@ export const assignSchedule = async (
   scheduleDay,
   listOrder,
   userIds,
-  token
+  token,
+  availableStaffs
 ) => {
   let response = await axios.post(
     `${domain}/api/v1/schedules`,
@@ -509,6 +510,7 @@ export const assignSchedule = async (
       scheduleDay: scheduleDay,
       schedules: listOrder,
       userIds: userIds,
+      availableStaffs: availableStaffs,
     },
     {headers: {Authorization: `Bearer ${token}`}}
   );
