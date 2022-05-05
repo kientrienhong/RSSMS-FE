@@ -110,14 +110,7 @@ const DashboardLayout = (props) => {
               >
                 {e.description}
               </p>
-              <p
-                style={{
-                  color: "#AAA",
-                  textAlign: "right",
-                }}
-              >
-                {moment(e.createDate, "YYYYMMDD").fromNow()}
-              </p>
+
               {e.isRead === false ? (
                 <Box
                   sx={{
