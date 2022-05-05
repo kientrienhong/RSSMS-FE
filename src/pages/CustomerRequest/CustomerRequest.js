@@ -291,37 +291,22 @@ function CustomerRequest({
       )}
 
       <Box
-        sx={{
-          marginLeft: "2%",
-          marginBottom: "1%",
-          display: "flex",
-          height: "45px",
-          flexDirection: "row",
-          alignItems: "center",
-        }}
+       sx={{
+        marginRight: "2%",
+        marginBottom: "1%",
+        display: "flex",
+        height: "45px",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: 'flex-end'
+      }}
       >
-        <TextField
-          hiddenLabel
-          sx={{
-            width: "80%",
-          }}
-          onChange={(e) => {}}
-          InputProps={{
-            style: {height: "45px", backgroundColor: "white"},
-            startAdornment: (
-              <InputAdornment>
-                <IconButton>
-                  <SearchIcon />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
+        
         <MultipleSelectCheckmarks
           handleChange={handleChangeFilter}
           currentData={currentFilter}
           listData={LIST_STATUS_REQUEST}
-          name={"Lọc theo tình trạng"}
+          name={"Lọc theo trạng thái"}
         />
       </Box>
       <CancelRequest

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   InputAdornment,
@@ -8,17 +8,17 @@ import {
   Typography,
 } from "@material-ui/core";
 import SearchIcon from "@mui/icons-material/Search";
-import {useNavigate} from "react-router";
+import { useNavigate } from "react-router";
 import ListOrder from "./ViewOrder/ListOrder";
-import {useForm} from "react-hook-form";
-import {connect} from "react-redux";
+import { useForm } from "react-hook-form";
+import { connect } from "react-redux";
 import * as action from "../../redux/action/action";
-import {getOrder} from "../../apis/Apis";
+import { getOrder } from "../../apis/Apis";
 import UpdateOrderModal from "../../components/UpdateOrderModal";
 import MultipleSelectCheckmarks from "../../components/MultipleSelectCheckmarks";
-import {ORDER_STATUS} from "../../constant/constant";
+import { ORDER_STATUS } from "../../constant/constant";
 import OrderModal from "../../components/OrderModal";
-import {ErrorHandle} from "../../utils/ErrorHandle";
+import { ErrorHandle } from "../../utils/ErrorHandle";
 function Order({
   isLoadingOrder,
   showLoading,
@@ -31,7 +31,7 @@ function Order({
   const [openUpdateOrder, setOpenUpdateOrder] = React.useState(false);
 
   const navigate = useNavigate();
-  const {handleSubmit, reset, control} = useForm();
+  const { handleSubmit, reset, control } = useForm();
 
   const [currentOrder, setCurrentOrder] = useState();
   const [open, setOpen] = useState(false);
@@ -42,7 +42,7 @@ function Order({
   const [currentFilter, setCurrentFilter] = useState([]);
   const handleChangeFilter = (event) => {
     const {
-      target: {value},
+      target: { value },
     } = event;
     setCurrentFilter(
       // On autofill we get a stringified value.
@@ -202,45 +202,30 @@ function Order({
         isView={userState.roleName === "Admin"}
       />
 
+      
       <Box
         sx={{
-          marginLeft: "2%",
+          marginRight: "2%",
           marginBottom: "1%",
           display: "flex",
           height: "45px",
           flexDirection: "row",
           alignItems: "center",
+          justifyContent: 'flex-end'
         }}
       >
-        <TextField
-          hiddenLabel
-          sx={{
-            width: "80%",
-          }}
-          onChange={handleChangeSearchId}
-          InputProps={{
-            style: {height: "45px", backgroundColor: "white"},
-            startAdornment: (
-              <InputAdornment>
-                <IconButton>
-                  <SearchIcon />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
-
-        <MultipleSelectCheckmarks
-          handleChange={handleChangeFilter}
-          currentData={currentFilter}
-          listData={ORDER_STATUS[1]}
-          name={"Lọc theo tình trạng"}
-        />
+      
+      <MultipleSelectCheckmarks
+        handleChange={handleChangeFilter}
+        currentData={currentFilter}
+        listData={ORDER_STATUS[1]}
+        name={"Lọc theo trạng thái"}
+      />
       </Box>
       <Card
         variant="outlined"
         color="#FFF"
-        sx={{marginLeft: "2%", marginRight: "2%"}}
+        sx={{ marginLeft: "2%", marginRight: "2%" }}
       >
         {listOrder.length > 0 ? (
           <ListOrder

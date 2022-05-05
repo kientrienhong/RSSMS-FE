@@ -274,30 +274,14 @@ function AreaDetailNew({
       />
       <Box
         sx={{
-          marginLeft: "2%",
+          marginRight: "2%",
           marginBottom: "1%",
           display: "flex",
           height: "45px",
           flexDirection: "row",
+          justifyContent :'flex-end'
         }}
       >
-        <TextField
-          sx={{
-            width: "80%",
-          }}
-          // onChange={(e) => onHandleSearch(e)}
-          InputProps={{
-            style: {height: "45px", backgroundColor: "white"},
-            startAdornment: (
-              <InputAdornment>
-                <IconButton>
-                  <SearchIcon />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
-
         {userState.roleName !== "Admin" ? (
           <Button
             style={{
