@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const domain = "https://rssmsapi20220426221036.azurewebsites.net";
-// const domain = "https://localhost:44304";
+// const domain = "https://rssmsapi20220426221036.azurewebsites.net";
+const domain = "https://localhost:44304";
 
 export const getListRole = async (token) => {
   let user = await axios.get(`${domain}/api/v1/roles`, {
